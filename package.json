@@ -1,0 +1,124 @@
+{
+  "name": "web-cooperar",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --fix",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "fix": "vue-cli-service lint --fix"
+  },
+  "dependencies": {
+    "@coreui/coreui": "^3.0.0-rc",
+    "@coreui/icons": "^1.0.1",
+    "@coreui/icons-vue": "^1.3.1",
+    "@coreui/utils": "^1.2.2",
+    "@coreui/vue": "^3.0.10",
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@microsoft/signalr": "3.1.3",
+    "audit": "0.0.6",
+    "axios": "^0.19.2",
+    "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.9.0",
+    "uuid": "^7.0.2",
+    "vue": "^2.6.11",
+    "vue-i18n": "8.16.0",
+    "vue-notification": "1.3.20",
+    "vue-router": "^3.1.6",
+    "vue-select": "^3.9.5",
+    "vuex": "^3.1.3"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.2.3",
+    "@vue/cli-plugin-eslint": "^4.2.3",
+    "@vue/cli-service": "^4.2.3",
+    "babel-eslint": "^10.1.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "core-js": "^3.6.4",
+    "eslint": "^6.8.0",
+    "prettier": "^2.0.2",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-template-compiler": "^2.6.11",
+    "sass-loader": "^8.0.2",
+    "node-sass": "^4.13.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "@vue/prettier",
+      "plugin:prettier/recommended",
+      "plugin:vue/recommended"
+    ],
+    "rules": {
+      "no-unused-vars": [
+        "warn"
+      ],
+      "vue/component-tags-order": [
+        "off",
+        {
+          "order": [
+            "template",
+            "script",
+            "style"
+          ]
+        }
+      ],
+      "vue/singleline-html-element-content-newline": [
+        "off",
+        {
+          "ignoreWhenNoAttributes": true,
+          "ignoreWhenEmpty": true
+        }
+      ],
+      "vue/html-indent": "off",
+      "vue/html-self-closing": [
+        "warn",
+        {
+          "html": {
+            "normal": "any",
+            "void": "any",
+            "component": "any"
+          }
+        }
+      ],
+      "vue/attribute-hyphenation": [
+        "off",
+        {
+          "ignore": []
+        }
+      ],
+      "max-len": [
+        "warn",
+        {
+          "code": 120,
+          "ignoreComments": true
+        }
+      ],
+      "vue/max-attributes-per-line": [
+        "off",
+        {
+          "singleline": 3,
+          "multiline": {
+            "max": 1,
+            "allowFirstLine": true
+          }
+        }
+      ]
+    },
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}
