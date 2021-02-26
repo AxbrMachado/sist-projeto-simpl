@@ -16,9 +16,6 @@
       <strong>{{ $store.getters.getAutenticacao.apelido }}</strong>
     </CDropdownHeader>
     <CDropdownDivider />
-    <!-- <CDropdownItem>
-      <CIcon name="cil-shield-alt" /> Lock Account
-    </CDropdownItem>-->
     <CDropdownItem @click="TrocarSenha">
       <i class="fas fa-unlock-alt mr-2"></i>Trocar Senha
     </CDropdownItem>
