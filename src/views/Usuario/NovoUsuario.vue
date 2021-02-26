@@ -46,6 +46,9 @@
                     />
                   </div>
                 </div>
+                
+              </div>
+              <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
                     <label for>* Senha</label>
@@ -58,9 +61,7 @@
                     />
                   </div>
                 </div>
-              </div>
-              <div class="row">
-                <div
+                <!-- <div
                   class="col-sm-12 col-md-4 col-lg-4 col-xl-4"
                   title="Perfil de acesso do usuário ao sistema."
                 >
@@ -78,20 +79,7 @@
                       <option value="3">Comum</option>
                     </select>
                   </div>
-                </div>
-                <div
-                  class="col-sm-6 col-md-3 col-lg-3 col-xl-2"
-                  title="Informa se o usuário realiza atendimento as conversas."
-                >
-                  <label for>Atendimento</label>
-                  <b-form-checkbox
-                    v-model="viewModel.atendente"
-                    name="check-button"
-                    switch
-                  >
-                    Sim
-                  </b-form-checkbox>
-                </div>
+                </div> -->
                 <div
                   class="col-sm-6 col-md-2 col-lg-2 col-xl-1"
                   title="Informa se o usuário está ativo para utilizar o sistema."
@@ -106,7 +94,7 @@
                   </b-form-checkbox>
                 </div>
               </div>
-              <div class="row">
+              <!-- <div class="row">
                 <div
                   class="col-sm-12 col-md-7 col-lg-7 col-xl-5"
                   title="Digite a(s) empresa(s) que o usuário será liberado."
@@ -126,7 +114,7 @@
                     </template>
                   </v-select>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
           <button class="btn btn-success mr-2" type="submit">Salvar</button>
@@ -161,30 +149,9 @@ export default {
         ativo: true,
         email: "",
         apelido: "",
-        senha: "",
-        perfil: "",
-        contaId: this.$store.getters.getAutenticacao.contaSelecionadaId,
-        contas: []
+        senha: ""
       }
     };
-  },
-  mounted() {
-    let vm = this;
-    if (
-      this.$store.getters.getAutenticacao.contas &&
-      this.$store.getters.getAutenticacao.contas.length > 0
-    ) {
-      for (
-        let i = 0;
-        i < this.$store.getters.getAutenticacao.contas.length;
-        i++
-      ) {
-        this.contaOptions.push({
-          id: vm.$store.getters.getAutenticacao.contas[i].id,
-          label: vm.$store.getters.getAutenticacao.contas[i].nomeFantasia
-        });
-      }
-    }
   },
   created() {
     let usuarioId = this.$route.params.id;

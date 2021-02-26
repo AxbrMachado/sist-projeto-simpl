@@ -52,42 +52,10 @@ export default {
         _name: "CSidebarNav",
         _children: []
       });
-      switch (perfil) {
-        //Quando houver necessidade do pefil Sistema ter um menu diferente do Administrador, favor realizar a separação
-        case TipoPerfil.Sistema:
-        case TipoPerfil.Administrador:
-          menu[0]._children.push(Nav.Dashboard);
-          // menu[0]._children.push(Nav.Principal);
-          // menu[0]._children.push(Nav.Conversas);
-          // menu[0]._children.push(Nav.Email);
-          // menu[0]._children.push(Nav.Atendimentos);
-          // menu[0]._children.push(Nav.Orcamentos);
-          // menu[0]._children.push(Nav.Relatorio);
-          // menu[0]._children.push(Nav.Pessoas);
-          // menu[0]._children.push(Nav.Etapas);
-          // menu[0]._children.push(Nav.Midias);
-          // menu[0]._children.push(Nav.Escapo);
-          menu[0]._children.push(Nav.Configuracao);
-          menu[0]._children.push(Nav.Usuarios);
-          // menu[0]._children.push(Nav.Telefones);
-          // menu[0]._children.push(Nav.ConfiguracaoEmail);
-          // menu[0]._children.push(Nav.ConfiguracaoPagamento);
-          // menu[0]._children.push(Nav.MensagemPadrao);
-          // menu[0]._children.push(Nav.Parametro);
-          break;
-        case TipoPerfil.Comum:
-          menu[0]._children.push(Nav.Dashboard);
-          // menu[0]._children.push(Nav.Principal);
-          // menu[0]._children.push(Nav.Conversas);
-          // menu[0]._children.push(Nav.Email);
-          // menu[0]._children.push(Nav.Atendimentos);
-          // menu[0]._children.push(Nav.Orcamentos);
-          // menu[0]._children.push(Nav.Pessoas);
-          // menu[0]._children.push(Nav.Midias);
-          break;
-        default:
-          break;
-      }
+
+      menu[0]._children.push(Nav.Dashboard);
+      menu[0]._children.push(Nav.Configuracao);
+      menu[0]._children.push(Nav.Usuarios);
 
       return menu;
     }

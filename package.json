@@ -30,95 +30,10 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.3",
-    "@vue/cli-plugin-eslint": "^4.2.3",
     "@vue/cli-service": "^4.2.3",
-    "babel-eslint": "^10.1.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "babel-plugin-transform-remove-console": "^6.9.4",
     "core-js": "^3.6.4",
-    "eslint": "^6.8.0",
-    "prettier": "^2.0.2",
-    "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-vue": "^6.2.2",
     "vue-template-compiler": "^2.6.11",
     "sass-loader": "^8.0.2",
     "node-sass": "^4.13.1"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "browser": true,
-      "node": true,
-      "es6": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "@vue/prettier",
-      "plugin:prettier/recommended",
-      "plugin:vue/recommended"
-    ],
-    "rules": {
-      "no-unused-vars": [
-        "warn"
-      ],
-      "vue/component-tags-order": [
-        "off",
-        {
-          "order": [
-            "template",
-            "script",
-            "style"
-          ]
-        }
-      ],
-      "vue/singleline-html-element-content-newline": [
-        "off",
-        {
-          "ignoreWhenNoAttributes": true,
-          "ignoreWhenEmpty": true
-        }
-      ],
-      "vue/html-indent": "off",
-      "vue/html-self-closing": [
-        "warn",
-        {
-          "html": {
-            "normal": "any",
-            "void": "any",
-            "component": "any"
-          }
-        }
-      ],
-      "vue/attribute-hyphenation": [
-        "off",
-        {
-          "ignore": []
-        }
-      ],
-      "max-len": [
-        "warn",
-        {
-          "code": 120,
-          "ignoreComments": true
-        }
-      ],
-      "vue/max-attributes-per-line": [
-        "off",
-        {
-          "singleline": 3,
-          "multiline": {
-            "max": 1,
-            "allowFirstLine": true
-          }
-        }
-      ]
-    },
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
+  }
 }

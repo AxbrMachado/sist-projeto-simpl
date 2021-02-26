@@ -47,7 +47,7 @@
                 <div class="btn-group-sm">
                   <b-button
                     variant="warning"
-                    style="margin-right: 10px;"
+                    style="margin-right: 10px"
                     title="Editar"
                     @click="Editar(data.item)"
                   >
@@ -165,11 +165,7 @@ export default {
     ObterGrid(pagina) {
       this.loading = true;
       this.$http({
-        url:
-          "/usuario/obter-grid/" +
-          this.$store.getters.getAutenticacao.contaSelecionadaId +
-          "/" +
-          pagina,
+        url: "/usuario/obter-grid/" + pagina,
         method: "GET"
       })
         .then((response) => {
