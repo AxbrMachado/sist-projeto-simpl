@@ -147,13 +147,12 @@ export default {
       })
         .then((resp) => {
           this.loading = false;
-          const token = resp.data;
           // Add the following line:
           this.$http.defaults.headers.common["Authorization"] =
-            "bearer " + token.tokenDeAcesso;
+            "bearer " + resp.data.token;
           this.$store
-            .dispatch("login", token)
-            .then(() => this.$router.go());
+            .dispatch("login", resp.data)
+            .then(() => this.$router.push("/"));
         })
         .catch((erro) => {
           this.loading = false;
