@@ -46,7 +46,6 @@
                     />
                   </div>
                 </div>
-                
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -145,7 +144,6 @@ export default {
       contaOptions: [],
       viewModel: {
         id: this.$store.state.emptyGuid,
-        atendente: false,
         ativo: true,
         email: "",
         nome: "",
@@ -166,11 +164,7 @@ export default {
     Obter(usuarioId) {
       this.loading = true;
       this.$http({
-        url:
-          "usuario/obter/" +
-          usuarioId +
-          "/" +
-          this.$store.getters.getAutenticacao.contaSelecionadaId,
+        url: "usuario/obter/" + usuarioId,
         method: "GET"
       })
         .then((resposta) => {
