@@ -26,10 +26,10 @@
                   <div class="form-group">
                     <label for>* Nome</label>
                     <input
-                      v-model="viewModel.apelido"
+                      v-model="viewModel.nome"
                       class="form-control"
                       type="text"
-                      placeholder="Digite o nome/apelido"
+                      placeholder="Digite o nome"
                       required
                     />
                   </div>
@@ -148,7 +148,7 @@ export default {
         atendente: false,
         ativo: true,
         email: "",
-        apelido: "",
+        nome: "",
         senha: ""
       }
     };

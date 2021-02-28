@@ -106,7 +106,7 @@ export default {
       total: 0,
       itensPorPagina: 0,
       fields: [
-        { key: "apelido", label: "Nome", sortable: true },
+        { key: "nome", label: "Nome", sortable: true },
         { key: "email", label: "E-mail", sortable: true },
         { key: "ativo", label: "Ativo", sortable: true },
         {
@@ -140,15 +140,16 @@ export default {
       if (!this.itemRemover) return;
 
       this.$http({
-        url:
-          "usuario/remover/" +
-          this.itemRemover.id +
-          "/" +
-          this.$store.getters.getAutenticacao.contaSelecionadaId,
+        url: "usuario/remover/" + this.itemRemover.id,
         method: "DELETE"
       })
         .then(() => {
           this.ObterGrid(1);
+          this.$notify({
+            data: ["Usuário removido com sucesso."],
+            type: "success",
+            duration: 10000
+          });
         })
         .catch((erro) => {
           this.$notify({
@@ -165,7 +166,7 @@ export default {
     ObterGrid(pagina) {
       this.loading = true;
       this.$http({
-        url: "/usuario/obter-grid/" + pagina,
+        url: "/usuario/obter-grid/" + pagina + "/20",
         method: "GET"
       })
         .then((response) => {

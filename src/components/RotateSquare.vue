@@ -13,7 +13,7 @@ export default {
   computed: {
     styles() {
       return {
-        width: this.size,
+        width: "20px",
         height: this.size
       };
     }

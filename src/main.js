@@ -29,11 +29,11 @@ axiosInstance.interceptors.response.use(
 );
 
 Vue.prototype.$http = axiosInstance;
-const token = JSON.parse(localStorage.getItem("user-token"));
+const local = JSON.parse(localStorage.getItem("user-token"));
 
-if (token) {
+if (local) {
   Vue.prototype.$http.defaults.headers.common["Authorization"] =
-    "bearer " + token.tokenDeAcesso;
+    "bearer " + local.token;
 }
 
 Vue.use(CoreuiVue);
