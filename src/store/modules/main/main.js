@@ -2,7 +2,7 @@ import axios from "axios";
 import TipoPerfilEnum from "../../../enums/TipoPerfil";
 var url = "https://api.cooperar.coop.br/";
 if (process.env.NODE_ENV === "development") {
-  url = "https://localhost:44338/";
+  url = "https://localhost:5001/api/";
 }
 
 /* eslint-disable no-unused-vars */

@@ -42,8 +42,7 @@ export default new Router({
           name: "Usuário",
           // component: Usuario,
           meta: {
-            requiresAuth: true,
-            perfil: [1, 2]
+            requiresAuth: true
           },
           component: {
             render(c) {
@@ -55,8 +54,7 @@ export default new Router({
               path: "",
               component: Usuario,
               meta: {
-                requiresAuth: true,
-                perfil: [1, 2]
+                requiresAuth: true
               }
             },
             {
@@ -64,8 +62,7 @@ export default new Router({
               name: "Editar",
               component: NovoUsuario,
               meta: {
-                requiresAuth: true,
-                perfil: [1, 2]
+                requiresAuth: true
               }
             },
             {
@@ -73,8 +70,7 @@ export default new Router({
               name: "Novo",
               component: NovoUsuario,
               meta: {
-                requiresAuth: true,
-                perfil: [1, 2]
+                requiresAuth: true
               }
             },
             {
@@ -82,8 +78,7 @@ export default new Router({
               name: "Trocar Senha",
               component: TrocarSenha,
               meta: {
-                requiresAuth: true,
-                perfil: [1, 2, 3]
+                requiresAuth: true
               }
             }
           ]
@@ -95,8 +90,7 @@ export default new Router({
           name: "Parametro",
           component: Parametro,
           meta: {
-            requiresAuth: true,
-            perfil: [1, 2]
+            requiresAuth: true
           }
         }
       ]
