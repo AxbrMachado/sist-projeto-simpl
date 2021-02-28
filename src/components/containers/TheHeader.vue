@@ -29,44 +29,23 @@
       </CHeaderNavItem> -->
     </CHeaderNav>
     <CHeaderNav class="mr-4">
-      <!-- <CHeaderNavItem class="d-md-down-none mx-2">
-        <CHeaderNavLink>
-          <CIcon name="cil-bell" />
-        </CHeaderNavLink>
-      </CHeaderNavItem> -->
-      <!-- <CHeaderNavItem class="d-md-down-none mx-2">
-        <CHeaderNavLink>
-          <CIcon name="cil-list" />
-        </CHeaderNavLink>
-      </CHeaderNavItem> -->
-      <!-- <CHeaderNavItem class="d-md-down-none mx-2">
-        <CHeaderNavLink>
-          <CIcon name="cil-envelope-open" />
-        </CHeaderNavLink>
-      </CHeaderNavItem> -->
-      <CHeaderNavItem>
-        <DropDownConta></DropDownConta>
-      </CHeaderNavItem>
       <CHeaderNavItem>
         <label class="ml-2">{{ $store.getters.getAutenticacao.apelido }}</label>
       </CHeaderNavItem>
       <PerfilDropdown />
     </CHeaderNav>
-    <!-- <CSubheader class="px-3">
-      <CBreadcrumbRouter class="border-0" />
-    </CSubheader> -->
   </CHeader>
 </template>
 
 <script>
-import DropDownConta from "../dropdown/DropDownConta";
+// import DropDownConta from "../dropdown/DropDownConta";
 import PerfilDropdown from "./PerfilDropdown";
 
 export default {
   name: "TheHeader",
   components: {
-    PerfilDropdown,
-    DropDownConta
+    PerfilDropdown
+    // DropDownConta
   }
 };
 </script>

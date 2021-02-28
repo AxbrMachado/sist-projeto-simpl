@@ -64,7 +64,7 @@
 
                 <div class="d-flex align-content-around mt-5">
                   <!-- <button class="btn px-4 btn-primary mr-auto" type="submit">Login</button> -->
-                  <button class="btn px-4 btn-primary mr-auto" @click="Login()">
+                  <button class="btn px-4 btn-primary mr-auto" type="submit">
                     Login
                   </button>
 
@@ -119,27 +119,21 @@ export default {
   computed: {
     ViewModel() {
       return {
-        Login: this.email,
+        Email: this.email,
         Senha: this.senha
       };
     }
   },
   mounted() {
-    if (this.$route.params.id) {
-      this.$store.dispatch("logout");
-      this.LoginPortal();
-    }
-
     if (this.$store.getters.isLoggedIn) {
       this.$router.push("/");
     }
   },
   methods: {
-    onFormValidate() {
-      if (this.email.trim() || this.senha) {
-        return;
-      }
-      this.preventDefault();
+    onFormValidate(evt) {
+      evt.preventDefault();
+
+      this.Login();
     },
     Fechar() {
       this.mensagem = "";
@@ -147,7 +141,7 @@ export default {
     Login() {
       this.loading = true;
       this.$http({
-        url: "login",
+        url: "login/autenticar",
         data: this.ViewModel,
         method: "POST"
       })
@@ -169,34 +163,6 @@ export default {
             type: "warn",
             duration: 10000
           });
-          localStorage.removeItem("user-token");
-        });
-    },
-    LoginPortal() {
-      this.loading = true;
-      this.$http({
-        url: "login/autenticar-portal/" + this.$route.params.id,
-        method: "GET"
-      })
-        .then((resp) => {
-          this.loading = false;
-          const token = resp.data;
-          // Add the following line:
-          this.$http.defaults.headers.common["Authorization"] =
-            "bearer " + token.tokenDeAcesso;
-          this.$store
-            .dispatch("login", token)
-            .then(() => this.$router.push("/"));
-        })
-        .catch((erro) => {
-          this.loading = false;
-          console.error("Erro PORTAL:", erro);
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-
           localStorage.removeItem("user-token");
         });
     }

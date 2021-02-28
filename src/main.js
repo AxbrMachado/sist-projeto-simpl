@@ -29,11 +29,11 @@ axiosInstance.interceptors.response.use(
 );
 
 Vue.prototype.$http = axiosInstance;
-const token = JSON.parse(localStorage.getItem("user-token"));
+const local = JSON.parse(localStorage.getItem("user-token"));
 
-if (token) {
+if (local) {
   Vue.prototype.$http.defaults.headers.common["Authorization"] =
-    "bearer " + token.tokenDeAcesso;
+    "bearer " + local.token;
 }
 
 Vue.use(CoreuiVue);
@@ -50,14 +50,14 @@ router.beforeEach((to, from, next) => {
       next("/login");
       return;
     }
-    if (
-      to.meta.perfil &&
-      to.meta.perfil.length > 0 &&
-      to.meta.perfil.filter((x) => x === store.getters.getAutenticacao.perfil)
-        .length <= 0
-    ) {
-      next("/403");
-    }
+    // if (
+    //   to.meta.perfil &&
+    //   to.meta.perfil.length > 0 &&
+    //   to.meta.perfil.filter((x) => x === store.getters.getAutenticacao.perfil)
+    //     .length <= 0
+    // ) {
+    //   next("/403");
+    // }
     if (store.getters.isLoggedIn) {
       next();
       return;
