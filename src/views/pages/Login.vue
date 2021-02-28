@@ -153,7 +153,7 @@ export default {
             "bearer " + token.tokenDeAcesso;
           this.$store
             .dispatch("login", token)
-            .then(() => this.$router.push("/"));
+            .then(() => this.$router.go());
         })
         .catch((erro) => {
           this.loading = false;

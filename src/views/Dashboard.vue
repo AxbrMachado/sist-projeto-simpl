@@ -6,7 +6,9 @@
 export default {
   name: "Dashboard",
   components: {},
-  data() {},
+  data() {
+    return {};
+  },
   mounted() {},
   methods: {}
 };
