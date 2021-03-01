@@ -1,10 +1,12 @@
 <template>
-  <div></div>
+  <div>
+      <h1>Nova DAP</h1>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "Dashboard",
+  name: "NovaDap",
   components: {},
   data() {
     return {};

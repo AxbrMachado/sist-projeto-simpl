@@ -8,12 +8,13 @@
     <template #toggler>
       <CHeaderNavLink>
         <div class="c-avatar">
-          <img src="img/avatars/6.png" class="c-avatar-img" title="Perfil" />
+          <i class="fas fa-user-cog"></i>
+          <!-- <img src="img/avatars/6.png" class="c-avatar-img" title="Perfil" /> -->
         </div>
       </CHeaderNavLink>
     </template>
     <CDropdownHeader tag="div" class="text-center" color="light">
-      <strong>{{ $store.getters.getAutenticacao.apelido }}</strong>
+      <strong>{{ $store.getters.getAutenticacao.nome }}</strong>
     </CDropdownHeader>
     <CDropdownDivider />
     <CDropdownItem @click="TrocarSenha">
