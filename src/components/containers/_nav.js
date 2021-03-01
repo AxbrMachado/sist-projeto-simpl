@@ -14,6 +14,36 @@ const Menu = {
     _name: "CSidebarNavTitle",
     _children: ["Principal"]
   },
+  PedidoVenda: {
+    _name: "CSidebarNavItem",
+    name: "Pedido Venda",
+    to: "/pedido-venda",
+    icon: "cil-face"
+  },
+  Contrato: {
+    _name: "CSidebarNavItem",
+    name: "Contrato",
+    to: "/contrato",
+    icon: "cil-face"
+  },
+  Pessoa: {
+    _name: "CSidebarNavItem",
+    name: "Pessoa",
+    to: "/pessoa",
+    icon: "cil-face"
+  },
+  Produto: {
+    _name: "CSidebarNavItem",
+    name: "Produto",
+    to: "/produto",
+    icon: "cil-face"
+  },
+  Dap: {
+    _name: "CSidebarNavItem",
+    name: "DAP",
+    to: "/dap",
+    icon: "cil-face"
+  },
   Configuracao: {
     _name: "CSidebarNavTitle",
     _children: ["Configurações"]
