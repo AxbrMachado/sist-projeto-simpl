@@ -18,31 +18,31 @@ const Menu = {
     _name: "CSidebarNavItem",
     name: "Pedido Venda",
     to: "/pedido-venda",
-    icon: "cil-face"
+    icon: "cil-list"
   },
   Contrato: {
     _name: "CSidebarNavItem",
     name: "Contrato",
     to: "/contrato",
-    icon: "cil-face"
+    icon: "cil-layers"
   },
   Pessoa: {
     _name: "CSidebarNavItem",
     name: "Pessoa",
     to: "/pessoa",
-    icon: "cil-face"
+    icon: "cil-people"
   },
   Produto: {
     _name: "CSidebarNavItem",
     name: "Produto",
     to: "/produto",
-    icon: "cil-face"
+    icon: "cil-apple"
   },
   Dap: {
     _name: "CSidebarNavItem",
     name: "DAP",
     to: "/dap",
-    icon: "cil-face"
+    icon: "cil-task"
   },
   Configuracao: {
     _name: "CSidebarNavTitle",
