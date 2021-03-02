@@ -46,7 +46,6 @@ export default {
   },
   methods: {
     MontarMenu() {
-      let perfil = this.$store.getters.getAutenticacao.perfil;
       let menu = [];
       menu.push({
         _name: "CSidebarNav",
@@ -54,6 +53,14 @@ export default {
       });
 
       menu[0]._children.push(Nav.Dashboard);
+
+      menu[0]._children.push(Nav.Principal);
+      menu[0]._children.push(Nav.PedidoVenda);
+      menu[0]._children.push(Nav.Contrato);
+      menu[0]._children.push(Nav.Pessoa);
+      menu[0]._children.push(Nav.Dap);
+      menu[0]._children.push(Nav.Produto);
+
       menu[0]._children.push(Nav.Configuracao);
       menu[0]._children.push(Nav.Usuarios);
 
