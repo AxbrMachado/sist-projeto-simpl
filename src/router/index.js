@@ -19,7 +19,8 @@ const Pessoa = () => import("@/views/Pessoa/Pessoa");
 const NovaPessoa = () => import("@/views/Pessoa/NovaPessoa");
 const Produto = () => import("@/views/Produto/Produto");
 const NovoProduto = () => import("@/views/Produto/NovoProduto");
-
+const TipoDocumento = () => import("@/views/TipoDocumento/TipoDocumento");
+const NovoTipoDocumento = () => import("@/views/TipoDocumento/NovoTipoDocumento");
 
 Vue.use(Router);
 
@@ -96,8 +97,6 @@ export default new Router({
           ]
         },
 
-
-
         //Cadastro de contrato
         {
           path: "contrato",
@@ -136,11 +135,6 @@ export default new Router({
             }
           ]
         },
-
-
-
-
-
 
         //Cadastro de Dap
         {
@@ -181,8 +175,6 @@ export default new Router({
           ]
         },
 
-
-
         //Cadastro de pedido venda
         {
           path: "pedido-venda",
@@ -221,8 +213,6 @@ export default new Router({
             }
           ]
         },
-
-
 
         //Cadastro de pessoa
         {
@@ -263,8 +253,6 @@ export default new Router({
           ]
         },
 
-
-
         //Cadastro de pedido venda
         {
           path: "produto",
@@ -304,7 +292,44 @@ export default new Router({
           ]
         },
 
-
+        //Cadastro de tipo documento
+        {
+          path: "tipoDocumento",
+          name: "TipoDocumento",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: TipoDocumento,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoTipoDocumento,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoTipoDocumento,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
 
         // Parametros do sistema
         {

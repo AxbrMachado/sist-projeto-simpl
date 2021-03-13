@@ -55,6 +55,13 @@ const Menu = {
     icon: "cil-face"
   },
 
+  TipoDocumento: {
+    _name: "CSidebarNavItem",
+    name: "Tipo Documento",
+    to: "/tipoDocumento",
+    icon: "cil-description"
+  },
+
   Parametro: {
     _name: "CSidebarNavItem",
     name: "Parâmetro",
