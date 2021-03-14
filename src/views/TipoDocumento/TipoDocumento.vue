@@ -28,7 +28,7 @@
                   <label>Nome</label>
                   <input
                     type="text"
-                    v-model="filtro.nome"
+                    v-model="filtro.descricao"
                     class="form-control"
                   />
                 </div>
@@ -63,14 +63,6 @@
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
-              </template>
-              <template v-slot:cell(ativo)="data">
-                <div class="center">
-                  <span v-if="data.item.ativo" class="badge badge-success">
-                    Sim
-                  </span>
-                  <span v-else class="badge badge-secondary">Não</span>
-                </div>
               </template>
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
@@ -134,7 +126,7 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { nome: "" },
+      filtro: { descricao: "" },
       fields: [
         { key: "descricao", label: "Nome", sortable: true },
         {
@@ -156,7 +148,7 @@ export default {
   },
   methods: {
     Limpar() {
-      this.filtro.nome = "";
+      this.filtro.descricao = "";
       this.ObterGrid(1);
     },
     Editar(tipoDocumento) {
@@ -199,7 +191,7 @@ export default {
       this.loading = true;
       this.$http({
         url:
-          "/tipoDocumento/obter-grid?pagina=" + pagina + "&nome=" + this.filtro.nome,
+          "/tipoDocumento/obter-grid?pagina=" + pagina + "&descricao=" + this.filtro.descricao,
         method: "GET"
       })
         .then((response) => {
