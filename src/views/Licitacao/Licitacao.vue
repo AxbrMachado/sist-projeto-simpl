@@ -5,11 +5,11 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Tipo de endereço</strong>
+              <strong class="align-self-center">Licitação</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/tipoEndereco/novo"
-                title="Adicionar novo tipo de endereço"
+                href="/#/licitacao/nova"
+                title="Adicionar nova licitação"
               >
                 Adicionar
               </a>
@@ -25,10 +25,10 @@
             <div class="row">
               <div class="col-lg-5 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Descrição</label>
+                  <label>Nome</label>
                   <input
                     type="text"
-                    v-model="filtro.descricao"
+                    v-model="filtro.numero"
                     class="form-control"
                   />
                 </div>
@@ -59,7 +59,7 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhum tipo de endereço encontrado."
+              empty-text="Nenhuma licitação encontrada."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
@@ -81,6 +81,18 @@
                   >
                     <i class="fas fa-trash-alt text-black"></i>
                   </b-button>
+                </div>
+              </template>
+              <template v-slot:cell(tipoEnquadramento)="data">
+                <div class="center">
+                  <span>{{
+                    ObterNomeEnquadramento(data.item.tipoEnquadramento)
+                  }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(validade)="data">
+                <div class="center">
+                  <span>{{ FormatarData(data.item.validade) }}</span>
                 </div>
               </template>
             </b-table>
@@ -111,9 +123,10 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 
 export default {
-  name: "TipoEndereco",
+  name: "Licitacao",
   components: {
     RotateSquare
   },
@@ -126,9 +139,12 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { descricao: "" },
+      filtro: { numero: "" },
       fields: [
-        { key: "descricao", label: "Nome", sortable: true },
+        { key: "numero", label: "Número", sortable: true },
+        { key: "tipoEnquadramento", label: "Enquadramento", sortable: true },
+        { key: "validade", label: "Validade", sortable: true },
+        { key: "pessoaNome", label: "Cooperado", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -148,11 +164,11 @@ export default {
   },
   methods: {
     Limpar() {
-      this.filtro.descricao = "";
+      this.filtro.numero = "";
       this.ObterGrid(1);
     },
-    Editar(tipoEndereco) {
-      this.$router.push("/tipoEndereco/editar/" + tipoEndereco.id);
+    Editar(licitacao) {
+      this.$router.push("/licitacao/editar/" + licitacao.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -164,13 +180,13 @@ export default {
       if (!this.itemRemover) return;
 
       this.$http({
-        url: "tipoEndereco/remover/" + this.itemRemover.id,
+        url: "licitacao/remover/" + this.itemRemover.id,
         method: "DELETE"
       })
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["TipoEndereco removida com sucesso."],
+            data: ["Licitação removida com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -191,7 +207,7 @@ export default {
       this.loading = true;
       this.$http({
         url:
-          "/tipoEndereco/obter-grid?pagina=" + pagina + "&descricao=" + this.filtro.descricao,
+          "/licitacao/obter-grid?pagina=" + pagina + "&numero=" + this.filtro.numero,
         method: "GET"
       })
         .then((response) => {
@@ -209,6 +225,26 @@ export default {
             duration: 10000
           });
         });
+    },
+
+    ObterNomeEnquadramento(item) {
+      switch (item) {
+        case TipoEnquadramentoEnum.Grupo_A:
+          return "A";
+        case TipoEnquadramentoEnum.Grupo_B:
+          return "B";
+        case TipoEnquadramentoEnum.GRUPO_AC:
+          return "AC";
+        case TipoEnquadramentoEnum.Grupo_V:
+          return "V";
+        default:
+          return "Inválido";
+      }
+    },
+
+    FormatarData(validade) {
+      var dataValidade = new Date(validade);
+      return dataValidade.toLocaleDateString();
     }
   }
 };

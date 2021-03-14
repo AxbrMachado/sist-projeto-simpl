@@ -81,6 +81,13 @@ const Menu = {
     icon: "cil-description"
   },
 
+  Licitacao: {
+    _name: "CSidebarNavItem",
+    name: "Licitacao",
+    to: "/licitacao",
+    icon: "cil-description"
+  },
+
   Parametro: {
     _name: "CSidebarNavItem",
     name: "Parâmetro",

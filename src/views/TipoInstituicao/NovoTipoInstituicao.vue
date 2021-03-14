@@ -11,7 +11,7 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center">Novo Tipo Instituicao</strong>
+              <strong class="align-self-center">Novo Tipo de instituição</strong>
             </header>
             <div class="card-body">
               <div class="row">
@@ -24,12 +24,12 @@
               <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
-                    <label for>* Nome</label>
+                    <label for>* Descrição</label>
                     <input
                       v-model="viewModel.descricao"
                       class="form-control"
                       type="text"
-                      placeholder="Digite o descricao"
+                      placeholder="Digite a descricao"
                       required
                     />
                   </div>
@@ -109,7 +109,7 @@ export default {
           this.loading = false;
           this.$router.push("/tipoInstituicao");
           this.$notify({
-            data: ["Tipo Instituicao cadastrado com sucesso."],
+            data: ["Tipo de instituição cadastrada com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -134,7 +134,7 @@ export default {
           this.loading = false;
           this.$router.push("/tipoInstituicao");
           this.$notify({
-            data: ["Tipo Instituicao editado com sucesso."],
+            data: ["Tipo de instituição editada com sucesso."],
             type: "success",
             duration: 10000
           });
