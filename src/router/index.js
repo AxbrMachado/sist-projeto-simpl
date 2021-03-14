@@ -20,7 +20,13 @@ const NovaPessoa = () => import("@/views/Pessoa/NovaPessoa");
 const Produto = () => import("@/views/Produto/Produto");
 const NovoProduto = () => import("@/views/Produto/NovoProduto");
 const TipoDocumento = () => import("@/views/TipoDocumento/TipoDocumento");
-const NovoTipoDocumento = () => import("@/views/TipoDocumento/NovoTipoDocumento");
+const NovoTipoDocumento =() => import("@/views/TipoDocumento/NovoTipoDocumento");
+const TipoEndereco = () => import("@/views/TipoEndereco/TipoEndereco");
+const NovoTipoEndereco = () => iport("@/views/TipoEndereco/NovoTipoEndereco");
+const TipoProduto = () => import("@/views/TipoProduto/TipoProduto");
+const NovoTipoProduto = () => imort("@/views/TipoProduto/NovoTipoProduto");
+const TipoInstituicao = () => import("@/views/TipoInstituicao/TipoInstituicao");
+const NovoTipoInstituicao = () => import("@/views/TipoInstituicao/NovoTipoInstituicao");
 
 Vue.use(Router);
 
@@ -324,6 +330,123 @@ export default new Router({
               path: "novo",
               name: "Novo",
               component: NovoTipoDocumento,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
+        // //Cadastro de tipo endereco
+        {
+          path: "tipoEndereco",
+          name: "TipoEndereco",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: TipoEndereco,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoTipoEndereco,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoTipoEndereco,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
+        //Cadastro de tipo Instituicao
+        {
+          path: "tipoInstituicao",
+          name: "TipoInstituicao",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: TipoInstituicao,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoTipoInstituicao,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoTipoInstituicao,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
+        //Cadastro de tipo produto
+        {
+          path: "tipoProduto",
+          name: "TipoProduto",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: TipoProduto,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoTipoProduto,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoTipoProduto,
               meta: {
                 requiresAuth: true
               }
