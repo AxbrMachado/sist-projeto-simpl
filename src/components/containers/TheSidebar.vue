@@ -56,6 +56,7 @@ export default {
 
       menu[0]._children.push(Nav.Principal);
       menu[0]._children.push(Nav.PedidoVenda);
+      menu[0]._children.push(Nav.Licitacao);
       menu[0]._children.push(Nav.Contrato);
       menu[0]._children.push(Nav.Pessoa);
       menu[0]._children.push(Nav.Dap);

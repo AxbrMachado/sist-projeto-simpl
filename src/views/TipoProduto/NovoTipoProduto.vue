@@ -11,7 +11,7 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center">Novo Tipo Produto</strong>
+              <strong class="align-self-center">Novo Tipo de produto</strong>
             </header>
             <div class="card-body">
               <div class="row">
@@ -24,12 +24,12 @@
               <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
-                    <label for>* Nome</label>
+                    <label for>* Descricao</label>
                     <input
                       v-model="viewModel.descricao"
                       class="form-control"
                       type="text"
-                      placeholder="Digite o descricao"
+                      placeholder="Digite a descrição"
                       required
                     />
                   </div>
@@ -109,7 +109,7 @@ export default {
           this.loading = false;
           this.$router.push("/tipoProduto");
           this.$notify({
-            data: ["Tipo Produto cadastrado com sucesso."],
+            data: ["Tipo de produto cadastrado com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -134,7 +134,7 @@ export default {
           this.loading = false;
           this.$router.push("/tipoProduto");
           this.$notify({
-            data: ["Tipo Produto editado com sucesso."],
+            data: ["Tipo de produto editado com sucesso."],
             type: "success",
             duration: 10000
           });

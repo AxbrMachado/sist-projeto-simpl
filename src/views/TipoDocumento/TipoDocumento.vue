@@ -5,11 +5,11 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Tipo Documento</strong>
+              <strong class="align-self-center">Tipo de documento</strong>
               <a
                 class="ml-auto btn btn-primary"
                 href="/#/tipoDocumento/novo"
-                title="Adicionar novo tipo documento"
+                title="Adicionar novo tipo de documento"
               >
                 Adicionar
               </a>
@@ -25,7 +25,7 @@
             <div class="row">
               <div class="col-lg-5 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Nome</label>
+                  <label>Descrição</label>
                   <input
                     type="text"
                     v-model="filtro.descricao"
@@ -59,7 +59,7 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhum tipo documento encontrado."
+              empty-text="Nenhum tipo de documento encontrado."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
@@ -170,7 +170,7 @@ export default {
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["TipoDocumento removida com sucesso."],
+            data: ["Tipo de documento removido com sucesso."],
             type: "success",
             duration: 10000
           });

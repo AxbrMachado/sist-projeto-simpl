@@ -9,7 +9,7 @@
               <a
                 class="ml-auto btn btn-primary"
                 href="/#/tipoInstituicao/novo"
-                title="Adicionar novo tipo instituição"
+                title="Adicionar novo tipo de instituição"
               >
                 Adicionar
               </a>
@@ -25,7 +25,7 @@
             <div class="row">
               <div class="col-lg-5 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Nome</label>
+                  <label>Descrição</label>
                   <input
                     type="text"
                     v-model="filtro.descricao"
@@ -59,7 +59,7 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhum tipo instituição encontrado."
+              empty-text="Nenhum tipo de instituição encontrada."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
@@ -170,7 +170,7 @@ export default {
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["TipoInstituicao removida com sucesso."],
+            data: ["Tipo de instituição removida com sucesso."],
             type: "success",
             duration: 10000
           });

@@ -22,11 +22,13 @@ const NovoProduto = () => import("@/views/Produto/NovoProduto");
 const TipoDocumento = () => import("@/views/TipoDocumento/TipoDocumento");
 const NovoTipoDocumento =() => import("@/views/TipoDocumento/NovoTipoDocumento");
 const TipoEndereco = () => import("@/views/TipoEndereco/TipoEndereco");
-const NovoTipoEndereco = () => iport("@/views/TipoEndereco/NovoTipoEndereco");
+const NovoTipoEndereco = () => import("@/views/TipoEndereco/NovoTipoEndereco");
 const TipoProduto = () => import("@/views/TipoProduto/TipoProduto");
-const NovoTipoProduto = () => imort("@/views/TipoProduto/NovoTipoProduto");
+const NovoTipoProduto = () => import("@/views/TipoProduto/NovoTipoProduto");
 const TipoInstituicao = () => import("@/views/TipoInstituicao/TipoInstituicao");
 const NovoTipoInstituicao = () => import("@/views/TipoInstituicao/NovoTipoInstituicao");
+const Licitacao = () => import("@/views/Licitacao/Licitacao");
+const NovaLicitacao = () => import("@/views/Licitacao/NovaLicitacao");
 
 Vue.use(Router);
 
@@ -96,6 +98,45 @@ export default new Router({
               path: "trocar-senha",
               name: "Trocar Senha",
               component: TrocarSenha,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
+         //Cadastro de licitacao
+         {
+          path: "licitacao",
+          name: "Licitacao",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: Licitacao,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovaLicitacao,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovaLicitacao,
               meta: {
                 requiresAuth: true
               }

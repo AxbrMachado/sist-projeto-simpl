@@ -5,7 +5,7 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Tipo Produto</strong>
+              <strong class="align-self-center">Tipo de produto</strong>
               <a
                 class="ml-auto btn btn-primary"
                 href="/#/tipoProduto/novo"
@@ -25,7 +25,7 @@
             <div class="row">
               <div class="col-lg-5 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Nome</label>
+                  <label>Descrição</label>
                   <input
                     type="text"
                     v-model="filtro.descricao"
@@ -152,6 +152,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(tipoProduto) {
+      console.log("/tipoProduto/editar/" + tipoProduto.id);
       this.$router.push("/tipoProduto/editar/" + tipoProduto.id);
     },
     ModalCancel(evento) {

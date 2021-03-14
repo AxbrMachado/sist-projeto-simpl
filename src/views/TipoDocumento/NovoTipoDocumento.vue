@@ -24,12 +24,12 @@
               <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
-                    <label for>* Nome</label>
+                    <label for>* Descrição</label>
                     <input
                       v-model="viewModel.descricao"
                       class="form-control"
                       type="text"
-                      placeholder="Digite o descricao"
+                      placeholder="Digite a descrição"
                       required
                     />
                   </div>
@@ -109,7 +109,7 @@ export default {
           this.loading = false;
           this.$router.push("/tipoDocumento");
           this.$notify({
-            data: ["Tipo Documento cadastrado com sucesso."],
+            data: ["Tipo de documento cadastrado com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -134,7 +134,7 @@ export default {
           this.loading = false;
           this.$router.push("/tipoDocumento");
           this.$notify({
-            data: ["Tipo Documento editado com sucesso."],
+            data: ["Tipo de documento editado com sucesso."],
             type: "success",
             duration: 10000
           });
