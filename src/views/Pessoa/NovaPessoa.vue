@@ -107,13 +107,10 @@
                 >
                   <div class="form-group">
                     <label for>Estado Civil</label>
-                    <input
+                    <b-form-select
                       v-model="viewModel.estadoCivil"
-                      class="form-control"
-                      type="text"
-                      placeholder="Digite estado civil"
-                      required
-                    />
+                      :options="tiposEstadoCivil"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div
@@ -184,6 +181,7 @@
 import TipoPessoa from "../../enums/TipoPessoa";
 import TipoSexo from "../../enums/TipoSexo";
 import RotateSquare from "../../components/RotateSquare";
+import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
 
 export default {
   name: "NovaPessoa",
@@ -191,6 +189,12 @@ export default {
   data() {
     return {
       loading: false,
+      tiposEstadoCivil: [
+        { value: TipoEstadoCivilEnum.Solteiro, text: "Solteiro" },
+        { value: TipoEstadoCivilEnum.Casado, text: "Casado" },
+        { value: TipoEstadoCivilEnum.Viuvo, text: "Viúvo" },
+        { value: TipoEstadoCivilEnum.Divorciado, text: "Divorciado" }
+      ],
       tiposPessoas: [
         { value: TipoPessoa.Funcionario, text: "Funcionário" },
         { value: TipoPessoa.Fornecedor, text: "Fornecedor" },
@@ -207,7 +211,7 @@ export default {
         nomeCompleto: "",
         nacionalidade: "",
         dataNascimento: "",
-        estadoCivil: "",
+        estadoCivil: null,
         telefone: "",
         telefone2: "",
         tipoSexo: 3,
