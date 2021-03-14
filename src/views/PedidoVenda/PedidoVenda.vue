@@ -32,7 +32,9 @@ export default {
   name: "PedidoVenda",
   components: {},
   data() {
-    return {};
+    return {
+       loading: false
+    };
   },
   mounted() {},
   methods: {}
