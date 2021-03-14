@@ -56,6 +56,25 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                  <div class="form-group">
+                    <label for>* Pessoa(s)</label>
+                    <v-select
+                      placeholder="Digite pessoa(s)"
+                      multiple
+                      v-model="viewModel.pessoas"
+                      :options="pessoasOptions"
+                      required
+                      @search="ObterPessoasVSelect"
+                    >
+                      <template slot="no-options">
+                        Nenhum resultado para a busca.
+                      </template>
+                    </v-select>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <button class="btn btn-success mr-2" type="submit">Salvar</button>
@@ -84,7 +103,7 @@ export default {
   data() {
     return {
       loading: false,
-      contaOptions: [],
+      pessoasOptions: [],
       tipoEnquadramentos: [
         { value: TipoEnquadramentoEnum.Grupo_A, text: "A" },
         { value: TipoEnquadramentoEnum.Grupo_B, text: "B" },
@@ -95,7 +114,8 @@ export default {
         id: this.$store.state.emptyGuid,
         numero: "",
         validade: "",
-        tipoEnquadramento: 0
+        tipoEnquadramento: 0,
+        pessoas: []
       }
     };
   },
@@ -106,6 +126,16 @@ export default {
   methods: {
     ValidarForm(evt) {
       evt.preventDefault();
+
+      if (!this.viewModel.pessoas || this.viewModel.pessoas.length <= 0) {
+        this.loading = false;
+        this.$notify({
+          data: ["Informe ao menos uma pessoa."],
+          type: "warn",
+          duration: 10000
+        });
+        return;
+      }
       if (this.viewModel.id !== this.$store.state.emptyGuid) this.Editar();
       else this.Novo();
     },
@@ -171,6 +201,24 @@ export default {
         })
         .catch((erro) => {
           this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 10000
+          });
+        });
+    },
+    ObterPessoasVSelect(busca) {
+      if (!busca || busca.length <= 3) return;
+
+      this.$http({
+        url: "/pessoa/obter-v-select/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.pessoasOptions = response.data;
+        })
+        .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
