@@ -62,6 +62,25 @@ const Menu = {
     icon: "cil-description"
   },
 
+  TipoProduto: {
+    _name: "CSidebarNavItem",
+    name: "Tipo Produto",
+    to: "/tipoProduto",
+    icon: "cil-description"
+  },
+  TipoInstituicao: {
+    _name: "CSidebarNavItem",
+    name: "Tipo Instituicao",
+    to: "/tipoInstituicao",
+    icon: "cil-description"
+  },
+  TipoEndereco: {
+    _name: "CSidebarNavItem",
+    name: "Tipo Endereco",
+    to: "/tipoEndereco",
+    icon: "cil-description"
+  },
+
   Parametro: {
     _name: "CSidebarNavItem",
     name: "Parâmetro",
