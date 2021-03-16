@@ -8,7 +8,7 @@
               <strong class="align-self-center">Licitação</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/licitacao/nova"
+                href="/#/licitacao/novo"
                 title="Adicionar nova licitação"
               >
                 Adicionar
@@ -25,7 +25,7 @@
             <div class="row">
               <div class="col-lg-5 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Nome</label>
+                  <label>Número</label>
                   <input
                     type="text"
                     v-model="filtro.numero"
@@ -90,9 +90,9 @@
                   }}</span>
                 </div>
               </template>
-              <template v-slot:cell(validade)="data">
+              <template v-slot:cell(dataVencimento)="data">
                 <div class="center">
-                  <span>{{ FormatarData(data.item.validade) }}</span>
+                  <span>{{ FormatarData(data.item.dataVencimento) }}</span>
                 </div>
               </template>
             </b-table>
@@ -142,9 +142,9 @@ export default {
       filtro: { numero: "" },
       fields: [
         { key: "numero", label: "Número", sortable: true },
-        { key: "tipoEnquadramento", label: "Enquadramento", sortable: true },
-        { key: "validade", label: "Validade", sortable: true },
-        { key: "pessoaNome", label: "Cooperado", sortable: true },
+        { key: "instituicao", label: "Instituição", sortable: true },
+        { key: "tipoInstituicao", label: "Tipo Instituição", sortable: true },
+        { key: "dataVencimento", label: "Data Vencimento", sortable: true },
         {
           key: "acoes",
           label: "Ações",

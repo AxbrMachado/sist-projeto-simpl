@@ -23,7 +23,7 @@
 
 <script>
 import Nav from "./_nav";
-import TipoPerfil from "../../enums/TipoPerfil";
+import TipoPerfilEnum from "../../enums/TipoPerfilEnum";
 
 export default {
   name: "TheSidebar",

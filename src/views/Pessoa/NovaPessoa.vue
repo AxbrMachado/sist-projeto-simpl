@@ -178,14 +178,14 @@
 </template>
 
 <script>
-import TipoPessoa from "../../enums/TipoPessoa";
-import TipoSexo from "../../enums/TipoSexo";
+import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import TipoSexoEnum from "../../enums/TipoSexoEnum";
 import RotateSquare from "../../components/RotateSquare";
 import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
 
 export default {
   name: "NovaPessoa",
-  components: { TipoPessoa, TipoSexo, RotateSquare },
+  components: { TipoPessoaEnum, TipoSexoEnum, RotateSquare },
   data() {
     return {
       loading: false,
@@ -196,14 +196,15 @@ export default {
         { value: TipoEstadoCivilEnum.Divorciado, text: "Divorciado" }
       ],
       tiposPessoas: [
-        { value: TipoPessoa.Funcionario, text: "Funcionário" },
-        { value: TipoPessoa.Fornecedor, text: "Fornecedor" },
-        { value: TipoPessoa.Cliente, text: "Cliente" }
+        { value: TipoPessoaEnum.Funcionario, text: "Funcionário" },
+        { value: TipoPessoaEnum.Fornecedor, text: "Fornecedor" },
+        { value: TipoPessoaEnum.Cliente, text: "Cliente" },
+        { value: TipoPessoaEnum.Instituicao, text: "Instituição" }
       ],
       tiposSexo: [
-        { value: TipoSexo.Masculino, text: "Masculino" },
-        { value: TipoSexo.Feminino, text: "Feminino" },
-        { value: TipoSexo.Indefinido, text: "Indefinido" }
+        { value: TipoSexoEnum.Masculino, text: "Masculino" },
+        { value: TipoSexoEnum.Feminino, text: "Feminino" },
+        { value: TipoSexoEnum.Indefinido, text: "Indefinido" }
       ],
       viewModel: {
         tipoPessoa: 0,
@@ -227,12 +228,13 @@ export default {
   methods: {
     isPessoaJuridica() {
       return (
-        this.viewModel.tipoPessoa == TipoPessoa.Fornecedor ||
-        this.viewModel.tipoPessoa == TipoPessoa.Cliente
+        this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor ||
+        this.viewModel.tipoPessoa == TipoPessoaEnum.Cliente ||
+        this.viewModel.tipoPessoa == TipoPessoaEnum.Instituicao 
       );
     },
     isFuncionario() {
-      return this.viewModel.tipoPessoa == TipoPessoa.Funcionario;
+      return this.viewModel.tipoPessoa == TipoPessoaEnum.Funcionario;
     },
     ValidarForm(evt) {
       evt.preventDefault();
