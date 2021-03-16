@@ -32,7 +32,7 @@ import TheSidebar from "./TheSidebar";
 import TheHeader from "./TheHeader";
 import TheFooter from "./TheFooter";
 // import SignalR from "../../components/signalr/SignalR";
-// import TipoPerfil from "../../enums/TipoPerfil";
+// import TipoPerfilEnum from "../../enums/TipoPerfilEnum";
 
 export default {
   name: "TheContainer",
@@ -54,7 +54,7 @@ export default {
   methods: {
     // ValidarToken() {
     //   if (!this.$store.getters.getAutenticacao) this.$router.go(0);
-    //   if (this.$store.getters.getAutenticacao.perfil === TipoPerfil.Sistema)
+    //   if (this.$store.getters.getAutenticacao.perfil === TipoPerfilEnum.Sistema)
     //     return;
     //   this.$http({
     //     url: "login/validar-token",

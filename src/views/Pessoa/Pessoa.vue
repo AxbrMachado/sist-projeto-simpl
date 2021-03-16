@@ -72,6 +72,13 @@
                   <span v-else class="badge badge-secondary">Não</span>
                 </div>
               </template>
+              <template v-slot:cell(tipoPessoa)="data">
+                <div class="center">
+                  <span>{{
+                    ObterTipoPessoa(data.item.tipoPessoa)
+                  }}</span>
+                </div>
+              </template>
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
                   <b-button
@@ -119,6 +126,7 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
 export default {
   name: "Pessoa",
@@ -137,6 +145,8 @@ export default {
       filtro: { nome: "" },
       fields: [
         { key: "nome", label: "Nome", sortable: true },
+        { key: "tipoPessoa", label: "Tipo", sortable: true },
+        { key: "observacao", label: "Observação", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -217,6 +227,21 @@ export default {
             duration: 10000
           });
         });
+    },
+
+    ObterTipoPessoa(item) {
+      switch (item) {
+        case TipoPessoaEnum.Funcionario:
+          return "Funcionário";
+        case TipoPessoaEnum.Fornecedor:
+          return "Fornecedor";
+        case TipoPessoaEnum.Cliente:
+          return "Cliente";
+        case TipoPessoaEnum.Instituicao:
+          return "Instituição";
+        default:
+          return "Inválido";
+      }
     }
   }
 };

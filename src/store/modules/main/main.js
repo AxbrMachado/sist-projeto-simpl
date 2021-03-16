@@ -1,5 +1,5 @@
 import axios from "axios";
-import TipoPerfilEnum from "../../../enums/TipoPerfil";
+import TipoPerfilEnum from "../../../enums/TipoPerfilEnum";
 var url = "https://api.cooperar.coop.br/";
 if (process.env.NODE_ENV === "development") {
   url = "https://localhost:5001/api/";
