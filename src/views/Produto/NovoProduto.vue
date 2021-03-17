@@ -36,15 +36,6 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
-                    <label for>* Tipo Produto</label>
-                    <b-form-select
-                      v-model="viewModel.tipoProdutoId"
-                      :options="tipoEnquadramentos"
-                    ></b-form-select>
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
                     <label for>* Valor Base</label>
                     <input
                       v-model="viewModel.valorBase"
@@ -53,6 +44,16 @@
                       placeholder="Digite o valor base"
                       required
                     />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="form-group">
+                    <label for>* Tipo Produto</label>
+                    <b-form-select
+                      v-model="viewModel.tipoProdutoId"
+                      :options="tiposProdutoOptions"
+                      required
+                    ></b-form-select>
                   </div>
                 </div>
               </div>
@@ -83,17 +84,20 @@ export default {
   data() {
     return {
       loading: false,
-      pessoasOptions: [],
+      tiposProdutoOptions: [],
+      selected: null,
       viewModel: {
         id: this.$store.state.emptyGuid,
         descricao: "",
-        valorBase: ""
+        valorBase: 0,
+        tipoProdutoId: ""
       }
     };
   },
   created() {
     let produtoId = this.$route.params.id;
     if (produtoId) this.Obter(produtoId);
+    this.ObterTiposProdutoSelect();
   },
   methods: {
     ValidarForm(evt) {
@@ -131,7 +135,7 @@ export default {
           this.loading = false;
           this.$router.push("/produto");
           this.$notify({
-            data: ["Produto cadastrada com sucesso."],
+            data: ["Produto cadastrado com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -156,13 +160,35 @@ export default {
           this.loading = false;
           this.$router.push("/produto");
           this.$notify({
-            data: ["Produto editada com sucesso."],
+            data: ["Produto editado com sucesso."],
             type: "success",
             duration: 10000
           });
         })
         .catch((erro) => {
           this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 10000
+          });
+        });
+    },
+
+    ObterTiposProdutoSelect() {
+      this.$http({
+        url: "/tipoProduto/obter-v-select/x",
+        method: "GET"
+      })
+        .then((response) => {
+          response.data.forEach((element) => {
+            this.tiposProdutoOptions.push({
+              text: element.label,
+              value: element.id
+            });
+          });
+        })
+        .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
