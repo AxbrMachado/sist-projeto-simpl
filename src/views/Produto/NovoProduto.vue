@@ -40,7 +40,8 @@
                     <input
                       v-model="viewModel.valorBase"
                       class="form-control"
-                      type="currency"
+                      type="number"
+                      step="0.01"
                       placeholder="Digite o valor base"
                       required
                     />
@@ -177,16 +178,11 @@ export default {
 
     ObterTiposProdutoSelect() {
       this.$http({
-        url: "/tipoProduto/obter-v-select/x",
+        url: "/tipoProduto/obter-select",
         method: "GET"
       })
         .then((response) => {
-          response.data.forEach((element) => {
-            this.tiposProdutoOptions.push({
-              text: element.label,
-              value: element.id
-            });
-          });
+          this.tiposProdutoOptions = response.data;
         })
         .catch((erro) => {
           this.$notify({
