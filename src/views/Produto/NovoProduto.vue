@@ -43,10 +43,9 @@
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
                     <label for>* Valor Base</label>
-                    <input
-                      v-model.number="viewModel.valorBase"
+                    <currency-input
+                      v-model="viewModel.valorBase"
                       class="form-control"
-                      type="number"
                       placeholder="Digite o valor base"
                       required
                     />
