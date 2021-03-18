@@ -11,7 +11,13 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center">Nova Produto</strong>
+              <strong class="align-self-center"
+                >{{
+                  viewModel.id == $store.state.emptyGuid
+                    ? 'Novo Produto'
+                    : 'Editar Produto'
+                }}
+              </strong>
             </header>
             <div class="card-body">
               <div class="row">
@@ -38,10 +44,9 @@
                   <div class="form-group">
                     <label for>* Valor Base</label>
                     <input
-                      v-model="viewModel.valorBase"
+                      v-model.number="viewModel.valorBase"
                       class="form-control"
                       type="number"
-                      step="0.01"
                       placeholder="Digite o valor base"
                       required
                     />
@@ -86,7 +91,6 @@ export default {
     return {
       loading: false,
       tiposProdutoOptions: [],
-      selected: null,
       viewModel: {
         id: this.$store.state.emptyGuid,
         descricao: "",
