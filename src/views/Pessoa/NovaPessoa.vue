@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn">
-    <div v-if="loading" class="loading-container">
+    <div v-if="loadingPessoa" class="loadingPessoa-container">
       <RotateSquare
-        class="loading-position animated fadeIn"
+        class="loadingPessoa-position animated fadeIn"
         size="60px"
       ></RotateSquare>
     </div>
@@ -11,7 +11,7 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center">Nova Pessoa</strong>
+              <strong class="align-self-center">Pessoa</strong>
             </header>
             <div class="card-body">
               <div class="row">
@@ -26,7 +26,7 @@
                   <div class="form-group">
                     <label for>* Tipo</label>
                     <b-form-select
-                      v-model="viewModel.tipoPessoa"
+                      v-model="viewModelPessoa.tipoPessoa"
                       :options="tiposPessoas"
                     ></b-form-select>
                   </div>
@@ -38,7 +38,7 @@
                       isPessoaJuridica() ? "* Fantasia" : "* Nome"
                     }}</label>
                     <input
-                      v-model="viewModel.nome"
+                      v-model="viewModelPessoa.nome"
                       class="form-control"
                       type="text"
                       placeholder="Digite o nome"
@@ -54,7 +54,7 @@
                   <div class="form-group">
                     <label for>* Razão Social</label>
                     <input
-                      v-model="viewModel.nomeCompleto"
+                      v-model="viewModelPessoa.nomeCompleto"
                       class="form-control"
                       type="text"
                       placeholder="Digite a razão social"
@@ -66,7 +66,7 @@
                   <div class="form-group">
                     <label for>E-mail</label>
                     <input
-                      v-model="viewModel.email"
+                      v-model="viewModelPessoa.email"
                       class="form-control"
                       type="email"
                       placeholder="Digite o e-mail"
@@ -77,7 +77,7 @@
                   <div class="form-group">
                     <label for>Nacionalidade</label>
                     <input
-                      v-model="viewModel.nacionalidade"
+                      v-model="viewModelPessoa.nacionalidade"
                       class="form-control"
                       type="text"
                       placeholder="Digite a nacionalidade"
@@ -93,7 +93,7 @@
                       isFuncionario() ? "Data Nascimento" : "Data Fundação"
                     }}</label>
                     <input
-                      v-model="viewModel.dataNascimento"
+                      v-model="viewModelPessoa.dataNascimento"
                       class="form-control"
                       type="date"
                       placeholder="Digite a data de nascimento"
@@ -108,7 +108,7 @@
                   <div class="form-group">
                     <label for>Estado Civil</label>
                     <b-form-select
-                      v-model="viewModel.estadoCivil"
+                      v-model="viewModelPessoa.estadoCivil"
                       :options="tiposEstadoCivil"
                     ></b-form-select>
                   </div>
@@ -120,7 +120,7 @@
                   <div class="form-group">
                     <label for>Sexo</label>
                     <b-form-select
-                      v-model="viewModel.tipoSexo"
+                      v-model="viewModelPessoa.tipoSexo"
                       :options="tiposSexo"
                     ></b-form-select>
                   </div>
@@ -133,7 +133,7 @@
                     <input
                       type="text"
                       class="form-control"
-                      v-model="viewModel.telefone"
+                      v-model="viewModelPessoa.telefone"
                     />
                   </div>
                 </div>
@@ -143,7 +143,7 @@
                     <input
                       type="text"
                       class="form-control"
-                      v-model="viewModel.telefone2"
+                      v-model="viewModelPessoa.telefone2"
                     />
                   </div>
                 </div>
@@ -153,7 +153,7 @@
                   <div class="form-group">
                     <label for>Observação</label>
                     <b-form-textarea
-                      v-model="viewModel.observacao"
+                      v-model="viewModelPessoa.observacao"
                       rows="4"
                       max-rows="12"
                       placeholder="Observações gerais..."
@@ -182,6 +182,9 @@
         </div>
       </div>
     </form>
+    <div v-if="IsEdicao()">
+      <NovoDocumento> :pessoaId="viewModelPessoa.id" </NovoDocumento>
+    </div>
   </div>
 </template>
 
@@ -190,13 +193,14 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import TipoSexoEnum from "../../enums/TipoSexoEnum";
 import RotateSquare from "../../components/RotateSquare";
 import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
+import NovoDocumento from "./NovoDocumento";
 
 export default {
   name: "NovaPessoa",
-  components: { TipoPessoaEnum, TipoSexoEnum, RotateSquare },
+  components: { TipoPessoaEnum, TipoSexoEnum, RotateSquare, NovoDocumento },
   data() {
     return {
-      loading: false,
+      loadingPessoa: false,
       tiposEstadoCivil: [
         { value: TipoEstadoCivilEnum.Solteiro, text: "Solteiro" },
         { value: TipoEstadoCivilEnum.Casado, text: "Casado" },
@@ -214,8 +218,8 @@ export default {
         { value: TipoSexoEnum.Feminino, text: "Feminino" },
         { value: TipoSexoEnum.Indefinido, text: "Indefinido" }
       ],
-      viewModel: {
-        id: this.$store.state.emptyGuid,
+      viewModelPessoa: {
+        id: this.$store.getters.emptyGuid,
         tipoPessoa: 0,
         nome: "",
         nomeCompleto: "",
@@ -237,31 +241,35 @@ export default {
   methods: {
     isPessoaJuridica() {
       return (
-        this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor ||
-        this.viewModel.tipoPessoa == TipoPessoaEnum.Cliente ||
-        this.viewModel.tipoPessoa == TipoPessoaEnum.Instituicao
+        this.viewModelPessoa.tipoPessoa == TipoPessoaEnum.Fornecedor ||
+        this.viewModelPessoa.tipoPessoa == TipoPessoaEnum.Cliente ||
+        this.viewModelPessoa.tipoPessoa == TipoPessoaEnum.Instituicao
       );
     },
     isFuncionario() {
-      return this.viewModel.tipoPessoa == TipoPessoaEnum.Funcionario;
+      return this.viewModelPessoa.tipoPessoa == TipoPessoaEnum.Funcionario;
     },
     ValidarForm(evt) {
       evt.preventDefault();
-      if (this.viewModel.id !== this.$store.state.emptyGuid) this.Editar();
+      if (this.viewModelPessoa.id !== this.$store.getters.emptyGuid)
+        this.Editar();
       else this.Novo();
     },
+    ValidarFormDocumento(evt) {
+      evt.preventDefault();
+    },
     Obter(id) {
-      this.loading = true;
+      this.loadingPessoa = true;
       this.$http({
         url: "pessoa/obter/" + id,
         method: "GET"
       })
         .then((resposta) => {
-          this.loading = false;
-          this.viewModel = resposta.data;
+          this.loadingPessoa = false;
+          this.viewModelPessoa = resposta.data;
         })
         .catch((erro) => {
-          this.loading = false;
+          this.loadingPessoa = false;
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
@@ -270,15 +278,15 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loadingPessoa = true;
       this.$http({
         url: "pessoa/novo",
-        data: this.viewModel,
+        data: this.viewModelPessoa,
         method: "POST"
       })
-        .then(() => {
-          this.loading = false;
-          this.$router.push("/pessoa");
+        .then((resposta) => {
+          this.viewModelPessoa.id = resposta.data.id;
+          this.loadingPessoa = false;
           this.$notify({
             data: ["Pessoa cadastrado com sucesso."],
             type: "success",
@@ -286,7 +294,7 @@ export default {
           });
         })
         .catch((erro) => {
-          this.loading = false;
+          this.loadingPessoa = false;
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
@@ -295,14 +303,14 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loadingPessoa = true;
       this.$http({
         url: "pessoa/editar",
-        data: this.viewModel,
+        data: this.viewModelPessoa,
         method: "PUT"
       })
         .then(() => {
-          this.loading = false;
+          this.loadingPessoa = false;
           this.$router.push("/pessoa");
           this.$notify({
             data: ["Pessoa editado com sucesso."],
@@ -311,13 +319,16 @@ export default {
           });
         })
         .catch((erro) => {
-          this.loading = false;
+          this.loadingPessoa = false;
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
             duration: 10000
           });
         });
+    },
+    IsEdicao() {
+      return this.viewModelPessoa.id !== this.$store.getters.emptyGuid;
     }
   }
 };
