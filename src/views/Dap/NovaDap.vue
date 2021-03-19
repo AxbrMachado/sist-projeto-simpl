@@ -111,7 +111,7 @@ export default {
         { value: TipoEnquadramentoEnum.V, text: "V" }
       ],
       viewModel: {
-        id: this.$store.state.emptyGuid,
+        id: this.$store.getters.emptyGuid,
         numero: "",
         validade: "",
         tipoEnquadramento: 0,
@@ -136,7 +136,7 @@ export default {
         });
         return;
       }
-      if (this.viewModel.id !== this.$store.state.emptyGuid) this.Editar();
+      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
     Obter(dapId) {

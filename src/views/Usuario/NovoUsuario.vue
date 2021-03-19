@@ -143,7 +143,7 @@ export default {
       loading: false,
       contaOptions: [],
       viewModel: {
-        id: this.$store.state.emptyGuid,
+        id: this.$store.getters.emptyGuid,
         ativo: true,
         email: "",
         nome: "",
@@ -158,7 +158,7 @@ export default {
   methods: {
     ValidarForm(evt) {
       evt.preventDefault();
-      if (this.viewModel.id !== this.$store.state.emptyGuid) this.Editar();
+      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
     Obter(usuarioId) {
