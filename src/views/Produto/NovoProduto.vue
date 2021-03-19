@@ -91,7 +91,7 @@ export default {
       loading: false,
       tiposProdutoOptions: [],
       viewModel: {
-        id: this.$store.state.emptyGuid,
+        id: this.$store.getters.emptyGuid,
         descricao: "",
         valorBase: 0,
         tipoProdutoId: ""
@@ -106,7 +106,7 @@ export default {
   methods: {
     ValidarForm(evt) {
       evt.preventDefault();
-      if (this.viewModel.id !== this.$store.state.emptyGuid) this.Editar();
+      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
     Obter(produtoId) {
