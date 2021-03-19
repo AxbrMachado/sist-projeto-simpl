@@ -14,8 +14,8 @@
               <strong class="align-self-center"
                 >{{
                   viewModel.id == $store.state.emptyGuid
-                    ? 'Novo Produto'
-                    : 'Editar Produto'
+                    ? "Novo Produto"
+                    : "Editar Produto"
                 }}
               </strong>
             </header>
