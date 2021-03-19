@@ -13,7 +13,7 @@
             <header class="card-header">
               <strong class="align-self-center"
                 >{{
-                  viewModel.id == $store.state.emptyGuid
+                  viewModel.id == this.$store.getters.emptyGuid
                     ? "Novo Produto"
                     : "Editar Produto"
                 }}
