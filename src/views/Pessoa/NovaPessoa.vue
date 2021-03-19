@@ -207,6 +207,7 @@ export default {
         { value: TipoSexoEnum.Indefinido, text: "Indefinido" }
       ],
       viewModel: {
+        id: this.$store.state.emptyGuid,
         tipoPessoa: 0,
         nome: "",
         nomeCompleto: "",
@@ -230,7 +231,7 @@ export default {
       return (
         this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor ||
         this.viewModel.tipoPessoa == TipoPessoaEnum.Cliente ||
-        this.viewModel.tipoPessoa == TipoPessoaEnum.Instituicao 
+        this.viewModel.tipoPessoa == TipoPessoaEnum.Instituicao
       );
     },
     isFuncionario() {
