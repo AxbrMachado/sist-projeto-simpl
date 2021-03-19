@@ -147,6 +147,10 @@ export default {
       })
         .then((resposta) => {
           this.loading = false;
+
+          resposta.data.validade = new Date(resposta.data.validade).toISOString().split('T')[0];
+          console.log(resposta.data.validade);
+
           this.viewModel = resposta.data;
         })
         .catch((erro) => {
