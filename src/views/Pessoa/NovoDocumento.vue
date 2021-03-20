@@ -141,6 +141,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import DateTime from "../../Util/DateTime";
 
 export default {
   components: { RotateSquare },
@@ -223,9 +224,7 @@ export default {
       })
         .then((resposta) => {
           this.loading = false;
-          resposta.data.validade = new Date(resposta.data.validade)
-            .toISOString()
-            .split("T")[0];
+          resposta.data.validade = DateTime.formatar(resposta.data.validade);
           this.viewModel = resposta.data;
         })
         .catch((erro) => {
