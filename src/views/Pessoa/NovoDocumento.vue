@@ -141,7 +141,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import DateTime from "../../Util/DateTime";
+import DateTime from "../../util/DateTime";
 
 export default {
   components: { RotateSquare },
