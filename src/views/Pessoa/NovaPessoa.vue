@@ -26,7 +26,7 @@
                   <div class="form-group">
                     <label for>* Tipo</label>
                     <b-form-select
-                      v-model="viewModelPessoa.tipoPessoa"
+                      v-model="viewModel.tipoPessoa"
                       :options="tiposPessoas"
                     ></b-form-select>
                   </div>
@@ -38,7 +38,7 @@
                       isPessoaJuridica() ? "* Fantasia" : "* Nome"
                     }}</label>
                     <input
-                      v-model="viewModelPessoa.nome"
+                      v-model="viewModel.nome"
                       class="form-control"
                       type="text"
                       placeholder="Digite o nome"
@@ -54,7 +54,7 @@
                   <div class="form-group">
                     <label for>* Razão Social</label>
                     <input
-                      v-model="viewModelPessoa.nomeCompleto"
+                      v-model="viewModel.nomeCompleto"
                       class="form-control"
                       type="text"
                       placeholder="Digite a razão social"
@@ -66,7 +66,7 @@
                   <div class="form-group">
                     <label for>E-mail</label>
                     <input
-                      v-model="viewModelPessoa.email"
+                      v-model="viewModel.email"
                       class="form-control"
                       type="email"
                       placeholder="Digite o e-mail"
@@ -77,7 +77,7 @@
                   <div class="form-group">
                     <label for>Nacionalidade</label>
                     <input
-                      v-model="viewModelPessoa.nacionalidade"
+                      v-model="viewModel.nacionalidade"
                       class="form-control"
                       type="text"
                       placeholder="Digite a nacionalidade"
@@ -93,7 +93,7 @@
                       isFuncionario() ? "Data Nascimento" : "Data Fundação"
                     }}</label>
                     <input
-                      v-model="viewModelPessoa.dataNascimento"
+                      v-model="viewModel.dataNascimento"
                       class="form-control"
                       type="date"
                       placeholder="Digite a data de nascimento"
@@ -108,7 +108,7 @@
                   <div class="form-group">
                     <label for>Estado Civil</label>
                     <b-form-select
-                      v-model="viewModelPessoa.estadoCivil"
+                      v-model="viewModel.estadoCivil"
                       :options="tiposEstadoCivil"
                     ></b-form-select>
                   </div>
@@ -120,7 +120,7 @@
                   <div class="form-group">
                     <label for>Sexo</label>
                     <b-form-select
-                      v-model="viewModelPessoa.tipoSexo"
+                      v-model="viewModel.tipoSexo"
                       :options="tiposSexo"
                     ></b-form-select>
                   </div>
@@ -133,7 +133,7 @@
                     <input
                       type="text"
                       class="form-control"
-                      v-model="viewModelPessoa.telefone"
+                      v-model="viewModel.telefone"
                     />
                   </div>
                 </div>
@@ -143,7 +143,7 @@
                     <input
                       type="text"
                       class="form-control"
-                      v-model="viewModelPessoa.telefone2"
+                      v-model="viewModel.telefone2"
                     />
                   </div>
                 </div>
@@ -153,7 +153,7 @@
                   <div class="form-group">
                     <label for>Observação</label>
                     <b-form-textarea
-                      v-model="viewModelPessoa.observacao"
+                      v-model="viewModel.observacao"
                       rows="4"
                       max-rows="12"
                       placeholder="Observações gerais..."
@@ -183,7 +183,7 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <NovoDocumento> :pessoaId="viewModelPessoa.id" </NovoDocumento>
+      <NovoDocumento :pessoaId="viewModel.id"> </NovoDocumento>
     </div>
   </div>
 </template>
@@ -218,7 +218,7 @@ export default {
         { value: TipoSexoEnum.Feminino, text: "Feminino" },
         { value: TipoSexoEnum.Indefinido, text: "Indefinido" }
       ],
-      viewModelPessoa: {
+      viewModel: {
         id: this.$store.getters.emptyGuid,
         tipoPessoa: 0,
         nome: "",
@@ -241,18 +241,17 @@ export default {
   methods: {
     isPessoaJuridica() {
       return (
-        this.viewModelPessoa.tipoPessoa == TipoPessoaEnum.Fornecedor ||
-        this.viewModelPessoa.tipoPessoa == TipoPessoaEnum.Cliente ||
-        this.viewModelPessoa.tipoPessoa == TipoPessoaEnum.Instituicao
+        this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor ||
+        this.viewModel.tipoPessoa == TipoPessoaEnum.Cliente ||
+        this.viewModel.tipoPessoa == TipoPessoaEnum.Instituicao
       );
     },
     isFuncionario() {
-      return this.viewModelPessoa.tipoPessoa == TipoPessoaEnum.Funcionario;
+      return this.viewModel.tipoPessoa == TipoPessoaEnum.Funcionario;
     },
     ValidarForm(evt) {
       evt.preventDefault();
-      if (this.viewModelPessoa.id !== this.$store.getters.emptyGuid)
-        this.Editar();
+      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
     ValidarFormDocumento(evt) {
@@ -266,7 +265,7 @@ export default {
       })
         .then((resposta) => {
           this.loadingPessoa = false;
-          this.viewModelPessoa = resposta.data;
+          this.viewModel = resposta.data;
         })
         .catch((erro) => {
           this.loadingPessoa = false;
@@ -281,11 +280,11 @@ export default {
       this.loadingPessoa = true;
       this.$http({
         url: "pessoa/novo",
-        data: this.viewModelPessoa,
+        data: this.viewModel,
         method: "POST"
       })
         .then((resposta) => {
-          this.viewModelPessoa.id = resposta.data.id;
+          this.viewModel.id = resposta.data.id;
           this.loadingPessoa = false;
           this.$notify({
             data: ["Pessoa cadastrado com sucesso."],
@@ -306,7 +305,7 @@ export default {
       this.loadingPessoa = true;
       this.$http({
         url: "pessoa/editar",
-        data: this.viewModelPessoa,
+        data: this.viewModel,
         method: "PUT"
       })
         .then(() => {
@@ -328,7 +327,7 @@ export default {
         });
     },
     IsEdicao() {
-      return this.viewModelPessoa.id !== this.$store.getters.emptyGuid;
+      return this.viewModel.id !== this.$store.getters.emptyGuid;
     }
   }
 };
