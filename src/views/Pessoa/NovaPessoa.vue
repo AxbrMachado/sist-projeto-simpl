@@ -196,6 +196,7 @@ import RotateSquare from "../../components/RotateSquare";
 import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
 import NovoDocumento from "./NovoDocumento";
 import NovoEndereco from "./NovoEndereco";
+import DateTime from "../../util/DateTime";
 
 export default {
   name: "NovaPessoa",
@@ -204,7 +205,8 @@ export default {
     TipoSexoEnum,
     RotateSquare,
     NovoDocumento,
-    NovoEndereco
+    NovoEndereco,
+    DateTime
   },
   data() {
     return {
@@ -273,6 +275,7 @@ export default {
       })
         .then((resposta) => {
           this.loadingPessoa = false;
+          resposta.data.dataNascimento = DateTime.formatar(resposta.data.dataNascimento);
           this.viewModel = resposta.data;
         })
         .catch((erro) => {
