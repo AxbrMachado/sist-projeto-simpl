@@ -11,7 +11,13 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center">Novo Tipo Documento</strong>
+              <strong class="align-self-center"
+                >{{
+                  viewModel.id == this.$store.getters.emptyGuid
+                    ? "Novo Tipo de Documento"
+                    : "Editar Tipo de Documento"
+                }}
+              </strong>
             </header>
             <div class="card-body">
               <div class="row">
