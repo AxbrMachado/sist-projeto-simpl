@@ -11,7 +11,13 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center">Nova Dap</strong>
+              <strong class="align-self-center"
+                >{{
+                  viewModel.id == this.$store.getters.emptyGuid
+                    ? "Nova Dap"
+                    : "Editar Dap"
+                }}
+              </strong>
             </header>
             <div class="card-body">
               <div class="row">
@@ -94,6 +100,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
+import DateTime from "../../util/DateTime";
 
 export default {
   name: "NovoDap",
@@ -147,10 +154,7 @@ export default {
       })
         .then((resposta) => {
           this.loading = false;
-
-          resposta.data.validade = new Date(resposta.data.validade).toISOString().split('T')[0];
-          console.log(resposta.data.validade);
-
+          resposta.data.validade = DateTime.formatar(resposta.data.validade);
           this.viewModel = resposta.data;
         })
         .catch((erro) => {
