@@ -184,6 +184,7 @@
     </form>
     <div v-if="IsEdicao()">
       <NovoDocumento :pessoaId="viewModel.id"> </NovoDocumento>
+      <NovoEndereco :pessoaId="viewModel.id"> </NovoEndereco>
     </div>
   </div>
 </template>
@@ -194,10 +195,17 @@ import TipoSexoEnum from "../../enums/TipoSexoEnum";
 import RotateSquare from "../../components/RotateSquare";
 import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
 import NovoDocumento from "./NovoDocumento";
+import NovoEndereco from "./NovoEndereco";
 
 export default {
   name: "NovaPessoa",
-  components: { TipoPessoaEnum, TipoSexoEnum, RotateSquare, NovoDocumento },
+  components: {
+    TipoPessoaEnum,
+    TipoSexoEnum,
+    RotateSquare,
+    NovoDocumento,
+    NovoEndereco
+  },
   data() {
     return {
       loadingPessoa: false,
