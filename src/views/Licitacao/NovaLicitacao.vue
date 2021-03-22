@@ -121,18 +121,29 @@
                 </div>
               </div>
             </div>
+            <div class="btn-toolbar mb-3 ml-3" role="toolbar">
+              <div class="btn-group" role="group">
+                <button class="btn btn-success mr-2" type="submit">
+                  Salvar
+                </button>
+              </div>
+              <div class="btn-group" role="group">
+                <button
+                  class="btn btn-secondary"
+                  type="reset"
+                  @click="$router.push('/licitacao')"
+                >
+                  Voltar
+                </button>
+              </div>
+            </div>
           </div>
-          <button class="btn btn-success mr-2" type="submit">Salvar</button>
-          <button
-            class="btn btn-secondary"
-            type="reset"
-            @click="$router.push('/licitacao')"
-          >
-            Voltar
-          </button>
         </div>
       </div>
     </form>
+    <div v-if="IsEdicao()">
+      <LicitacaoContrato :licitacaoId="viewModel.id"> </LicitacaoContrato>
+    </div>
   </div>
 </template>
 
@@ -140,12 +151,14 @@
 import RotateSquare from "../../components/RotateSquare";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import DateTime from "../../util/DateTime";
+import LicitacaoContrato from "./LicitacaoContrato";
 
 export default {
   name: "NovoLicitacao",
   components: {
     RotateSquare,
-    TipoPessoaEnum
+    TipoPessoaEnum,
+    LicitacaoContrato
   },
   data() {
     return {
@@ -286,6 +299,9 @@ export default {
             duration: 10000
           });
         });
+    },
+    IsEdicao() {
+      return this.viewModel.id !== this.$store.getters.emptyGuid;
     }
   }
 };

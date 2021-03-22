@@ -275,7 +275,9 @@ export default {
       })
         .then((resposta) => {
           this.loadingPessoa = false;
-          resposta.data.dataNascimento = DateTime.formatar(resposta.data.dataNascimento);
+          resposta.data.dataNascimento = DateTime.formatar(
+            resposta.data.dataNascimento
+          );
           this.viewModel = resposta.data;
         })
         .catch((erro) => {

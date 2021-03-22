@@ -115,15 +115,23 @@
                 </div>
               </div> -->
             </div>
+            <div class="btn-toolbar mb-3 ml-3" role="toolbar">
+              <div class="btn-group" role="group">
+                <button class="btn btn-success mr-2" type="submit">
+                  Salvar
+                </button>
+              </div>
+              <div class="btn-group" role="group">
+                <button
+                  class="btn btn-secondary"
+                  type="reset"
+                  @click="$router.push('/usuario')"
+                >
+                  Voltar
+                </button>
+              </div>
+            </div>
           </div>
-          <button class="btn btn-success mr-2" type="submit">Salvar</button>
-          <button
-            class="btn btn-secondary"
-            type="reset"
-            @click="$router.push('/usuario')"
-          >
-            Voltar
-          </button>
         </div>
       </div>
     </form>
