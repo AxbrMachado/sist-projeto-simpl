@@ -92,7 +92,7 @@
               </template>
               <template v-slot:cell(dataVencimento)="data">
                 <div class="center">
-                  <span>{{ FormatarData(data.item.dataVencimento) }}</span>
+                  <span>{{ formatarData(data.item.dataVencimento) }}</span>
                 </div>
               </template>
             </b-table>
@@ -242,7 +242,7 @@ export default {
       }
     },
 
-    FormatarData(validade) {
+    formatarData(validade) {
       var dataValidade = new Date(validade);
       return dataValidade.toLocaleDateString();
     }
