@@ -155,6 +155,8 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
+import DocumentoServico from "./servico/DocumentoServico";
+import TipoDocumentoServico from "../../views/TipoDocumento/servico/TipoDocumentoServico";
 
 export default {
   components: { RotateSquare },
@@ -205,10 +207,7 @@ export default {
   methods: {
     ObterTipoDocumento() {
       this.loading = true;
-      this.$http({
-        url: "tipodocumento/obter-select",
-        method: "GET"
-      })
+      TipoDocumentoServico.ObterSelect()
         .then((resposta) => {
           this.loading = false;
           this.tipos = resposta.data;
@@ -232,10 +231,7 @@ export default {
     },
     Obter(id) {
       this.loading = true;
-      this.$http({
-        url: "documento/obter/" + id,
-        method: "GET"
-      })
+      DocumentoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -252,16 +248,7 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      this.$http({
-        url:
-          "documento/obter-grid/" +
-          val +
-          "/" +
-          this.itensPorPagina +
-          "/" +
-          this.pessoaId,
-        method: "GET"
-      })
+      DocumentoServico.ObterGrid(val, this.itensPorPagina, this.pessoaId)
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -278,10 +265,7 @@ export default {
         });
     },
     Remover(id) {
-      this.$http({
-        url: "documento/remover/" + id,
-        method: "DELETE"
-      })
+      DocumentoServico.Remover(id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -301,11 +285,7 @@ export default {
     Novo() {
       this.loading = true;
       this.viewModel.pessoaId = this.pessoaId;
-      this.$http({
-        url: "documento/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+      DocumentoServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -328,12 +308,7 @@ export default {
     Editar() {
       this.loading = true;
       this.viewModel.pessoaId = this.pessoaId;
-
-      this.$http({
-        url: "documento/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+      DocumentoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
