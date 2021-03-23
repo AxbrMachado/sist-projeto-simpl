@@ -1,5 +1,4 @@
 <template>
-  <!-- <div v-show="!IsNovo()"> -->
   <div class="animated fadeIn">
     <div v-if="loading" class="loading-container">
       <RotateSquare
@@ -151,7 +150,6 @@
       </div>
     </form>
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
