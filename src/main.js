@@ -10,6 +10,7 @@ import router from "./router";
 import store from "./store/index";
 import App from "./App.vue";
 import VueCurrencyInput from 'vue-currency-input'
+import HighchartsVue from 'highcharts-vue'
 
 const pluginOptions = {
   globalOptions: { currency: 'BRL'}
@@ -47,7 +48,7 @@ Vue.use(BootstrapVue);
 
 Vue.use(Notifications);
 Vue.component("v-select", VSelect);
-
+Vue.use(HighchartsVue)
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {

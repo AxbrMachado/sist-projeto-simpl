@@ -50,9 +50,12 @@
 </template>
 
 <script>
+import { Highcharts } from "highcharts-vue";
 export default {
   name: "Dashboard",
-  components: {},
+  components: {
+    highcharts
+  },
   data() {
     return {};
   },
