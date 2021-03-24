@@ -231,7 +231,7 @@ export default {
           return "A";
         case TipoEnquadramentoEnum.Grupo_B:
           return "B";
-        case TipoEnquadramentoEnum.GRUPO_AC:
+        case TipoEnquadramentoEnum.Grupo_AC:
           return "AC";
         case TipoEnquadramentoEnum.Grupo_V:
           return "V";

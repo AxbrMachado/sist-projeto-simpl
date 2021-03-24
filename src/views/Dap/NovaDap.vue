@@ -108,12 +108,14 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
+import TipoPessoaEnum from '../../enums/TipoPessoaEnum';
 import DateTime from "../../util/DateTime";
 
 export default {
   name: "NovoDap",
   components: {
-    RotateSquare
+    RotateSquare,
+    TipoPessoaEnum
   },
   data() {
     return {
@@ -122,8 +124,8 @@ export default {
       tipoEnquadramentos: [
         { value: TipoEnquadramentoEnum.Grupo_A, text: "A" },
         { value: TipoEnquadramentoEnum.Grupo_B, text: "B" },
-        { value: TipoEnquadramentoEnum.GRUPO_AC, text: "AC" },
-        { value: TipoEnquadramentoEnum.V, text: "V" }
+        { value: TipoEnquadramentoEnum.Grupo_AC, text: "AC" },
+        { value: TipoEnquadramentoEnum.Grupo_V, text: "V" }
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
@@ -228,7 +230,7 @@ export default {
       if (!busca || busca.length <= 3) return;
 
       this.$http({
-        url: "/pessoa/obter-v-select/" + busca,
+        url: "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
         method: "GET"
       })
         .then((response) => {
