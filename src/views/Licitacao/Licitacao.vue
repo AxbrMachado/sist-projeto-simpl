@@ -124,6 +124,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
+import LicitacaoServico from "../../servico/LicitacaoServico";
 
 export default {
   name: "Licitacao",

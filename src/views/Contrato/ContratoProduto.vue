@@ -6,13 +6,13 @@
         size="60px"
       ></RotateSquare>
     </div>
-    <form v-else @submit="ValidarFormDocumento">
+    <form v-else @submit="ValidarFormContratoProduto">
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Documento(s)</strong>
+                <strong class="align-self-center">Produtos(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
 
                 <i
@@ -38,46 +38,34 @@
                 <div class="row">
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
-                      <label for="">* Número</label>
-                      <input
-                        class="form-control"
-                        type="text"
-                        v-model="viewModel.numero"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for="">Validade</label>
-                      <input
-                        class="form-control"
-                        type="date"
-                        v-model="viewModel.validade"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Tipo</label>
+                      <label for>* Produto</label>
                       <b-form-select
-                        v-model="viewModel.tipoDocumentoId"
-                        :options="tipos"
+                        v-model="viewModel.produtoId"
+                        :options="produtoOptions"
                         required
                       ></b-form-select>
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
-                      <label for>Observação</label>
-                      <b-form-textarea
-                        v-model="viewModel.observacao"
-                        rows="4"
-                        max-rows="12"
-                        placeholder="Observações gerais..."
-                      ></b-form-textarea>
+                      <label for>* Valor</label>
+                      <currency-input
+                        v-model="viewModel.valor"
+                        class="form-control"
+                        placeholder="Digite o valor base"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                      <label for>* Quantidade</label>
+                      <currency-input
+                        v-model="viewModel.quantidade"
+                        class="form-control"
+                        placeholder="Digite a quantidade"
+                        required
+                      />
                     </div>
                   </div>
                 </div>
@@ -91,7 +79,7 @@
                     <button
                       class="btn btn-secondary"
                       type="reset"
-                      @click="$router.push('/pessoa')"
+                      @click="$router.push('/contrato')"
                     >
                       Voltar
                     </button>
@@ -107,7 +95,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum documento encontrado."
+                      empty-text="Nenhum produto encontrado."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -132,6 +120,11 @@
                           </b-button>
                         </div>
                       </template>
+                      <template v-slot:cell(valor)="data">
+                        <div class="left">
+                          <span>{{ FormataValor(data.item.valor) }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -154,21 +147,19 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import DateTime from "../../util/DateTime";
-import DocumentoServico from "../../servico/DocumentoServico";
-import TipoDocumentoServico from "../../views/TipoDocumento/servico/TipoDocumentoServico";
+import ContratoProduto from "../../servico/ContratoProdutoServico";
 
 export default {
   components: { RotateSquare },
   props: {
-    pessoaId: {
+    contratoId: {
       type: String,
       default: ""
     }
   },
   data() {
     return {
-      tipos: [],
+      produtoOptions: [],
       loading: false,
       pagina: 1,
       total: 0,
@@ -176,8 +167,10 @@ export default {
       itens: [],
       abrir: false,
       fields: [
-        { key: "numero", label: "Número", sortable: true },
-        { key: "tipoDocumento", label: "Tipo", sortable: true },
+        { key: "produto", label: "Produto", sortable: true },
+        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        { key: "valor", label: "Valor", sortable: true },
+        { key: "quantidade", label: "Quantidade", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -187,16 +180,14 @@ export default {
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        tipoDocumentoId: "",
-        numero: "",
-        observacao: "",
-        validade: "",
-        pessoaId: ""
+        produtoId: "",
+        contratoId: "",
+        valor: 0,
+        quantidade: 0
       }
     };
   },
   mounted() {
-    this.ObterTipoDocumento();
     this.ObterGrid(1);
   },
   watch: {
@@ -204,37 +195,26 @@ export default {
       this.ObterGrid(val);
     }
   },
+  created() {
+    //let contratoId = this.$route.params.id;
+    //if (contratoId) this.Obter(contratoId);
+    this.ObterProdutosSelect();
+  },
   methods: {
-    ObterTipoDocumento() {
-      this.loading = true;
-      TipoDocumentoServico.ObterSelect()
-        .then((resposta) => {
-          this.loading = false;
-          this.tipos = resposta.data;
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
     IsNovo() {
-      return this.pessoaId === this.$store.getters.emptyGuid;
+      return this.contratoId === this.$store.getters.emptyGuid;
     },
-    ValidarFormDocumento(evt) {
+    ValidarFormContratoProduto(evt) {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
     Obter(id) {
       this.loading = true;
-      DocumentoServico.Obter(id)
+      ContratoProduto.Obter(id)
         .then((resposta) => {
           this.loading = false;
-          resposta.data.validade = DateTime.formatar(resposta.data.validade);
+          //resposta.data.validade = DateTime.formatar(resposta.data.validade);
           this.viewModel = resposta.data;
         })
         .catch((erro) => {
@@ -248,7 +228,7 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      DocumentoServico.ObterGrid(val, this.itensPorPagina, this.pessoaId)
+      ContratoProduto.ObterGrid(val, this.itensPorPagina, this.contratoId)
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -265,11 +245,11 @@ export default {
         });
     },
     Remover(id) {
-      DocumentoServico.Remover(id)
+      ContratoProduto.Remover(id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Documento removido com sucesso."],
+            data: ["Produto removido com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -284,14 +264,14 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.viewModel.pessoaId = this.pessoaId;
-      DocumentoServico.Novo(this.viewModel)
+      this.viewModel.contratoId = this.contratoId;
+      ContratoProduto.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Documento cadastrado com sucesso."],
+            data: ["Produto cadastrado com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -307,14 +287,14 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.viewModel.pessoaId = this.pessoaId;
-      DocumentoServico.Editar(this.viewModel)
+      this.viewModel.contratoId = this.contratoId;
+      ContratoProduto.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Documento editado com sucesso."],
+            data: ["Produto editado com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -330,11 +310,43 @@ export default {
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
-      this.viewModel.tipoDocumentoId = "";
-      this.viewModel.numero = "";
-      this.viewModel.observacao = "";
-      this.viewModel.validade = "";
-      this.viewModel.pessoaId = "";
+      this.viewModel.produtoId = "";
+      this.viewModel.contratoId = "";
+      this.viewModel.valor = 0;
+      this.viewModel.quantidade = 0;
+    },
+    FormataValor(valor) {
+      if (valor != null) {
+        return valor.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      } else {
+        return valor;
+      }
+    },
+    RemoverCifrao(valor) {
+      if (valor != null) {
+        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+      } else {
+        return valor;
+      }
+    },
+    ObterProdutosSelect() {
+      this.$http({
+        url: "/produto/obter-select",
+        method: "GET"
+      })
+        .then((response) => {
+          this.produtoOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 10000
+          });
+        });
     }
   }
 };
