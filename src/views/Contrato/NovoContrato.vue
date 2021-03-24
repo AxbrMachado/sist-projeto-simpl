@@ -107,19 +107,22 @@
         </div>
       </div>
     </form>
+    <div v-if="IsEdicao()">
+      <ContratoProduto :contratoId="viewModel.id"> </ContratoProduto>
+    </div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import ContratoProduto from "./ContratoProduto";
 import DateTime from "../../util/DateTime";
 
 export default {
   name: "NovoContrato",
   components: {
     RotateSquare,
-    TipoPessoaEnum
+    ContratoProduto
   },
   data() {
     return {
@@ -183,6 +186,10 @@ export default {
       })
         .then(() => {
           this.loading = false;
+          // this.$router.push(
+          //   "/contrato/editar/" + "68f2d01a-a002-4c2c-b640-169d47f52c91"
+          // );
+
           this.$router.push("/contrato");
           this.$notify({
             data: ["Contrato cadastrada com sucesso."],
@@ -257,6 +264,9 @@ export default {
             duration: 10000
           });
         });
+    },
+    IsEdicao() {
+      return this.viewModel.id !== this.$store.getters.emptyGuid;
     }
   }
 };
