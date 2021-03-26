@@ -97,11 +97,7 @@
                 </div>
                 <div class="btn-toolbar mb-3" role="toolbar">
                   <div class="btn-group" role="group">
-                    <button
-                      class="btn btn-success mr-2"
-                      type="submit"
-                      :disabled="loadingArquivo"
-                    >
+                    <button class="btn btn-success mr-2" type="submit">
                       Salvar
                     </button>
                   </div>
@@ -134,6 +130,18 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
+                          <a
+                            class="btn btn-secondary mr-2"
+                            :href="
+                              $store.getters.baseURL +
+                              'arquivo/obter/' +
+                              data.item.arquivoId
+                            "
+                            title="Baixar"
+                            target="_blank"
+                          >
+                            <i class="fas fa-download text-black"></i>
+                          </a>
                           <b-button
                             variant="warning"
                             style="margin-right: 10px"
@@ -176,7 +184,7 @@ import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
 import DocumentoServico from "../../servico/DocumentoServico";
 import TipoDocumentoServico from "../../views/TipoDocumento/servico/TipoDocumentoServico";
-import ArquivoServiceo from "../../servico/DocumentoServico";
+import ArquivoServico from "../../servico/ArquivoServico";
 
 export default {
   components: { RotateSquare },
@@ -228,16 +236,29 @@ export default {
     }
   },
   methods: {
-    NovoArquivo(arquivo) {
-      console.log("Arquivo: ", arquivo);
-      this.loadingArquivo = true;
-      ArquivoServiceo.Novo(arquivo)
+    NovoArquivo() {
+      console.log("Arquivo: ", this.arquivo);
+
+      if (!this.arquivo) this.Novo();
+      else if (this.arquivo.size > 1024 * 1024 * 5) {
+        this.$notify({
+          data: [
+            "O arquivo selecionado é maior que 5MB e não pode ser enviado."
+          ],
+          type: "warn",
+          duration: 10000
+        });
+        return;
+      }
+      this.loading = true;
+      ArquivoServico.Novo(this.arquivo)
         .then((resposta) => {
-          this.loadingArquivo = false;
+          this.loading = false;
           this.viewModel.arquivoId = resposta.data;
+          this.Novo();
         })
         .catch((erro) => {
-          this.loadingArquivo = false;
+          this.loading = false;
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
@@ -267,7 +288,7 @@ export default {
     ValidarFormDocumento(evt) {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.Novo();
+      else this.NovoArquivo();
     },
     Obter(id) {
       this.loading = true;
