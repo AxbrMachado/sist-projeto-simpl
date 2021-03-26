@@ -68,6 +68,20 @@
                     </div>
                   </div>
                 </div>
+                <div v-if="IsNovo()" class="row">
+                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                      <label for>Arquivo </label> <small>Limite 5MB</small>
+                      <b-form-file
+                        v-model="arquivo"
+                        :state="Boolean(arquivo)"
+                        placeholder="Escolha o arquivo..."
+                        accept=".jpg, .png, .jpeg, .pdf, .doc, .docx, .xls, .xlsx"
+                        browse-text="Procurar"
+                      ></b-form-file>
+                    </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="form-group">
@@ -83,7 +97,11 @@
                 </div>
                 <div class="btn-toolbar mb-3" role="toolbar">
                   <div class="btn-group" role="group">
-                    <button class="btn btn-success mr-2" type="submit">
+                    <button
+                      class="btn btn-success mr-2"
+                      type="submit"
+                      :disabled="loadingArquivo"
+                    >
                       Salvar
                     </button>
                   </div>
@@ -97,6 +115,7 @@
                     </button>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-12">
                     <b-table
@@ -157,6 +176,7 @@ import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
 import DocumentoServico from "../../servico/DocumentoServico";
 import TipoDocumentoServico from "../../views/TipoDocumento/servico/TipoDocumentoServico";
+import ArquivoServiceo from "../../servico/DocumentoServico";
 
 export default {
   components: { RotateSquare },
@@ -170,11 +190,13 @@ export default {
     return {
       tipos: [],
       loading: false,
+      loadingArquivo: false,
       pagina: 1,
       total: 0,
       itensPorPagina: 5,
       itens: [],
       abrir: false,
+      arquivo: null,
       fields: [
         { key: "numero", label: "Número", sortable: true },
         { key: "tipoDocumento", label: "Tipo", sortable: true },
@@ -191,7 +213,8 @@ export default {
         numero: "",
         observacao: "",
         validade: "",
-        pessoaId: ""
+        pessoaId: "",
+        arquivoId: ""
       }
     };
   },
@@ -205,6 +228,23 @@ export default {
     }
   },
   methods: {
+    NovoArquivo(arquivo) {
+      console.log("Arquivo: ", arquivo);
+      this.loadingArquivo = true;
+      ArquivoServiceo.Novo(arquivo)
+        .then((resposta) => {
+          this.loadingArquivo = false;
+          this.viewModel.arquivoId = resposta.data;
+        })
+        .catch((erro) => {
+          this.loadingArquivo = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 10000
+          });
+        });
+    },
     ObterTipoDocumento() {
       this.loading = true;
       TipoDocumentoServico.ObterSelect()
@@ -222,7 +262,7 @@ export default {
         });
     },
     IsNovo() {
-      return this.pessoaId === this.$store.getters.emptyGuid;
+      return this.viewModel.id === this.$store.getters.emptyGuid;
     },
     ValidarFormDocumento(evt) {
       evt.preventDefault();
