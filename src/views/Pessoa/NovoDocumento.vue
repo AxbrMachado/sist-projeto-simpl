@@ -131,6 +131,7 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <a
+                            v-if="data.item.arquivoId"
                             class="btn btn-secondary mr-2"
                             :href="
                               $store.getters.baseURL +
@@ -142,6 +143,13 @@
                           >
                             <i class="fas fa-download text-black"></i>
                           </a>
+                          <b-button
+                            v-else
+                            disabled
+                            class="btn btn-secondary mr-2"
+                            title="Sem arquivo"
+                            ><i class="fas fa-download text-black"></i
+                          ></b-button>
                           <b-button
                             variant="warning"
                             style="margin-right: 10px"
