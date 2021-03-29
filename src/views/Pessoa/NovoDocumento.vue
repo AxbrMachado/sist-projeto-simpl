@@ -75,9 +75,10 @@
                       <b-form-file
                         v-model="arquivo"
                         :state="Boolean(arquivo)"
-                        placeholder="Escolha o arquivo..."
+                        placeholder="Escolha o(s) arquivo(s)..."
                         accept=".jpg, .png, .jpeg, .pdf, .doc, .docx, .xls, .xlsx"
                         browse-text="Procurar"
+                        multiple
                       ></b-form-file>
                     </div>
                   </div>
@@ -130,19 +131,13 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
-                          <a
-                            v-if="data.item.arquivoId"
+                          <b-button
+                            v-if="data.item.arquivos"
                             class="btn btn-secondary mr-2"
-                            :href="
-                              $store.getters.baseURL +
-                              'arquivo/obter/' +
-                              data.item.arquivoId
-                            "
-                            title="Baixar"
-                            target="_blank"
+                            title="Visualizar arquivos"
                           >
                             <i class="fas fa-download text-black"></i>
-                          </a>
+                          </b-button>
                           <b-button
                             v-else
                             disabled
@@ -230,7 +225,7 @@ export default {
         observacao: "",
         validade: "",
         pessoaId: "",
-        arquivoId: ""
+        arquivos: ""
       }
     };
   },
@@ -262,7 +257,7 @@ export default {
       ArquivoServico.Novo(this.arquivo)
         .then((resposta) => {
           this.loading = false;
-          this.viewModel.arquivoId = resposta.data;
+          this.viewModel.arquivos = resposta.data;
           this.Novo();
         })
         .catch((erro) => {

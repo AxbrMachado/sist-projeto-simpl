@@ -7,9 +7,12 @@ class ArquivoServico {
         });
     }
 
-    Novo(arquivo) {
+    Novo(arquivos) {
+        console.log(arquivos);
         let formData = new FormData();
-        formData.append("arquivo", arquivo);
+        for (let index = 0; index < arquivos.length; index++) {
+            formData.append("arquivo", arquivos[index]);
+        }
         return Vue.prototype.$http({
             url: "arquivo/novo",
             data: formData,
