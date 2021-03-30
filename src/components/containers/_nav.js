@@ -70,20 +70,20 @@ const Menu = {
   },
   TipoInstituicao: {
     _name: "CSidebarNavItem",
-    name: "Tipo Instituicao",
+    name: "Tipo Instituição",
     to: "/tipoInstituicao",
     icon: "cil-description"
   },
   TipoEndereco: {
     _name: "CSidebarNavItem",
-    name: "Tipo Endereco",
+    name: "Tipo Endereço",
     to: "/tipoEndereco",
     icon: "cil-description"
   },
 
   Licitacao: {
     _name: "CSidebarNavItem",
-    name: "Licitacao",
+    name: "Licitação",
     to: "/licitacao",
     icon: "cil-description"
   },
