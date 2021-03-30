@@ -131,7 +131,12 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
-                          <ModalArquivo :arquivos="data.item.arquivos" />
+                          <ModalArquivo
+                            :arquivos="data.item.arquivos"
+                            :urlDownload="'arquivo/obter/'"
+                            :urlRemover="'documentoanexo/remover/'"
+                            :vinculoId="data.item.id"
+                          />
                           <b-button
                             variant="warning"
                             style="margin-right: 10px"
@@ -175,7 +180,7 @@ import DateTime from "../../util/DateTime";
 import DocumentoServico from "../../servico/DocumentoServico";
 import TipoDocumentoServico from "../../views/TipoDocumento/servico/TipoDocumentoServico";
 import ArquivoServico from "../../servico/ArquivoServico";
-import ModalArquivo from "./ModalArquivo";
+import ModalArquivo from "../../components/ModalArquivo";
 
 export default {
   components: { RotateSquare, ModalArquivo },
@@ -211,7 +216,7 @@ export default {
         tipoDocumentoId: "",
         numero: "",
         observacao: "",
-        validade: "",
+        validade: null,
         pessoaId: "",
         arquivos: []
       }
@@ -228,8 +233,6 @@ export default {
   },
   methods: {
     NovoArquivo() {
-      console.log("Arquivo: ", this.arquivo);
-
       if (!this.arquivo) this.Novo();
       else if (this.arquivo.size > 1024 * 1024 * 5) {
         this.$notify({
@@ -385,7 +388,7 @@ export default {
       this.viewModel.tipoDocumentoId = "";
       this.viewModel.numero = "";
       this.viewModel.observacao = "";
-      this.viewModel.validade = "";
+      this.viewModel.validade = null;
       this.viewModel.pessoaId = "";
       this.viewModel.arquivos = [];
     }

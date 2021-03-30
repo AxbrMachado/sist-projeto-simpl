@@ -14,12 +14,23 @@
       hide-footer
     >
       <div class="row" v-for="(item, index) in arquivos" :key="index">
-        <div class="col-6">
+        <div class="col-5">
           <a
-            :href="$store.getters.baseURL + 'arquivo/obter/' + item"
+            class="btn btn-primary mb-1"
+            :href="$store.getters.baseURL + urlDownload + item"
             target="_blank"
             >Arquivo {{ index + 1 }}</a
           >
+        </div>
+        <div class="col-3">
+          <button class="btn btn-danger mb-1" @click="Remover(item)">
+            Remover
+          </button>
+        </div>
+      </div>
+      <div class="row" v-if="!TemArquivo()">
+        <div class="col-6">
+          <span>Nenhum arquivo...</span>
         </div>
       </div>
     </b-modal>
@@ -27,14 +38,24 @@
 </template>
 
 <script>
-import DocumentoServico from "../../servico/DocumentoServico";
-
 export default {
   components: {},
   props: {
     arquivos: {
       type: Array,
       default: []
+    },
+    urlDownload: {
+      type: String,
+      default: ""
+    },
+    urlRemover: {
+      type: String,
+      default: ""
+    },
+    vinculoId: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -42,9 +63,7 @@ export default {
       abrir: false
     };
   },
-  mounted() {
-    console.log(this.arquivos);
-  },
+  mounted() {},
   methods: {
     TemArquivo() {
       if (!this.arquivos || this.arquivos.length <= 0) return false;
@@ -55,15 +74,22 @@ export default {
       this.abrir = true;
     },
     Remover(id) {
-      DocumentoServico.Remover(id)
+      this.$http({
+        url: this.urlRemover + id + "/" + this.vinculoId,
+        method: "DELETE"
+      })
         .then(() => {
+          let indice = this.arquivos.indexOf(id);
+          console.log("indice", indice);
+          this.arquivos.splice(indice, 1);
           this.$notify({
-            data: ["Documento removido com sucesso."],
+            data: ["Removido com sucesso."],
             type: "success",
             duration: 10000
           });
         })
         .catch((erro) => {
+          console.log("erro", erro);
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
