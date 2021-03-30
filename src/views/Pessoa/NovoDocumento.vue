@@ -68,6 +68,21 @@
                     </div>
                   </div>
                 </div>
+                <div v-if="IsNovo()" class="row">
+                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                      <label for>Arquivo </label> <small>Limite 5MB</small>
+                      <b-form-file
+                        v-model="arquivo"
+                        :state="Boolean(arquivo)"
+                        placeholder="Escolha o(s) arquivo(s)..."
+                        accept=".jpg, .png, .jpeg, .pdf, .doc, .docx, .xls, .xlsx"
+                        browse-text="Procurar"
+                        multiple
+                      ></b-form-file>
+                    </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="form-group">
@@ -97,6 +112,7 @@
                     </button>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-12">
                     <b-table
@@ -115,6 +131,12 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
+                          <ModalArquivo
+                            :arquivos="data.item.arquivos"
+                            :urlDownload="'arquivo/obter/'"
+                            :urlRemover="'documentoanexo/remover/'"
+                            :vinculoId="data.item.id"
+                          />
                           <b-button
                             variant="warning"
                             style="margin-right: 10px"
@@ -157,9 +179,11 @@ import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
 import DocumentoServico from "../../servico/DocumentoServico";
 import TipoDocumentoServico from "../../views/TipoDocumento/servico/TipoDocumentoServico";
+import ArquivoServico from "../../servico/ArquivoServico";
+import ModalArquivo from "../../components/ModalArquivo";
 
 export default {
-  components: { RotateSquare },
+  components: { RotateSquare, ModalArquivo },
   props: {
     pessoaId: {
       type: String,
@@ -170,11 +194,13 @@ export default {
     return {
       tipos: [],
       loading: false,
+      loadingArquivo: false,
       pagina: 1,
       total: 0,
       itensPorPagina: 5,
       itens: [],
       abrir: false,
+      arquivo: null,
       fields: [
         { key: "numero", label: "Número", sortable: true },
         { key: "tipoDocumento", label: "Tipo", sortable: true },
@@ -190,8 +216,9 @@ export default {
         tipoDocumentoId: "",
         numero: "",
         observacao: "",
-        validade: "",
-        pessoaId: ""
+        validade: null,
+        pessoaId: "",
+        arquivos: []
       }
     };
   },
@@ -205,6 +232,34 @@ export default {
     }
   },
   methods: {
+    NovoArquivo() {
+      if (!this.arquivo) this.Novo();
+      else if (this.arquivo.size > 1024 * 1024 * 5) {
+        this.$notify({
+          data: [
+            "O arquivo selecionado é maior que 5MB e não pode ser enviado."
+          ],
+          type: "warn",
+          duration: 10000
+        });
+        return;
+      }
+      this.loading = true;
+      ArquivoServico.Novo(this.arquivo)
+        .then((resposta) => {
+          this.loading = false;
+          this.viewModel.arquivos = resposta.data;
+          this.Novo();
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 10000
+          });
+        });
+    },
     ObterTipoDocumento() {
       this.loading = true;
       TipoDocumentoServico.ObterSelect()
@@ -222,12 +277,12 @@ export default {
         });
     },
     IsNovo() {
-      return this.pessoaId === this.$store.getters.emptyGuid;
+      return this.viewModel.id === this.$store.getters.emptyGuid;
     },
     ValidarFormDocumento(evt) {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.Novo();
+      else this.NovoArquivo();
     },
     Obter(id) {
       this.loading = true;
@@ -333,8 +388,9 @@ export default {
       this.viewModel.tipoDocumentoId = "";
       this.viewModel.numero = "";
       this.viewModel.observacao = "";
-      this.viewModel.validade = "";
+      this.viewModel.validade = null;
       this.viewModel.pessoaId = "";
+      this.viewModel.arquivos = [];
     }
   }
 };
