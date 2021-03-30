@@ -131,20 +131,7 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
-                          <b-button
-                            v-if="data.item.arquivos"
-                            class="btn btn-secondary mr-2"
-                            title="Visualizar arquivos"
-                          >
-                            <i class="fas fa-download text-black"></i>
-                          </b-button>
-                          <b-button
-                            v-else
-                            disabled
-                            class="btn btn-secondary mr-2"
-                            title="Sem arquivo"
-                            ><i class="fas fa-download text-black"></i
-                          ></b-button>
+                          <ModalArquivo :arquivos="data.item.arquivos" />
                           <b-button
                             variant="warning"
                             style="margin-right: 10px"
@@ -188,9 +175,10 @@ import DateTime from "../../util/DateTime";
 import DocumentoServico from "../../servico/DocumentoServico";
 import TipoDocumentoServico from "../../views/TipoDocumento/servico/TipoDocumentoServico";
 import ArquivoServico from "../../servico/ArquivoServico";
+import ModalArquivo from "./ModalArquivo";
 
 export default {
-  components: { RotateSquare },
+  components: { RotateSquare, ModalArquivo },
   props: {
     pessoaId: {
       type: String,
@@ -225,7 +213,7 @@ export default {
         observacao: "",
         validade: "",
         pessoaId: "",
-        arquivos: ""
+        arquivos: []
       }
     };
   },
@@ -399,6 +387,7 @@ export default {
       this.viewModel.observacao = "";
       this.viewModel.validade = "";
       this.viewModel.pessoaId = "";
+      this.viewModel.arquivos = [];
     }
   }
 };
