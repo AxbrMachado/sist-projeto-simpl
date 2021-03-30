@@ -5,7 +5,7 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Tipo Instituicao</strong>
+              <strong class="align-self-center">Tipo Instituição</strong>
               <a
                 class="ml-auto btn btn-primary"
                 href="/#/tipoInstituicao/novo"
