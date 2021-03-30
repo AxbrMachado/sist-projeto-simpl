@@ -8,7 +8,6 @@ class ArquivoServico {
     }
 
     Novo(arquivos) {
-        console.log(arquivos);
         let formData = new FormData();
         for (let index = 0; index < arquivos.length; index++) {
             formData.append("arquivo", arquivos[index]);
