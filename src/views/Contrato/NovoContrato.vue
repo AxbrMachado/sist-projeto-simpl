@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
-                    <label for>* Licitacao</label>
+                    <label for>* Licitação</label>
                     <b-form-select
                       v-model="viewModel.licitacaoId"
                       :options="licitacaoOptions"

@@ -143,7 +143,7 @@ export default {
       fields: [
         { key: "numero", label: "Número", sortable: true },
         { key: "tipoEnquadramento", label: "Enquadramento", sortable: true },
-        { key: "validade", label: "Validade", sortable: true },
+        { key: "validade", label: "Válidade", sortable: true },
         { key: "pessoaNome", label: "Cooperado", sortable: true },
         {
           key: "acoes",
