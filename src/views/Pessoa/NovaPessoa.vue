@@ -162,25 +162,6 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                  <div class="form-group">
-                    <label for>* Dap(s)</label>
-                    <v-select
-                      placeholder="Digite dap(s)"
-                      multiple
-                      v-model="viewModel.daps"
-                      :options="dapsOptions"
-                      required
-                      @search="ObterDapsVSelect"
-                    >
-                      <template slot="no-options">
-                        Nenhum resultado para a busca.
-                      </template>
-                    </v-select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                   <div class="form-group">
                     <label for>Observação</label>
@@ -230,7 +211,6 @@ import NovoDocumento from "./NovoDocumento";
 import NovoEndereco from "./NovoEndereco";
 import DateTime from "../../util/DateTime";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
-import DapServico from "../../servico/DapServico";
 
 export default {
   name: "NovaPessoa",
@@ -242,7 +222,6 @@ export default {
   data() {
     return {
       loadingPessoa: false,
-      dapsOptions: [],
       tiposEstadoCivil: [
         { value: TipoEstadoCivilEnum.Solteiro, text: "Solteiro" },
         { value: TipoEstadoCivilEnum.Casado, text: "Casado" },
@@ -277,8 +256,7 @@ export default {
         telefone2: "",
         tipoSexo: 3,
         email: "",
-        observacao: "",
-        daps: []
+        observacao: ""
       }
     };
   },
@@ -383,19 +361,6 @@ export default {
     IsEdicao() {
       return this.viewModel.id !== this.$store.getters.emptyGuid;
     },
-    ObterDapsVSelect(busca) {
-      if (!busca || busca.length <= 3) return;
-      DapServico.ObterVSelect(busca)
-        .then(() => {})
-        .catch((erro) => {
-          this.loadingPessoa = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    }
   }
 };
 </script>
