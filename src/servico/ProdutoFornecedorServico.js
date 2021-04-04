@@ -7,15 +7,15 @@ class DocumentoServico {
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, contratoId) {
+  ObterGrid(pagina, itensPorPagina, produtoId) {
     return Vue.prototype.$http({
       url:
         "/fornecedorproduto/obter-grid?pagina=" +
         pagina +
         "&ItensPorPagina=" +
         itensPorPagina +
-        "&contratoId=" +
-        contratoId,
+        "&produtoId=" +
+        produtoId,
       method: "GET"
     });
   }
@@ -24,7 +24,7 @@ class DocumentoServico {
     return Vue.prototype.$http({
       url: "fornecedorproduto/remover/" + id,
       method: "DELETE"
-    });
+    }); 
   }
 
   Novo(viewModel) {
