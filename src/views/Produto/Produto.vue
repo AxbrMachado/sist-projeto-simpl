@@ -199,7 +199,10 @@ export default {
       this.loading = true;
       this.$http({
         url:
-          "/produto/obter-grid?pagina=" + pagina + "&numero=" + this.filtro.numero,
+          "/produto/obter-grid?pagina=" +
+          pagina +
+          "&numero=" +
+          this.filtro.numero,
         method: "GET"
       })
         .then((response) => {
@@ -235,7 +238,10 @@ export default {
     },
 
     FormataValor(valor) {
-      return valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+      return valor.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     }
   }
 };

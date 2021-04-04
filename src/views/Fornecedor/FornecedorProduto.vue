@@ -150,6 +150,7 @@ import RotateSquare from "../../components/RotateSquare";
 import FornecedorProduto from "../../servico/FornecedorProdutoServico";
 
 export default {
+  name: "FornecedorProduto",
   components: { RotateSquare },
   props: {
     fornecedorId: {
