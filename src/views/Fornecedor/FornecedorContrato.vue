@@ -177,9 +177,6 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = true;
-
-      console.log(this.pessoaId);
-
       this.$http({
         url:
           "/pessoacontrato/obter-grid?pagina=" +
