@@ -6,7 +6,7 @@
         size="60px"
       ></RotateSquare>
     </div>
-    <form v-else @submit="ValidarFormContratoFornecedor">
+    <form v-else @submit="ValidarFormProdutoFornecedor">
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
@@ -159,7 +159,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoFornecedor from "../../servico/ContratoFornecedorServico";
+import ProdutoFornecedor from "../../servico/ProdutoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
@@ -216,14 +216,14 @@ export default {
     IsNovo() {
       return this.produtoId === this.$store.getters.emptyGuid;
     },
-    ValidarFormContratoFornecedor(evt) {
+    ValidarFormProdutoFornecedor(evt) {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
     Obter(id) {
       this.loading = true;
-      ContratoFornecedor.Obter(id)
+      ProdutoFornecedor.Obter(id)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -239,7 +239,7 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      ContratoFornecedor.ObterGrid(val, this.itensPorPagina, this.produtoId)
+      ProdutoFornecedor.ObterGrid(val, this.itensPorPagina, this.produtoId)
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -256,7 +256,7 @@ export default {
         });
     },
     Remover(id) {
-      ContratoFornecedor.Remover(id)
+      ProdutoFornecedor.Remover(id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -276,7 +276,7 @@ export default {
     Novo() {
       this.loading = true;
       this.viewModel.produtoId = this.produtoId;
-      ContratoFornecedor.Novo(this.viewModel)
+      ProdutoFornecedor.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -299,7 +299,7 @@ export default {
     Editar() {
       this.loading = true;
       this.viewModel.produtoId = this.produtoId;
-      ContratoFornecedor.Editar(this.viewModel)
+      ProdutoFornecedor.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
