@@ -102,19 +102,24 @@
         </div>
       </div>
     </form>
+    <div v-if="IsEdicao()">
+      <!-- <DapContrato :dapId="viewModel.id"> </DapContrato> -->
+    </div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
-import TipoPessoaEnum from '../../enums/TipoPessoaEnum';
+import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import DateTime from "../../util/DateTime";
+import DapContrato from "./DapContrato";
 
 export default {
   name: "NovoDap",
   components: {
     RotateSquare,
+    DapContrato,
     TipoPessoaEnum
   },
   data() {
@@ -230,7 +235,8 @@ export default {
       if (!busca || busca.length <= 3) return;
 
       this.$http({
-        url: "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
+        url:
+          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
         method: "GET"
       })
         .then((response) => {
@@ -243,6 +249,9 @@ export default {
             duration: 10000
           });
         });
+    },
+    IsEdicao() {
+      return this.viewModel.id !== this.$store.getters.emptyGuid;
     }
   }
 };

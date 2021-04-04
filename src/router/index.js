@@ -29,6 +29,8 @@ const TipoInstituicao = () => import("@/views/TipoInstituicao/TipoInstituicao");
 const NovoTipoInstituicao = () => import("@/views/TipoInstituicao/NovoTipoInstituicao");
 const Licitacao = () => import("@/views/Licitacao/Licitacao");
 const NovaLicitacao = () => import("@/views/Licitacao/NovaLicitacao");
+const Fornecedor = () => import("@/views/Fornecedor/Fornecedor");
+const NovoFornecedor = () => import("@/views/Fornecedor/NovoFornecedor");
 
 Vue.use(Router);
 
@@ -300,7 +302,46 @@ export default new Router({
           ]
         },
 
-        //Cadastro de pedido venda
+        //Cadastro de fornecedor
+        {
+          path: "fornecedor",
+          name: "Fornecedor",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: Fornecedor,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoFornecedor,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoFornecedor,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+        
+        //Cadastro de produto
         {
           path: "produto",
           name: "Produto",

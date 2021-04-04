@@ -14,8 +14,8 @@
               <strong class="align-self-center"
                 >{{
                   viewModel.id == this.$store.getters.emptyGuid
-                    ? "Nova Pessoa"
-                    : "Editar Pessoa"
+                    ? "Novo Fornecedor"
+                    : "Editar Fornecedor"
                 }}
               </strong>
             </header>
@@ -178,7 +178,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/pessoa')"
+                  @click="$router.push('/fornecedor')"
                 >
                   Voltar
                 </button>
@@ -189,8 +189,8 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <NovoDocumento :pessoaId="viewModel.id"> </NovoDocumento>
-      <NovoEndereco :pessoaId="viewModel.id"> </NovoEndereco>
+      <!-- <FornecedorContrato :fornecedorId="viewModel.id"> </FornecedorContrato> -->
+      <FornecedorProduto :fornecedorId="viewModel.fornecedorId"> </FornecedorProduto>
     </div>
   </div>
 </template>
@@ -200,18 +200,18 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import TipoSexoEnum from "../../enums/TipoSexoEnum";
 import RotateSquare from "../../components/RotateSquare";
 import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
-import NovoDocumento from "./NovoDocumento";
-import NovoEndereco from "./NovoEndereco";
+import FornecedorContrato from "./FornecedorContrato";
+import FornecedorProduto from "./FornecedorProduto";
 import DateTime from "../../util/DateTime";
 
 export default {
-  name: "NovaPessoa",
+  name: "NovoFornecedor",
   components: {
     TipoPessoaEnum,
     TipoSexoEnum,
     RotateSquare,
-    NovoDocumento,
-    NovoEndereco,
+    FornecedorContrato,
+    FornecedorProduto,
     DateTime
   },
   data() {
@@ -236,6 +236,7 @@ export default {
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
+        fornecedorId: "",
         tipoPessoa: 0,
         nome: "",
         nomeCompleto: "",
@@ -329,7 +330,7 @@ export default {
       })
         .then(() => {
           this.loadingPessoa = false;
-          this.$router.push("/pessoa");
+          this.$router.push("/fornecedor");
           this.$notify({
             data: ["Pessoa editado com sucesso."],
             type: "success",

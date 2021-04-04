@@ -32,6 +32,12 @@ const Menu = {
     to: "/pessoa",
     icon: "cil-people"
   },
+  Fornecedor: {
+    _name: "CSidebarNavItem",
+    name: "Fornecedor",
+    to: "/fornecedor",
+    icon: "cil-people"
+  },
   Produto: {
     _name: "CSidebarNavItem",
     name: "Produto",
