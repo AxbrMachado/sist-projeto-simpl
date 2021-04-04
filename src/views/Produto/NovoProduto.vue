@@ -85,7 +85,7 @@
     </form>
     <div v-if="IsEdicao()">
       <ProdutoContrato :produtoId="viewModel.id"></ProdutoContrato>
-      <!-- <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor> -->
+      <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor>
     </div>
   </div>
 </template>

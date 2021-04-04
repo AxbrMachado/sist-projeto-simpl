@@ -50,20 +50,20 @@
                     <div class="form-group">
                       <label for>* Valor Limite</label>
                       <currency-input
-                        v-model="viewModel.valorLimite"
+                        v-model="viewModel.valor"
                         class="form-control"
-                        placeholder="Digite o valor limite"
+                        placeholder="Digite o valor"
                         required
                       />
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
-                      <label for>* Quantidade Limite</label>
+                      <label for>* Quantidade</label>
                       <currency-input
-                        v-model="viewModel.quantidadeLimite"
+                        v-model="viewModel.quantidade"
                         class="form-control"
-                        placeholder="Digite a quantidade limite"
+                        placeholder="Digite a quantidade"
                         required
                       />
                     </div>
@@ -166,7 +166,7 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 export default {
   components: { RotateSquare },
   props: {
-    contratoId: {
+    produtoId: {
       type: String,
       default: ""
     }
@@ -181,10 +181,10 @@ export default {
       itens: [],
       abrir: false,
       fields: [
-        { key: "pessoa", label: "Fornecedor", sortable: true },
+        { key: "nome", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
-        { key: "valorLimite", label: "Valor Limite", sortable: true },
-        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        { key: "valor", label: "Valor", sortable: true },
+        { key: "quantidade", label: "Quantidade", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -195,7 +195,7 @@ export default {
       viewModel: {
         id: this.$store.getters.emptyGuid,
         pessoaId: "",
-        contratoId: "",
+        produtoId: "",
         valorLimite: 0,
         quantidadeLimite: 0
       }
@@ -210,13 +210,11 @@ export default {
     }
   },
   created() {
-    //let contratoId = this.$route.params.id;
-    //if (contratoId) this.Obter(contratoId);
     this.ObterFornecedorsSelect();
   },
   methods: {
     IsNovo() {
-      return this.contratoId === this.$store.getters.emptyGuid;
+      return this.produtoId === this.$store.getters.emptyGuid;
     },
     ValidarFormContratoFornecedor(evt) {
       evt.preventDefault();
@@ -228,7 +226,6 @@ export default {
       ContratoFornecedor.Obter(id)
         .then((resposta) => {
           this.loading = false;
-          //resposta.data.validade = DateTime.formatar(resposta.data.validade);
           this.viewModel = resposta.data;
         })
         .catch((erro) => {
@@ -242,7 +239,7 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      ContratoFornecedor.ObterGrid(val, this.itensPorPagina, this.contratoId)
+      ContratoFornecedor.ObterGrid(val, this.itensPorPagina, this.produtoId)
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -278,7 +275,7 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.viewModel.contratoId = this.contratoId;
+      this.viewModel.produtoId = this.produtoId;
       ContratoFornecedor.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
@@ -301,7 +298,7 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.viewModel.contratoId = this.contratoId;
+      this.viewModel.produtoId = this.produtoId;
       ContratoFornecedor.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
@@ -325,9 +322,9 @@ export default {
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.pessoaId = "";
-      this.viewModel.contratoId = "";
-      this.viewModel.valorLimite = 0;
-      this.viewModel.quantidadeLimite = 0;
+      this.viewModel.produtoId = "";
+      this.viewModel.valor = 0;
+      this.viewModel.quantidade = 0;
     },
     FormataValor(valor) {
       if (valor != null) {
