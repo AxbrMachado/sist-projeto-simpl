@@ -189,7 +189,7 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <!-- <FornecedorContrato :fornecedorId="viewModel.id"> </FornecedorContrato> -->
+      <FornecedorContrato :pessoaId="viewModel.id"> </FornecedorContrato>
       <FornecedorProduto :fornecedorId="viewModel.fornecedorId"> </FornecedorProduto>
     </div>
   </div>

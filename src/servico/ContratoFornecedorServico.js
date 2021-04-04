@@ -10,7 +10,7 @@ class DocumentoServico {
     ObterGrid(pagina, itensPorPagina, contratoId) {
         return Vue.prototype.$http({
           url:
-          "/pessoacontrato/obter-grid-pessoa?pagina=" +
+          "/pessoacontrato/obter-grid?pagina=" +
           pagina +
           "&ItensPorPagina=" +
           itensPorPagina +

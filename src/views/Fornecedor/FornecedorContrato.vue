@@ -90,6 +90,16 @@
                       <span>{{ data.item.dataTermino }}</span>
                     </div>
                   </template>
+                  <template v-slot:cell(valorLimite)="data">
+                    <div class="left">
+                      <span>{{ FormataValor(data.item.valorLimite) }}</span>
+                    </div>
+                  </template>
+                  <template v-slot:cell(valor)="data">
+                    <div class="left">
+                      <span>{{ FormataValor(data.item.valor) }}</span>
+                    </div>
+                  </template>
                 </b-table>
                 <b-pagination
                   v-model="pagina"
@@ -110,17 +120,16 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import DateTime from "../../util/DateTime";
 
 export default {
-  name: "DapContrato",
+  name: "FornecedorContrato",
   components: {
     RotateSquare,
     DateTime
   },
   props: {
-    dapId: {
+    pessoaId: {
       type: String,
       default: ""
     }
@@ -136,9 +145,11 @@ export default {
       filtro: { numero: "" },
       fields: [
         { key: "numero", label: "Número", sortable: true },
-        { key: "licitacao", label: "Licitação", sortable: true },
+        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        { key: "valorLimite", label: "Valor Limite", sortable: true },
         { key: "dataInicio", label: "Data Início", sortable: true },
         { key: "dataTermino", label: "Data Término", sortable: true },
+        { key: "valor", label: "Valor Contrato", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -162,21 +173,21 @@ export default {
       this.ObterGrid(1);
     },
     Editar(contrato) {
-      this.$router.push("/contrato/editar/" + contrato.id);
+      this.$router.push("/contrato/editar/" + contrato.contratoId);
     },
     ObterGrid(pagina) {
       this.loading = true;
-      
-      console.log(this.dapId);
-      
+
+      console.log(this.pessoaId);
+
       this.$http({
         url:
-          "/dapcontrato/obter-grid-contrato?pagina=" +
+          "/pessoacontrato/obter-grid?pagina=" +
           pagina +
           "&numero=" +
           this.filtro.numero +
-          "&dapId=" +
-          this.dapId,
+          "&pessoaId=" +
+          this.pessoaId,
         method: "GET"
       })
         .then((response) => {
@@ -200,27 +211,18 @@ export default {
           });
         });
     },
-
-    ObterNomeEnquadramento(item) {
-      switch (item) {
-        case TipoEnquadramentoEnum.Grupo_A:
-          return "A";
-        case TipoEnquadramentoEnum.Grupo_B:
-          return "B";
-        case TipoEnquadramentoEnum.Grupo_AC:
-          return "AC";
-        case TipoEnquadramentoEnum.Grupo_V:
-          return "V";
-        default:
-          return "Inválido";
-      }
+    IsNovo() {
+      return this.pessoaId === this.$store.getters.emptyGuid;
+    },
+    formatarData(value) {
+      return new Date(value).toLocaleDateString();
+    },
+    FormataValor(valor) {
+      return valor.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     }
-  },
-  IsNovo() {
-    return this.dapId === this.$store.getters.emptyGuid;
-  },
-  formatarData(value) {
-    return new Date(value).toLocaleDateString();
   }
 };
 </script>
