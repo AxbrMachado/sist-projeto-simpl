@@ -36,7 +36,23 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                    <div class="form-group">
+                      <label for>* Fornecedor</label>
+                      <v-select
+                        placeholder="Digite um fornecedor.."
+                        v-model="viewModel.pessoa"
+                        :options="fornecedorOptions"
+                        required
+                        @search="ObterFornecedoresVSelect"
+                      >
+                        <template slot="no-options">
+                          Nenhum resultado para a busca.
+                        </template>
+                      </v-select>
+                    </div>
+                  </div>
+                  <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Fornecedor</label>
                       <b-form-select
@@ -45,10 +61,10 @@
                         required
                       ></b-form-select>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
-                      <label for>* Valor Limite</label>
+                      <label for>* Valor</label>
                       <currency-input
                         v-model="viewModel.valor"
                         class="form-control"
@@ -79,7 +95,7 @@
                     <button
                       class="btn btn-secondary"
                       type="reset"
-                      @click="$router.push('/contrato')"
+                      @click="$router.push('/produto')"
                     >
                       Voltar
                     </button>
@@ -132,11 +148,11 @@
                           }}</span>
                         </div>
                       </template>
-                      <template v-slot:cell(valorLimite)="data">
+                      <!-- <template v-slot:cell(valor)="data">
                         <div class="left">
-                          <span>{{ FormataValor(data.item.valorLimite) }}</span>
+                          <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
-                      </template>
+                      </template> -->
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -194,10 +210,10 @@ export default {
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        pessoaId: "",
         produtoId: "",
-        valorLimite: 0,
-        quantidadeLimite: 0
+        valor: 0,
+        quantidade: 0,
+        pessoa: {}
       }
     };
   },
@@ -210,7 +226,7 @@ export default {
     }
   },
   created() {
-    this.ObterFornecedorsSelect();
+    // this.ObterFornecedorsSelect();
   },
   methods: {
     IsNovo() {
@@ -218,6 +234,16 @@ export default {
     },
     ValidarFormProdutoFornecedor(evt) {
       evt.preventDefault();
+      if (!this.viewModel.pessoa || this.viewModel.pessoa.id == undefined) {
+        this.loading = false;
+        this.$notify({
+          data: ["Informe ao menos um fornecedor."],
+          type: "warn",
+          duration: 10000
+        });
+        return;
+      }
+
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
@@ -321,10 +347,10 @@ export default {
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
-      this.viewModel.pessoaId = "";
       this.viewModel.produtoId = "";
       this.viewModel.valor = 0;
       this.viewModel.quantidade = 0;
+      this.viewModel.pessoa = {};
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -343,22 +369,22 @@ export default {
         return valor;
       }
     },
-    ObterFornecedorsSelect() {
-      this.$http({
-        url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
-        method: "GET"
-      })
-        .then((response) => {
-          this.fornecedorOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
+    // ObterFornecedorsSelect() {
+    //   this.$http({
+    //     url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
+    //     method: "GET"
+    //   })
+    //     .then((response) => {
+    //       this.fornecedorOptions = response.data;
+    //     })
+    //     .catch((erro) => {
+    //       this.$notify({
+    //         data: erro.response.data.erros,
+    //         type: "warn",
+    //         duration: 10000
+    //       });
+    //     });
+    // },
     FormataValor(valor) {
       if (valor != null) {
         return valor.toLocaleString("pt-br", {
@@ -378,6 +404,25 @@ export default {
         default:
           return "Inválido";
       }
+    },
+    ObterFornecedoresVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url:
+          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.fornecedorOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 10000
+          });
+        });
     }
   }
 };

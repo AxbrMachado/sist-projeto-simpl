@@ -232,7 +232,7 @@ export default {
         });
     },
     ObterPessoasVSelect(busca) {
-      if (!busca || busca.length <= 3) return;
+      if (!busca || busca.length <= 2) return;
 
       this.$http({
         url:
