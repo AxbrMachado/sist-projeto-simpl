@@ -14,8 +14,8 @@
               <strong class="align-self-center"
                 >{{
                   viewModel.id == this.$store.getters.emptyGuid
-                    ? "Nova Pessoa"
-                    : "Editar Pessoa"
+                    ? "Novo Fornecedor"
+                    : "Editar Fornecedor"
                 }}
               </strong>
             </header>
@@ -34,19 +34,6 @@
                     <b-form-select
                       v-model="viewModel.tipoPessoa"
                       :options="tiposPessoas"
-                    ></b-form-select>
-                  </div>
-                </div>
-
-                <div
-                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
-                  v-if="isFornecedor()"
-                >
-                  <div class="form-group">
-                    <label for>* Tipo Fornecedor</label>
-                    <b-form-select
-                      v-model="viewModel.tipoFornecedor"
-                      :options="tiposFornecedor"
                     ></b-form-select>
                   </div>
                 </div>
@@ -191,7 +178,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/pessoa')"
+                  @click="$router.push('/fornecedor')"
                 >
                   Voltar
                 </button>
@@ -202,8 +189,8 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <NovoDocumento :pessoaId="viewModel.id"> </NovoDocumento>
-      <NovoEndereco :pessoaId="viewModel.id"> </NovoEndereco>
+      <FornecedorContrato :pessoaId="viewModel.id"> </FornecedorContrato>
+      <FornecedorProduto :fornecedorId="viewModel.fornecedorId"> </FornecedorProduto>
     </div>
   </div>
 </template>
@@ -213,17 +200,19 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import TipoSexoEnum from "../../enums/TipoSexoEnum";
 import RotateSquare from "../../components/RotateSquare";
 import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
-import NovoDocumento from "./NovoDocumento";
-import NovoEndereco from "./NovoEndereco";
+import FornecedorContrato from "./FornecedorContrato";
+import FornecedorProduto from "./FornecedorProduto";
 import DateTime from "../../util/DateTime";
-import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 
 export default {
-  name: "NovaPessoa",
+  name: "NovoFornecedor",
   components: {
+    TipoPessoaEnum,
+    TipoSexoEnum,
     RotateSquare,
-    NovoDocumento,
-    NovoEndereco
+    FornecedorContrato,
+    FornecedorProduto,
+    DateTime
   },
   data() {
     return {
@@ -245,14 +234,10 @@ export default {
         { value: TipoSexoEnum.Feminino, text: "Feminino" },
         { value: TipoSexoEnum.Indefinido, text: "Indefinido" }
       ],
-      tiposFornecedor: [
-        { value: TipoFornecedorEnum.Cooperado, text: "Cooperado" },
-        { value: TipoFornecedorEnum.Avulso, text: "Avulso" }
-      ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
+        fornecedorId: "",
         tipoPessoa: 0,
-        tipoFornecedor: null,
         nome: "",
         nomeCompleto: "",
         nacionalidade: "",
@@ -280,9 +265,6 @@ export default {
     },
     isFuncionario() {
       return this.viewModel.tipoPessoa == TipoPessoaEnum.Funcionario;
-    },
-    isFornecedor() {
-      return this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor;
     },
     ValidarForm(evt) {
       evt.preventDefault();
@@ -348,7 +330,7 @@ export default {
       })
         .then(() => {
           this.loadingPessoa = false;
-          this.$router.push("/pessoa");
+          this.$router.push("/fornecedor");
           this.$notify({
             data: ["Pessoa editado com sucesso."],
             type: "success",
@@ -366,7 +348,7 @@ export default {
     },
     IsEdicao() {
       return this.viewModel.id !== this.$store.getters.emptyGuid;
-    },
+    }
   }
 };
 </script>

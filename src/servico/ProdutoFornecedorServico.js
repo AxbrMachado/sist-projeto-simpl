@@ -2,34 +2,34 @@ import Vue from "vue";
 class DocumentoServico {
   Obter(id) {
     return Vue.prototype.$http({
-      url: "pessoacontrato/obter/" + id,
+      url: "fornecedorproduto/obter/" + id,
       method: "GET"
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, contratoId) {
+  ObterGrid(pagina, itensPorPagina, produtoId) {
     return Vue.prototype.$http({
       url:
-        "/pessoacontrato/obter-grid?pagina=" +
+        "/fornecedorproduto/obter-grid?pagina=" +
         pagina +
         "&ItensPorPagina=" +
         itensPorPagina +
-        "&contratoId=" +
-        contratoId,
+        "&produtoId=" +
+        produtoId,
       method: "GET"
     });
   }
 
   Remover(id) {
     return Vue.prototype.$http({
-      url: "pessoacontrato/remover/" + id,
+      url: "fornecedorproduto/remover/" + id,
       method: "DELETE"
-    });
+    }); 
   }
 
   Novo(viewModel) {
     return Vue.prototype.$http({
-      url: "pessoacontrato/novo",
+      url: "fornecedorproduto/novo",
       data: viewModel,
       method: "POST"
     });
@@ -37,7 +37,7 @@ class DocumentoServico {
 
   Editar(viewModel) {
     return Vue.prototype.$http({
-      url: "pessoacontrato/editar",
+      url: "fornecedorproduto/editar",
       data: viewModel,
       method: "PUT"
     });

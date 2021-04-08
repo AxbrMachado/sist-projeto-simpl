@@ -102,6 +102,9 @@
         </div>
       </div>
     </form>
+    <div v-if="IsEdicao()">
+      <!-- <DapContrato :dapId="viewModel.id"> </DapContrato> -->
+    </div>
   </div>
 </template>
 
@@ -111,11 +114,13 @@ import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import DateTime from "../../util/DateTime";
 import DapServico from "../../servico/DapServico";
+import DapContrato from "./DapContrato";
 
 export default {
   name: "NovoDap",
   components: {
     RotateSquare,
+    DapContrato,
     TipoPessoaEnum
   },
   data() {
@@ -234,6 +239,9 @@ export default {
             duration: 10000
           });
         });
+    },
+    IsEdicao() {
+      return this.viewModel.id !== this.$store.getters.emptyGuid;
     }
   }
 };

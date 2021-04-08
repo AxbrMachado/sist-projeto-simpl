@@ -5,11 +5,11 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Produto</strong>
+              <strong class="align-self-center">Fornecedores</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/produto/novo"
-                title="Adicionar nova produto"
+                href="/#/fornecedor/novo"
+                title="Adicionar novo fornecedor"
               >
                 Adicionar
               </a>
@@ -25,10 +25,10 @@
             <div class="row">
               <div class="col-lg-5 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Número</label>
+                  <label>Nome</label>
                   <input
                     type="text"
-                    v-model="filtro.numero"
+                    v-model="filtro.nome"
                     class="form-control"
                   />
                 </div>
@@ -59,10 +59,25 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhuma produto encontrada."
+              empty-text="Nenhuma fornecedor encontrada."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
+              </template>
+              <template v-slot:cell(ativo)="data">
+                <div class="center">
+                  <span v-if="data.item.ativo" class="badge badge-success">
+                    Sim
+                  </span>
+                  <span v-else class="badge badge-secondary">Não</span>
+                </div>
+              </template>
+              <template v-slot:cell(tipoFornecedor)="data">
+                <div class="center">
+                  <span>{{
+                    ObterTipoFornecedor(data.item.tipoFornecedor)
+                  }}</span>
+                </div>
               </template>
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
@@ -74,18 +89,13 @@
                   >
                     <i class="fa fa-edit text-black"></i>
                   </b-button>
-                  <b-button
+                  <!-- <b-button
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
                     <i class="fas fa-trash-alt text-black"></i>
-                  </b-button>
-                </div>
-              </template>
-              <template v-slot:cell(valorBase)="data">
-                <div class="left">
-                  <span>{{ FormataValor(data.item.valorBase) }}</span>
+                  </b-button> -->
                 </div>
               </template>
             </b-table>
@@ -116,10 +126,10 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
+import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 
 export default {
-  name: "Produto",
+  name: "Fornecedor",
   components: {
     RotateSquare
   },
@@ -132,11 +142,11 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { numero: "" },
+      filtro: { nome: "" },
       fields: [
-        { key: "descricao", label: "Descrição", sortable: true },
-        { key: "valorBase", label: "Valor Base", sortable: true },
-        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        { key: "nome", label: "Nome", sortable: true },
+        { key: "tipoFornecedor", label: "Tipo", sortable: true },
+        { key: "observacao", label: "Observação", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -156,11 +166,11 @@ export default {
   },
   methods: {
     Limpar() {
-      this.filtro.numero = "";
+      this.filtro.nome = "";
       this.ObterGrid(1);
     },
-    Editar(produto) {
-      this.$router.push("/produto/editar/" + produto.id);
+    Editar(fornecedor) {
+      this.$router.push("/fornecedor/editar/" + fornecedor.pessoaId);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -172,13 +182,13 @@ export default {
       if (!this.itemRemover) return;
 
       this.$http({
-        url: "produto/remover/" + this.itemRemover.id,
+        url: "fornecedor/remover/" + this.itemRemover.id,
         method: "DELETE"
       })
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Produto removida com sucesso."],
+            data: ["Fornecedor removida com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -199,10 +209,10 @@ export default {
       this.loading = true;
       this.$http({
         url:
-          "/produto/obter-grid?pagina=" +
+          "/fornecedor/obter-grid?pagina=" +
           pagina +
-          "&numero=" +
-          this.filtro.numero,
+          "&nome=" +
+          this.filtro.nome,
         method: "GET"
       })
         .then((response) => {
@@ -222,26 +232,15 @@ export default {
         });
     },
 
-    ObterNomeEnquadramento(item) {
+    ObterTipoFornecedor(item) {
       switch (item) {
-        case TipoEnquadramentoEnum.Grupo_A:
-          return "A";
-        case TipoEnquadramentoEnum.Grupo_B:
-          return "B";
-        case TipoEnquadramentoEnum.Grupo_AC:
-          return "AC";
-        case TipoEnquadramentoEnum.Grupo_V:
-          return "V";
+        case TipoFornecedorEnum.Cooperado:
+          return "Cooperado";
+        case TipoFornecedorEnum.Avulso:
+          return "Avulso";
         default:
           return "Inválido";
       }
-    },
-
-    FormataValor(valor) {
-      return valor.toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL"
-      });
     }
   }
 };

@@ -83,16 +83,24 @@
         </div>
       </div>
     </form>
+    <div v-if="IsEdicao()">
+      <ProdutoContrato :produtoId="viewModel.id"></ProdutoContrato>
+      <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor>
+    </div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import ProdutoFornecedor from "./ProdutoFornecedor";
+import ProdutoContrato from "./ProdutoContrato";
 
 export default {
   name: "NovoProduto",
   components: {
-    RotateSquare
+    RotateSquare,
+    ProdutoFornecedor,
+    ProdutoContrato
   },
   data() {
     return {
@@ -202,6 +210,9 @@ export default {
             duration: 10000
           });
         });
+    },
+    IsEdicao() {
+      return this.viewModel.id !== this.$store.getters.emptyGuid;
     }
   }
 };
