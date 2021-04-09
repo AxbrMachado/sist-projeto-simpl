@@ -137,6 +137,16 @@
         </div>
       </div>
     </form>
+    <b-modal
+      v-model="modalRemover"
+      title="Confirmar exclusão"
+      class="modal-danger"
+      ok-variant="danger"
+      @ok="ModalOk"
+      @hidden="ModalCancel"
+    >
+      Você confirma a exclusão desse registro?
+    </b-modal>
   </div>
 </template>
 
@@ -154,6 +164,8 @@ export default {
   },
   data() {
     return {
+      modalRemover: false,
+      itemRemover: null,
       loading: false,
       pagina: 1,
       total: 0,
@@ -190,6 +202,36 @@ export default {
     }
   },
   methods: {
+    ModalCancel(evento) {
+      evento.preventDefault();
+      this.itemRemover = null;
+    },
+    ModalOk(evento) {
+      evento.preventDefault();
+      this.modalRemover = false;
+      if (!this.itemRemover) return;
+
+      ContatoServico.Remover(this.itemRemover)
+        .then(() => {
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Contato removido com sucesso."],
+            type: "success",
+            duration: 10000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 10000
+          });
+        });
+    },
+    Remover(item) {
+      this.modalRemover = true;
+      this.itemRemover = item;
+    },
     ValidarFormDocumento(evt) {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
@@ -222,24 +264,6 @@ export default {
         })
         .catch((erro) => {
           this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
-    Remover(id) {
-      ContatoServico.Remover(id)
-        .then(() => {
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Contato removido com sucesso."],
-            type: "success",
-            duration: 10000
-          });
-        })
-        .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",

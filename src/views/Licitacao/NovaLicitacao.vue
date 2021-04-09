@@ -228,7 +228,6 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/licitacao");
           this.$notify({
             data: ["Licitacao cadastrada com sucesso."],
             type: "success",
