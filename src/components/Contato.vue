@@ -62,9 +62,8 @@
                       <label for="">E-mail</label>
                       <input
                         class="form-control"
-                        type="text"
+                        type="email"
                         v-model="viewModel.email"
-                        required
                       />
                     </div>
                   </div>
@@ -79,7 +78,7 @@
                     <button
                       class="btn btn-secondary"
                       type="reset"
-                      @click="$router.push('/pessoa')"
+                      @click="$router.back()"
                     >
                       Voltar
                     </button>
@@ -142,8 +141,8 @@
 </template>
 
 <script>
-import RotateSquare from "../../components/RotateSquare";
-import ContatoServico from "../../servico/ContatoServico";
+import RotateSquare from "../components/RotateSquare";
+import ContatoServico from "../servico/ContatoServico";
 
 export default {
   components: { RotateSquare },

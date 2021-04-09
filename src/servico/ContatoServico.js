@@ -35,7 +35,7 @@ class ContatoServico {
 
     Editar(viewModel) {
         return Vue.prototype.$http({
-            url: "documento/editar",
+            url: "contato/editar",
             data: viewModel,
             method: "PUT"
         });
