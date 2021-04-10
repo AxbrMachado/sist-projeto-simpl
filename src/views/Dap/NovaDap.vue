@@ -113,6 +113,7 @@ import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import DateTime from "../../util/DateTime";
+import DapServico from "../../servico/DapServico";
 import DapContrato from "./DapContrato";
 
 export default {
@@ -163,10 +164,7 @@ export default {
     },
     Obter(dapId) {
       this.loading = true;
-      this.$http({
-        url: "dap/obter/" + dapId,
-        method: "GET"
-      })
+      DapServico.Obter(dapId)
         .then((resposta) => {
           this.loading = false;
           resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -183,11 +181,7 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.$http({
-        url: "dap/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+      DapServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/dap");
@@ -208,11 +202,7 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.$http({
-        url: "dap/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+      DapServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/dap");
