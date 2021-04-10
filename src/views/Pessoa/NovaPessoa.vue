@@ -38,6 +38,19 @@
                   </div>
                 </div>
 
+                <div
+                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
+                  v-if="isFornecedor()"
+                >
+                  <div class="form-group">
+                    <label for>* Tipo Fornecedor</label>
+                    <b-form-select
+                      v-model="viewModel.tipoFornecedor"
+                      :options="tiposFornecedor"
+                    ></b-form-select>
+                  </div>
+                </div>
+
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
                     <label for>{{
@@ -203,16 +216,14 @@ import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
 import NovoDocumento from "./NovoDocumento";
 import NovoEndereco from "./NovoEndereco";
 import DateTime from "../../util/DateTime";
+import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 
 export default {
   name: "NovaPessoa",
   components: {
-    TipoPessoaEnum,
-    TipoSexoEnum,
     RotateSquare,
     NovoDocumento,
-    NovoEndereco,
-    DateTime
+    NovoEndereco
   },
   data() {
     return {
@@ -234,9 +245,14 @@ export default {
         { value: TipoSexoEnum.Feminino, text: "Feminino" },
         { value: TipoSexoEnum.Indefinido, text: "Indefinido" }
       ],
+      tiposFornecedor: [
+        { value: TipoFornecedorEnum.Cooperado, text: "Cooperado" },
+        { value: TipoFornecedorEnum.Avulso, text: "Avulso" }
+      ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
         tipoPessoa: 0,
+        tipoFornecedor: null,
         nome: "",
         nomeCompleto: "",
         nacionalidade: "",
@@ -264,6 +280,9 @@ export default {
     },
     isFuncionario() {
       return this.viewModel.tipoPessoa == TipoPessoaEnum.Funcionario;
+    },
+    isFornecedor() {
+      return this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor;
     },
     ValidarForm(evt) {
       evt.preventDefault();
@@ -347,7 +366,7 @@ export default {
     },
     IsEdicao() {
       return this.viewModel.id !== this.$store.getters.emptyGuid;
-    }
+    },
   }
 };
 </script>
