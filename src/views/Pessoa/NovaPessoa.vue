@@ -204,6 +204,7 @@
     <div v-if="IsEdicao()">
       <NovoDocumento :pessoaId="viewModel.id"> </NovoDocumento>
       <NovoEndereco :pessoaId="viewModel.id"> </NovoEndereco>
+      <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
   </div>
 </template>
@@ -217,13 +218,15 @@ import NovoDocumento from "./NovoDocumento";
 import NovoEndereco from "./NovoEndereco";
 import DateTime from "../../util/DateTime";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
+import Contato from "../../components/Contato";
 
 export default {
   name: "NovaPessoa",
   components: {
     RotateSquare,
     NovoDocumento,
-    NovoEndereco
+    NovoEndereco,
+    Contato
   },
   data() {
     return {
@@ -366,7 +369,7 @@ export default {
     },
     IsEdicao() {
       return this.viewModel.id !== this.$store.getters.emptyGuid;
-    },
+    }
   }
 };
 </script>

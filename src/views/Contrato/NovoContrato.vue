@@ -110,6 +110,7 @@
     <div v-if="IsEdicao()">
       <ContratoProduto :contratoId="viewModel.id"> </ContratoProduto>
       <ContratoFornecedor :contratoId="viewModel.id"> </ContratoFornecedor>
+      <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
   </div>
 </template>
@@ -119,13 +120,15 @@ import RotateSquare from "../../components/RotateSquare";
 import ContratoProduto from "./ContratoProduto";
 import ContratoFornecedor from "./ContratoFornecedor";
 import DateTime from "../../util/DateTime";
+import Contato from "../../components/Contato";
 
 export default {
   name: "NovoContrato",
   components: {
     RotateSquare,
     ContratoProduto,
-    ContratoFornecedor
+    ContratoFornecedor,
+    Contato
   },
   data() {
     return {
