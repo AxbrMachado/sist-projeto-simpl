@@ -205,7 +205,10 @@ export default {
       this.loading = true;
       this.$http({
         url:
-          "/contrato/obter-grid?pagina=" + pagina + "&numero=" + this.filtro.numero,
+          "/contrato/obter-grid?pagina=" +
+          pagina +
+          "&numero=" +
+          this.filtro.numero,
         method: "GET"
       })
         .then((response) => {
