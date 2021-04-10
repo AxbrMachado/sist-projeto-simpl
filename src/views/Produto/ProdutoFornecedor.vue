@@ -170,6 +170,16 @@
         </div>
       </div>
     </form>
+    <b-modal
+      v-model="modalRemover"
+      title="Confirmar exclusão"
+      class="modal-danger"
+      ok-variant="danger"
+      @ok="ModalOk"
+      @hidden="ModalCancel"
+    >
+      Você confirma a exclusão desse registro?
+    </b-modal>
   </div>
 </template>
 
@@ -189,6 +199,8 @@ export default {
   },
   data() {
     return {
+      modalRemover: false,
+      itemRemover: null,
       fornecedorOptions: [],
       loading: false,
       pagina: 1,
@@ -281,8 +293,16 @@ export default {
           });
         });
     },
-    Remover(id) {
-      ProdutoFornecedor.Remover(id)
+    ModalCancel(evento) {
+      evento.preventDefault();
+      this.itemRemover = null;
+    },
+    ModalOk(evento) {
+      evento.preventDefault();
+      this.modalRemover = false;
+      if (!this.itemRemover) return;
+
+      ProdutoFornecedor.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -298,6 +318,10 @@ export default {
             duration: 10000
           });
         });
+    },
+    Remover(id) {
+      this.modalRemover = true;
+      this.itemRemover = id;
     },
     Novo() {
       this.loading = true;
