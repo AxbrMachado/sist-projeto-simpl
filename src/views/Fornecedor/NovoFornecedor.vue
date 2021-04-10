@@ -190,7 +190,8 @@
     </form>
     <div v-if="IsEdicao()">
       <FornecedorContrato :pessoaId="viewModel.id"> </FornecedorContrato>
-      <FornecedorProduto :fornecedorId="viewModel.fornecedorId"> </FornecedorProduto>
+      <FornecedorProduto :fornecedorId="viewModel.fornecedorId" />
+      <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
   </div>
 </template>
@@ -203,6 +204,7 @@ import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
 import FornecedorContrato from "./FornecedorContrato";
 import FornecedorProduto from "./FornecedorProduto";
 import DateTime from "../../util/DateTime";
+import Contato from "../../components/Contato";
 
 export default {
   name: "NovoFornecedor",
@@ -212,7 +214,8 @@ export default {
     RotateSquare,
     FornecedorContrato,
     FornecedorProduto,
-    DateTime
+    DateTime,
+    Contato
   },
   data() {
     return {
