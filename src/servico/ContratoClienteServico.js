@@ -19,7 +19,7 @@ class DocumentoServico {
         "&contratoId=" +
         contratoId + 
         "&tipoPessoaContrato=" +
-        TipoPessoaContratoEnum.Fornecedor ,
+        TipoPessoaContratoEnum.Cliente ,
       method: "GET"
     });
   }

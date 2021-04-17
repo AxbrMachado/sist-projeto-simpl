@@ -6,13 +6,13 @@
         size="60px"
       ></RotateSquare>
     </div>
-    <form v-else @submit="ValidarFormContratoFornecedor">
+    <form v-else @submit="ValidarFormContratoCliente">
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Fornecedores</strong>
+                <strong class="align-self-center">Clientes</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
 
                 <i
@@ -38,34 +38,12 @@
                 <div class="row">
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
-                      <label for>* Fornecedor</label>
+                      <label for>* Cliente</label>
                       <b-form-select
                         v-model="viewModel.pessoaId"
-                        :options="fornecedorOptions"
+                        :options="clienteOptions"
                         required
                       ></b-form-select>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Valor Limite</label>
-                      <currency-input
-                        v-model="viewModel.valorLimite"
-                        class="form-control"
-                        placeholder="Digite o valor limite"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Quantidade Limite</label>
-                      <currency-input
-                        v-model="viewModel.quantidadeLimite"
-                        class="form-control"
-                        placeholder="Digite a quantidade limite"
-                        required
-                      />
                     </div>
                   </div>
                 </div>
@@ -95,7 +73,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum fornecedor encontrado."
+                      empty-text="Nenhum cliente encontrado."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -120,21 +98,11 @@
                           </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(valor)="data">
-                        <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(tipoFornecedor)="data">
+                      <template v-slot:cell(tipoPessoa)="data">
                         <div class="center">
                           <span>{{
-                            ObterNomeTipoFornecedor(data.item.tipoFornecedor)
+                            ObterTipoPessoa(data.item.tipoPessoa)
                           }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(valorLimite)="data">
-                        <div class="left">
-                          <span>{{ FormataValor(data.item.valorLimite) }}</span>
                         </div>
                       </template>
                     </b-table>
@@ -169,13 +137,17 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoFornecedor from "../../servico/ContratoFornecedorServico";
-import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
+import ContratoCliente from "../../servico/ContratoClienteServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
 export default {
-  components: { RotateSquare },
+  components: {
+    RotateSquare,
+    ContratoCliente,
+    TipoPessoaContratoEnum,
+    TipoPessoaEnum
+  },
   props: {
     contratoId: {
       type: String,
@@ -186,7 +158,7 @@ export default {
     return {
       modalRemover: false,
       itemRemover: null,
-      fornecedorOptions: [],
+      clienteOptions: [],
       loading: false,
       pagina: 1,
       total: 0,
@@ -194,10 +166,8 @@ export default {
       itens: [],
       abrir: false,
       fields: [
-        { key: "pessoa", label: "Fornecedor", sortable: true },
-        { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
-        { key: "valorLimite", label: "Valor Limite", sortable: true },
-        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        { key: "pessoa", label: "Cliente", sortable: true },
+        { key: "tipoPessoa", label: "Tipo Pessoa", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -211,7 +181,7 @@ export default {
         contratoId: "",
         valorLimite: 0,
         quantidadeLimite: 0,
-        tipoPessoaContrato: TipoPessoaContratoEnum.Fornecedor 
+        tipoPessoaContrato: TipoPessoaContratoEnum.Cliente
       }
     };
   },
@@ -226,20 +196,20 @@ export default {
   created() {
     //let contratoId = this.$route.params.id;
     //if (contratoId) this.Obter(contratoId);
-    this.ObterFornecedorsSelect();
+    this.ObterClientesSelect();
   },
   methods: {
     IsNovo() {
       return this.contratoId === this.$store.getters.emptyGuid;
     },
-    ValidarFormContratoFornecedor(evt) {
+    ValidarFormContratoCliente(evt) {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
     Obter(id) {
       this.loading = true;
-      ContratoFornecedor.Obter(id)
+      ContratoCliente.Obter(id)
         .then((resposta) => {
           this.loading = false;
           //resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -256,7 +226,7 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      ContratoFornecedor.ObterGrid(val, this.itensPorPagina, this.contratoId)
+      ContratoCliente.ObterGrid(val, this.itensPorPagina, this.contratoId)
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -281,11 +251,11 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ContratoFornecedor.Remover(this.itemRemover)
+      ContratoCliente.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Fornecedor removido com sucesso."],
+            data: ["Cliente removido com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -305,13 +275,13 @@ export default {
     Novo() {
       this.loading = true;
       this.viewModel.contratoId = this.contratoId;
-      ContratoFornecedor.Novo(this.viewModel)
+      ContratoCliente.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Fornecedor cadastrado com sucesso."],
+            data: ["Cliente cadastrado com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -328,13 +298,13 @@ export default {
     Editar() {
       this.loading = true;
       this.viewModel.contratoId = this.contratoId;
-      ContratoFornecedor.Editar(this.viewModel)
+      ContratoCliente.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Fornecedor editado com sucesso."],
+            data: ["Cliente editado com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -372,13 +342,14 @@ export default {
         return valor;
       }
     },
-    ObterFornecedorsSelect() {
+    ObterClientesSelect() {
       this.$http({
-        url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
+        // url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
+        url: "/pessoa/obter-select",
         method: "GET"
       })
         .then((response) => {
-          this.fornecedorOptions = response.data;
+          this.clienteOptions = response.data;
         })
         .catch((erro) => {
           this.$notify({
@@ -398,12 +369,16 @@ export default {
         return valor;
       }
     },
-    ObterNomeTipoFornecedor(item) {
+    ObterTipoPessoa(item) {
       switch (item) {
-        case TipoFornecedorEnum.Avulso:
-          return "Avulso";
-        case TipoFornecedorEnum.Cooperado:
-          return "Cooperado";
+        case TipoPessoaEnum.Funcionario:
+          return "Funcionário";
+        case TipoPessoaEnum.Fornecedor:
+          return "Fornecedor";
+        case TipoPessoaEnum.Cliente:
+          return "Cliente";
+        case TipoPessoaEnum.Instituicao:
+          return "Instituição";
         default:
           return "Inválido";
       }
