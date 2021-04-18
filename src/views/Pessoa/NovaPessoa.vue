@@ -92,31 +92,18 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>Nacionalidade</label>
-                    <input
-                      v-model="viewModel.nacionalidade"
-                      class="form-control"
-                      type="text"
-                      placeholder="Digite a nacionalidade"
-                      required
-                    />
-                  </div>
-                </div>
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
                     <label for>{{
-                      isFuncionario() ? "Data Nascimento" : "Data Fundação"
+                      isFuncionario() ? "* Data Nascimento" : "Data Fundação"
                     }}</label>
                     <input
                       v-model="viewModel.dataNascimento"
                       class="form-control"
                       type="date"
-                      placeholder="Digite a data de nascimento"
-                      required
+                      placeholder="Digite a data"
                     />
                   </div>
                 </div>
@@ -258,7 +245,6 @@ export default {
         tipoFornecedor: null,
         nome: "",
         nomeCompleto: "",
-        nacionalidade: "",
         dataNascimento: "",
         estadoCivil: null,
         telefone: "",
