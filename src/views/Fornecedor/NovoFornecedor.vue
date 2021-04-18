@@ -79,30 +79,18 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>Nacionalidade</label>
-                    <input
-                      v-model="viewModel.nacionalidade"
-                      class="form-control"
-                      type="text"
-                      placeholder="Digite a nacionalidade"
-                      required
-                    />
-                  </div>
-                </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3" v-if="isFuncionario()">
                   <div class="form-group">
-                    <label for>{{
-                      isFuncionario() ? "Data Nascimento" : "Data Fundação"
-                    }}</label>
+                    <label for>
+                       * Data Nascimento
+                    </label>
                     <input
                       v-model="viewModel.dataNascimento"
                       class="form-control"
                       type="date"
-                      placeholder="Digite a data de nascimento"
+                      placeholder="Digite a data"
                       required
                     />
                   </div>
@@ -135,21 +123,11 @@
               <div class="row">
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
-                    <label for>Telefone</label>
+                    <label for>Código</label>
                     <input
                       type="text"
                       class="form-control"
-                      v-model="viewModel.telefone"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>Telefone</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      v-model="viewModel.telefone2"
+                      v-model="viewModel.codigo"
                     />
                   </div>
                 </div>
@@ -243,14 +221,12 @@ export default {
         tipoPessoa: 0,
         nome: "",
         nomeCompleto: "",
-        nacionalidade: "",
         dataNascimento: "",
         estadoCivil: null,
-        telefone: "",
-        telefone2: "",
         tipoSexo: 3,
         email: "",
-        observacao: ""
+        observacao: "",
+        codigo: ""
       }
     };
   },
