@@ -33,17 +33,13 @@
                     <label for>* Tipo</label>
                     <!-- TO-DO rever este ponto aqui..  -->
                     <b-form-select
-                      disabled="true"
                       v-model="viewModel.tipoPessoa"
                       :options="tiposPessoas"
                     ></b-form-select>
                   </div>
                 </div>
 
-                <div
-                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
-                  v-if="isFornecedor()"
-                >
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
                     <label for>* Tipo Fornecedor</label>
                     <b-form-select
@@ -55,9 +51,7 @@
 
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
-                    <label for>{{
-                      isPessoaJuridica() ? "* Fantasia" : "* Nome"
-                    }}</label>
+                    <label for>* Fantasia</label>
                     <input
                       v-model="viewModel.nome"
                       class="form-control"
@@ -68,10 +62,7 @@
                   </div>
                 </div>
 
-                <div
-                  class="col-sm-12 col-md-4 col-lg-4 col-xl-4"
-                  v-if="isPessoaJuridica()"
-                >
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
                     <label for>* Razão Social</label>
                     <input
@@ -92,47 +83,6 @@
                       type="email"
                       placeholder="Digite o e-mail"
                     />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div
-                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
-                  v-if="isFuncionario()"
-                >
-                  <div class="form-group">
-                    <label for> * Data Nascimento </label>
-                    <input
-                      v-model="viewModel.dataNascimento"
-                      class="form-control"
-                      type="date"
-                      placeholder="Digite a data de nascimento"
-                      required
-                    />
-                  </div>
-                </div>
-                <div
-                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
-                  v-if="isFuncionario()"
-                >
-                  <div class="form-group">
-                    <label for>Estado Civil</label>
-                    <b-form-select
-                      v-model="viewModel.estadoCivil"
-                      :options="tiposEstadoCivil"
-                    ></b-form-select>
-                  </div>
-                </div>
-                <div
-                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
-                  v-if="isFuncionario()"
-                >
-                  <div class="form-group">
-                    <label for>Sexo</label>
-                    <b-form-select
-                      v-model="viewModel.tipoSexo"
-                      :options="tiposSexo"
-                    ></b-form-select>
                   </div>
                 </div>
               </div>
@@ -193,9 +143,7 @@
 <script>
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
-import TipoSexoEnum from "../../enums/TipoSexoEnum";
 import RotateSquare from "../../components/RotateSquare";
-import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
 import FornecedorContrato from "./FornecedorContrato";
 import FornecedorProduto from "./FornecedorProduto";
 import DateTime from "../../util/DateTime";
@@ -206,7 +154,6 @@ export default {
   components: {
     TipoPessoaEnum,
     TipoFornecedorEnum,
-    TipoSexoEnum,
     RotateSquare,
     FornecedorContrato,
     FornecedorProduto,
@@ -216,23 +163,7 @@ export default {
   data() {
     return {
       loadingPessoa: false,
-      tiposEstadoCivil: [
-        { value: TipoEstadoCivilEnum.Solteiro, text: "Solteiro" },
-        { value: TipoEstadoCivilEnum.Casado, text: "Casado" },
-        { value: TipoEstadoCivilEnum.Viuvo, text: "Viúvo" },
-        { value: TipoEstadoCivilEnum.Divorciado, text: "Divorciado" }
-      ],
-      tiposPessoas: [
-        { value: TipoPessoaEnum.Funcionario, text: "Funcionário" },
-        { value: TipoPessoaEnum.Fornecedor, text: "Fornecedor" },
-        { value: TipoPessoaEnum.Cliente, text: "Cliente" },
-        { value: TipoPessoaEnum.Instituicao, text: "Instituição" }
-      ],
-      tiposSexo: [
-        { value: TipoSexoEnum.Masculino, text: "Masculino" },
-        { value: TipoSexoEnum.Feminino, text: "Feminino" },
-        { value: TipoSexoEnum.Indefinido, text: "Indefinido" }
-      ],
+      tiposPessoas: [{ value: TipoPessoaEnum.Fornecedor, text: "Fornecedor" }],
       tiposFornecedor: [
         { value: TipoFornecedorEnum.Cooperado, text: "Cooperado" },
         { value: TipoFornecedorEnum.Avulso, text: "Avulso" }
@@ -257,23 +188,9 @@ export default {
     if (id) this.Obter(id);
   },
   methods: {
-    isPessoaJuridica() {
-      return (
-        this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor ||
-        this.viewModel.tipoPessoa == TipoPessoaEnum.Cliente ||
-        this.viewModel.tipoPessoa == TipoPessoaEnum.Instituicao
-      );
-    },
-    isFuncionario() {
-      return this.viewModel.tipoPessoa == TipoPessoaEnum.Funcionario;
-    },
-    isFornecedor() {
-      return this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor;
-    },
     ValidarForm(evt) {
       evt.preventDefault();
-      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.Novo();
+      this.Editar();
     },
     ValidarFormDocumento(evt) {
       evt.preventDefault();
@@ -300,31 +217,7 @@ export default {
           });
         });
     },
-    Novo() {
-      this.loadingPessoa = true;
-      this.$http({
-        url: "pessoa/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
-        .then((resposta) => {
-          this.viewModel.id = resposta.data.id;
-          this.loadingPessoa = false;
-          this.$notify({
-            data: ["Pessoa cadastrado com sucesso."],
-            type: "success",
-            duration: 10000
-          });
-        })
-        .catch((erro) => {
-          this.loadingPessoa = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
+
     Editar() {
       this.loadingPessoa = true;
       this.$http({
