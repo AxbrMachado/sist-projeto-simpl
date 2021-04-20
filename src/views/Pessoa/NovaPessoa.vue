@@ -92,25 +92,14 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>Nacionalidade</label>
-                    <input
-                      v-model="viewModel.nacionalidade"
-                      class="form-control"
-                      type="text"
-                      placeholder="Digite a nacionalidade"
-                      required
-                    />
-                  </div>
-                </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div
+                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
+                  v-if="isFuncionario()"
+                >
                   <div class="form-group">
-                    <label for>{{
-                      isFuncionario() ? "Data Nascimento" : "Data Fundação"
-                    }}</label>
+                    <label for> * Data Nascimento </label>
                     <input
                       v-model="viewModel.dataNascimento"
                       class="form-control"
@@ -148,24 +137,15 @@
               <div class="row">
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
-                    <label for>Telefone</label>
+                    <label for>Código</label>
                     <input
                       type="text"
                       class="form-control"
-                      v-model="viewModel.telefone"
+                      v-model="viewModel.codigo"
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>Telefone</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      v-model="viewModel.telefone2"
-                    />
-                  </div>
-                </div>
+
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -258,14 +238,12 @@ export default {
         tipoFornecedor: null,
         nome: "",
         nomeCompleto: "",
-        nacionalidade: "",
-        dataNascimento: "",
+        dataNascimento: null,
         estadoCivil: null,
-        telefone: "",
-        telefone2: "",
         tipoSexo: 3,
         email: "",
-        observacao: ""
+        observacao: "",
+        codigo: ""
       }
     };
   },
