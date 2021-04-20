@@ -5,11 +5,11 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Produto</strong>
+              <strong class="align-self-center">Tipo de unidade medida</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/produto/novo"
-                title="Adicionar nova produto"
+                href="/#/tipoUnidadeMedida/novo"
+                title="Adicionar novo tipo unidade medida"
               >
                 Adicionar
               </a>
@@ -25,10 +25,10 @@
             <div class="row">
               <div class="col-lg-5 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Número</label>
+                  <label>Descrição</label>
                   <input
                     type="text"
-                    v-model="filtro.numero"
+                    v-model="filtro.descricao"
                     class="form-control"
                   />
                 </div>
@@ -59,7 +59,7 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhuma produto encontrada."
+              empty-text="Nenhum tipo unidade medida encontrado."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
@@ -81,11 +81,6 @@
                   >
                     <i class="fas fa-trash-alt text-black"></i>
                   </b-button>
-                </div>
-              </template>
-              <template v-slot:cell(valorBase)="data">
-                <div class="left">
-                  <span>{{ FormataValor(data.item.valorBase) }}</span>
                 </div>
               </template>
             </b-table>
@@ -116,10 +111,9 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 
 export default {
-  name: "Produto",
+  name: "TipoUnidadeMedida",
   components: {
     RotateSquare
   },
@@ -132,12 +126,9 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { numero: "" },
+      filtro: { descricao: "" },
       fields: [
-        { key: "descricao", label: "Descrição", sortable: true },
-        { key: "valorBase", label: "Valor Base", sortable: true },
-        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
+        { key: "descricao", label: "Nome", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -157,11 +148,12 @@ export default {
   },
   methods: {
     Limpar() {
-      this.filtro.numero = "";
+      this.filtro.descricao = "";
       this.ObterGrid(1);
     },
-    Editar(produto) {
-      this.$router.push("/produto/editar/" + produto.id);
+    Editar(tipoUnidadeMedida) {
+      console.log("/tipoUnidadeMedida/editar/" + tipoUnidadeMedida.id);
+      this.$router.push("/tipoUnidadeMedida/editar/" + tipoUnidadeMedida.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -173,13 +165,13 @@ export default {
       if (!this.itemRemover) return;
 
       this.$http({
-        url: "produto/remover/" + this.itemRemover.id,
+        url: "tipoUnidadeMedida/remover/" + this.itemRemover.id,
         method: "DELETE"
       })
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Produto removida com sucesso."],
+            data: ["TipoUnidadeMedida removida com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -200,10 +192,7 @@ export default {
       this.loading = true;
       this.$http({
         url:
-          "/produto/obter-grid?pagina=" +
-          pagina +
-          "&numero=" +
-          this.filtro.numero,
+          "/tipoUnidadeMedida/obter-grid?pagina=" + pagina + "&descricao=" + this.filtro.descricao,
         method: "GET"
       })
         .then((response) => {
@@ -221,28 +210,6 @@ export default {
             duration: 10000
           });
         });
-    },
-
-    ObterNomeEnquadramento(item) {
-      switch (item) {
-        case TipoEnquadramentoEnum.Grupo_A:
-          return "A";
-        case TipoEnquadramentoEnum.Grupo_B:
-          return "B";
-        case TipoEnquadramentoEnum.Grupo_AC:
-          return "AC";
-        case TipoEnquadramentoEnum.Grupo_V:
-          return "V";
-        default:
-          return "Inválido";
-      }
-    },
-
-    FormataValor(valor) {
-      return valor.toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL"
-      });
     }
   }
 };
