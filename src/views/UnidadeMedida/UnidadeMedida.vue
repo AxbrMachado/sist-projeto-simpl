@@ -143,7 +143,6 @@ export default {
           label: "Unidade",
           sortable: true
         },
-        // { key: "operacao", label: "Condição", sortable: true },
         { key: "valor", label: "Quantidade", sortable: true },
         {
           key: "tipoUnidadeMedidaBase",

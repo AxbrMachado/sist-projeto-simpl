@@ -56,7 +56,7 @@
                   <div class="form-group">
                     <label for>* Quantidade</label>
                     <vue-numeric
-                      v-bind:precision="2"
+                      v-bind:precision="3"
                       v-bind:minus="false"
                       v-model="viewModel.valor"
                       class="form-control"
@@ -110,17 +110,18 @@
         </div>
       </div>
     </form>
-    <div v-if="IsEdicao()"></div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import UnidadeMedidaServico from "../../servico/UnidadeMedidaServico";
 
 export default {
   name: "NovoUnidadeMedida",
   components: {
-    RotateSquare
+    RotateSquare,
+    UnidadeMedidaServico
   },
   data() {
     return {
@@ -144,15 +145,26 @@ export default {
   methods: {
     ValidarForm(evt) {
       evt.preventDefault();
+
+      if (
+        this.viewModel.tipoUnidadeMedidaId ==
+        this.viewModel.tipoUnidadeMedidaBaseId
+      ) {
+        this.loading = false;
+        this.$notify({
+          data: ["Unidades devem ser diferentes."],
+          type: "warn",
+          duration: 10000
+        });
+        return;
+      }
+
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
     Obter(unidadeMedidaId) {
       this.loading = true;
-      this.$http({
-        url: "unidadeMedida/obter/" + unidadeMedidaId,
-        method: "GET"
-      })
+      UnidadeMedidaServico.Obter(unidadeMedidaId)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -168,11 +180,7 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.$http({
-        url: "unidadeMedida/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+      UnidadeMedidaServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/unidadeMedida");
@@ -193,11 +201,7 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.$http({
-        url: "unidadeMedida/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+      UnidadeMedidaServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/unidadeMedida");
@@ -231,9 +235,6 @@ export default {
             duration: 10000
           });
         });
-    },
-    IsEdicao() {
-      return this.viewModel.id !== this.$store.getters.emptyGuid;
     }
   }
 };

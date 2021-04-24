@@ -6,7 +6,7 @@
         size="60px"
       ></RotateSquare>
     </div>
-    <form v-else @submit="ValidarFormFornecedorProduto">
+    <form v-else @submit="ValidarForm">
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
@@ -219,7 +219,7 @@ export default {
     IsNovo() {
       return this.fornecedorId === this.$store.getters.emptyGuid;
     },
-    ValidarFormFornecedorProduto(evt) {
+    ValidarForm(evt) {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();

@@ -192,9 +192,9 @@ export default {
       evt.preventDefault();
       this.Editar();
     },
-    ValidarFormDocumento(evt) {
-      evt.preventDefault();
-    },
+    // ValidarFormDocumento(evt) {
+    //   evt.preventDefault();
+    // },
     Obter(id) {
       this.loadingPessoa = true;
       this.$http({
