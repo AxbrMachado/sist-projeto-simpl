@@ -175,7 +175,6 @@ export default {
       this.ObterGrid(1);
     },
     Editar(unidadeMedida) {
-      console.log("/unidadeMedida/editar/" + unidadeMedida.id);
       this.$router.push("/unidadeMedida/editar/" + unidadeMedida.id);
     },
     ModalCancel(evento) {

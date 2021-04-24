@@ -152,7 +152,6 @@ export default {
       this.ObterGrid(1);
     },
     Editar(tipoProduto) {
-      console.log("/tipoProduto/editar/" + tipoProduto.id);
       this.$router.push("/tipoProduto/editar/" + tipoProduto.id);
     },
     ModalCancel(evento) {

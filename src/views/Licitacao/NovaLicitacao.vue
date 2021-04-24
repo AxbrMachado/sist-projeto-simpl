@@ -66,7 +66,7 @@
                     <currency-input
                       v-model="viewModel.valor"
                       class="form-control"
-                      placeholder="Digite o valor base"
+                      placeholder="Digite o valor"
                       required
                     />
                   </div>
