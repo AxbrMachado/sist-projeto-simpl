@@ -52,13 +52,15 @@
                     ></b-form-select>
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
                     <label for>* Quantidade</label>
-                    <currency-input
+                    <vue-numeric
+                      v-bind:precision="2"
+                      v-bind:minus="false"
                       v-model="viewModel.valor"
                       class="form-control"
-                      placeholder="Digite o valor base"
+                      placeholder="Digite a quantidade"
                       required
                     />
                   </div>

@@ -60,7 +60,9 @@
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Quantidade Limite</label>
-                      <currency-input
+                      <vue-numeric
+                        v-bind:precision="2"
+                        v-bind:minus="false"
                         v-model="viewModel.quantidadeLimite"
                         class="form-control"
                         placeholder="Digite a quantidade limite"
@@ -137,6 +139,13 @@
                           <span>{{ FormataValor(data.item.valorLimite) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidadeLimite)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValorDecimal(data.item.quantidadeLimite)
+                          }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -211,7 +220,7 @@ export default {
         contratoId: "",
         valorLimite: 0,
         quantidadeLimite: 0,
-        tipoPessoaContrato: TipoPessoaContratoEnum.Fornecedor 
+        tipoPessoaContrato: TipoPessoaContratoEnum.Fornecedor
       }
     };
   },
@@ -356,6 +365,17 @@ export default {
       this.viewModel.quantidadeLimite = 0;
     },
     FormataValor(valor) {
+      if (valor != null) {
+        return valor.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      } else {
+        return valor;
+      }
+    },
+    FormataValorDecimal(valor) {
+      return valor;
       if (valor != null) {
         return valor.toLocaleString("pt-br", {
           style: "currency",

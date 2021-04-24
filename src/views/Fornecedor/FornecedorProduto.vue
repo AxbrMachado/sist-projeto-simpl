@@ -52,7 +52,7 @@
                       <currency-input
                         v-model="viewModel.valor"
                         class="form-control"
-                        placeholder="Digite o valor base"
+                        placeholder="Digite o valor"
                         required
                       />
                     </div>
@@ -60,7 +60,9 @@
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Quantidade</label>
-                      <currency-input
+                      <vue-numeric
+                        v-bind:precision="2"
+                        v-bind:minus="false"
                         v-model="viewModel.quantidade"
                         class="form-control"
                         placeholder="Digite a quantidade"

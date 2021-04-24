@@ -166,9 +166,6 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = true;
-      
-      console.log(this.dapId);
-      
       this.$http({
         url:
           "/dapcontrato/obter-grid-contrato?pagina=" +
