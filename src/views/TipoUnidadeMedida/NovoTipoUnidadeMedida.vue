@@ -62,16 +62,21 @@
         </div>
       </div>
     </form>
+    <div v-if="IsEdicao()">
+      <TipoUnidadeMedidaConversao :tipoUnidadeMedidaId="viewModel.id" />
+    </div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import TipoUnidadeMedidaConversao from "./TipoUnidadeMedidaConversao";
 
 export default {
-  name: "NovoTipoUnidade Medida",
+  name: "NovoTipoUnidadeMedida",
   components: {
-    RotateSquare
+    RotateSquare,
+    TipoUnidadeMedidaConversao
   },
   data() {
     return {
@@ -161,6 +166,9 @@ export default {
             duration: 10000
           });
         });
+    },
+    IsEdicao() {
+      return this.viewModel.id !== this.$store.getters.emptyGuid;
     }
   }
 };

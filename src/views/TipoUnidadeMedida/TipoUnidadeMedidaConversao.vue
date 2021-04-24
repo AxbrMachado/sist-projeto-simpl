@@ -12,7 +12,7 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Fornecedores</strong>
+                <strong class="align-self-center">Conversões(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
 
                 <i
@@ -36,54 +36,63 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                  <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
-                      <label for>* Fornecedor</label>
-                      <v-select
-                        placeholder="Digite um fornecedor.."
-                        v-model="viewModel.pessoa"
-                        :options="fornecedorOptions"
-                        required
-                        @search="ObterFornecedoresVSelect"
-                      >
-                        <template slot="no-options">
-                          Nenhum resultado para a busca.
-                        </template>
-                      </v-select>
-                    </div>
-                  </div>
-                  <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Fornecedor</label>
-                      <b-form-select
-                        v-model="viewModel.pessoaId"
-                        :options="fornecedorOptions"
-                        required
-                      ></b-form-select>
-                    </div>
-                  </div> -->
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Valor</label>
-                      <currency-input
-                        v-model="viewModel.valor"
+                      <label for>* Descrição</label>
+                      <input
+                        v-model="viewModel.descricao"
                         class="form-control"
-                        placeholder="Digite o valor"
+                        type="text"
+                        placeholder="Digite a descrição"
                         required
                       />
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                </div>
+                <div class="row">
+                  <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                      <label for>* Unidade Medida</label>
+                      <b-form-select
+                        v-model="viewModel.tipoUnidadeMedidaId"
+                        :options="tiposUnidadeMedidaOptions"
+                      ></b-form-select>
+                    </div>
+                  </div> -->
+                  <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                       <label for>* Quantidade</label>
                       <vue-numeric
-                        v-bind:precision="2"
+                        v-bind:precision="3"
                         v-bind:minus="false"
-                        v-model="viewModel.quantidade"
+                        v-model="viewModel.valor"
                         class="form-control"
                         placeholder="Digite a quantidade"
                         required
                       />
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                      <label for>* Unidade Medida</label>
+                      <b-form-select
+                        v-model="viewModel.tipoUnidadeMedidaBaseId"
+                        :options="tiposUnidadeMedidaOptions"
+                        required
+                      ></b-form-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                      <label for>Observação</label>
+                      <b-form-textarea
+                        v-model="viewModel.observacao"
+                        rows="4"
+                        max-rows="12"
+                        placeholder="Observações gerais..."
+                      ></b-form-textarea>
                     </div>
                   </div>
                 </div>
@@ -97,7 +106,7 @@
                     <button
                       class="btn btn-secondary"
                       type="reset"
-                      @click="$router.push('/produto')"
+                      @click="$router.push('/tipoUnidadeMedida')"
                     >
                       Voltar
                     </button>
@@ -113,7 +122,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum fornecedor encontrado."
+                      empty-text="Nenhuma conversão encontrada."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -138,23 +147,6 @@
                           </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(valor)="data">
-                        <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(tipoFornecedor)="data">
-                        <div class="center">
-                          <span>{{
-                            ObterNomeTipoFornecedor(data.item.tipoFornecedor)
-                          }}</span>
-                        </div>
-                      </template>
-                      <!-- <template v-slot:cell(valor)="data">
-                        <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
-                        </div>
-                      </template> -->
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -187,14 +179,12 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ProdutoFornecedor from "../../servico/ProdutoFornecedorServico";
-import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
-import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import UnidadeMedidaServico from "../../servico/UnidadeMedidaServico";
 
 export default {
   components: { RotateSquare },
   props: {
-    produtoId: {
+    tipoUnidadeMedidaId: {
       type: String,
       default: ""
     }
@@ -203,7 +193,7 @@ export default {
     return {
       modalRemover: false,
       itemRemover: null,
-      fornecedorOptions: [],
+      tiposUnidadeMedidaOptions: [],
       loading: false,
       pagina: 1,
       total: 0,
@@ -211,10 +201,19 @@ export default {
       itens: [],
       abrir: false,
       fields: [
-        { key: "nome", label: "Fornecedor", sortable: true },
-        { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
-        { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "descricao", label: "Nome", sortable: true },
+        {
+          key: "tipoUnidadeMedida",
+          label: "Unidade",
+          sortable: true
+        },
+        { key: "valor", label: "Quantidade", sortable: true },
+        {
+          key: "tipoUnidadeMedidaBase",
+          label: "Unidade",
+          sortable: true
+        },
+        { key: "observacao", label: "Observação", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -224,10 +223,12 @@ export default {
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        produtoId: "",
+        descricao: "",
+        tipoUnidadeMedidaId: "",
+        operacao: 0,
         valor: 0,
-        quantidade: 0,
-        pessoa: {}
+        tipoUnidadeMedidaBaseId: "",
+        observacao: ""
       }
     };
   },
@@ -240,18 +241,19 @@ export default {
     }
   },
   created() {
-    // this.ObterFornecedorsSelect();
+    this.ObterTiposUnidadeMedidaSelect();
   },
   methods: {
     IsNovo() {
-      return this.produtoId === this.$store.getters.emptyGuid;
+      return this.tipoUnidadeMedidaId === this.$store.getters.emptyGuid;
     },
     ValidarForm(evt) {
       evt.preventDefault();
-      if (!this.viewModel.pessoa || this.viewModel.pessoa.id == undefined) {
+
+      if (this.tipoUnidadeMedidaId == this.viewModel.tipoUnidadeMedidaBaseId) {
         this.loading = false;
         this.$notify({
-          data: ["Informe ao menos um fornecedor."],
+          data: ["Unidades devem ser diferentes."],
           type: "warn",
           duration: 10000
         });
@@ -263,7 +265,7 @@ export default {
     },
     Obter(id) {
       this.loading = true;
-      ProdutoFornecedor.Obter(id)
+      UnidadeMedidaServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -279,7 +281,11 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      ProdutoFornecedor.ObterGrid(val, this.itensPorPagina, this.produtoId)
+      UnidadeMedidaServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.tipoUnidadeMedidaId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -304,11 +310,11 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ProdutoFornecedor.Remover(this.itemRemover)
+      UnidadeMedidaServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Fornecedor removido com sucesso."],
+            data: ["Conversão removida com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -327,14 +333,14 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.viewModel.produtoId = this.produtoId;
-      ProdutoFornecedor.Novo(this.viewModel)
+      this.viewModel.tipoUnidadeMedidaId = this.tipoUnidadeMedidaId;
+      UnidadeMedidaServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Fornecedor cadastrado com sucesso."],
+            data: ["Conversão cadastrada com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -350,14 +356,14 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.viewModel.produtoId = this.produtoId;
-      ProdutoFornecedor.Editar(this.viewModel)
+      this.viewModel.tipoUnidadeMedidaId = this.tipoUnidadeMedidaId;
+      UnidadeMedidaServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Fornecedor editado com sucesso."],
+            data: ["Conversão editada com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -373,10 +379,12 @@ export default {
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
-      this.viewModel.produtoId = "";
+      this.viewModel.descricao = "";
+      this.viewModel.tipoUnidadeMedidaId = "";
+      this.viewModel.operacao = 0;
       this.viewModel.valor = 0;
-      this.viewModel.quantidade = 0;
-      this.viewModel.pessoa = {};
+      this.viewModel.tipoUnidadeMedidaBaseId = "";
+      this.viewModel.observacao = "";
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -388,59 +396,13 @@ export default {
         return valor;
       }
     },
-    RemoverCifrao(valor) {
-      if (valor != null) {
-        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
-    // ObterFornecedorsSelect() {
-    //   this.$http({
-    //     url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.fornecedorOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 10000
-    //       });
-    //     });
-    // },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return valor;
-      }
-    },
-    ObterNomeTipoFornecedor(item) {
-      switch (item) {
-        case TipoFornecedorEnum.Avulso:
-          return "Avulso";
-        case TipoFornecedorEnum.Cooperado:
-          return "Cooperado";
-        default:
-          return "Inválido";
-      }
-    },
-    ObterFornecedoresVSelect(busca) {
-      if (!busca || busca.length <= 2) return;
-
+    ObterTiposUnidadeMedidaSelect() {
       this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
+        url: "/tipoUnidadeMedida/obter-select",
         method: "GET"
       })
         .then((response) => {
-          this.fornecedorOptions = response.data;
+          this.tiposUnidadeMedidaOptions = response.data;
         })
         .catch((erro) => {
           this.$notify({

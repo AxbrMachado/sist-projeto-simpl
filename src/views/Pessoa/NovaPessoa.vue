@@ -145,7 +145,6 @@
                     />
                   </div>
                 </div>
-
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -270,9 +269,9 @@ export default {
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
-    ValidarFormDocumento(evt) {
-      evt.preventDefault();
-    },
+    // ValidarFormDocumento(evt) {
+    //   evt.preventDefault();
+    // },
     Obter(id) {
       this.loadingPessoa = true;
       this.$http({
