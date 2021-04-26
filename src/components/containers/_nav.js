@@ -74,6 +74,21 @@ const Menu = {
     to: "/tipoProduto",
     icon: "cil-description"
   },
+
+  TipoUnidadeMedida: {
+    _name: "CSidebarNavItem",
+    name: "Tipo Unidade Medida",
+    to: "/tipoUnidadeMedida",
+    icon: "cil-description"
+  },
+
+  UnidadeMedida: {
+    _name: "CSidebarNavItem",
+    name: "Conversão Unidade Medida",
+    to: "/unidadeMedida",
+    icon: "cil-description"
+  },
+
   TipoInstituicao: {
     _name: "CSidebarNavItem",
     name: "Tipo Instituição",

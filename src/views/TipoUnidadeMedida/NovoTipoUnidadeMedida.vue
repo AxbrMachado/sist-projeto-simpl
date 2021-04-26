@@ -14,8 +14,8 @@
               <strong class="align-self-center"
                 >{{
                   viewModel.id == this.$store.getters.emptyGuid
-                    ? "Novo Produto"
-                    : "Editar Produto"
+                    ? "Novo Tipo de Unidade Medida"
+                    : "Editar Tipo de Unidade Medida"
                 }}
               </strong>
             </header>
@@ -30,7 +30,7 @@
               <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
-                    <label for>* Descrição</label>
+                    <label for>* Descricao</label>
                     <input
                       v-model="viewModel.descricao"
                       class="form-control"
@@ -38,37 +38,6 @@
                       placeholder="Digite a descrição"
                       required
                     />
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>* Valor Base</label>
-                    <currency-input
-                      v-model="viewModel.valorBase"
-                      class="form-control"
-                      placeholder="Digite o valor base"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>* Tipo Produto</label>
-                    <b-form-select
-                      v-model="viewModel.tipoProdutoId"
-                      :options="tiposProdutoOptions"
-                      required
-                    ></b-form-select>
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>* Unidade Medida</label>
-                    <b-form-select
-                      v-model="viewModel.tipoUnidadeMedidaId"
-                      :options="tiposUnidadeMedidaOptions"
-                      required
-                    ></b-form-select>
                   </div>
                 </div>
               </div>
@@ -83,7 +52,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/produto')"
+                  @click="$router.push('/tipoUnidadeMedida')"
                 >
                   Voltar
                 </button>
@@ -94,43 +63,34 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <ProdutoContrato :produtoId="viewModel.id"></ProdutoContrato>
-      <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor>
+      <TipoUnidadeMedidaConversao :tipoUnidadeMedidaId="viewModel.id" />
     </div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ProdutoFornecedor from "./ProdutoFornecedor";
-import ProdutoContrato from "./ProdutoContrato";
+import TipoUnidadeMedidaConversao from "./TipoUnidadeMedidaConversao";
 
 export default {
-  name: "NovoProduto",
+  name: "NovoTipoUnidadeMedida",
   components: {
     RotateSquare,
-    ProdutoFornecedor,
-    ProdutoContrato
+    TipoUnidadeMedidaConversao
   },
   data() {
     return {
       loading: false,
-      tiposProdutoOptions: [],
-      tiposUnidadeMedidaOptions: [],
+      contaOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        descricao: "",
-        valorBase: 0,
-        tipoProdutoId: "",
-        tipoUnidadeMedidaId: ""
+        descricao: ""
       }
     };
   },
   created() {
-    let produtoId = this.$route.params.id;
-    if (produtoId) this.Obter(produtoId);
-    this.ObterTiposProdutoSelect();
-    this.ObterTiposUnidadeMedidaSelect();
+    let tipoUnidadeMedidaId = this.$route.params.id;
+    if (tipoUnidadeMedidaId) this.Obter(tipoUnidadeMedidaId);
   },
   methods: {
     ValidarForm(evt) {
@@ -138,10 +98,10 @@ export default {
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
-    Obter(produtoId) {
+    Obter(tipoUnidadeMedidaId) {
       this.loading = true;
       this.$http({
-        url: "produto/obter/" + produtoId,
+        url: "tipoUnidadeMedida/obter/" + tipoUnidadeMedidaId,
         method: "GET"
       })
         .then((resposta) => {
@@ -160,15 +120,15 @@ export default {
     Novo() {
       this.loading = true;
       this.$http({
-        url: "produto/novo",
+        url: "tipoUnidadeMedida/novo",
         data: this.viewModel,
         method: "POST"
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/produto");
+          this.$router.push("/tipoUnidadeMedida");
           this.$notify({
-            data: ["Produto cadastrado com sucesso."],
+            data: ["Tipo de unidade medida cadastrado com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -185,54 +145,21 @@ export default {
     Editar() {
       this.loading = true;
       this.$http({
-        url: "produto/editar",
+        url: "tipoUnidadeMedida/editar",
         data: this.viewModel,
         method: "PUT"
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/produto");
+          this.$router.push("/tipoUnidadeMedida");
           this.$notify({
-            data: ["Produto editado com sucesso."],
+            data: ["Tipo de unidade medida editado com sucesso."],
             type: "success",
             duration: 10000
           });
         })
         .catch((erro) => {
           this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
-
-    ObterTiposProdutoSelect() {
-      this.$http({
-        url: "/tipoProduto/obter-select",
-        method: "GET"
-      })
-        .then((response) => {
-          this.tiposProdutoOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
-    ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
-        .then((response) => {
-          this.tiposUnidadeMedidaOptions = response.data;
-        })
-        .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",

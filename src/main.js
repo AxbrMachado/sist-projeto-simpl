@@ -9,14 +9,17 @@ import "./directives/outsideClickHandler";
 import router from "./router";
 import store from "./store/index";
 import App from "./App.vue";
-import VueCurrencyInput from 'vue-currency-input'
 import HighchartsVue from "highcharts-vue";
 import Highcharts from "highcharts";
+import VueCurrencyInput from "vue-currency-input";
+import VueNumeric from "vue-numeric";
 
 const pluginOptions = {
-  globalOptions: { currency: 'BRL'}
-}
-Vue.use(VueCurrencyInput, pluginOptions)
+  globalOptions: { currency: "BRL" }
+};
+Vue.use(VueCurrencyInput, pluginOptions);
+
+Vue.use(VueNumeric);
 
 var axiosInstance = Axios.create({
   baseURL: store.getters.baseURL
@@ -49,8 +52,8 @@ Vue.use(BootstrapVue);
 
 Vue.use(Notifications);
 Vue.component("v-select", VSelect);
-Vue.use(HighchartsVue)
-Vue.use(Highcharts)
+Vue.use(HighchartsVue);
+Vue.use(Highcharts);
 
 Vue.config.productionTip = false;
 

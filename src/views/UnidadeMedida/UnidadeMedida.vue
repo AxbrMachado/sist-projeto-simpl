@@ -5,11 +5,13 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Tipo de produto</strong>
+              <strong class="align-self-center"
+                >Conversão unidade medida</strong
+              >
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/tipoProduto/novo"
-                title="Adicionar novo tipo produto"
+                href="/#/unidadeMedida/novo"
+                title="Adicionar nova conversão unidade medida"
               >
                 Adicionar
               </a>
@@ -59,7 +61,7 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhum tipo produto encontrado."
+              empty-text="Nenhuma conversão unidade medida encontrada."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
@@ -81,6 +83,11 @@
                   >
                     <i class="fas fa-trash-alt text-black"></i>
                   </b-button>
+                </div>
+              </template>
+              <template v-slot:cell(operacao)="data">
+                <div class="center">
+                  <span>{{ ObterNomeOperacao(data.item.operacao) }}</span>
                 </div>
               </template>
             </b-table>
@@ -111,11 +118,13 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import TipoOperacaoAritmeticaEnum from "../../enums/TipoOperacaoAritmeticaEnum";
 
 export default {
-  name: "TipoProduto",
+  name: "UnidadeMedida",
   components: {
-    RotateSquare
+    RotateSquare,
+    TipoOperacaoAritmeticaEnum
   },
   data() {
     return {
@@ -129,6 +138,19 @@ export default {
       filtro: { descricao: "" },
       fields: [
         { key: "descricao", label: "Nome", sortable: true },
+        {
+          key: "tipoUnidadeMedida",
+          label: "Unidade",
+          sortable: true
+        },
+        { key: "valor", label: "Quantidade", sortable: true },
+        {
+          key: "tipoUnidadeMedidaBase",
+          label: "Unidade",
+          sortable: true
+        },
+        { key: "observacao", label: "Observação", sortable: true },
+
         {
           key: "acoes",
           label: "Ações",
@@ -151,8 +173,8 @@ export default {
       this.filtro.descricao = "";
       this.ObterGrid(1);
     },
-    Editar(tipoProduto) {
-      this.$router.push("/tipoProduto/editar/" + tipoProduto.id);
+    Editar(unidadeMedida) {
+      this.$router.push("/unidadeMedida/editar/" + unidadeMedida.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -164,13 +186,13 @@ export default {
       if (!this.itemRemover) return;
 
       this.$http({
-        url: "tipoProduto/remover/" + this.itemRemover.id,
+        url: "unidadeMedida/remover/" + this.itemRemover.id,
         method: "DELETE"
       })
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["TipoProduto removida com sucesso."],
+            data: ["Conversão unidade medida removida com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -191,7 +213,10 @@ export default {
       this.loading = true;
       this.$http({
         url:
-          "/tipoProduto/obter-grid?pagina=" + pagina + "&descricao=" + this.filtro.descricao,
+          "/unidadeMedida/obter-grid?pagina=" +
+          pagina +
+          "&descricao=" +
+          this.filtro.descricao,
         method: "GET"
       })
         .then((response) => {
@@ -209,6 +234,22 @@ export default {
             duration: 10000
           });
         });
+    },
+    ObterNomeOperacao(item) {
+      switch (item) {
+        case TipoOperacaoAritmeticaEnum.Igual:
+          return "=";
+        case TipoOperacaoAritmeticaEnum.Divisao:
+          return "/";
+        case TipoOperacaoAritmeticaEnum.Multiplicacao:
+          return "x";
+        case TipoOperacaoAritmeticaEnum.Soma:
+          return "+";
+        case TipoOperacaoAritmeticaEnum.Subtracao:
+          return "-";
+        default:
+          return "Inválido";
+      }
     }
   }
 };

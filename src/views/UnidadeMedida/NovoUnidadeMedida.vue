@@ -14,8 +14,8 @@
               <strong class="align-self-center"
                 >{{
                   viewModel.id == this.$store.getters.emptyGuid
-                    ? "Novo Produto"
-                    : "Editar Produto"
+                    ? "Nova Conversão unidade medida"
+                    : "Editar Conversão unidade medida"
                 }}
               </strong>
             </header>
@@ -40,27 +40,8 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>* Valor Base</label>
-                    <currency-input
-                      v-model="viewModel.valorBase"
-                      class="form-control"
-                      placeholder="Digite o valor base"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>* Tipo Produto</label>
-                    <b-form-select
-                      v-model="viewModel.tipoProdutoId"
-                      :options="tiposProdutoOptions"
-                      required
-                    ></b-form-select>
-                  </div>
-                </div>
+              </div>
+              <div class="row">
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
                     <label for>* Unidade Medida</label>
@@ -69,6 +50,42 @@
                       :options="tiposUnidadeMedidaOptions"
                       required
                     ></b-form-select>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label for>* Quantidade</label>
+                    <vue-numeric
+                      v-bind:precision="3"
+                      v-bind:minus="false"
+                      v-model="viewModel.valor"
+                      class="form-control"
+                      placeholder="Digite a quantidade"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="form-group">
+                    <label for>* Unidade Medida</label>
+                    <b-form-select
+                      v-model="viewModel.tipoUnidadeMedidaBaseId"
+                      :options="tiposUnidadeMedidaOptions"
+                      required
+                    ></b-form-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                  <div class="form-group">
+                    <label for>Observação</label>
+                    <b-form-textarea
+                      v-model="viewModel.observacao"
+                      rows="4"
+                      max-rows="12"
+                      placeholder="Observações gerais..."
+                    ></b-form-textarea>
                   </div>
                 </div>
               </div>
@@ -83,7 +100,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/produto')"
+                  @click="$router.push('/unidadeMedida')"
                 >
                   Voltar
                 </button>
@@ -93,57 +110,61 @@
         </div>
       </div>
     </form>
-    <div v-if="IsEdicao()">
-      <ProdutoContrato :produtoId="viewModel.id"></ProdutoContrato>
-      <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor>
-    </div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ProdutoFornecedor from "./ProdutoFornecedor";
-import ProdutoContrato from "./ProdutoContrato";
+import UnidadeMedidaServico from "../../servico/UnidadeMedidaServico";
 
 export default {
-  name: "NovoProduto",
+  name: "NovoUnidadeMedida",
   components: {
     RotateSquare,
-    ProdutoFornecedor,
-    ProdutoContrato
+    UnidadeMedidaServico
   },
   data() {
     return {
       loading: false,
-      tiposProdutoOptions: [],
       tiposUnidadeMedidaOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
         descricao: "",
-        valorBase: 0,
-        tipoProdutoId: "",
-        tipoUnidadeMedidaId: ""
+        tipoUnidadeMedidaId: "",
+        operacao: 0,
+        valor: 0,
+        tipoUnidadeMedidaBaseId: ""
       }
     };
   },
   created() {
-    let produtoId = this.$route.params.id;
-    if (produtoId) this.Obter(produtoId);
-    this.ObterTiposProdutoSelect();
+    let unidadeMedidaId = this.$route.params.id;
+    if (unidadeMedidaId) this.Obter(unidadeMedidaId);
     this.ObterTiposUnidadeMedidaSelect();
   },
   methods: {
     ValidarForm(evt) {
       evt.preventDefault();
+
+      if (
+        this.viewModel.tipoUnidadeMedidaId ==
+        this.viewModel.tipoUnidadeMedidaBaseId
+      ) {
+        this.loading = false;
+        this.$notify({
+          data: ["Unidades devem ser diferentes."],
+          type: "warn",
+          duration: 10000
+        });
+        return;
+      }
+
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
-    Obter(produtoId) {
+    Obter(unidadeMedidaId) {
       this.loading = true;
-      this.$http({
-        url: "produto/obter/" + produtoId,
-        method: "GET"
-      })
+      UnidadeMedidaServico.Obter(unidadeMedidaId)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -159,16 +180,12 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.$http({
-        url: "produto/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+      UnidadeMedidaServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/produto");
+          this.$router.push("/unidadeMedida");
           this.$notify({
-            data: ["Produto cadastrado com sucesso."],
+            data: ["Conversão cadastrada com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -184,39 +201,18 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.$http({
-        url: "produto/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+      UnidadeMedidaServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/produto");
+          this.$router.push("/unidadeMedida");
           this.$notify({
-            data: ["Produto editado com sucesso."],
+            data: ["Conversão editado com sucesso."],
             type: "success",
             duration: 10000
           });
         })
         .catch((erro) => {
           this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
-
-    ObterTiposProdutoSelect() {
-      this.$http({
-        url: "/tipoProduto/obter-select",
-        method: "GET"
-      })
-        .then((response) => {
-          this.tiposProdutoOptions = response.data;
-        })
-        .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
@@ -239,9 +235,6 @@ export default {
             duration: 10000
           });
         });
-    },
-    IsEdicao() {
-      return this.viewModel.id !== this.$store.getters.emptyGuid;
     }
   }
 };

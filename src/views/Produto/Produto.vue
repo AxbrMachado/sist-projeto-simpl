@@ -137,6 +137,7 @@ export default {
         { key: "descricao", label: "Descrição", sortable: true },
         { key: "valorBase", label: "Valor Base", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
           label: "Ações",

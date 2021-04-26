@@ -312,9 +312,9 @@ export default {
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
-    ValidarFormDocumento(evt) {
-      evt.preventDefault();
-    },
+    // ValidarFormDocumento(evt) {
+    //   evt.preventDefault();
+    // },
     Obter(id) {
       this.loadingPessoa = true;
       this.$http({

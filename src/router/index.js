@@ -20,13 +20,22 @@ const NovaPessoa = () => import("@/views/Pessoa/NovaPessoa");
 const Produto = () => import("@/views/Produto/Produto");
 const NovoProduto = () => import("@/views/Produto/NovoProduto");
 const TipoDocumento = () => import("@/views/TipoDocumento/TipoDocumento");
-const NovoTipoDocumento =() => import("@/views/TipoDocumento/NovoTipoDocumento");
+const NovoTipoDocumento = () =>
+  import("@/views/TipoDocumento/NovoTipoDocumento");
 const TipoEndereco = () => import("@/views/TipoEndereco/TipoEndereco");
 const NovoTipoEndereco = () => import("@/views/TipoEndereco/NovoTipoEndereco");
 const TipoProduto = () => import("@/views/TipoProduto/TipoProduto");
 const NovoTipoProduto = () => import("@/views/TipoProduto/NovoTipoProduto");
+const TipoUnidadeMedida = () =>
+  import("@/views/TipoUnidadeMedida/TipoUnidadeMedida");
+const NovoTipoUnidadeMedida = () =>
+  import("@/views/TipoUnidadeMedida/NovoTipoUnidadeMedida");
+const UnidadeMedida = () => import("@/views/UnidadeMedida/UnidadeMedida");
+const NovoUnidadeMedida = () =>
+  import("@/views/UnidadeMedida/NovoUnidadeMedida");
 const TipoInstituicao = () => import("@/views/TipoInstituicao/TipoInstituicao");
-const NovoTipoInstituicao = () => import("@/views/TipoInstituicao/NovoTipoInstituicao");
+const NovoTipoInstituicao = () =>
+  import("@/views/TipoInstituicao/NovoTipoInstituicao");
 const Licitacao = () => import("@/views/Licitacao/Licitacao");
 const NovaLicitacao = () => import("@/views/Licitacao/NovaLicitacao");
 const Fornecedor = () => import("@/views/Fornecedor/Fornecedor");
@@ -107,8 +116,8 @@ export default new Router({
           ]
         },
 
-         //Cadastro de licitacao
-         {
+        //Cadastro de licitacao
+        {
           path: "licitacao",
           name: "Licitacao",
           meta: {
@@ -340,7 +349,7 @@ export default new Router({
             }
           ]
         },
-        
+
         //Cadastro de produto
         {
           path: "produto",
@@ -529,6 +538,84 @@ export default new Router({
               path: "novo",
               name: "Novo",
               component: NovoTipoProduto,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
+        //Cadastro de tipo unidade medida
+        {
+          path: "tipoUnidadeMedida",
+          name: "tipoUnidadeMedida",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: TipoUnidadeMedida,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoTipoUnidadeMedida,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoTipoUnidadeMedida,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
+        //Cadastro de unidade medida
+        {
+          path: "unidadeMedida",
+          name: "unidadeMedida",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: UnidadeMedida,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoUnidadeMedida,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoUnidadeMedida,
               meta: {
                 requiresAuth: true
               }

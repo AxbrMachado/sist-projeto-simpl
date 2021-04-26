@@ -5,11 +5,11 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Tipo de produto</strong>
+              <strong class="align-self-center">Tipo de unidade medida</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/tipoProduto/novo"
-                title="Adicionar novo tipo produto"
+                href="/#/tipoUnidadeMedida/novo"
+                title="Adicionar novo tipo unidade medida"
               >
                 Adicionar
               </a>
@@ -59,7 +59,7 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhum tipo produto encontrado."
+              empty-text="Nenhum tipo unidade medida encontrado."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
@@ -113,7 +113,7 @@
 import RotateSquare from "../../components/RotateSquare";
 
 export default {
-  name: "TipoProduto",
+  name: "TipoUnidadeMedida",
   components: {
     RotateSquare
   },
@@ -151,8 +151,8 @@ export default {
       this.filtro.descricao = "";
       this.ObterGrid(1);
     },
-    Editar(tipoProduto) {
-      this.$router.push("/tipoProduto/editar/" + tipoProduto.id);
+    Editar(tipoUnidadeMedida) {
+      this.$router.push("/tipoUnidadeMedida/editar/" + tipoUnidadeMedida.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -164,13 +164,13 @@ export default {
       if (!this.itemRemover) return;
 
       this.$http({
-        url: "tipoProduto/remover/" + this.itemRemover.id,
+        url: "tipoUnidadeMedida/remover/" + this.itemRemover.id,
         method: "DELETE"
       })
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["TipoProduto removida com sucesso."],
+            data: ["TipoUnidadeMedida removida com sucesso."],
             type: "success",
             duration: 10000
           });
@@ -191,7 +191,7 @@ export default {
       this.loading = true;
       this.$http({
         url:
-          "/tipoProduto/obter-grid?pagina=" + pagina + "&descricao=" + this.filtro.descricao,
+          "/tipoUnidadeMedida/obter-grid?pagina=" + pagina + "&descricao=" + this.filtro.descricao,
         method: "GET"
       })
         .then((response) => {

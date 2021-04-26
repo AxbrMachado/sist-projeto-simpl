@@ -6,7 +6,7 @@
         size="60px"
       ></RotateSquare>
     </div>
-    <form v-else @submit="ValidarFormContratoProduto">
+    <form v-else @submit="ValidarForm">
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
@@ -52,7 +52,7 @@
                       <currency-input
                         v-model="viewModel.valor"
                         class="form-control"
-                        placeholder="Digite o valor base"
+                        placeholder="Digite o valor"
                         required
                       />
                     </div>
@@ -60,7 +60,9 @@
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Quantidade</label>
-                      <currency-input
+                      <vue-numeric
+                        v-bind:precision="2"
+                        v-bind:minus="false"
                         v-model="viewModel.quantidade"
                         class="form-control"
                         placeholder="Digite a quantidade"
@@ -216,7 +218,7 @@ export default {
     IsNovo() {
       return this.contratoId === this.$store.getters.emptyGuid;
     },
-    ValidarFormContratoProduto(evt) {
+    ValidarForm(evt) {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
