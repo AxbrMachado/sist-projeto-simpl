@@ -170,7 +170,7 @@ export default {
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["TipoUnidadeMedida removida com sucesso."],
+            data: ["Tipo unidade medida removida com sucesso."],
             type: "success",
             duration: 10000
           });
