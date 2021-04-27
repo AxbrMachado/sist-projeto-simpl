@@ -39,11 +39,17 @@
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Cliente</label>
-                      <b-form-select
-                        v-model="viewModel.pessoaId"
+                      <v-select
+                        placeholder="Digite um cliente.."
+                        v-model="viewModel.pessoa"
                         :options="clienteOptions"
                         required
-                      ></b-form-select>
+                        @search="ObterClientesVSelect"
+                      >
+                        <template slot="no-options">
+                          Nenhum resultado para a busca.
+                        </template>
+                      </v-select>
                     </div>
                   </div>
                 </div>
@@ -178,6 +184,7 @@ export default {
       viewModel: {
         id: this.$store.getters.emptyGuid,
         pessoaId: "",
+        pessoa: {},
         contratoId: "",
         valorLimite: 0,
         quantidadeLimite: 0,
@@ -196,7 +203,7 @@ export default {
   created() {
     //let contratoId = this.$route.params.id;
     //if (contratoId) this.Obter(contratoId);
-    this.ObterClientesSelect();
+    // this.ObterClientesSelect();
   },
   methods: {
     IsNovo() {
@@ -204,6 +211,17 @@ export default {
     },
     ValidarForm(evt) {
       evt.preventDefault();
+
+      if (!this.viewModel.pessoa || this.viewModel.pessoa.id == undefined) {
+        this.loading = false;
+        this.$notify({
+          data: ["Informe um cliente."],
+          type: "warn",
+          duration: 10000
+        });
+        return;
+      }
+
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
@@ -275,6 +293,7 @@ export default {
     Novo() {
       this.loading = true;
       this.viewModel.contratoId = this.contratoId;
+      this.viewModel.pessoaId = this.viewModel.pessoa.id;
       ContratoCliente.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
@@ -298,6 +317,7 @@ export default {
     Editar() {
       this.loading = true;
       this.viewModel.contratoId = this.contratoId;
+      this.viewModel.pessoaId = this.viewModel.pessoa.id;
       ContratoCliente.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
@@ -324,6 +344,7 @@ export default {
       this.viewModel.contratoId = "";
       this.viewModel.valorLimite = 0;
       this.viewModel.quantidadeLimite = 0;
+      this.viewModel.pessoa = {};
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -342,23 +363,23 @@ export default {
         return valor;
       }
     },
-    ObterClientesSelect() {
-      this.$http({
-        // url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
-        url: "/pessoa/obter-select",
-        method: "GET"
-      })
-        .then((response) => {
-          this.clienteOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
+    // ObterClientesSelect() {
+    //   this.$http({
+    //     // url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
+    //     url: "/pessoa/obter-select",
+    //     method: "GET"
+    //   })
+    //     .then((response) => {
+    //       this.clienteOptions = response.data;
+    //     })
+    //     .catch((erro) => {
+    //       this.$notify({
+    //         data: erro.response.data.erros,
+    //         type: "warn",
+    //         duration: 10000
+    //       });
+    //     });
+    // },
     FormataValor(valor) {
       if (valor != null) {
         return valor.toLocaleString("pt-br", {
@@ -382,6 +403,26 @@ export default {
         default:
           return "Inválido";
       }
+    },
+    ObterClientesVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url:
+          // "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
+          "/pessoa/obter-v-select/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.clienteOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 10000
+          });
+        });
     }
   }
 };
