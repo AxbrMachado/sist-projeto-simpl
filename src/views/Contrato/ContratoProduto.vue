@@ -381,22 +381,22 @@ export default {
         return valor;
       }
     },
-    ObterProdutosSelect() {
-      this.$http({
-        url: "/produto/obter-select",
-        method: "GET"
-      })
-        .then((response) => {
-          this.produtoOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
+    // ObterProdutosSelect() {
+    //   this.$http({
+    //     url: "/produto/obter-select",
+    //     method: "GET"
+    //   })
+    //     .then((response) => {
+    //       this.produtoOptions = response.data;
+    //     })
+    //     .catch((erro) => {
+    //       this.$notify({
+    //         data: erro.response.data.erros,
+    //         type: "warn",
+    //         duration: 10000
+    //       });
+    //     });
+    // },
     ObterProdutosVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
