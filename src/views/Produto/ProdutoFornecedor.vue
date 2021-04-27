@@ -52,16 +52,6 @@
                       </v-select>
                     </div>
                   </div>
-                  <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Fornecedor</label>
-                      <b-form-select
-                        v-model="viewModel.pessoaId"
-                        :options="fornecedorOptions"
-                        required
-                      ></b-form-select>
-                    </div>
-                  </div> -->
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Valor</label>
@@ -77,8 +67,10 @@
                     <div class="form-group">
                       <label for>* Quantidade</label>
                       <vue-numeric
-                        v-bind:precision="2"
+                        v-bind:precision="3"
                         v-bind:minus="false"
+                        thousand-separator="."
+                        decimal-separator=","
                         v-model="viewModel.quantidade"
                         class="form-control"
                         placeholder="Digite a quantidade"
@@ -251,7 +243,7 @@ export default {
       if (!this.viewModel.pessoa || this.viewModel.pessoa.id == undefined) {
         this.loading = false;
         this.$notify({
-          data: ["Informe ao menos um fornecedor."],
+          data: ["Informe um fornecedor."],
           type: "warn",
           duration: 10000
         });

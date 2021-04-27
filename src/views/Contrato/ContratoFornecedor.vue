@@ -39,11 +39,17 @@
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Fornecedor</label>
-                      <b-form-select
-                        v-model="viewModel.pessoaId"
+                      <v-select
+                        placeholder="Digite um fornecedor.."
+                        v-model="viewModel.pessoa"
                         :options="fornecedorOptions"
                         required
-                      ></b-form-select>
+                        @search="ObterFornecedoresVSelect"
+                      >
+                        <template slot="no-options">
+                          Nenhum resultado para a busca.
+                        </template>
+                      </v-select>
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -61,8 +67,10 @@
                     <div class="form-group">
                       <label for>* Quantidade Limite</label>
                       <vue-numeric
-                        v-bind:precision="2"
+                        v-bind:precision="3"
                         v-bind:minus="false"
+                        thousand-separator="."
+                        decimal-separator=","
                         v-model="viewModel.quantidadeLimite"
                         class="form-control"
                         placeholder="Digite a quantidade limite"
@@ -217,6 +225,7 @@ export default {
       viewModel: {
         id: this.$store.getters.emptyGuid,
         pessoaId: "",
+        pessoa: {},
         contratoId: "",
         valorLimite: 0,
         quantidadeLimite: 0,
@@ -235,7 +244,7 @@ export default {
   created() {
     //let contratoId = this.$route.params.id;
     //if (contratoId) this.Obter(contratoId);
-    this.ObterFornecedorsSelect();
+    // this.ObterFornecedorFsSelect();
   },
   methods: {
     IsNovo() {
@@ -243,6 +252,17 @@ export default {
     },
     ValidarForm(evt) {
       evt.preventDefault();
+
+      if (!this.viewModel.pessoa || this.viewModel.pessoa.id == undefined) {
+        this.loading = false;
+        this.$notify({
+          data: ["Informe um fornecedor."],
+          type: "warn",
+          duration: 10000
+        });
+        return;
+      }
+
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
@@ -314,6 +334,7 @@ export default {
     Novo() {
       this.loading = true;
       this.viewModel.contratoId = this.contratoId;
+      this.viewModel.pessoaId = this.viewModel.pessoa.id;
       ContratoFornecedor.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
@@ -337,6 +358,7 @@ export default {
     Editar() {
       this.loading = true;
       this.viewModel.contratoId = this.contratoId;
+      this.viewModel.pessoaId = this.viewModel.pessoa.id;
       ContratoFornecedor.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
@@ -363,6 +385,7 @@ export default {
       this.viewModel.contratoId = "";
       this.viewModel.valorLimite = 0;
       this.viewModel.quantidadeLimite = 0;
+      this.viewModel.pessoa = {};
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -392,22 +415,22 @@ export default {
         return valor;
       }
     },
-    ObterFornecedorsSelect() {
-      this.$http({
-        url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
-        method: "GET"
-      })
-        .then((response) => {
-          this.fornecedorOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 10000
-          });
-        });
-    },
+    // ObterFornecedorsSelect() {
+    //   this.$http({
+    //     url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
+    //     method: "GET"
+    //   })
+    //     .then((response) => {
+    //       this.fornecedorOptions = response.data;
+    //     })
+    //     .catch((erro) => {
+    //       this.$notify({
+    //         data: erro.response.data.erros,
+    //         type: "warn",
+    //         duration: 10000
+    //       });
+    //     });
+    // },
     FormataValor(valor) {
       if (valor != null) {
         return valor.toLocaleString("pt-br", {
@@ -427,6 +450,25 @@ export default {
         default:
           return "Inválido";
       }
+    },
+    ObterFornecedoresVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url:
+          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.fornecedorOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 10000
+          });
+        });
     }
   }
 };

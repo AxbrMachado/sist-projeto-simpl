@@ -13,13 +13,14 @@ import HighchartsVue from "highcharts-vue";
 import Highcharts from "highcharts";
 import VueCurrencyInput from "vue-currency-input";
 import VueNumeric from "vue-numeric";
+import VueMask from "v-mask";
 
 const pluginOptions = {
   globalOptions: { currency: "BRL" }
 };
 Vue.use(VueCurrencyInput, pluginOptions);
-
 Vue.use(VueNumeric);
+Vue.use(VueMask);
 
 var axiosInstance = Axios.create({
   baseURL: store.getters.baseURL

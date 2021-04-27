@@ -39,11 +39,17 @@
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Produto</label>
-                      <b-form-select
-                        v-model="viewModel.produtoId"
+                      <v-select
+                        placeholder="Digite um produto.."
+                        v-model="viewModel.produto"
                         :options="produtoOptions"
                         required
-                      ></b-form-select>
+                        @search="ObterProdutosVSelect"
+                      >
+                        <template slot="no-options">
+                          Nenhum resultado para a busca.
+                        </template>
+                      </v-select>
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -61,8 +67,10 @@
                     <div class="form-group">
                       <label for>* Quantidade</label>
                       <vue-numeric
-                        v-bind:precision="2"
+                        v-bind:precision="3"
                         v-bind:minus="false"
+                        thousand-separator="."
+                        decimal-separator=","
                         v-model="viewModel.quantidade"
                         class="form-control"
                         placeholder="Digite a quantidade"
@@ -196,6 +204,7 @@ export default {
       viewModel: {
         id: this.$store.getters.emptyGuid,
         produtoId: "",
+        produto: {},
         fornecedorId: "",
         valor: 0,
         quantidade: 0
@@ -213,7 +222,7 @@ export default {
   created() {
     //let fornecedorId = this.$route.params.id;
     //if (fornecedorId) this.Obter(fornecedorId);
-    this.ObterProdutosSelect();
+    // this.ObterProdutosSelect();
   },
   methods: {
     IsNovo() {
@@ -221,6 +230,17 @@ export default {
     },
     ValidarForm(evt) {
       evt.preventDefault();
+
+      if (!this.viewModel.produto || this.viewModel.produto.id == undefined) {
+        this.loading = false;
+        this.$notify({
+          data: ["Informe um produto."],
+          type: "warn",
+          duration: 10000
+        });
+        return;
+      }
+
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
@@ -292,6 +312,7 @@ export default {
     Novo() {
       this.loading = true;
       this.viewModel.fornecedorId = this.fornecedorId;
+      this.viewModel.produtoId = this.viewModel.produto.id;
       FornecedorProduto.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
@@ -315,6 +336,7 @@ export default {
     Editar() {
       this.loading = true;
       this.viewModel.fornecedorId = this.fornecedorId;
+      this.viewModel.produtoId = this.viewModel.produto.id;
       FornecedorProduto.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
@@ -341,6 +363,7 @@ export default {
       this.viewModel.fornecedorId = "";
       this.viewModel.valor = 0;
       this.viewModel.quantidade = 0;
+      this.viewModel.produto = {};
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -359,9 +382,11 @@ export default {
         return valor;
       }
     },
-    ObterProdutosSelect() {
+    ObterProdutosVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
       this.$http({
-        url: "/produto/obter-select",
+        url: "/produto/obter-v-select/" + busca,
         method: "GET"
       })
         .then((response) => {

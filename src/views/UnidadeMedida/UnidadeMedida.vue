@@ -85,11 +85,6 @@
                   </b-button>
                 </div>
               </template>
-              <template v-slot:cell(operacao)="data">
-                <div class="center">
-                  <span>{{ ObterNomeOperacao(data.item.operacao) }}</span>
-                </div>
-              </template>
             </b-table>
             <b-pagination
               v-model="pagina"
@@ -118,13 +113,11 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import TipoOperacaoAritmeticaEnum from "../../enums/TipoOperacaoAritmeticaEnum";
 
 export default {
   name: "UnidadeMedida",
   components: {
-    RotateSquare,
-    TipoOperacaoAritmeticaEnum
+    RotateSquare
   },
   data() {
     return {
@@ -234,22 +227,6 @@ export default {
             duration: 10000
           });
         });
-    },
-    ObterNomeOperacao(item) {
-      switch (item) {
-        case TipoOperacaoAritmeticaEnum.Igual:
-          return "=";
-        case TipoOperacaoAritmeticaEnum.Divisao:
-          return "/";
-        case TipoOperacaoAritmeticaEnum.Multiplicacao:
-          return "x";
-        case TipoOperacaoAritmeticaEnum.Soma:
-          return "+";
-        case TipoOperacaoAritmeticaEnum.Subtracao:
-          return "-";
-        default:
-          return "Inválido";
-      }
     }
   }
 };
