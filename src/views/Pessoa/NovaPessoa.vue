@@ -145,6 +145,43 @@
                     />
                   </div>
                 </div>
+                <div
+                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
+                  v-if="isCooperado()"
+                >
+                  <div class="form-group">
+                    <label for>* Data Entrada</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      v-model="viewModel.dataEntrada"
+                      placeholder="Digite a data de entrada"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row" v-if="isCooperado() || isFuncionario()">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="form-group">
+                    <label for>Nome Mãe</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="viewModel.nomeMae"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="form-group">
+                    <label for>Nome Pai</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="viewModel.nomePai"
+                    />
+                  </div>
+                </div>
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -242,7 +279,10 @@ export default {
         tipoSexo: 3,
         email: "",
         observacao: "",
-        codigo: ""
+        codigo: "",
+        dataEntrada: null,
+        nomeMae: "",
+        nomePai: ""
       }
     };
   },
@@ -264,6 +304,9 @@ export default {
     isFornecedor() {
       return this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor;
     },
+    isCooperado() {
+      return this.viewModel.tipoFornecedor == TipoFornecedorEnum.Cooperado;
+    },
     ValidarForm(evt) {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
@@ -282,6 +325,9 @@ export default {
           this.loadingPessoa = false;
           resposta.data.dataNascimento = DateTime.formatar(
             resposta.data.dataNascimento
+          );
+          resposta.data.dataEntrada = DateTime.formatar(
+            resposta.data.dataEntrada
           );
           this.viewModel = resposta.data;
         })
