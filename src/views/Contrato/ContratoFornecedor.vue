@@ -40,7 +40,7 @@
                     <div class="form-group">
                       <label for>* Fornecedor</label>
                       <v-select
-                        placeholder="Digite um cliente.."
+                        placeholder="Digite um fornecedor.."
                         v-model="viewModel.pessoa"
                         :options="fornecedorOptions"
                         required
@@ -244,7 +244,7 @@ export default {
   created() {
     //let contratoId = this.$route.params.id;
     //if (contratoId) this.Obter(contratoId);
-    this.ObterFornecedorsSelect();
+    // this.ObterFornecedorFsSelect();
   },
   methods: {
     IsNovo() {

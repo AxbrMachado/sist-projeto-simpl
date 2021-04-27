@@ -408,9 +408,7 @@ export default {
       if (!busca || busca.length <= 2) return;
 
       this.$http({
-        url:
-          // "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
-          "/pessoa/obter-v-select/" + busca,
+        url: "/pessoa/obter-v-select/" + busca,
         method: "GET"
       })
         .then((response) => {
