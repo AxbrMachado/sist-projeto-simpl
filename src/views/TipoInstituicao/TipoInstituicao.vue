@@ -59,7 +59,7 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhum tipo de instituição encontrada."
+              empty-text="Nenhum tipo de instituição encontrado."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
