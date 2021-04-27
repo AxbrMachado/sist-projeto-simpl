@@ -56,8 +56,10 @@
                   <div class="form-group">
                     <label for>* Quantidade</label>
                     <vue-numeric
-                      v-bind:precision="3"
-                      v-bind:minus="false"
+                        v-bind:precision="3"
+                        v-bind:minus="false"
+                        thousand-separator="."
+                        decimal-separator=","
                       v-model="viewModel.valor"
                       class="form-control"
                       placeholder="Digite a quantidade"
@@ -131,7 +133,6 @@ export default {
         id: this.$store.getters.emptyGuid,
         descricao: "",
         tipoUnidadeMedidaId: "",
-        operacao: 0,
         valor: 0,
         tipoUnidadeMedidaBaseId: ""
       }
