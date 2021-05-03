@@ -89,7 +89,7 @@
                     <button
                       class="btn btn-secondary"
                       type="reset"
-                      @click="$router.push('/contrato')"
+                      @click="abrir = !abrir"
                     >
                       Voltar
                     </button>
