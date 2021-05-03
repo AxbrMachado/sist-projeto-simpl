@@ -90,6 +90,11 @@
                   }}</span>
                 </div>
               </template>
+              <template v-slot:cell(valor)="data">
+                <div class="left">
+                  <span>{{ FormataValor(data.item.valor) }}</span>
+                </div>
+              </template>
               <template v-slot:cell(dataVencimento)="data">
                 <div class="center">
                   <span>{{ formatarData(data.item.dataVencimento) }}</span>
@@ -146,6 +151,8 @@ export default {
         { key: "instituicao", label: "Instituição", sortable: true },
         { key: "tipoInstituicao", label: "Tipo Instituição", sortable: true },
         { key: "dataVencimento", label: "Data Vencimento", sortable: true },
+        { key: "valor", label: "Valor", sortable: true },
+        { key: "valorEntregue", label: "Valor Entregue", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -208,7 +215,10 @@ export default {
       this.loading = true;
       this.$http({
         url:
-          "/licitacao/obter-grid?pagina=" + pagina + "&numero=" + this.filtro.numero,
+          "/licitacao/obter-grid?pagina=" +
+          pagina +
+          "&numero=" +
+          this.filtro.numero,
         method: "GET"
       })
         .then((response) => {
@@ -246,6 +256,12 @@ export default {
     formatarData(validade) {
       var dataValidade = new Date(validade);
       return dataValidade.toLocaleDateString();
+    },
+    FormataValor(valor) {
+      return valor.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     }
   }
 };
