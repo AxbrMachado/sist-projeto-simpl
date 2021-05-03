@@ -106,7 +106,7 @@
                     <button
                       class="btn btn-secondary"
                       type="reset"
-                      @click="$router.push('/pessoa')"
+                      @click="abrir = !abrir"
                     >
                       Voltar
                     </button>

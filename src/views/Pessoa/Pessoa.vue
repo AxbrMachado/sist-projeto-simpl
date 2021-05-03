@@ -75,7 +75,8 @@
               <template v-slot:cell(tipoPessoa)="data">
                 <div class="center">
                   <span>{{
-                    ObterTipoPessoa(data.item.tipoPessoa)
+                    ObterTipoPessoa(data.item.tipoPessoa) +
+                    ObterNomeTipoFornecedor(data.item.tipoFornecedor)
                   }}</span>
                 </div>
               </template>
@@ -127,6 +128,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 
 export default {
   name: "Pessoa",
@@ -241,6 +243,16 @@ export default {
           return "Instituição";
         default:
           return "Inválido";
+      }
+    },
+    ObterNomeTipoFornecedor(item) {
+      switch (item) {
+        case TipoFornecedorEnum.Avulso:
+          return "/Avulso";
+        case TipoFornecedorEnum.Cooperado:
+          return "/Cooperado";
+        default:
+          return "";
       }
     }
   }

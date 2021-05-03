@@ -93,6 +93,11 @@
                   <span>{{ FormatarData(data.item.dataTermino) }}</span>
                 </div>
               </template>
+              <template v-slot:cell(valor)="data">
+                <div class="left">
+                  <span>{{ FormataValor(data.item.valor) }}</span>
+                </div>
+              </template>
             </b-table>
             <b-pagination
               v-model="pagina"
@@ -144,6 +149,8 @@ export default {
         { key: "licitacao", label: "Licitação", sortable: true },
         { key: "dataInicio", label: "Data Início", sortable: true },
         { key: "dataTermino", label: "Data Término", sortable: true },
+        { key: "valor", label: "Valor", sortable: true },
+        { key: "valorEntregue", label: "Valor Entregue", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -247,6 +254,12 @@ export default {
     FormatarData(validade) {
       var dataValidade = new Date(validade);
       return dataValidade.toLocaleDateString();
+    },
+    FormataValor(valor) {
+      return valor.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     }
   }
 };
