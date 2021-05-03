@@ -52,6 +52,18 @@
                       </v-select>
                     </div>
                   </div>
+                  <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div class="form-group">
+                      <label for>* Rota</label>
+                      <input
+                        v-model="viewModel.rota"
+                        class="form-control"
+                        type="text"
+                        placeholder="Digite a descrição"
+                        required
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div class="btn-toolbar mb-3" role="toolbar">
                   <div class="btn-group" role="group">
@@ -174,6 +186,7 @@ export default {
       fields: [
         { key: "pessoa", label: "Cliente", sortable: true },
         { key: "tipoPessoa", label: "Tipo Pessoa", sortable: true },
+        { key: "rota", label: "Rota", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -186,6 +199,7 @@ export default {
         pessoaId: "",
         pessoa: {},
         contratoId: "",
+        rota: "",
         valorLimite: 0,
         quantidadeLimite: 0,
         tipoPessoaContrato: TipoPessoaContratoEnum.Cliente
@@ -217,7 +231,7 @@ export default {
         this.$notify({
           data: ["Informe um cliente."],
           type: "warn",
-          duration: 10000
+          duration: 5000
         });
         return;
       }
@@ -238,7 +252,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -256,7 +270,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -275,14 +289,14 @@ export default {
           this.$notify({
             data: ["Cliente removido com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -302,7 +316,7 @@ export default {
           this.$notify({
             data: ["Cliente cadastrado com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -310,7 +324,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -326,7 +340,7 @@ export default {
           this.$notify({
             data: ["Cliente editado com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -334,7 +348,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -342,6 +356,7 @@ export default {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.pessoaId = "";
       this.viewModel.contratoId = "";
+      this.viewModel.rota = "";
       this.viewModel.valorLimite = 0;
       this.viewModel.quantidadeLimite = 0;
       this.viewModel.pessoa = {};
@@ -376,7 +391,7 @@ export default {
     //       this.$notify({
     //         data: erro.response.data.erros,
     //         type: "warn",
-    //         duration: 10000
+    //         duration: 5000
     //       });
     //     });
     // },
@@ -418,7 +433,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     }
