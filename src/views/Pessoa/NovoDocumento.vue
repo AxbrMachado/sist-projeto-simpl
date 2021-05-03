@@ -252,7 +252,7 @@ export default {
             "O arquivo selecionado é maior que 5MB e não pode ser enviado."
           ],
           type: "warn",
-          duration: 10000
+          duration: 5000
         });
         return;
       }
@@ -268,7 +268,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -284,7 +284,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -309,7 +309,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -327,7 +327,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -346,14 +346,14 @@ export default {
           this.$notify({
             data: ["Documento removido com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -372,7 +372,7 @@ export default {
           this.$notify({
             data: ["Documento cadastrado com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -380,7 +380,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -395,7 +395,7 @@ export default {
           this.$notify({
             data: ["Documento editado com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -403,7 +403,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },

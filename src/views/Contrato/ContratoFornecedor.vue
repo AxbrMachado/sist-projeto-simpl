@@ -216,6 +216,11 @@ export default {
         { key: "valorLimite", label: "Valor Limite", sortable: true },
         { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         {
+          key: "quantidadeConsumida",
+          label: "Quantidade Consumida",
+          sortable: true
+        },
+        {
           key: "acoes",
           label: "Ações",
           sortable: false,
@@ -258,7 +263,7 @@ export default {
         this.$notify({
           data: ["Informe um fornecedor."],
           type: "warn",
-          duration: 10000
+          duration: 5000
         });
         return;
       }
@@ -279,7 +284,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -297,7 +302,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -316,14 +321,14 @@ export default {
           this.$notify({
             data: ["Fornecedor removido com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -343,7 +348,7 @@ export default {
           this.$notify({
             data: ["Fornecedor cadastrado com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -351,7 +356,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -367,7 +372,7 @@ export default {
           this.$notify({
             data: ["Fornecedor editado com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -375,7 +380,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -427,7 +432,7 @@ export default {
     //       this.$notify({
     //         data: erro.response.data.erros,
     //         type: "warn",
-    //         duration: 10000
+    //         duration: 5000
     //       });
     //     });
     // },
@@ -466,7 +471,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     }

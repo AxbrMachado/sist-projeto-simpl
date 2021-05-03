@@ -173,7 +173,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -193,7 +193,7 @@ export default {
           this.$notify({
             data: ["Senha atualizada com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
           this.$router.push("/login");
         })
@@ -202,7 +202,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     }

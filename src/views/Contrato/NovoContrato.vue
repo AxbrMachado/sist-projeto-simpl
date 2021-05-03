@@ -30,6 +30,18 @@
               <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
+                    <label for>* Descricao</label>
+                    <input
+                      v-model="viewModel.descricao"
+                      class="form-control"
+                      type="text"
+                      placeholder="Digite a descrição"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
                     <label for>* Número</label>
                     <input
                       v-model="viewModel.numero"
@@ -140,6 +152,7 @@ export default {
       licitacaoOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
+        descricao: "",
         licitacaoId: "",
         numero: "",
         dataInicio: "",
@@ -182,7 +195,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -203,7 +216,7 @@ export default {
           this.$notify({
             data: ["Contrato cadastrada com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -211,7 +224,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -228,7 +241,7 @@ export default {
           this.$notify({
             data: ["Contrato editada com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -236,7 +249,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -253,7 +266,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -270,7 +283,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },

@@ -256,7 +256,7 @@ export default {
         this.$notify({
           data: ["Unidades devem ser diferentes."],
           type: "warn",
-          duration: 10000
+          duration: 5000
         });
         return;
       }
@@ -276,7 +276,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -298,7 +298,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -317,14 +317,14 @@ export default {
           this.$notify({
             data: ["Conversão removida com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -343,7 +343,7 @@ export default {
           this.$notify({
             data: ["Conversão cadastrada com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -351,7 +351,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -366,7 +366,7 @@ export default {
           this.$notify({
             data: ["Conversão editada com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -374,7 +374,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -408,7 +408,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     }

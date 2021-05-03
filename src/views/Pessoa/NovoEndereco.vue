@@ -323,7 +323,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -351,7 +351,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -378,7 +378,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -400,14 +400,14 @@ export default {
           this.$notify({
             data: ["Endereço removido com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -430,7 +430,7 @@ export default {
           this.$notify({
             data: ["Endereço cadastrado com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -438,7 +438,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
@@ -458,7 +458,7 @@ export default {
           this.$notify({
             data: ["Endereço editado com sucesso."],
             type: "success",
-            duration: 10000
+            duration: 5000
           });
         })
         .catch((erro) => {
@@ -466,7 +466,7 @@ export default {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
-            duration: 10000
+            duration: 5000
           });
         });
     },
