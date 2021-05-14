@@ -9,7 +9,7 @@ class NotificacaoServico {
 
     Obter(id) {
         return Vue.prototype.$http({
-            url: "notificacao/obter/" + id,
+            url: "/notificacao/obter/" + id,
             method: "GET"
         });
     }
@@ -17,7 +17,7 @@ class NotificacaoServico {
     ObterGrid(pagina, itensPorPagina) {
         return Vue.prototype.$http({
             url:
-                "/unidadeMedida/obter-grid?pagina=" +
+                "/notificacao/obter-grid?pagina=" +
                 pagina +
                 "&ItensPorPagina=" +
                 itensPorPagina,
