@@ -32,6 +32,7 @@
       <CHeaderNavItem>
         <label class="ml-2">{{ $store.getters.getAutenticacao.apelido }}</label>
       </CHeaderNavItem>
+      <Notificacao />
       <PerfilDropdown />
     </CHeaderNav>
   </CHeader>
@@ -40,11 +41,13 @@
 <script>
 // import DropDownConta from "../dropdown/DropDownConta";
 import PerfilDropdown from "./PerfilDropdown";
+import Notificacao from "../../views/Notificacao/Notificacao";
 
 export default {
   name: "TheHeader",
   components: {
-    PerfilDropdown
+    PerfilDropdown,
+    Notificacao
     // DropDownConta
   }
 };
