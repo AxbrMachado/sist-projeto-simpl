@@ -98,6 +98,19 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                  <div class="form-group">
+                    <label for>Observação</label>
+                    <b-form-textarea
+                      v-model="viewModel.observacao"
+                      rows="4"
+                      max-rows="12"
+                      placeholder="Observações gerais..."
+                    ></b-form-textarea>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="btn-toolbar mb-3 ml-3" role="toolbar">
               <div class="btn-group" role="group">
@@ -153,6 +166,7 @@ export default {
       viewModel: {
         id: this.$store.getters.emptyGuid,
         descricao: "",
+        observacao:"",
         licitacaoId: "",
         numero: "",
         dataInicio: "",
