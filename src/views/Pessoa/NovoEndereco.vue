@@ -143,6 +143,7 @@
                 <div class="form-group">
                   <label for>* País</label>
                   <input
+                    enable="false"
                     type="text"
                     v-model="viewModel.pais"
                     class="form-control"
@@ -277,7 +278,7 @@ export default {
         bairro: "",
         cidade: "",
         uf: "",
-        pais: "",
+        pais: "Brasil",
         complemento: "",
         referencia: ""
       }
@@ -480,7 +481,7 @@ export default {
       this.viewModel.bairro = "";
       this.viewModel.cidade = "";
       this.viewModel.uf = "";
-      this.viewModel.pais = "";
+      this.viewModel.pais = "Brasil";
       this.viewModel.complemento = "";
       this.viewModel.referencia = "";
     }
