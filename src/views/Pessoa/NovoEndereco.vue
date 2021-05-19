@@ -143,7 +143,6 @@
                 <div class="form-group">
                   <label for>* País</label>
                   <input
-                    enable="false"
                     type="text"
                     v-model="viewModel.pais"
                     class="form-control"
