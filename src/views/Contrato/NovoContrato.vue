@@ -11,13 +11,23 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center"
-                >{{
-                  viewModel.id == this.$store.getters.emptyGuid
-                    ? "Novo Contrato"
-                    : "Editar Contrato"
-                }}
-              </strong>
+              <div class="d-flex">
+                <strong class="align-self-center"
+                  >{{
+                    viewModel.id == this.$store.getters.emptyGuid
+                      ? "Novo Contrato"
+                      : "Editar Contrato"
+                  }}
+                </strong>
+                <a
+                  @click="Limpar()"
+                  class="ml-auto btn btn-primary"
+                  href="/#/contrato/novo"
+                  title="Adicionar novo contrato"
+                >
+                  Adicionar
+                </a>
+              </div>
             </header>
             <div class="card-body">
               <div class="row">
@@ -166,7 +176,7 @@ export default {
       viewModel: {
         id: this.$store.getters.emptyGuid,
         descricao: "",
-        observacao:"",
+        observacao: "",
         licitacaoId: "",
         numero: "",
         dataInicio: "",
@@ -303,6 +313,17 @@ export default {
     },
     IsEdicao() {
       return this.viewModel.id !== this.$store.getters.emptyGuid;
+    },
+    Limpar() {
+      this.viewModel.id = this.$store.getters.emptyGuid;
+      this.viewModel.descricao = "";
+      this.viewModel.observacao = "";
+      this.viewModel.licitacaoId = "";
+      this.viewModel.numero = "";
+      this.viewModel.dataInicio = "";
+      this.viewModel.dataTermino = "";
+      this.viewModel.valor = 0;
+      this.viewModel.produtos = [];
     }
   }
 };
