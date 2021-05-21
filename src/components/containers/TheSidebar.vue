@@ -67,6 +67,7 @@ export default {
 
       menu[0]._children.push(Nav.Configuracao);
       menu[0]._children.push(Nav.Usuarios);
+      menu[0]._children.push(Nav.GrupoUsuario);
       menu[0]._children.push(Nav.TipoDocumento);
       menu[0]._children.push(Nav.TipoEndereco);
       menu[0]._children.push(Nav.TipoProduto);

@@ -8,7 +8,7 @@
               <strong class="align-self-center">Tipo Instituição</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/tipoInstituicao/novo"
+                href="/#/tipo-instituicao/novo"
                 title="Adicionar novo tipo de instituição"
               >
                 Adicionar
@@ -152,7 +152,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(tipoInstituicao) {
-      this.$router.push("/tipoInstituicao/editar/" + tipoInstituicao.id);
+      this.$router.push("/tipo-instituicao/editar/" + tipoInstituicao.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();

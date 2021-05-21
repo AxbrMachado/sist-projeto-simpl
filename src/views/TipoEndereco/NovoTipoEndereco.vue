@@ -52,7 +52,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/tipoEndereco')"
+                  @click="$router.push('/tipo-endereco')"
                 >
                   Voltar
                 </button>
@@ -121,7 +121,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoEndereco");
+          this.$router.push("/tipo-endereco");
           this.$notify({
             data: ["Tipo de endereço cadastrado com sucesso."],
             type: "success",
@@ -146,7 +146,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoEndereco");
+          this.$router.push("/tipo-endereco");
           this.$notify({
             data: ["Tipo de endereço editado com sucesso."],
             type: "success",

@@ -52,7 +52,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/tipoInstituicao')"
+                  @click="$router.push('/tipo-instituicao')"
                 >
                   Voltar
                 </button>
@@ -121,7 +121,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoInstituicao");
+          this.$router.push("/tipo-instituicao");
           this.$notify({
             data: ["Tipo de instituição cadastrada com sucesso."],
             type: "success",
@@ -146,7 +146,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoInstituicao");
+          this.$router.push("/tipo-instituicao");
           this.$notify({
             data: ["Tipo de instituição editada com sucesso."],
             type: "success",

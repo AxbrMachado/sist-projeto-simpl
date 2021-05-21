@@ -8,7 +8,7 @@
               <strong class="align-self-center">Tipo de endereço</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/tipoEndereco/novo"
+                href="/#/tipo-endereco/novo"
                 title="Adicionar novo tipo de endereço"
               >
                 Adicionar
@@ -152,7 +152,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(tipoEndereco) {
-      this.$router.push("/tipoEndereco/editar/" + tipoEndereco.id);
+      this.$router.push("/tipo-endereco/editar/" + tipoEndereco.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();

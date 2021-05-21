@@ -108,7 +108,7 @@
                     <button
                       class="btn btn-secondary"
                       type="reset"
-                      @click="$router.push('/tipoUnidadeMedida')"
+                      @click="$router.push('/tipo-unidade-medida')"
                     >
                       Voltar
                     </button>
