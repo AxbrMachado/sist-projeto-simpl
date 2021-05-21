@@ -11,13 +11,23 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center"
-                >{{
-                  viewModel.id == this.$store.getters.emptyGuid
-                    ? "Nova Dap"
-                    : "Editar Dap"
-                }}
-              </strong>
+              <div class="d-flex">
+                <strong class="align-self-center"
+                  >{{
+                    viewModel.id == this.$store.getters.emptyGuid
+                      ? "Nova Dap"
+                      : "Editar Dap"
+                  }}
+                </strong>
+                <a
+                  @click="Limpar()"
+                  class="ml-auto btn btn-primary"
+                  href="/#/dap/novo"
+                  title="Adicionar nova dap"
+                >
+                  Adicionar
+                </a>
+              </div>
             </header>
             <div class="card-body">
               <div class="row">
@@ -244,6 +254,13 @@ export default {
     },
     IsEdicao() {
       return this.viewModel.id !== this.$store.getters.emptyGuid;
+    },
+    Limpar() {
+      this.viewModel.id = this.$store.getters.emptyGuid;
+      this.viewModel.numero = "";
+      this.viewModel.validade = "";
+      this.viewModel.tipoEnquadramento = 0;
+      this.viewModel.pessoas = [];
     }
   }
 };
