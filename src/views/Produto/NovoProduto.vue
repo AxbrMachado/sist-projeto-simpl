@@ -11,13 +11,23 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center"
-                >{{
-                  viewModel.id == this.$store.getters.emptyGuid
-                    ? "Novo Produto"
-                    : "Editar Produto"
-                }}
-              </strong>
+              <div class="d-flex">
+                <strong class="align-self-center"
+                  >{{
+                    viewModel.id == this.$store.getters.emptyGuid
+                      ? "Novo Produto"
+                      : "Editar Produto"
+                  }}
+                </strong>
+                <a
+                  @click="Limpar()"
+                  class="ml-auto btn btn-primary"
+                  href="/#/produto/novo"
+                  title="Adicionar novo produto"
+                >
+                  Adicionar
+                </a>
+              </div>
             </header>
             <div class="card-body">
               <div class="row">
@@ -242,6 +252,13 @@ export default {
     },
     IsEdicao() {
       return this.viewModel.id !== this.$store.getters.emptyGuid;
+    },
+    Limpar() {
+      this.viewModel.id = this.$store.getters.emptyGuid;
+      this.viewModel.descricao = "";
+      this.viewModel.valorBase = 0;
+      this.viewModel.tipoProdutoId = "";
+      this.viewModel.tipoUnidadeMedidaId = "";
     }
   }
 };

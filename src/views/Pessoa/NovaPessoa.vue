@@ -11,13 +11,23 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center"
-                >{{
-                  viewModel.id == this.$store.getters.emptyGuid
-                    ? "Nova Pessoa"
-                    : "Editar Pessoa"
-                }}
-              </strong>
+              <div class="d-flex">
+                <strong class="align-self-center"
+                  >{{
+                    viewModel.id == this.$store.getters.emptyGuid
+                      ? "Nova Pessoa"
+                      : "Editar Pessoa"
+                  }}
+                </strong>
+                <a
+                  @click="Limpar()"
+                  class="ml-auto btn btn-primary"
+                  href="/#/pessoa/novo"
+                  title="Adicionar nova pessoa"
+                >
+                  Adicionar
+                </a>
+              </div>
             </header>
             <div class="card-body">
               <div class="row">
@@ -392,6 +402,22 @@ export default {
     },
     IsEdicao() {
       return this.viewModel.id !== this.$store.getters.emptyGuid;
+    },
+    Limpar() {
+      this.viewModel.id = this.$store.getters.emptyGuid;
+      this.viewModel.tipoPessoa = 0;
+      this.viewModel.tipoFornecedor = null;
+      this.viewModel.nome = "";
+      this.viewModel.nomeCompleto = "";
+      this.viewModel.dataNascimento = null;
+      this.viewModel.estadoCivil = null;
+      this.viewModel.tipoSexo = 3;
+      this.viewModel.email = "";
+      this.viewModel.observacao = "";
+      this.viewModel.codigo = "";
+      this.viewModel.dataEntrada = null;
+      this.viewModel.nomeMae = "";
+      this.viewModel.nomePai = "";
     }
   }
 };
