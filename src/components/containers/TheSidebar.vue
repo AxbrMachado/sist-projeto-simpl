@@ -64,7 +64,6 @@ export default {
 
       menu[0]._children.push(Nav.Dap);
       menu[0]._children.push(Nav.Produto);
-
       menu[0]._children.push(Nav.Configuracao);
       menu[0]._children.push(Nav.Usuarios);
       menu[0]._children.push(Nav.GrupoUsuario);
