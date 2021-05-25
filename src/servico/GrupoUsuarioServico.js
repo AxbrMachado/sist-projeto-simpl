@@ -32,6 +32,14 @@ class GrupoUsuarioServico {
       method: "POST"
     });
   }
+
+  Editar(viewModel) {
+    return Vue.prototype.$http({
+      url: "grupousuario/editar",
+      data: viewModel,
+      method: "PUT"
+    });
+  }
 }
 
 export default new GrupoUsuarioServico();
