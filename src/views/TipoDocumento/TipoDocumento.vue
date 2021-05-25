@@ -8,7 +8,7 @@
               <strong class="align-self-center">Tipo de documento</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/tipoDocumento/novo"
+                href="/#/tipo-documento/novo"
                 title="Adicionar novo tipo de documento"
               >
                 Adicionar
@@ -152,7 +152,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(tipoDocumento) {
-      this.$router.push("/tipoDocumento/editar/" + tipoDocumento.id);
+      this.$router.push("/tipo-documento/editar/" + tipoDocumento.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();

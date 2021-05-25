@@ -52,7 +52,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/tipoDocumento')"
+                  @click="$router.push('/tipo-documento')"
                 >
                   Voltar
                 </button>
@@ -121,7 +121,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoDocumento");
+          this.$router.push("/tipo-documento");
           this.$notify({
             data: ["Tipo de documento cadastrado com sucesso."],
             type: "success",
@@ -146,7 +146,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoDocumento");
+          this.$router.push("/tipo-documento");
           this.$notify({
             data: ["Tipo de documento editado com sucesso."],
             type: "success",

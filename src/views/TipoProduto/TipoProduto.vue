@@ -8,7 +8,7 @@
               <strong class="align-self-center">Tipo de produto</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/tipoProduto/novo"
+                href="/#/tipo-produto/novo"
                 title="Adicionar novo tipo produto"
               >
                 Adicionar
@@ -152,7 +152,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(tipoProduto) {
-      this.$router.push("/tipoProduto/editar/" + tipoProduto.id);
+      this.$router.push("/tipo-produto/editar/" + tipoProduto.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();

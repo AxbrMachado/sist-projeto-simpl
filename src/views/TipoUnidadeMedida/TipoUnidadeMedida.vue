@@ -8,7 +8,7 @@
               <strong class="align-self-center">Tipo de unidade medida</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/tipoUnidadeMedida/novo"
+                href="/#/tipo-unidade-medida/novo"
                 title="Adicionar novo tipo unidade medida"
               >
                 Adicionar
@@ -152,7 +152,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(tipoUnidadeMedida) {
-      this.$router.push("/tipoUnidadeMedida/editar/" + tipoUnidadeMedida.id);
+      this.$router.push("/tipo-unidade-medida/editar/" + tipoUnidadeMedida.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();

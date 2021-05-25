@@ -11,13 +11,7 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
             <header class="card-header">
-              <strong class="align-self-center"
-                >{{
-                  viewModel.id == this.$store.getters.emptyGuid
-                    ? "Novo Tipo de Endereço"
-                    : "Editar Tipo de Endereço"
-                }}
-              </strong>
+              <strong class="align-self-center">Novo Grupo</strong>
             </header>
             <div class="card-body">
               <div class="row">
@@ -30,17 +24,19 @@
               <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
-                    <label for>* Descrição</label>
+                    <label for>* Nome</label>
                     <input
-                      v-model="viewModel.descricao"
+                      v-model="viewModel.nome"
                       class="form-control"
                       type="text"
-                      placeholder="Digite a descrição"
+                      placeholder="Digite o nome"
                       required
                     />
                   </div>
                 </div>
+                
               </div>
+              
             </div>
             <div class="btn-toolbar mb-3 ml-3" role="toolbar">
               <div class="btn-group" role="group">
@@ -52,7 +48,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/tipo-endereco')"
+                  @click="$router.push('/usuario')"
                 >
                   Voltar
                 </button>
@@ -67,9 +63,11 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import GrupoUsuarioServico from "../../servico/GrupoUsuarioServico";
+
 
 export default {
-  name: "NovoTipoEndereco",
+  name: "NovoGrupoUsuario",
   components: {
     RotateSquare
   },
@@ -79,13 +77,13 @@ export default {
       contaOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        descricao: ""
+        nome: "",
       }
     };
   },
   created() {
-    let tipoEnderecoId = this.$route.params.id;
-    if (tipoEnderecoId) this.Obter(tipoEnderecoId);
+    let grupo = this.$route.params.id;
+    if (grupo) this.Obter(grupo);
   },
   methods: {
     ValidarForm(evt) {
@@ -93,12 +91,9 @@ export default {
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
-    Obter(tipoEnderecoId) {
+    Obter(grupoId) {
       this.loading = true;
-      this.$http({
-        url: "tipoEndereco/obter/" + tipoEnderecoId,
-        method: "GET"
-      })
+      GrupoUsuarioServico.Obter(grupoId)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -114,16 +109,12 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.$http({
-        url: "tipoEndereco/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+      GrupoUsuarioServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipo-endereco");
+          this.$router.push("/grupo-usuario");
           this.$notify({
-            data: ["Tipo de endereço cadastrado com sucesso."],
+            data: ["Grupo cadastro com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -139,16 +130,12 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.$http({
-        url: "tipoEndereco/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+      GrupoUsuarioServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipo-endereco");
+          this.$router.push("/grupo-usuario");
           this.$notify({
-            data: ["Tipo de endereço editado com sucesso."],
+            data: ["Grupo editado com sucesso."],
             type: "success",
             duration: 5000
           });

@@ -41,6 +41,9 @@ const NovaLicitacao = () => import("@/views/Licitacao/NovaLicitacao");
 const Fornecedor = () => import("@/views/Fornecedor/Fornecedor");
 const NovoFornecedor = () => import("@/views/Fornecedor/NovoFornecedor");
 
+const NovoGrupoUsuario = () => import("@/views/GrupoUsuario/NovoGrupoUsuario");
+const GrupoUsuario = () => import("@/views/GrupoUsuario/GrupoUsuario");
+
 Vue.use(Router);
 
 export default new Router({
@@ -391,7 +394,7 @@ export default new Router({
 
         //Cadastro de tipo documento
         {
-          path: "tipoDocumento",
+          path: "tipo-documento",
           name: "TipoDocumento",
           meta: {
             requiresAuth: true
@@ -430,7 +433,7 @@ export default new Router({
 
         // //Cadastro de tipo endereco
         {
-          path: "tipoEndereco",
+          path: "tipo-endereco",
           name: "TipoEndereco",
           meta: {
             requiresAuth: true
@@ -469,7 +472,7 @@ export default new Router({
 
         //Cadastro de tipo Instituicao
         {
-          path: "tipoInstituicao",
+          path: "tipo-instituicao",
           name: "TipoInstituicao",
           meta: {
             requiresAuth: true
@@ -508,7 +511,7 @@ export default new Router({
 
         //Cadastro de tipo produto
         {
-          path: "tipoProduto",
+          path: "tipo-produto",
           name: "TipoProduto",
           meta: {
             requiresAuth: true
@@ -547,8 +550,8 @@ export default new Router({
 
         //Cadastro de tipo unidade medida
         {
-          path: "tipoUnidadeMedida",
-          name: "tipoUnidadeMedida",
+          path: "tipo-unidade-medida",
+          name: "TipoUnidadeMedida",
           meta: {
             requiresAuth: true
           },
@@ -586,8 +589,8 @@ export default new Router({
 
         //Cadastro de unidade medida
         {
-          path: "unidadeMedida",
-          name: "unidadeMedida",
+          path: "unidade-medida",
+          name: "UnidadeMedida",
           meta: {
             requiresAuth: true
           },
@@ -616,6 +619,45 @@ export default new Router({
               path: "novo",
               name: "Novo",
               component: NovoUnidadeMedida,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
+        //Cadastro grupo de usuário
+        {
+          path: "grupo-usuario",
+          name: "GrupoUsuario",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: GrupoUsuario,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoGrupoUsuario,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoGrupoUsuario,
               meta: {
                 requiresAuth: true
               }
