@@ -5,11 +5,11 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Tipo Instituição</strong>
+              <strong class="align-self-center">Grupos</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/tipo-instituicao/novo"
-                title="Adicionar novo tipo de instituição"
+                href="/#/grupo-usuario/novo"
+                title="Adicionar novo grupo"
               >
                 Adicionar
               </a>
@@ -22,35 +22,6 @@
             ></RotateSquare>
           </div>
           <div v-else class="card-body">
-            <div class="row">
-              <div class="col-lg-5 col-md-6 col-sm-12">
-                <div class="form-group">
-                  <label>Descrição</label>
-                  <input
-                    type="text"
-                    v-model="filtro.descricao"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
-                <button
-                  class="btn btn-primary mr-2"
-                  type="button"
-                  @click="ObterGrid(1)"
-                >
-                  Filtrar
-                </button>
-                <button
-                  class="btn btn-secondary"
-                  type="button"
-                  @click="Limpar()"
-                >
-                  Limpar
-                </button>
-              </div>
-            </div>
-
             <b-table
               :hover="true"
               responsive
@@ -59,10 +30,18 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhum tipo de instituição encontrado."
+              empty-text="Nenhum grupo usuário encontrado."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
+              </template>
+              <template v-slot:cell(ativo)="data">
+                <div class="center">
+                  <span v-if="data.item.ativo" class="badge badge-success">
+                    Sim
+                  </span>
+                  <span v-else class="badge badge-secondary">Não</span>
+                </div>
               </template>
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
@@ -92,7 +71,6 @@
               size="md"
               class="mt-2"
             ></b-pagination>
-            <!-- <b-modal v-model="modalShow">Hello From Modal!</b-modal> -->
             <b-modal
               v-model="modalRemover"
               title="Confirmar exclusão"
@@ -109,11 +87,13 @@
     </div>
   </div>
 </template>
+
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import GrupoUsuarioServico from "../../servico/GrupoUsuarioServico";
 
 export default {
-  name: "TipoInstituicao",
+  name: "GrupoUsuario",
   components: {
     RotateSquare
   },
@@ -126,9 +106,8 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { descricao: "" },
       fields: [
-        { key: "descricao", label: "Nome", sortable: true },
+        { key: "nome", label: "Nome", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -143,16 +122,12 @@ export default {
       this.ObterGrid(val);
     }
   },
-  mounted() {
+  beforeMount() {
     this.ObterGrid(1);
   },
   methods: {
-    Limpar() {
-      this.filtro.descricao = "";
-      this.ObterGrid(1);
-    },
-    Editar(tipoInstituicao) {
-      this.$router.push("/tipo-instituicao/editar/" + tipoInstituicao.id);
+    Editar(grupo) {
+      this.$router.push("/grupo-usuario/editar/" + grupo.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -163,14 +138,11 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "tipoInstituicao/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      GrupoUsuarioServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Tipo de instituição removida com sucesso."],
+            data: ["Grupo removido com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -189,11 +161,7 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = true;
-      this.$http({
-        url:
-          "/tipoInstituicao/obter-grid?pagina=" + pagina + "&descricao=" + this.filtro.descricao,
-        method: "GET"
-      })
+      GrupoUsuarioServico.ObterGrid(pagina, 20)
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;

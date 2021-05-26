@@ -64,41 +64,41 @@ const Menu = {
   TipoDocumento: {
     _name: "CSidebarNavItem",
     name: "Tipo Documento",
-    to: "/tipoDocumento",
+    to: "/tipo-documento",
     icon: "cil-description"
   },
 
   TipoProduto: {
     _name: "CSidebarNavItem",
     name: "Tipo Produto",
-    to: "/tipoProduto",
+    to: "/tipo-produto",
     icon: "cil-description"
   },
 
   TipoUnidadeMedida: {
     _name: "CSidebarNavItem",
     name: "Tipo Unidade Medida",
-    to: "/tipoUnidadeMedida",
+    to: "/tipo-unidade-medida",
     icon: "cil-description"
   },
 
   UnidadeMedida: {
     _name: "CSidebarNavItem",
     name: "Conversão Unidade Medida",
-    to: "/unidadeMedida",
+    to: "/unidade-medida",
     icon: "cil-description"
   },
 
   TipoInstituicao: {
     _name: "CSidebarNavItem",
     name: "Tipo Instituição",
-    to: "/tipoInstituicao",
+    to: "/tipo-instituicao",
     icon: "cil-description"
   },
   TipoEndereco: {
     _name: "CSidebarNavItem",
     name: "Tipo Endereço",
-    to: "/tipoEndereco",
+    to: "/tipo-endereco",
     icon: "cil-description"
   },
 
@@ -114,6 +114,13 @@ const Menu = {
     name: "Parâmetro",
     route: "/parametro",
     to: "/parametro",
+    icon: "cil-library"
+  },
+
+  GrupoUsuario: {
+    _name: "CSidebarNavItem",
+    name: "Grupo Usuário",
+    to: "/grupo-usuario",
     icon: "cil-library"
   }
 };

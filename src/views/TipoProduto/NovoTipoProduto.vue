@@ -52,7 +52,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/tipoProduto')"
+                  @click="$router.push('/tipo-produto')"
                 >
                   Voltar
                 </button>
@@ -121,7 +121,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoProduto");
+          this.$router.push("/tipo-produto");
           this.$notify({
             data: ["Tipo de produto cadastrado com sucesso."],
             type: "success",
@@ -146,7 +146,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoProduto");
+          this.$router.push("/tipo-produto");
           this.$notify({
             data: ["Tipo de produto editado com sucesso."],
             type: "success",

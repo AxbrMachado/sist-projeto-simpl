@@ -52,7 +52,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/tipoUnidadeMedida')"
+                  @click="$router.push('/tipo-unidade-medida')"
                 >
                   Voltar
                 </button>
@@ -126,7 +126,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoUnidadeMedida");
+          this.$router.push("/tipo-unidade-medida");
           this.$notify({
             data: ["Tipo de unidade medida cadastrado com sucesso."],
             type: "success",
@@ -151,7 +151,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/tipoUnidadeMedida");
+          this.$router.push("/tipo-unidade-medida");
           this.$notify({
             data: ["Tipo de unidade medida editado com sucesso."],
             type: "success",
