@@ -23,14 +23,34 @@
           </div>
           <div v-else class="card-body">
             <div class="row">
-              <div class="col-lg-5 col-md-6 col-sm-12">
+              <div class="col-lg-2 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Número</label>
+                  <label>Descricao</label>
                   <input
                     type="text"
-                    v-model="filtro.numero"
+                    v-model="filtro.descricao"
                     class="form-control"
                   />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>* Tipo Produto</label>
+                  <b-form-select
+                    v-model="filtro.tipoProdutoId"
+                    :options="tiposProdutoOptions"
+                    required
+                  ></b-form-select>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>* Unidade Medida</label>
+                  <b-form-select
+                    v-model="filtro.tipoUnidadeMedidaId"
+                    :options="tiposUnidadeMedidaOptions"
+                    required
+                  ></b-form-select>
                 </div>
               </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
@@ -116,7 +136,6 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 
 export default {
   name: "Produto",
@@ -132,7 +151,13 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { numero: "" },
+      tiposProdutoOptions: [],
+      tiposUnidadeMedidaOptions: [],
+      filtro: {
+        descricao: "",
+        tipoProdutoId: "",
+        tipoUnidadeMedidaId: ""
+      },
       fields: [
         { key: "descricao", label: "Descrição", sortable: true },
         { key: "valorBase", label: "Valor Base", sortable: true },
@@ -154,10 +179,15 @@ export default {
   },
   mounted() {
     this.ObterGrid(1);
+    this.ObterTiposProdutoSelect();
+    this.ObterTiposUnidadeMedidaSelect();
   },
   methods: {
     Limpar() {
-      this.filtro.numero = "";
+      this.filtro.descricao = "";
+      this.filtro.tipoProdutoId = "";
+      this.filtro.tipoUnidadeMedidaId = "";
+
       this.ObterGrid(1);
     },
     Editar(produto) {
@@ -199,11 +229,7 @@ export default {
     ObterGrid(pagina) {
       this.loading = true;
       this.$http({
-        url:
-          "/produto/obter-grid?pagina=" +
-          pagina +
-          "&numero=" +
-          this.filtro.numero,
+        url: "/produto/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"
       })
         .then((response) => {
@@ -222,22 +248,53 @@ export default {
           });
         });
     },
+    MontaFiltro() {
+      var filtros = "";
+      var filtros = filtros + "&Descricao=" + this.filtro.descricao;
 
-    ObterNomeEnquadramento(item) {
-      switch (item) {
-        case TipoEnquadramentoEnum.Grupo_A:
-          return "A";
-        case TipoEnquadramentoEnum.Grupo_B:
-          return "B";
-        case TipoEnquadramentoEnum.Grupo_AC:
-          return "AC";
-        case TipoEnquadramentoEnum.Grupo_V:
-          return "V";
-        default:
-          return "Inválido";
+      if (this.filtro.tipoProdutoId) {
+        var filtros = filtros + "&tipoProdutoId=" + this.filtro.tipoProdutoId;
       }
-    },
 
+      if (this.filtro.tipoUnidadeMedidaId) {
+        var filtros =
+          filtros + "&tipoUnidadeMedidaId=" + this.filtro.tipoUnidadeMedidaId;
+      }
+
+      return filtros;
+    },
+    ObterTiposProdutoSelect() {
+      this.$http({
+        url: "/tipoProduto/obter-select",
+        method: "GET"
+      })
+        .then((response) => {
+          this.tiposProdutoOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ObterTiposUnidadeMedidaSelect() {
+      this.$http({
+        url: "/tipoUnidadeMedida/obter-select",
+        method: "GET"
+      })
+        .then((response) => {
+          this.tiposUnidadeMedidaOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
     FormataValor(valor) {
       return valor.toLocaleString("pt-br", {
         style: "currency",
