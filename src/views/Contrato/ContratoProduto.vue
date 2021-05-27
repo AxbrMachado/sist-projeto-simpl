@@ -193,6 +193,7 @@ export default {
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
           label: "Ações",
