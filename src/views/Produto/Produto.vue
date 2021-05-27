@@ -35,7 +35,7 @@
               </div>
               <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                 <div class="form-group">
-                  <label for>* Tipo Produto</label>
+                  <label for>Tipo Produto</label>
                   <b-form-select
                     v-model="filtro.tipoProdutoId"
                     :options="tiposProdutoOptions"
@@ -45,7 +45,7 @@
               </div>
               <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                 <div class="form-group">
-                  <label for>* Unidade Medida</label>
+                  <label for>Unidade Medida</label>
                   <b-form-select
                     v-model="filtro.tipoUnidadeMedidaId"
                     :options="tiposUnidadeMedidaOptions"
