@@ -23,14 +23,38 @@
           </div>
           <div v-else class="card-body">
             <div class="row">
-              <div class="col-lg-5 col-md-6 col-sm-12">
+              <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="form-group">
                   <label>Nome</label>
                   <input
                     type="text"
-                    v-model="filtro.nome"
+                    v-model="filtro.Nome"
                     class="form-control"
                   />
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="form-group">
+                  <label for>Cidade</label>
+                  <v-select
+                    placeholder="Digite uma cidade.."
+                    v-model="filtro.Cidade"
+                    :options="cidadeOptions"
+                    @search="ObterCidadesVSelect"
+                  >
+                    <template slot="no-options">
+                      Nenhum resultado para a busca.
+                    </template>
+                  </v-select>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>Tipo</label>
+                  <b-form-select
+                    v-model="filtro.TipoPessoa"
+                    :options="tipoOptions"
+                  ></b-form-select>
                 </div>
               </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
@@ -144,9 +168,21 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { nome: "" },
+      tipoOptions: [
+        { value: TipoPessoaEnum.Funcionario, text: "Funcionário" },
+        { value: TipoPessoaEnum.Fornecedor, text: "Fornecedor" },
+        { value: TipoPessoaEnum.Cliente, text: "Cliente" },
+        { value: TipoPessoaEnum.Instituicao, text: "Instituicao" }
+      ],
+      cidadeOptions: [],
+      filtro: {
+        Nome: "",
+        Cidade: "",
+        TipoPessoa: 0
+      },
       fields: [
         { key: "nome", label: "Nome", sortable: true },
+        { key: "cidade", label: "Cidade", sortable: true },
         { key: "tipoPessoa", label: "Tipo", sortable: true },
         { key: "observacao", label: "Observação", sortable: true },
         {
@@ -168,7 +204,10 @@ export default {
   },
   methods: {
     Limpar() {
-      this.filtro.nome = "";
+      this.filtro.Nome = "";
+      this.filtro.Cidade = "";
+      this.filtro.TipoPessoa = 0;
+
       this.ObterGrid(1);
     },
     Editar(pessoa) {
@@ -210,8 +249,7 @@ export default {
     ObterGrid(pagina) {
       this.loading = true;
       this.$http({
-        url:
-          "/pessoa/obter-grid?pagina=" + pagina + "&nome=" + this.filtro.nome,
+        url: "/pessoa/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"
       })
         .then((response) => {
@@ -230,7 +268,20 @@ export default {
           });
         });
     },
+    MontaFiltro() {
+      var filtros = "";
+      var filtros = filtros + "&Nome=" + this.filtro.Nome;
 
+      if (this.filtro.Cidade) {
+        var filtros = filtros + "&Cidade=" + this.filtro.Cidade.label;
+      }
+
+      if (this.filtro.TipoPessoa != 0) {
+        var filtros = filtros + "&TipoPessoa=" + this.filtro.TipoPessoa;
+      }
+
+      return filtros;
+    },
     ObterTipoPessoa(item) {
       switch (item) {
         case TipoPessoaEnum.Funcionario:
@@ -254,6 +305,24 @@ export default {
         default:
           return "";
       }
+    },
+    ObterCidadesVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url: "/pessoaendereco/obter-v-select/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.cidadeOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };
