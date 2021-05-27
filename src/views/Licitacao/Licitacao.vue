@@ -23,15 +23,64 @@
           </div>
           <div v-else class="card-body">
             <div class="row">
-              <div class="col-lg-5 col-md-6 col-sm-12">
+              <div class="col-lg-2 col-md-6 col-sm-12">
                 <div class="form-group">
                   <label>Número</label>
                   <input
                     type="text"
-                    v-model="filtro.numero"
+                    v-model="filtro.Numero"
                     class="form-control"
                   />
                 </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                  <label for>Instituição</label>
+                  <v-select
+                    placeholder="Digite uma instituição.."
+                    v-model="filtro.Instituicao"
+                    :options="instituicaoOptions"
+                    @search="ObterInstituicaoVSelect"
+                  >
+                    <template slot="no-options">
+                      Nenhum resultado para a busca.
+                    </template>
+                  </v-select>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="form-group">
+                  <label for>Tipo Instituição</label>
+                  <b-form-select
+                    v-model="filtro.TipoInstituicao"
+                    :options="tiposInstituicaoOptions"
+                  ></b-form-select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>Data Vencimento</label>
+                  <input
+                    v-model="filtro.DataVencimento"
+                    class="form-control"
+                    type="date"
+                    placeholder="Digite a data de vencimento"
+                  />
+                </div>
+              </div>
+              <div
+                class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                title="Apenas licitações vencidas."
+              >
+                <label for>Licitações Vencidas</label>
+                <b-form-checkbox
+                  v-model="filtro.LicitacaoVencida"
+                  name="check-button"
+                  switch
+                >
+                </b-form-checkbox>
               </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
@@ -129,6 +178,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
+import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import LicitacaoServico from "../../servico/LicitacaoServico";
 
 export default {
@@ -145,7 +195,15 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { numero: "" },
+      tiposInstituicaoOptions: [],
+      instituicaoOptions: [],
+      filtro: {
+        Numero: "",
+        TipoInstituicao: "",
+        Instituicao: "",
+        DataVencimento: "",
+        LicitacaoVencida: false
+      },
       fields: [
         { key: "numero", label: "Número", sortable: true },
         { key: "instituicao", label: "Instituição", sortable: true },
@@ -169,10 +227,16 @@ export default {
   },
   mounted() {
     this.ObterGrid(1);
+    this.ObterTiposInstituicoesSelect();
   },
   methods: {
     Limpar() {
-      this.filtro.numero = "";
+      this.filtro.Numero = "";
+      this.filtro.TipoInstituicao = "";
+      this.filtro.Instituicao = "";
+      this.filtro.DataVencimento = "";
+      this.filtro.LicitacaoVencida = false;
+
       this.ObterGrid(1);
     },
     Editar(licitacao) {
@@ -214,11 +278,7 @@ export default {
     ObterGrid(pagina) {
       this.loading = true;
       this.$http({
-        url:
-          "/licitacao/obter-grid?pagina=" +
-          pagina +
-          "&numero=" +
-          this.filtro.numero,
+        url: "/licitacao/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"
       })
         .then((response) => {
@@ -236,6 +296,25 @@ export default {
             duration: 5000
           });
         });
+    },
+    MontaFiltro() {
+      var filtros = "";
+      var filtros = filtros + "&Numero=" + this.filtro.Numero;
+
+      if (this.filtro.Instituicao) {
+        var filtros = filtros + "&PessoaId=" + this.filtro.Instituicao.id;
+      }
+
+      if (this.filtro.TipoInstituicao != 0) {
+        var filtros =
+          filtros + "&TipoInstituicaoId=" + this.filtro.TipoInstituicao;
+      }
+
+      var filtros = filtros + "&DataVencimento=" + this.filtro.DataVencimento;
+      var filtros =
+        filtros + "&LicitacaoVencida=" + this.filtro.LicitacaoVencida;
+
+      return filtros;
     },
 
     ObterNomeEnquadramento(item) {
@@ -262,6 +341,41 @@ export default {
         style: "currency",
         currency: "BRL"
       });
+    },
+    ObterTiposInstituicoesSelect() {
+      this.$http({
+        url: "/tipoInstituicao/obter-select",
+        method: "GET"
+      })
+        .then((response) => {
+          this.tiposInstituicaoOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ObterInstituicaoVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url:
+          "/pessoa/obter-v-select/" + TipoPessoaEnum.Instituicao + "/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.instituicaoOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };

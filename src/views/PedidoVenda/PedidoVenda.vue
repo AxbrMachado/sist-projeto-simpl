@@ -369,16 +369,6 @@ export default {
         });
     },
     MontaFiltro() {
-      // console.log("Descricao -> " + this.filtro.Descricao);
-      // console.log("Numero -> " + this.filtro.Numero);
-      // console.log("ContratoId -> " + this.filtro.Contrato);
-      // console.log("Status -> " + this.filtro.Status);
-      // console.log("DataEntrega -> " + this.filtro.DataEntrega);
-      // console.log("InstituicaoId -> " + this.filtro.Instituicao.id);
-      // console.log("PedidoAvulso -> " + this.filtro.PedidoAvulso);
-      // console.log("PedidoCompleto -> " + this.filtro.PedidoCompleto);
-      // console.log("PedidoEntregue -> " + this.filtro.PedidoEntregue);
-
       var filtros = "";
       var filtros = filtros + "&Descricao=" + this.filtro.Descricao;
       var filtros = filtros + "&Numero=" + this.filtro.Numero;
