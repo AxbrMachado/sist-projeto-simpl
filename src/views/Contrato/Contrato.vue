@@ -152,7 +152,6 @@
               size="md"
               class="mt-2"
             ></b-pagination>
-            <!-- <b-modal v-model="modalShow">Hello From Modal!</b-modal> -->
             <b-modal
               v-model="modalRemover"
               title="Confirmar exclusão"
@@ -171,7 +170,6 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 
 export default {
   name: "Contrato",
@@ -303,21 +301,6 @@ export default {
 
       return filtros;
     },
-    ObterNomeEnquadramento(item) {
-      switch (item) {
-        case TipoEnquadramentoEnum.Grupo_A:
-          return "A";
-        case TipoEnquadramentoEnum.Grupo_B:
-          return "B";
-        case TipoEnquadramentoEnum.Grupo_AC:
-          return "AC";
-        case TipoEnquadramentoEnum.Grupo_V:
-          return "V";
-        default:
-          return "Inválido";
-      }
-    },
-
     FormatarData(validade) {
       var dataValidade = new Date(validade);
       return dataValidade.toLocaleDateString();

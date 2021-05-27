@@ -107,7 +107,6 @@
               size="md"
               class="mt-2"
             ></b-pagination>
-            <!-- <b-modal v-model="modalShow">Hello From Modal!</b-modal> -->
             <b-modal
               v-model="modalRemover"
               title="Confirmar exclusão"
