@@ -23,15 +23,64 @@
           </div>
           <div v-else class="card-body">
             <div class="row">
-              <div class="col-lg-5 col-md-6 col-sm-12">
+              <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Nome</label>
+                  <label>Número</label>
                   <input
                     type="text"
                     v-model="filtro.numero"
                     class="form-control"
                   />
                 </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>Tipo Enquadramento</label>
+                  <b-form-select
+                    v-model="filtro.tipoEnquadramento"
+                    :options="tipoEnquadramentos"
+                  ></b-form-select>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                  <label for>Cooperado</label>
+                  <v-select
+                    placeholder="Digite um cooperado.."
+                    v-model="filtro.cooperado"
+                    :options="cooperadoOptions"
+                    @search="ObterCooperadoVSelect"
+                  >
+                    <template slot="no-options">
+                      Nenhum resultado para a busca.
+                    </template>
+                  </v-select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>Data Validade</label>
+                  <input
+                    v-model="filtro.dataVencimento"
+                    class="form-control"
+                    type="date"
+                    placeholder="Digite a data de validade"
+                  />
+                </div>
+              </div>
+              <div
+                class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                title="Apenas daps vencidas."
+              >
+                <label for>Daps Vencidas</label>
+                <b-form-checkbox
+                  v-model="filtro.dapVencida"
+                  name="check-button"
+                  switch
+                >
+                </b-form-checkbox>
               </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
@@ -123,6 +172,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
+import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
 export default {
   name: "Dap",
@@ -138,7 +188,20 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { numero: "" },
+      cooperadoOptions: [],
+      tipoEnquadramentos: [
+        { value: TipoEnquadramentoEnum.Grupo_A, text: "A" },
+        { value: TipoEnquadramentoEnum.Grupo_B, text: "B" },
+        { value: TipoEnquadramentoEnum.Grupo_AC, text: "AC" },
+        { value: TipoEnquadramentoEnum.Grupo_V, text: "V" }
+      ],
+      filtro: {
+        numero: "",
+        tipoEnquadramento: 0,
+        dataVencimento: "",
+        dapVencida: false,
+        cooperado: ""
+      },
       fields: [
         { key: "numero", label: "Número", sortable: true },
         { key: "tipoEnquadramento", label: "Enquadramento", sortable: true },
@@ -164,6 +227,11 @@ export default {
   methods: {
     Limpar() {
       this.filtro.numero = "";
+      this.filtro.tipoEnquadramento = 0;
+      this.filtro.dataVencimento = "";
+      this.filtro.dapVencida = false;
+      this.filtro.cooperado = "";
+
       this.ObterGrid(1);
     },
     Editar(dap) {
@@ -205,8 +273,7 @@ export default {
     ObterGrid(pagina) {
       this.loading = true;
       this.$http({
-        url:
-          "/dap/obter-grid?pagina=" + pagina + "&numero=" + this.filtro.numero,
+        url: "/dap/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"
       })
         .then((response) => {
@@ -225,7 +292,24 @@ export default {
           });
         });
     },
+    MontaFiltro() {
+      var filtros = "";
+      var filtros = filtros + "&Numero=" + this.filtro.numero;
 
+      if (this.filtro.tipoEnquadramento) {
+        var filtros =
+          filtros + "&TipoEnquadramento=" + this.filtro.tipoEnquadramento;
+      }
+
+      if (this.filtro.cooperado) {
+        var filtros = filtros + "&PessoaId=" + this.filtro.cooperado.id;
+      }
+
+      var filtros = filtros + "&Validade=" + this.filtro.dataVencimento;
+      var filtros = filtros + "&DapVencida=" + this.filtro.dapVencida;
+
+      return filtros;
+    },
     ObterNomeEnquadramento(item) {
       switch (item) {
         case TipoEnquadramentoEnum.Grupo_A:
@@ -244,6 +328,25 @@ export default {
     FormatarData(validade) {
       var dataValidade = new Date(validade);
       return dataValidade.toLocaleDateString();
+    },
+    ObterCooperadoVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url:
+          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.cooperadoOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };
