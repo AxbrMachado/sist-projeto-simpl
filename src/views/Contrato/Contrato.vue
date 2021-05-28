@@ -23,7 +23,17 @@
           </div>
           <div v-else class="card-body">
             <div class="row">
-              <div class="col-lg-5 col-md-6 col-sm-12">
+              <div class="col-lg-2 col-md-6 col-sm-12">
+                <div class="form-group">
+                  <label>Descrição</label>
+                  <input
+                    type="text"
+                    v-model="filtro.descricao"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-6 col-sm-12">
                 <div class="form-group">
                   <label>Número</label>
                   <input
@@ -32,6 +42,41 @@
                     class="form-control"
                   />
                 </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="form-group">
+                  <label for>Licitação</label>
+                  <b-form-select
+                    v-model="filtro.licitacaoId"
+                    :options="licitacaoOptions"
+                    required
+                  ></b-form-select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>Data Vencimento</label>
+                  <input
+                    v-model="filtro.dataVencimento"
+                    class="form-control"
+                    type="date"
+                    placeholder="Digite a data de vencimento"
+                  />
+                </div>
+              </div>
+              <div
+                class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                title="Apenas licitações vencidas."
+              >
+                <label for>Contratos Vencidos</label>
+                <b-form-checkbox
+                  v-model="filtro.contratoVencido"
+                  name="check-button"
+                  switch
+                >
+                </b-form-checkbox>
               </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
@@ -107,7 +152,6 @@
               size="md"
               class="mt-2"
             ></b-pagination>
-            <!-- <b-modal v-model="modalShow">Hello From Modal!</b-modal> -->
             <b-modal
               v-model="modalRemover"
               title="Confirmar exclusão"
@@ -126,7 +170,6 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 
 export default {
   name: "Contrato",
@@ -142,7 +185,14 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      filtro: { numero: "" },
+      licitacaoOptions: [],
+      filtro: {
+        numero: "",
+        descricao: "",
+        contratoVencido: false,
+        licitacaoId: "",
+        dataVencimento: ""
+      },
       fields: [
         { key: "descricao", label: "Descrição", sortable: true },
         { key: "numero", label: "Número", sortable: true },
@@ -167,10 +217,16 @@ export default {
   },
   mounted() {
     this.ObterGrid(1);
+    this.ObterInstituicoesSelect();
   },
   methods: {
     Limpar() {
       this.filtro.numero = "";
+      this.filtro.descricao = "";
+      this.filtro.contratoVencido = false;
+      this.filtro.licitacaoId = "";
+      this.filtro.dataVencimento = "";
+
       this.ObterGrid(1);
     },
     Editar(contrato) {
@@ -212,11 +268,7 @@ export default {
     ObterGrid(pagina) {
       this.loading = true;
       this.$http({
-        url:
-          "/contrato/obter-grid?pagina=" +
-          pagina +
-          "&numero=" +
-          this.filtro.numero,
+        url: "/contrato/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"
       })
         .then((response) => {
@@ -235,22 +287,20 @@ export default {
           });
         });
     },
+    MontaFiltro() {
+      var filtros = "";
+      var filtros = filtros + "&Descricao=" + this.filtro.descricao;
+      var filtros = filtros + "&Numero=" + this.filtro.numero;
 
-    ObterNomeEnquadramento(item) {
-      switch (item) {
-        case TipoEnquadramentoEnum.Grupo_A:
-          return "A";
-        case TipoEnquadramentoEnum.Grupo_B:
-          return "B";
-        case TipoEnquadramentoEnum.Grupo_AC:
-          return "AC";
-        case TipoEnquadramentoEnum.Grupo_V:
-          return "V";
-        default:
-          return "Inválido";
+      if (this.filtro.licitacaoId) {
+        var filtros = filtros + "&LicitacaoId=" + this.filtro.licitacaoId;
       }
-    },
 
+      var filtros = filtros + "&DataTermino=" + this.filtro.dataVencimento;
+      var filtros = filtros + "&ContratoVencido=" + this.filtro.contratoVencido;
+
+      return filtros;
+    },
     FormatarData(validade) {
       var dataValidade = new Date(validade);
       return dataValidade.toLocaleDateString();
@@ -260,6 +310,22 @@ export default {
         style: "currency",
         currency: "BRL"
       });
+    },
+    ObterInstituicoesSelect() {
+      this.$http({
+        url: "/licitacao/obter-select",
+        method: "GET"
+      })
+        .then((response) => {
+          this.licitacaoOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };
