@@ -238,7 +238,7 @@ export default new Router({
 
         //Cadastro de pedido venda
         {
-          path: "pedido-venda",
+          path: "pedidovenda",
           name: "PedidoVenda",
           meta: {
             requiresAuth: true

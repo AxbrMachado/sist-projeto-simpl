@@ -8,7 +8,7 @@
               <strong class="align-self-center">Pedidos</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/pedido/novo"
+                href="/#/pedidovenda/novo"
                 title="Adicionar novo pedido"
               >
                 Adicionar
@@ -231,7 +231,7 @@ import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
 export default {
-  name: "Pedido",
+  name: "PedidoVenda",
   components: {
     RotateSquare
   },
