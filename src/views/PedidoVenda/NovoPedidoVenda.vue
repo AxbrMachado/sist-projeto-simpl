@@ -134,6 +134,7 @@
     </form>
     <div v-if="IsEdicao()">
       <PedidoCliente :pedidoId="this.viewModel.id"> </PedidoCliente>
+      <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor>
       <NovoDocumento :pedidoId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
@@ -143,9 +144,10 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
-import PedidoCliente from "./PedidoCliente";
 import Contato from "../../components/Contato";
 import NovoDocumento from "./NovoDocumento";
+import PedidoCliente from "./PedidoCliente";
+import PedidoFornecedor from "./PedidoFornecedor";
 
 export default {
   name: "NovoPedidoVenda",
@@ -153,6 +155,7 @@ export default {
     RotateSquare,
     NovoDocumento,
     PedidoCliente,
+    PedidoFornecedor,
     Contato
   },
   data() {
