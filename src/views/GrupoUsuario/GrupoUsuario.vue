@@ -46,6 +46,15 @@
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
                   <b-button
+                    variant="info"
+                    style="margin-right: 10px"
+                    title="Editar"
+                    @click="Permissao(data.item)"
+                  >
+                    <i class="fas fa-unlock-alt text-black"></i>
+                  </b-button>
+
+                  <b-button
                     variant="warning"
                     style="margin-right: 10px"
                     title="Editar"
@@ -126,6 +135,9 @@ export default {
     this.ObterGrid(1);
   },
   methods: {
+    Permissao(grupo) {
+      this.$router.push("/grupo-usuario/permissao/" + grupo.id);
+    },
     Editar(grupo) {
       this.$router.push("/grupo-usuario/editar/" + grupo.id);
     },
