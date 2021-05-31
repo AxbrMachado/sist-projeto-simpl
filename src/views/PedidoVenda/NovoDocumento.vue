@@ -208,7 +208,7 @@ import TipoDocumentoAnexoEnum from "../../enums/TipoDocumentoAnexoEnum";
 export default {
   components: { RotateSquare, TipoDocumentoAnexoEnum, ModalArquivo },
   props: {
-    pessoaId: {
+    pedidoId: {
       type: String,
       default: ""
     }
@@ -244,8 +244,8 @@ export default {
         numero: "",
         observacao: "",
         validade: null,
-        pessoaId: "",
-        tipoDocumentoAnexo: TipoDocumentoAnexoEnum.Pessoa,
+        pedidoId: this.pedidoId,
+        tipoDocumentoAnexo: TipoDocumentoAnexoEnum.Pedido,
         arquivos: []
       }
     };
@@ -314,6 +314,7 @@ export default {
     },
     Obter(id) {
       this.loading = true;
+
       DocumentoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
@@ -334,8 +335,8 @@ export default {
       DocumentoServico.ObterGrid(
         val,
         this.itensPorPagina,
-        this.pessoaId,
-        TipoDocumentoAnexoEnum.Pessoa
+        this.pedidoId,
+        TipoDocumentoAnexoEnum.Pedido
       )
         .then((resposta) => {
           this.loading = false;
@@ -384,7 +385,7 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.viewModel.pessoaId = this.pessoaId;
+      this.viewModel.pedidoId = this.pedidoId;
       DocumentoServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
@@ -407,7 +408,7 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.viewModel.pessoaId = this.pessoaId;
+      this.viewModel.pedidoId = this.pedidoId;
       DocumentoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
@@ -434,7 +435,7 @@ export default {
       this.viewModel.numero = "";
       this.viewModel.observacao = "";
       this.viewModel.validade = null;
-      this.viewModel.pessoaId = "";
+      this.viewModel.pedidoId = "";
       this.viewModel.arquivos = [];
     },
     FormatarData(validade) {

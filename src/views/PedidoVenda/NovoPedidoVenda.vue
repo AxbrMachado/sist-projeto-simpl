@@ -141,17 +141,23 @@
       </div>
     </form>
     <div v-if="IsEdicao()"></div>
+    <NovoDocumento :pedidoId="this.viewModel.id"> </NovoDocumento>
+    <Contato :referenciaId="this.viewModel.id"> </Contato>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
+import Contato from "../../components/Contato";
+import NovoDocumento from "./NovoDocumento";
 
 export default {
   name: "NovoPedidoVenda",
   components: {
-    RotateSquare
+    RotateSquare,
+    NovoDocumento,
+    Contato
   },
   data() {
     return {
@@ -163,7 +169,6 @@ export default {
         id: this.$store.getters.emptyGuid,
         descricao: "",
         observacao: "",
-        // licitacaoId: this.$store.getters.emptyGuid,
         contratoId: this.$store.getters.emptyGuid,
         numero: 0,
         dataEntrega: "",
@@ -172,9 +177,9 @@ export default {
     };
   },
   created() {
+    this.viewModel.id = this.$route.params.id;
     let pedidoId = this.$route.params.id;
     if (pedidoId) this.Obter(pedidoId);
-    // this.ObterInstituicoesSelect();
     this.ObterContratosSelect();
   },
   methods: {
@@ -217,10 +222,6 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          // this.$router.push(
-          //   "/pedido/editar/" + "68f2d01a-a002-4c2c-b640-169d47f52c91"
-          // );
-
           this.$router.push("/pedidovenda");
           this.$notify({
             data: ["Pedido cadastrado com sucesso."],
@@ -301,14 +302,12 @@ export default {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.descricao = "";
       this.viewModel.observacao = "";
-      // this.viewModel.licitacaoId = this.$store.getters.emptyGuid;
       this.viewModel.contratoId = this.$store.getters.emptyGuid;
       this.viewModel.numero = 0;
       this.viewModel.dataEntrega = "";
       this.viewModel.dataTermino = "";
       this.viewModel.valor = 0;
 
-      // this.ObterInstituicoesSelect();
       this.ObterContratosSelect();
     }
   }
