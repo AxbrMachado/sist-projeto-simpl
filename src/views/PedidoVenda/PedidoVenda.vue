@@ -118,6 +118,18 @@
                 >
                 </b-form-checkbox>
               </div>
+              <div
+                class="col-sm-6 col-md-2 col-lg-2 col-xl-1"
+                title="Apenas pedidos completos."
+              >
+                <label for>Pendente</label>
+                <b-form-checkbox
+                  v-model="filtro.PedidoPendente"
+                  name="check-button"
+                  switch
+                >
+                </b-form-checkbox>
+              </div>
               <!-- <div
                 class="col-sm-6 col-md-2 col-lg-2 col-xl-1"
                 title="Apenas pedidos entregues."
@@ -270,6 +282,7 @@ export default {
         Instituicao: "",
         PedidoAvulso: false,
         PedidoCompleto: false,
+        PedidoPendente: false,
         PedidoEntregue: false
       },
       fields: [
@@ -305,12 +318,13 @@ export default {
       this.filtro.Instituicao = "";
       this.filtro.PedidoAvulso = false;
       this.filtro.PedidoCompleto = false;
+      this.filtro.PedidoPendente = false;
       this.filtro.PedidoEntregue = false;
 
       this.ObterGrid(1);
     },
     Editar(pedido) {
-      this.$router.push("/pedido/editar/" + pedido.id);
+      this.$router.push("/pedidovenda/editar/" + pedido.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -383,6 +397,7 @@ export default {
       var filtros = filtros + "&DataEntrega=" + this.filtro.DataEntrega;
       var filtros = filtros + "&PedidoAvulso=" + this.filtro.PedidoAvulso;
       var filtros = filtros + "&PedidoCompleto=" + this.filtro.PedidoCompleto;
+      var filtros = filtros + "&PedidoPendente=" + this.filtro.PedidoPendente;
       var filtros = filtros + "&PedidoEntregue=" + this.filtro.PedidoEntregue;
 
       if (this.filtro.Instituicao) {
@@ -417,15 +432,18 @@ export default {
       }
     },
 
-    FormatarData(validade) {
-      var dataValidade = new Date(validade);
-      return dataValidade.toLocaleDateString();
+    FormatarData(valor) {
+      return new Date(valor).toLocaleDateString();
     },
     FormataValor(valor) {
-      return valor.toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL"
-      });
+      if (valor) {
+        return valor.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      } else {
+        return valor;
+      }
     },
     ObterContratoVSelect(busca) {
       if (!busca || busca.length <= 2) return;

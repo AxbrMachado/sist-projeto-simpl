@@ -38,9 +38,20 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-1">
                   <div class="form-group">
-                    <label for>* Descricao</label>
+                    <label for> Número</label>
+                    <input
+                      v-model="viewModel.numero"
+                      class="form-control"
+                      type="text"
+                      placeholder="Digite o número"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
+                  <div class="form-group">
+                    <label for> Descrição</label>
                     <input
                       v-model="viewModel.descricao"
                       class="form-control"
@@ -50,19 +61,7 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                  <div class="form-group">
-                    <label for>* Número</label>
-                    <input
-                      v-model="viewModel.numero"
-                      class="form-control"
-                      type="text"
-                      placeholder="Digite o número"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
                   <div class="form-group">
                     <label for>* Licitação</label>
                     <b-form-select
@@ -71,39 +70,38 @@
                       required
                     ></b-form-select>
                   </div>
+                </div> -->
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+                  <div class="form-group">
+                    <label for>* Contrato</label>
+                    <b-form-select
+                      v-model="viewModel.contratoId"
+                      :options="contratoOptions"
+                      required
+                    ></b-form-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="form-group">
+                    <label for>* Data Entrega</label>
+                    <input
+                      v-model="viewModel.dataEntrega"
+                      class="form-control"
+                      type="date"
+                      placeholder="Digite a data de entrega"
+                      required
+                    />
+                  </div>
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
-                    <label for>* Valor</label>
+                    <label for> Valor</label>
                     <currency-input
                       v-model="viewModel.valor"
                       class="form-control"
                       placeholder="Digite o valor"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>* Data Início</label>
-                    <input
-                      v-model="viewModel.dataInicio"
-                      class="form-control"
-                      type="date"
-                      placeholder="Digite a data de início"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                  <div class="form-group">
-                    <label for>* Data de Término</label>
-                    <input
-                      v-model="viewModel.dataTermino"
-                      class="form-control"
-                      type="date"
-                      placeholder="Digite a data de término"
-                      required
                     />
                   </div>
                 </div>
@@ -160,24 +158,24 @@ export default {
       loading: false,
       tiposInstituicaoOptions: [],
       licitacaoOptions: [],
+      contratoOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
         descricao: "",
         observacao: "",
-        licitacaoId: "",
-        numero: "",
-        dataInicio: "",
-        dataTermino: "",
-        valor: 0,
-        produtos: []
+        // licitacaoId: this.$store.getters.emptyGuid,
+        contratoId: this.$store.getters.emptyGuid,
+        numero: 0,
+        dataEntrega: "",
+        dataTermino: ""
       }
     };
   },
   created() {
     let pedidoId = this.$route.params.id;
     if (pedidoId) this.Obter(pedidoId);
-    this.ObterInstituicoesSelect();
-    this.ObterTiposInstituicoesSelect();
+    // this.ObterInstituicoesSelect();
+    this.ObterContratosSelect();
   },
   methods: {
     ValidarForm(evt) {
@@ -193,8 +191,8 @@ export default {
       })
         .then((resposta) => {
           this.loading = false;
-          resposta.data.dataInicio = DateTime.formatar(
-            resposta.data.dataInicio
+          resposta.data.dataEntrega = DateTime.formatar(
+            resposta.data.dataEntrega
           );
           resposta.data.dataTermino = DateTime.formatar(
             resposta.data.dataTermino
@@ -250,7 +248,7 @@ export default {
           this.loading = false;
           this.$router.push("/pedidovenda");
           this.$notify({
-            data: ["Pedido editada com sucesso."],
+            data: ["Pedido editado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -264,7 +262,6 @@ export default {
           });
         });
     },
-
     ObterInstituicoesSelect() {
       this.$http({
         url: "/licitacao/obter-select",
@@ -281,14 +278,13 @@ export default {
           });
         });
     },
-
-    ObterTiposInstituicoesSelect() {
+    ObterContratosSelect() {
       this.$http({
-        url: "/tipoInstituicao/obter-select",
+        url: "/contrato/obter-select",
         method: "GET"
       })
         .then((response) => {
-          this.tiposInstituicaoOptions = response.data;
+          this.contratoOptions = response.data;
         })
         .catch((erro) => {
           this.$notify({
@@ -305,12 +301,15 @@ export default {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.descricao = "";
       this.viewModel.observacao = "";
-      this.viewModel.licitacaoId = "";
-      this.viewModel.numero = "";
-      this.viewModel.dataInicio = "";
+      // this.viewModel.licitacaoId = this.$store.getters.emptyGuid;
+      this.viewModel.contratoId = this.$store.getters.emptyGuid;
+      this.viewModel.numero = 0;
+      this.viewModel.dataEntrega = "";
       this.viewModel.dataTermino = "";
       this.viewModel.valor = 0;
-      this.viewModel.produtos = [];
+
+      // this.ObterInstituicoesSelect();
+      this.ObterContratosSelect();
     }
   }
 };
