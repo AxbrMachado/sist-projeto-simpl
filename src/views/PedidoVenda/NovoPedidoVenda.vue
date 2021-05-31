@@ -42,6 +42,7 @@
                   <div class="form-group">
                     <label for> Número</label>
                     <input
+                      disabled
                       v-model="viewModel.numero"
                       class="form-control"
                       type="text"
@@ -99,6 +100,7 @@
                   <div class="form-group">
                     <label for> Valor</label>
                     <currency-input
+                      disabled
                       v-model="viewModel.valor"
                       class="form-control"
                       placeholder="Digite o valor"
@@ -140,9 +142,10 @@
         </div>
       </div>
     </form>
-    <div v-if="IsEdicao()"></div>
-    <NovoDocumento :pedidoId="this.viewModel.id"> </NovoDocumento>
-    <Contato :referenciaId="this.viewModel.id"> </Contato>
+    <div v-if="IsEdicao()">
+      <NovoDocumento :pedidoId="this.viewModel.id"> </NovoDocumento>
+      <Contato :referenciaId="this.viewModel.id"> </Contato>
+    </div>
   </div>
 </template>
 
@@ -177,8 +180,16 @@ export default {
     };
   },
   created() {
-    this.viewModel.id = this.$route.params.id;
     let pedidoId = this.$route.params.id;
+
+    if (pedidoId) {
+      this.viewModel.id = pedidoId;
+      console.log("EMPTY: " + this.viewModel.id);
+    } else {
+      this.viewModel.id = this.$store.getters.emptyGuid;
+      console.log("EDIT: " + this.viewModel.id);
+    }
+
     if (pedidoId) this.Obter(pedidoId);
     this.ObterContratosSelect();
   },
