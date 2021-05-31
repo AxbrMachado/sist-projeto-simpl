@@ -62,16 +62,6 @@
                     />
                   </div>
                 </div>
-                <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
-                  <div class="form-group">
-                    <label for>* Licitação</label>
-                    <b-form-select
-                      v-model="viewModel.licitacaoId"
-                      :options="licitacaoOptions"
-                      required
-                    ></b-form-select>
-                  </div>
-                </div> -->
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
                   <div class="form-group">
                     <label for>* Contrato</label>
@@ -143,6 +133,7 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
+      <PedidoCliente :pedidoId="this.viewModel.id"> </PedidoCliente>
       <NovoDocumento :pedidoId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
@@ -152,6 +143,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
+import PedidoCliente from "./PedidoCliente";
 import Contato from "../../components/Contato";
 import NovoDocumento from "./NovoDocumento";
 
@@ -160,6 +152,7 @@ export default {
   components: {
     RotateSquare,
     NovoDocumento,
+    PedidoCliente,
     Contato
   },
   data() {
@@ -184,10 +177,8 @@ export default {
 
     if (pedidoId) {
       this.viewModel.id = pedidoId;
-      console.log("EMPTY: " + this.viewModel.id);
     } else {
       this.viewModel.id = this.$store.getters.emptyGuid;
-      console.log("EDIT: " + this.viewModel.id);
     }
 
     if (pedidoId) this.Obter(pedidoId);
