@@ -135,6 +135,7 @@
     <div v-if="IsEdicao()">
       <PedidoCliente :pedidoId="this.viewModel.id"> </PedidoCliente>
       <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor>
+      <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto>
       <NovoDocumento :pedidoId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
@@ -147,6 +148,7 @@ import DateTime from "../../util/DateTime";
 import Contato from "../../components/Contato";
 import NovoDocumento from "./NovoDocumento";
 import PedidoCliente from "./PedidoCliente";
+import PedidoProduto from "./PedidoProduto";
 import PedidoFornecedor from "./PedidoFornecedor";
 
 export default {
@@ -156,6 +158,7 @@ export default {
     NovoDocumento,
     PedidoCliente,
     PedidoFornecedor,
+    PedidoProduto,
     Contato
   },
   data() {
