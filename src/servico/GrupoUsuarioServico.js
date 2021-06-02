@@ -7,6 +7,13 @@ class GrupoUsuarioServico {
     });
   }
 
+  ObterPermissao(id) {
+    return Vue.prototype.$http({
+      url: "grupousuario/obter-permissoes/" + id,
+      method: "GET"
+    });
+  }
+
   ObterGrid(pagina, itensPorPagina) {
     return Vue.prototype.$http({
       url:
