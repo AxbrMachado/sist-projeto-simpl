@@ -12,38 +12,42 @@
           <div class="card">
             <header class="card-header">
               <strong class="align-self-center"
-                >Permissão {{ nomeGrupo }}</strong
+                >Permissão {{ viewModel.nomeGrupo }}</strong
               >
             </header>
             <div class="card-body">
               <div class="row">
-                <div class="col">
-                  <div class="form-group">
-                    <small>Campos com * são de preenchimento obrigatório</small>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                  <div class="form-group">
-                    <label for>* Nome</label>
-                    <input
-                      v-model="viewModel.nome"
-                      class="form-control"
-                      type="text"
-                      placeholder="Digite o nome"
-                      required
-                    />
-                  </div>
+                <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6">
+                  <b-table
+                    striped
+                    responsive
+                    :items="viewModel.permissoes"
+                  >
+                    <template v-slot:cell(valor)="data">
+                      <div class="center">
+                        <span> {{ FormatarNome(data.item.valor) }} </span>
+                      </div>
+                    </template>
+                    <template v-slot:cell(ativo)="data">
+                      <div class="center">
+                        <b-form-checkbox
+                          v-model="data.item.ativo"
+                          name="check-button"
+                          switch
+                        >
+                        </b-form-checkbox>
+                      </div>
+                    </template>
+                  </b-table>
                 </div>
               </div>
             </div>
             <div class="btn-toolbar mb-3 ml-3" role="toolbar">
-              <div class="btn-group" role="group">
+              <!-- <div class="btn-group" role="group">
                 <button class="btn btn-success mr-2" type="submit">
                   Salvar
                 </button>
-              </div>
+              </div> -->
               <div class="btn-group" role="group">
                 <button
                   class="btn btn-secondary"
@@ -76,8 +80,8 @@ export default {
       contaOptions: [],
       nomeGrupo: "",
       viewModel: {
-        id: this.$store.getters.emptyGuid,
-        nome: ""
+        permissoes: [],
+        nomeGrupo: ""
       }
     };
   },
@@ -86,17 +90,15 @@ export default {
     if (grupo) this.Obter(grupo);
   },
   methods: {
-    ValidarForm(evt) {
-      evt.preventDefault();
-      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.Novo();
+    FormatarNome() {
+      
     },
     Obter(grupoId) {
       this.loading = true;
-      GrupoUsuarioServico.Obter(grupoId)
+      GrupoUsuarioServico.ObterPermissao(grupoId)
         .then((resposta) => {
           this.loading = false;
-          this.nomeGrupo = resposta.data.nome;
+          this.viewModel = resposta.data;
         })
         .catch((erro) => {
           this.loading = false;
@@ -106,7 +108,7 @@ export default {
             duration: 5000
           });
         });
-    },
+    }
   }
 };
 </script>
