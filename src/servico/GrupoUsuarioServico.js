@@ -7,6 +7,13 @@ class GrupoUsuarioServico {
     });
   }
 
+  ObterPermissao(id) {
+    return Vue.prototype.$http({
+      url: "grupousuario/obter-permissoes/" + id,
+      method: "GET"
+    });
+  }
+
   ObterGrid(pagina, itensPorPagina) {
     return Vue.prototype.$http({
       url:
@@ -36,6 +43,14 @@ class GrupoUsuarioServico {
   Editar(viewModel) {
     return Vue.prototype.$http({
       url: "grupousuario/editar",
+      data: viewModel,
+      method: "PUT"
+    });
+  }
+
+  Permissao(viewModel) {
+    return Vue.prototype.$http({
+      url: "grupousuario/permissao",
       data: viewModel,
       method: "PUT"
     });
