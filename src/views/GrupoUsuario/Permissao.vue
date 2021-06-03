@@ -18,11 +18,7 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6">
-                  <b-table
-                    striped
-                    responsive
-                    :items="viewModel.permissoes"
-                  >
+                  <b-table striped responsive :items="viewModel.permissoes">
                     <template v-slot:cell(valor)="data">
                       <div class="center">
                         <span> {{ FormatarNome(data.item.valor) }} </span>
@@ -43,11 +39,11 @@
               </div>
             </div>
             <div class="btn-toolbar mb-3 ml-3" role="toolbar">
-              <!-- <div class="btn-group" role="group">
+              <div class="btn-group" role="group">
                 <button class="btn btn-success mr-2" type="submit">
                   Salvar
                 </button>
-              </div> -->
+              </div>
               <div class="btn-group" role="group">
                 <button
                   class="btn btn-secondary"
@@ -90,8 +86,33 @@ export default {
     if (grupo) this.Obter(grupo);
   },
   methods: {
-    FormatarNome() {
-      
+    ValidarForm(evt) {
+      evt.preventDefault();
+      this.Salvar();
+    },
+    FormatarNome(nome) {
+      return nome.replaceAll(".", " / ");
+    },
+    Salvar() {
+      this.loading = true;
+      GrupoUsuarioServico.Permissao(this.viewModel)
+        .then((resposta) => {
+          this.loading = false;
+          this.$notify({
+            data: ["Permissão atualizada com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+          this.$router.go(-1);
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     },
     Obter(grupoId) {
       this.loading = true;

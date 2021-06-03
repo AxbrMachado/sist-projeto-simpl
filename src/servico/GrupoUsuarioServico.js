@@ -47,6 +47,14 @@ class GrupoUsuarioServico {
       method: "PUT"
     });
   }
+
+  Permissao(viewModel) {
+    return Vue.prototype.$http({
+      url: "grupousuario/permissao",
+      data: viewModel,
+      method: "PUT"
+    });
+  }
 }
 
 export default new GrupoUsuarioServico();
