@@ -97,13 +97,12 @@
                   v-if="isPessoaJuridica()"
                 >
                   <div class="form-group">
-                    <label for>* Razão Social</label>
+                    <label for>Razão Social</label>
                     <input
                       v-model="viewModel.nomeCompleto"
                       class="form-control"
                       type="text"
                       placeholder="Digite a razão social"
-                      required
                     />
                   </div>
                 </div>
@@ -381,6 +380,9 @@ export default {
       })
         .then((resposta) => {
           this.viewModel.id = resposta.data.id;
+          if (!this.viewModel.nomeCompleto)
+            this.viewModel.nomeCompleto = this.viewModel.nome;
+
           this.loadingPessoa = false;
           this.$notify({
             data: ["Pessoa cadastrado com sucesso."],
