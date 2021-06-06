@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
                   <div class="form-group">
                     <label for>* Número</label>
                     <input
@@ -50,7 +50,7 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
                   <div class="form-group">
                     <label for>* Instituição</label>
                     <b-form-select
@@ -60,7 +60,7 @@
                     ></b-form-select>
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>* Tipo Instituição</label>
                     <b-form-select
@@ -70,7 +70,9 @@
                     ></b-form-select>
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>* Valor</label>
                     <currency-input
@@ -81,7 +83,7 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>* Data Licitação</label>
                     <input
@@ -93,7 +95,7 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>* Data de Vencimento</label>
                     <input
@@ -105,27 +107,37 @@
                     />
                   </div>
                 </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
+                    <label for>* Status</label>
+                    <b-form-select
+                      v-model="viewModel.status"
+                      :options="statusOptions"
+                      required
+                    ></b-form-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
-                    <label for>* Local</label>
+                    <label for> Local</label>
                     <input
                       v-model="viewModel.local"
                       class="form-control"
                       type="text"
                       placeholder="Digite o local"
-                      required
                     />
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
-                    <label for>* Regimento</label>
+                    <label for> Regimento</label>
                     <input
                       v-model="viewModel.regimento"
                       class="form-control"
                       type="text"
                       placeholder="Digite o regimento"
-                      required
                     />
                   </div>
                 </div>
@@ -166,6 +178,7 @@ import DateTime from "../../util/DateTime";
 import LicitacaoContrato from "./LicitacaoContrato";
 import Contato from "../../components/Contato";
 import NovoDocumento from "./NovoDocumento";
+import StatusLicitacaoEnum from "../../enums/StatusLicitacaoEnum";
 
 export default {
   name: "NovoLicitacao",
@@ -174,13 +187,20 @@ export default {
     TipoPessoaEnum,
     LicitacaoContrato,
     Contato,
-    NovoDocumento
+    NovoDocumento,
+    StatusLicitacaoEnum
   },
   data() {
     return {
       loading: false,
       tiposInstituicaoOptions: [],
       instituicaoOptions: [],
+      statusOptions: [
+        { value: StatusLicitacaoEnum.Pendente, text: "Pendente" },
+        { value: StatusLicitacaoEnum.Aprovada, text: "Aprovada" },
+        { value: StatusLicitacaoEnum.Reprovada, text: "Reprovada" },
+        { value: StatusLicitacaoEnum.Cancelada, text: "Cancelada" }
+      ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
         pessoaId: "",
@@ -188,6 +208,7 @@ export default {
         valor: 0,
         local: "",
         regimento: "",
+        status: 0,
         numero: "",
         dataLicitacao: "",
         dataVencimento: "",
@@ -325,6 +346,7 @@ export default {
       this.viewModel.valor = 0;
       this.viewModel.local = "";
       this.viewModel.regimento = "";
+      this.viewModel.status = 0;
       this.viewModel.numero = "";
       this.viewModel.dataLicitacao = "";
       this.viewModel.dataVencimento = "";
