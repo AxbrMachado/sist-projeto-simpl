@@ -153,6 +153,7 @@
     </form>
     <div v-if="IsEdicao()">
       <LicitacaoContrato :licitacaoId="viewModel.id"> </LicitacaoContrato>
+      <NovoDocumento :licitacaoId="viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="viewModel.id" />
     </div>
   </div>
@@ -164,6 +165,7 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import DateTime from "../../util/DateTime";
 import LicitacaoContrato from "./LicitacaoContrato";
 import Contato from "../../components/Contato";
+import NovoDocumento from "./NovoDocumento";
 
 export default {
   name: "NovoLicitacao",
@@ -171,7 +173,8 @@ export default {
     RotateSquare,
     TipoPessoaEnum,
     LicitacaoContrato,
-    Contato
+    Contato,
+    NovoDocumento
   },
   data() {
     return {
