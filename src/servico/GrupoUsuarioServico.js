@@ -14,6 +14,13 @@ class GrupoUsuarioServico {
     });
   }
 
+  ObterSelect() {
+    return Vue.prototype.$http({
+      url: "grupousuario/obter-select",
+      method: "GET"
+    });
+  }
+
   ObterGrid(pagina, itensPorPagina) {
     return Vue.prototype.$http({
       url:

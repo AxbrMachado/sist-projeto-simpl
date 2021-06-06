@@ -60,25 +60,6 @@
                     />
                   </div>
                 </div>
-                <!-- <div
-                  class="col-sm-12 col-md-4 col-lg-4 col-xl-4"
-                  title="Perfil de acesso do usuário ao sistema."
-                >
-                  <div class="form-group">
-                    <label for>* Perfil</label>
-                    <select
-                      v-model="viewModel.perfil"
-                      class="form-control"
-                      required
-                    >
-                      <option disabled selected value>
-                        Selecione...
-                      </option>
-                      <option value="2">Administrador</option>
-                      <option value="3">Comum</option>
-                    </select>
-                  </div>
-                </div> -->
                 <div
                   class="col-sm-6 col-md-2 col-lg-2 col-xl-1"
                   title="Informa se o usuário está ativo para utilizar o sistema."
@@ -91,6 +72,18 @@
                   >
                     Sim
                   </b-form-checkbox>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label for="">Grupo</label>
+                    <b-form-select
+                      v-model="viewModel.grupoId"
+                      :options="grupos"
+                      required
+                    ></b-form-select>
+                  </div>
                 </div>
               </div>
               <!-- <div class="row">
@@ -125,7 +118,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/usuario')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>
@@ -140,6 +133,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import GrupoUsuarioServico from "../../servico/GrupoUsuarioServico";
 
 export default {
   name: "NovoUsuario",
@@ -150,16 +144,19 @@ export default {
     return {
       loading: false,
       contaOptions: [],
+      grupos: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
         ativo: true,
         email: "",
         nome: "",
-        senha: ""
+        senha: "",
+        grupoId: ""
       }
     };
   },
   created() {
+    this.ObterGrupos();
     let usuarioId = this.$route.params.id;
     if (usuarioId) this.Obter(usuarioId);
   },
@@ -168,6 +165,20 @@ export default {
       evt.preventDefault();
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
+    },
+    ObterGrupos() {
+      GrupoUsuarioServico.ObterSelect()
+        .then((resposta) => {
+          this.grupos = resposta.data;
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     },
     Obter(usuarioId) {
       this.loading = true;
