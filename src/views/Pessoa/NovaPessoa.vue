@@ -44,6 +44,7 @@
                     <b-form-select
                       v-model="viewModel.tipoPessoa"
                       :options="tiposPessoas"
+                      required
                     ></b-form-select>
                   </div>
                 </div>
@@ -57,6 +58,21 @@
                     <b-form-select
                       v-model="viewModel.tipoFornecedor"
                       :options="tiposFornecedor"
+                      required
+                    ></b-form-select>
+                  </div>
+                </div>
+
+                <div
+                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
+                  v-if="isCliente()"
+                >
+                  <div class="form-group">
+                    <label for>* Tipo Cliente</label>
+                    <b-form-select
+                      v-model="viewModel.tipoClienteId"
+                      :options="tiposCliente"
+                      required
                     ></b-form-select>
                   </div>
                 </div>
@@ -257,6 +273,7 @@ export default {
   data() {
     return {
       loadingPessoa: false,
+      tiposCliente: [],
       tiposEstadoCivil: [
         { value: TipoEstadoCivilEnum.Solteiro, text: "Solteiro" },
         { value: TipoEstadoCivilEnum.Casado, text: "Casado" },
@@ -292,13 +309,15 @@ export default {
         codigo: "",
         dataEntrada: null,
         nomeMae: "",
-        nomePai: ""
+        nomePai: "",
+        tipoClienteId: ""
       }
     };
   },
   created() {
     let id = this.$route.params.id;
     if (id) this.Obter(id);
+    this.ObterTiposClienteSelect();
   },
   methods: {
     isPessoaJuridica() {
@@ -310,6 +329,9 @@ export default {
     },
     isFuncionario() {
       return this.viewModel.tipoPessoa == TipoPessoaEnum.Funcionario;
+    },
+    isCliente() {
+      return this.viewModel.tipoPessoa == TipoPessoaEnum.Cliente;
     },
     isFornecedor() {
       return this.viewModel.tipoPessoa == TipoPessoaEnum.Fornecedor;
@@ -418,6 +440,23 @@ export default {
       this.viewModel.dataEntrada = null;
       this.viewModel.nomeMae = "";
       this.viewModel.nomePai = "";
+      this.viewModel.tipoClienteId = "";
+    },
+    ObterTiposClienteSelect() {
+      this.$http({
+        url: "/tipoCliente/obter-select",
+        method: "GET"
+      })
+        .then((response) => {
+          this.tiposCliente = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };

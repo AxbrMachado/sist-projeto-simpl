@@ -100,7 +100,8 @@
                 <div class="center">
                   <span>{{
                     ObterTipoPessoa(data.item.tipoPessoa) +
-                    ObterNomeTipoFornecedor(data.item.tipoFornecedor)
+                    ObterNomeTipoFornecedor(data.item.tipoFornecedor) +
+                    (data.item.tipoCliente ? ("/" + data.item.tipoCliente) : "")
                   }}</span>
                 </div>
               </template>
