@@ -75,6 +75,13 @@ const Menu = {
     icon: "cil-description"
   },
 
+  TipoCliente: {
+    _name: "CSidebarNavItem",
+    name: "Tipo Cliente",
+    to: "/tipo-cliente",
+    icon: "cil-description"
+  },
+
   TipoUnidadeMedida: {
     _name: "CSidebarNavItem",
     name: "Tipo Unidade Medida",

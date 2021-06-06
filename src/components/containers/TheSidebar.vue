@@ -70,6 +70,7 @@ export default {
       menu[0]._children.push(Nav.TipoDocumento);
       menu[0]._children.push(Nav.TipoEndereco);
       menu[0]._children.push(Nav.TipoProduto);
+      menu[0]._children.push(Nav.TipoCliente);
       menu[0]._children.push(Nav.TipoUnidadeMedida);
       menu[0]._children.push(Nav.TipoInstituicao);
       menu[0]._children.push(Nav.UnidadeMedida);

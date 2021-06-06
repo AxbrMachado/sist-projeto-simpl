@@ -26,6 +26,8 @@ const TipoEndereco = () => import("@/views/TipoEndereco/TipoEndereco");
 const NovoTipoEndereco = () => import("@/views/TipoEndereco/NovoTipoEndereco");
 const TipoProduto = () => import("@/views/TipoProduto/TipoProduto");
 const NovoTipoProduto = () => import("@/views/TipoProduto/NovoTipoProduto");
+const TipoCliente = () => import("@/views/TipoCliente/TipoCliente");
+const NovoTipoCliente = () => import("@/views/TipoCliente/NovoTipoCliente");
 const TipoUnidadeMedida = () =>
   import("@/views/TipoUnidadeMedida/TipoUnidadeMedida");
 const NovoTipoUnidadeMedida = () =>
@@ -548,6 +550,46 @@ export default new Router({
             }
           ]
         },
+
+
+          //Cadastro de tipo cliente
+          {
+            path: "tipo-cliente",
+            name: "TipoCliente",
+            meta: {
+              requiresAuth: true
+            },
+            component: {
+              render(c) {
+                return c("router-view");
+              }
+            },
+            children: [
+              {
+                path: "",
+                component: TipoCliente,
+                meta: {
+                  requiresAuth: true
+                }
+              },
+              {
+                path: "editar/:id",
+                name: "Editar",
+                component: NovoTipoCliente,
+                meta: {
+                  requiresAuth: true
+                }
+              },
+              {
+                path: "novo",
+                name: "Novo",
+                component: NovoTipoCliente,
+                meta: {
+                  requiresAuth: true
+                }
+              }
+            ]
+          },
 
         //Cadastro de tipo unidade medida
         {
