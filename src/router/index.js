@@ -43,6 +43,7 @@ const NovoFornecedor = () => import("@/views/Fornecedor/NovoFornecedor");
 
 const NovoGrupoUsuario = () => import("@/views/GrupoUsuario/NovoGrupoUsuario");
 const GrupoUsuario = () => import("@/views/GrupoUsuario/GrupoUsuario");
+const Permissao = () => import("@/views/GrupoUsuario/Permissao");
 
 Vue.use(Router);
 
@@ -650,6 +651,14 @@ export default new Router({
               path: "editar/:id",
               name: "Editar",
               component: NovoGrupoUsuario,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "permissao/:id",
+              name: "Permissão",
+              component: Permissao,
               meta: {
                 requiresAuth: true
               }
