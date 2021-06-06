@@ -438,8 +438,12 @@ export default {
       this.viewModel.arquivos = [];
     },
     FormatarData(validade) {
-      var dataValidade = new Date(validade);
-      return dataValidade.toLocaleDateString();
+      if (validade) {
+        var dataValidade = new Date(validade);
+        return dataValidade.toLocaleDateString();
+      } else {
+        return "";
+      }
     }
   }
 };
