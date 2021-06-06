@@ -309,7 +309,7 @@ export default {
         dataEntrada: null,
         nomeMae: "",
         nomePai: "",
-        tipoClienteId: ""
+        tipoClienteId: this.$store.getters.emptyGuid
       }
     };
   },
@@ -442,7 +442,7 @@ export default {
       this.viewModel.dataEntrada = null;
       this.viewModel.nomeMae = "";
       this.viewModel.nomePai = "";
-      this.viewModel.tipoClienteId = "";
+      this.viewModel.tipoClienteId = this.$store.getters.emptyGuid;
     },
     ObterTiposClienteSelect() {
       this.$http({
