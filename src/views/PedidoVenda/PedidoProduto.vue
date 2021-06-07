@@ -12,7 +12,7 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Documento(s)</strong>
+                <strong class="align-self-center">Produtos(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
 
                 <i
@@ -26,7 +26,7 @@
             </header>
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col">
                     <div class="form-group">
                       <small
@@ -38,61 +38,44 @@
                 <div class="row">
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
-                      <label for="">* Nome</label>
-                      <input
+                      <label for>* Produto</label>
+                      <v-select
+                        placeholder="Digite um produto.."
+                        v-model="viewModel.produto"
+                        :options="produtoOptions"
+                        required
+                        @search="ObterProdutosVSelect"
+                      >
+                        <template slot="no-options">
+                          Nenhum resultado para a busca.
+                        </template>
+                      </v-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                      <label for>* Valor</label>
+                      <currency-input
+                        v-model="viewModel.valor"
                         class="form-control"
-                        type="text"
-                        v-model="viewModel.numero"
+                        placeholder="Digite o valor"
                         required
                       />
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
-                      <label for="">Validade</label>
-                      <input
+                      <label for>* Quantidade</label>
+                      <vue-numeric
+                        v-bind:precision="3"
+                        v-bind:minus="false"
+                        thousand-separator="."
+                        decimal-separator=","
+                        v-model="viewModel.quantidade"
                         class="form-control"
-                        type="date"
-                        v-model="viewModel.validade"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Tipo</label>
-                      <b-form-select
-                        v-model="viewModel.tipoDocumentoId"
-                        :options="tipos"
+                        placeholder="Digite a quantidade"
                         required
-                      ></b-form-select>
-                    </div>
-                  </div>
-                </div>
-                <div v-if="IsNovo()" class="row">
-                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <div class="form-group">
-                      <label for>Arquivo </label> <small>Limite 20MB</small>
-                      <b-form-file
-                        v-model="arquivo"
-                        :state="Boolean(arquivo)"
-                        placeholder="Escolha o(s) arquivo(s)..."
-                        accept=".jpg, .png, .jpeg, .pdf, .doc, .docx, .xls, .xlsx"
-                        browse-text="Procurar"
-                        multiple
-                      ></b-form-file>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <div class="form-group">
-                      <label for>Observação</label>
-                      <b-form-textarea
-                        v-model="viewModel.observacao"
-                        rows="4"
-                        max-rows="12"
-                        placeholder="Observações gerais..."
-                      ></b-form-textarea>
+                      />
                     </div>
                   </div>
                 </div>
@@ -111,8 +94,7 @@
                       Voltar
                     </button>
                   </div>
-                </div>
-
+                </div> -->
                 <div class="row">
                   <div class="col-12">
                     <b-table
@@ -123,7 +105,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum documento encontrado."
+                      empty-text="Nenhum produto encontrado."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -131,12 +113,6 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
-                          <ModalArquivo
-                            :arquivos="data.item.arquivos"
-                            :urlDownload="'arquivo/obter/'"
-                            :urlRemover="'documentoanexo/remover/'"
-                            :vinculoId="data.item.id"
-                          />
                           <b-button
                             variant="warning"
                             style="margin-right: 10px"
@@ -154,16 +130,9 @@
                           </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(validade)="data">
-                        <div class="center">
-                          <span>{{ FormatarData(data.item.validade) }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(dataCadastro)="data">
-                        <div class="center">
-                          <span>{{
-                            FormatarData(data.item.dataCadastro)
-                          }}</span>
+                      <template v-slot:cell(valor)="data">
+                        <div class="left">
+                          <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
                     </b-table>
@@ -198,17 +167,12 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import DateTime from "../../util/DateTime";
-import DocumentoServico from "../../servico/DocumentoServico";
-import TipoDocumentoServico from "../../views/TipoDocumento/servico/TipoDocumentoServico";
-import ArquivoServico from "../../servico/ArquivoServico";
-import ModalArquivo from "../../components/ModalArquivo";
-import TipoDocumentoAnexoEnum from "../../enums/TipoDocumentoAnexoEnum";
+import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
 
 export default {
-  components: { RotateSquare, TipoDocumentoAnexoEnum, ModalArquivo },
+  components: { RotateSquare },
   props: {
-    contratoId: {
+    pedidoId: {
       type: String,
       default: ""
     }
@@ -217,41 +181,38 @@ export default {
     return {
       modalRemover: false,
       itemRemover: null,
-      tipos: [],
+      produtoOptions: [],
       loading: false,
-      loadingArquivo: false,
       pagina: 1,
       total: 0,
       itensPorPagina: 5,
       itens: [],
       abrir: false,
-      arquivo: null,
       fields: [
-        { key: "numero", label: "Nome", sortable: true },
-        { key: "tipoDocumento", label: "Tipo", sortable: true },
-        { key: "dataCadastro", label: "Cadastro", sortable: true },
-        { key: "validade", label: "Validade", sortable: true },
-        {
-          key: "acoes",
-          label: "Ações",
-          sortable: false,
-          thClass: "center, wd-120-px"
-        }
+        { key: "produto", label: "Produto", sortable: true },
+        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        { key: "valor", label: "Valor", sortable: true },
+        { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "disponivel", label: "Disponivel", sortable: true },
+        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true }
+        // {
+        //   key: "acoes",
+        //   label: "Ações",
+        //   sortable: false,
+        //   thClass: "center, wd-120-px"
+        // }
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        tipoDocumentoId: "",
-        numero: "",
-        observacao: "",
-        validade: null,
-        contratoId: "",
-        tipoDocumentoAnexo: TipoDocumentoAnexoEnum.Contrato,
-        arquivos: []
+        produtoId: "",
+        produto: {},
+        pedidoId: "",
+        valor: 0,
+        quantidade: 0
       }
     };
   },
   mounted() {
-    this.ObterTipoDocumento();
     this.ObterGrid(1);
   },
   watch: {
@@ -259,65 +220,37 @@ export default {
       this.ObterGrid(val);
     }
   },
+  created() {
+    //let pedidoId = this.$route.params.id;
+    //if (pedidoId) this.Obter(pedidoId);
+    // this.ObterProdutosSelect();
+  },
   methods: {
-    NovoArquivo() {
-      if (!this.arquivo) this.Novo();
-      else if (this.arquivo.size > 1024 * 1024 * 20) {
+    IsNovo() {
+      return this.pedidoId === this.$store.getters.emptyGuid;
+    },
+    ValidarForm(evt) {
+      evt.preventDefault();
+
+      if (!this.viewModel.produto || this.viewModel.produto.id == undefined) {
+        this.loading = false;
         this.$notify({
-          data: [
-            "O arquivo selecionado é maior que 20MB e não pode ser enviado."
-          ],
+          data: ["Informe um produto."],
           type: "warn",
           duration: 5000
         });
         return;
       }
-      this.loading = true;
-      ArquivoServico.Novo(this.arquivo)
-        .then((resposta) => {
-          this.loading = false;
-          this.viewModel.arquivos = resposta.data;
-          this.Novo();
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    ObterTipoDocumento() {
-      this.loading = true;
-      TipoDocumentoServico.ObterSelect()
-        .then((resposta) => {
-          this.loading = false;
-          this.tipos = resposta.data;
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    IsNovo() {
-      return this.viewModel.id === this.$store.getters.emptyGuid;
-    },
-    ValidarForm(evt) {
-      evt.preventDefault();
+
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.NovoArquivo();
+      else this.Novo();
     },
     Obter(id) {
       this.loading = true;
-      DocumentoServico.Obter(id)
+      PedidoProdutoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
-          resposta.data.validade = DateTime.formatar(resposta.data.validade);
+          //resposta.data.validade = DateTime.formatar(resposta.data.validade);
           this.viewModel = resposta.data;
         })
         .catch((erro) => {
@@ -331,12 +264,7 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      DocumentoServico.ObterGrid(
-        val,
-        this.itensPorPagina,
-        this.contratoId,
-        TipoDocumentoAnexoEnum.Contrato
-      )
+      PedidoProdutoServico.ObterGrid(val, this.itensPorPagina, this.pedidoId)
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -361,11 +289,11 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      DocumentoServico.Remover(this.itemRemover)
+      PedidoProdutoServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Documento removido com sucesso."],
+            data: ["Produto removido com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -384,14 +312,15 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.viewModel.contratoId = this.contratoId;
-      DocumentoServico.Novo(this.viewModel)
+      this.viewModel.pedidoId = this.pedidoId;
+      this.viewModel.produtoId = this.viewModel.produto.id;
+      PedidoProdutoServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Documento cadastrado com sucesso."],
+            data: ["Produto cadastrado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -407,14 +336,15 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.viewModel.contratoId = this.contratoId;
-      DocumentoServico.Editar(this.viewModel)
+      this.viewModel.pedidoId = this.pedidoId;
+      this.viewModel.produtoId = this.viewModel.produto.id;
+      PedidoProdutoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Documento editado com sucesso."],
+            data: ["Produto editado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -430,20 +360,62 @@ export default {
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
-      this.viewModel.tipoDocumentoId = "";
-      this.viewModel.numero = "";
-      this.viewModel.observacao = "";
-      this.viewModel.validade = null;
-      this.viewModel.contratoId = "";
-      this.viewModel.arquivos = [];
+      this.viewModel.produtoId = "";
+      this.viewModel.pedidoId = "";
+      this.viewModel.valor = 0;
+      this.viewModel.quantidade = 0;
+      this.viewModel.produto = {};
     },
-    FormatarData(validade) {
-      if (validade) {
-        var dataValidade = new Date(validade);
-        return dataValidade.toLocaleDateString();
+    FormataValor(valor) {
+      if (valor != null) {
+        return valor.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       } else {
-        return "";
+        return valor;
       }
+    },
+    RemoverCifrao(valor) {
+      if (valor != null) {
+        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+      } else {
+        return valor;
+      }
+    },
+    // ObterProdutosSelect() {
+    //   this.$http({
+    //     url: "/produto/obter-select",
+    //     method: "GET"
+    //   })
+    //     .then((response) => {
+    //       this.produtoOptions = response.data;
+    //     })
+    //     .catch((erro) => {
+    //       this.$notify({
+    //         data: erro.response.data.erros,
+    //         type: "warn",
+    //         duration: 5000
+    //       });
+    //     });
+    // },
+    ObterProdutosVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url: "/produto/obter-v-select/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.produtoOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };

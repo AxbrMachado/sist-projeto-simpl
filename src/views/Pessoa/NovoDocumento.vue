@@ -38,7 +38,7 @@
                 <div class="row">
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
-                      <label for="">* Número</label>
+                      <label for="">* Nome</label>
                       <input
                         class="form-control"
                         type="text"
@@ -227,7 +227,7 @@ export default {
       abrir: false,
       arquivo: null,
       fields: [
-        { key: "numero", label: "Número", sortable: true },
+        { key: "numero", label: "Nome", sortable: true },
         { key: "tipoDocumento", label: "Tipo", sortable: true },
         { key: "dataCadastro", label: "Cadastro", sortable: true },
         { key: "validade", label: "Validade", sortable: true },
@@ -438,8 +438,12 @@ export default {
       this.viewModel.arquivos = [];
     },
     FormatarData(validade) {
-      var dataValidade = new Date(validade);
-      return dataValidade.toLocaleDateString();
+      if (validade) {
+        var dataValidade = new Date(validade);
+        return dataValidade.toLocaleDateString();
+      } else {
+        return "";
+      }
     }
   }
 };
