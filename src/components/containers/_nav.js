@@ -17,7 +17,7 @@ const Menu = {
   PedidoVenda: {
     _name: "CSidebarNavItem",
     name: "Pedido Venda",
-    to: "/pedido-venda",
+    to: "/pedidovenda",
     icon: "cil-list"
   },
   Contrato: {
@@ -72,6 +72,13 @@ const Menu = {
     _name: "CSidebarNavItem",
     name: "Tipo Produto",
     to: "/tipo-produto",
+    icon: "cil-description"
+  },
+
+  TipoCliente: {
+    _name: "CSidebarNavItem",
+    name: "Tipo Cliente",
+    to: "/tipo-cliente",
     icon: "cil-description"
   },
 

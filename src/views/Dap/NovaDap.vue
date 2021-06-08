@@ -113,6 +113,7 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
+      <NovoDocumento :dapId="viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
   </div>
@@ -126,6 +127,7 @@ import DateTime from "../../util/DateTime";
 import DapServico from "../../servico/DapServico";
 import DapContrato from "./DapContrato";
 import Contato from "../../components/Contato";
+import NovoDocumento from "./NovoDocumento";
 
 export default {
   name: "NovoDap",
@@ -133,7 +135,8 @@ export default {
     RotateSquare,
     DapContrato,
     TipoPessoaEnum,
-    Contato
+    Contato,
+    NovoDocumento
   },
   data() {
     return {

@@ -70,6 +70,15 @@
                   />
                 </div>
               </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>Status</label>
+                  <b-form-select
+                    v-model="filtro.Status"
+                    :options="statusOptions"
+                  ></b-form-select>
+                </div>
+              </div>
               <div
                 class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
                 title="Apenas licitações vencidas."
@@ -132,13 +141,6 @@
                   </b-button>
                 </div>
               </template>
-              <template v-slot:cell(tipoEnquadramento)="data">
-                <div class="center">
-                  <span>{{
-                    ObterNomeEnquadramento(data.item.tipoEnquadramento)
-                  }}</span>
-                </div>
-              </template>
               <template v-slot:cell(valor)="data">
                 <div class="left">
                   <span>{{ FormataValor(data.item.valor) }}</span>
@@ -147,6 +149,11 @@
               <template v-slot:cell(dataVencimento)="data">
                 <div class="center">
                   <span>{{ formatarData(data.item.dataVencimento) }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(status)="data">
+                <div class="center">
+                  <span>{{ ObterNomeStatus(data.item.status) }}</span>
                 </div>
               </template>
             </b-table>
@@ -179,6 +186,7 @@ import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import LicitacaoServico from "../../servico/LicitacaoServico";
+import StatusLicitacaoEnum from "../../enums/StatusLicitacaoEnum";
 
 export default {
   name: "Licitacao",
@@ -196,11 +204,19 @@ export default {
       itensPorPagina: 0,
       tiposInstituicaoOptions: [],
       instituicaoOptions: [],
+      statusOptions: [
+        { value: StatusLicitacaoEnum.Pendente, text: "Pendente" },
+        { value: StatusLicitacaoEnum.Aprovada, text: "Aprovada" },
+        { value: StatusLicitacaoEnum.Reprovada, text: "Reprovada" },
+        { value: StatusLicitacaoEnum.Cancelada, text: "Cancelada" }
+      ],
+
       filtro: {
         Numero: "",
         TipoInstituicao: "",
         Instituicao: "",
         DataVencimento: "",
+        Status: 0,
         LicitacaoVencida: false
       },
       fields: [
@@ -210,6 +226,7 @@ export default {
         { key: "dataVencimento", label: "Data Vencimento", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "valorEntregue", label: "Valor Entregue", sortable: true },
+        { key: "status", label: "Status", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -234,6 +251,7 @@ export default {
       this.filtro.TipoInstituicao = "";
       this.filtro.Instituicao = "";
       this.filtro.DataVencimento = "";
+      this.filtro.Status = 0;
       this.filtro.LicitacaoVencida = false;
 
       this.ObterGrid(1);
@@ -304,6 +322,10 @@ export default {
         var filtros = filtros + "&PessoaId=" + this.filtro.Instituicao.id;
       }
 
+      if (this.filtro.Status) {
+        var filtros = filtros + "&Status=" + this.filtro.Status;
+      }
+
       if (this.filtro.TipoInstituicao != 0) {
         var filtros =
           filtros + "&TipoInstituicaoId=" + this.filtro.TipoInstituicao;
@@ -315,22 +337,6 @@ export default {
 
       return filtros;
     },
-
-    ObterNomeEnquadramento(item) {
-      switch (item) {
-        case TipoEnquadramentoEnum.Grupo_A:
-          return "A";
-        case TipoEnquadramentoEnum.Grupo_B:
-          return "B";
-        case TipoEnquadramentoEnum.Grupo_AC:
-          return "AC";
-        case TipoEnquadramentoEnum.Grupo_V:
-          return "V";
-        default:
-          return "Inválido";
-      }
-    },
-
     formatarData(validade) {
       var dataValidade = new Date(validade);
       return dataValidade.toLocaleDateString();
@@ -375,6 +381,20 @@ export default {
             duration: 5000
           });
         });
+    },
+    ObterNomeStatus(item) {
+      switch (item) {
+        case StatusLicitacaoEnum.Pendente:
+          return "Pendente";
+        case StatusLicitacaoEnum.Aprovada:
+          return "Aprovada";
+        case StatusLicitacaoEnum.Reprovada:
+          return "Reprovada";
+        case StatusLicitacaoEnum.Cancelado:
+          return "Cancelada";
+        default:
+          return "Inválido";
+      }
     }
   }
 };

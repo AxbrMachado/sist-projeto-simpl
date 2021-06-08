@@ -5,11 +5,11 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Pessoas</strong>
+              <strong class="align-self-center">Tipo Cliente</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/pessoa/novo"
-                title="Adicionar nova pessoa"
+                href="/#/tipo-cliente/novo"
+                title="Adicionar novo tipo de cliente"
               >
                 Adicionar
               </a>
@@ -23,38 +23,14 @@
           </div>
           <div v-else class="card-body">
             <div class="row">
-              <div class="col-lg-3 col-md-6 col-sm-12">
+              <div class="col-lg-5 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Nome</label>
+                  <label>Descrição</label>
                   <input
                     type="text"
-                    v-model="filtro.Nome"
+                    v-model="filtro.descricao"
                     class="form-control"
                   />
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-6 col-sm-12">
-                <div class="form-group">
-                  <label for>Cidade</label>
-                  <v-select
-                    placeholder="Digite uma cidade.."
-                    v-model="filtro.Cidade"
-                    :options="cidadeOptions"
-                    @search="ObterCidadesVSelect"
-                  >
-                    <template slot="no-options">
-                      Nenhum resultado para a busca.
-                    </template>
-                  </v-select>
-                </div>
-              </div>
-              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
-                <div class="form-group">
-                  <label for>Tipo</label>
-                  <b-form-select
-                    v-model="filtro.TipoPessoa"
-                    :options="tipoOptions"
-                  ></b-form-select>
                 </div>
               </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
@@ -83,27 +59,10 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhuma pessoa encontrada."
+              empty-text="Nenhum tipo de cliente encontrado."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
-              </template>
-              <template v-slot:cell(ativo)="data">
-                <div class="center">
-                  <span v-if="data.item.ativo" class="badge badge-success">
-                    Sim
-                  </span>
-                  <span v-else class="badge badge-secondary">Não</span>
-                </div>
-              </template>
-              <template v-slot:cell(tipoPessoa)="data">
-                <div class="center">
-                  <span>{{
-                    ObterTipoPessoa(data.item.tipoPessoa) +
-                    ObterNomeTipoFornecedor(data.item.tipoFornecedor) +
-                    (data.item.tipoCliente ? "/" + data.item.tipoCliente : "")
-                  }}</span>
-                </div>
               </template>
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
@@ -151,11 +110,9 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
-import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 
 export default {
-  name: "Pessoa",
+  name: "TipoCliente",
   components: {
     RotateSquare
   },
@@ -168,23 +125,9 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 0,
-      tipoOptions: [
-        { value: TipoPessoaEnum.Funcionario, text: "Funcionário" },
-        { value: TipoPessoaEnum.Fornecedor, text: "Fornecedor" },
-        { value: TipoPessoaEnum.Cliente, text: "Cliente" },
-        { value: TipoPessoaEnum.Instituicao, text: "Instituicao" }
-      ],
-      cidadeOptions: [],
-      filtro: {
-        Nome: "",
-        Cidade: "",
-        TipoPessoa: 0
-      },
+      filtro: { descricao: "" },
       fields: [
-        { key: "nome", label: "Nome", sortable: true },
-        { key: "cidade", label: "Cidade", sortable: true },
-        { key: "tipoPessoa", label: "Tipo", sortable: true },
-        { key: "observacao", label: "Observação", sortable: true },
+        { key: "descricao", label: "Nome", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -204,14 +147,11 @@ export default {
   },
   methods: {
     Limpar() {
-      this.filtro.Nome = "";
-      this.filtro.Cidade = "";
-      this.filtro.TipoPessoa = 0;
-
+      this.filtro.descricao = "";
       this.ObterGrid(1);
     },
-    Editar(pessoa) {
-      this.$router.push("/pessoa/editar/" + pessoa.id);
+    Editar(tipoCliente) {
+      this.$router.push("/tipo-cliente/editar/" + tipoCliente.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -223,13 +163,13 @@ export default {
       if (!this.itemRemover) return;
 
       this.$http({
-        url: "pessoa/remover/" + this.itemRemover.id,
+        url: "tipoCliente/remover/" + this.itemRemover.id,
         method: "DELETE"
       })
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Pessoa removida com sucesso."],
+            data: ["Tipo de cliente removida com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -249,7 +189,11 @@ export default {
     ObterGrid(pagina) {
       this.loading = true;
       this.$http({
-        url: "/pessoa/obter-grid?pagina=" + pagina + this.MontaFiltro(),
+        url:
+          "/tipoCliente/obter-grid?pagina=" +
+          pagina +
+          "&descricao=" +
+          this.filtro.descricao,
         method: "GET"
       })
         .then((response) => {
@@ -261,62 +205,6 @@ export default {
         })
         .catch((erro) => {
           this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Nome=" + this.filtro.Nome;
-
-      if (this.filtro.Cidade) {
-        var filtros = filtros + "&Cidade=" + this.filtro.Cidade.label;
-      }
-
-      if (this.filtro.TipoPessoa != 0) {
-        var filtros = filtros + "&TipoPessoa=" + this.filtro.TipoPessoa;
-      }
-
-      return filtros;
-    },
-    ObterTipoPessoa(item) {
-      switch (item) {
-        case TipoPessoaEnum.Funcionario:
-          return "Funcionário";
-        case TipoPessoaEnum.Fornecedor:
-          return "Fornecedor";
-        case TipoPessoaEnum.Cliente:
-          return "Cliente";
-        case TipoPessoaEnum.Instituicao:
-          return "Instituição";
-        default:
-          return "Inválido";
-      }
-    },
-    ObterNomeTipoFornecedor(item) {
-      switch (item) {
-        case TipoFornecedorEnum.Avulso:
-          return "/Avulso";
-        case TipoFornecedorEnum.Cooperado:
-          return "/Cooperado";
-        default:
-          return "";
-      }
-    },
-    ObterCidadesVSelect(busca) {
-      if (!busca || busca.length <= 2) return;
-
-      this.$http({
-        url: "/pessoaendereco/obter-v-select/" + busca,
-        method: "GET"
-      })
-        .then((response) => {
-          this.cidadeOptions = response.data;
-        })
-        .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
