@@ -145,11 +145,11 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
-import Contato from "../../components/Contato";
 import NovoDocumento from "./NovoDocumento";
 import PedidoCliente from "./PedidoCliente";
 import PedidoProduto from "./PedidoProduto";
 import PedidoFornecedor from "./PedidoFornecedor";
+import Contato from "../../components/Contato";
 
 export default {
   name: "NovoPedidoVenda",
@@ -177,6 +177,12 @@ export default {
         dataTermino: ""
       }
     };
+  },
+  watch: {
+    contratoOptions: function (val) {
+      console.log("teste");
+      //this.LoadContratoLicitacao(val);
+    }
   },
   created() {
     let pedidoId = this.$route.params.id;
@@ -317,6 +323,9 @@ export default {
       this.viewModel.valor = 0;
 
       this.ObterContratosSelect();
+    },
+    LoadContratoLicitacao(val) {
+      console.log(val);
     }
   }
 };

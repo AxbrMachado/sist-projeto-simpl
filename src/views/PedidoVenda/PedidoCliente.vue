@@ -26,61 +26,6 @@
             </header>
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
-                <!-- <div class="row">
-                  <div class="col">
-                    <div class="form-group">
-                      <small
-                        >Campos com * são de preenchimento obrigatório</small
-                      >
-                    </div>
-                  </div>
-                </div> -->
-                <!-- <div class="row">
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Cliente</label>
-                      <v-select
-                        placeholder="Digite um cliente.."
-                        v-model="viewModel.pessoa"
-                        :options="clienteOptions"
-                        required
-                        @search="ObterClientesVSelect"
-                      >
-                        <template slot="no-options">
-                          Nenhum resultado para a busca.
-                        </template>
-                      </v-select>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                    <div class="form-group">
-                      <label for>* Rota</label>
-                      <input
-                        v-model="viewModel.rota"
-                        class="form-control"
-                        type="text"
-                        placeholder="Digite a descrição"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div> -->
-                <!-- <div class="btn-toolbar mb-3" role="toolbar">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-success mr-2" type="submit">
-                      Salvar
-                    </button>
-                  </div>
-                  <div class="btn-group" role="group">
-                    <button
-                      class="btn btn-secondary"
-                      type="reset"
-                      @click="abrir = !abrir"
-                    >
-                      Voltar
-                    </button>
-                  </div>
-                </div> -->
                 <div class="row">
                   <div class="col-12">
                     <b-table
@@ -103,17 +48,10 @@
                             variant="warning"
                             style="margin-right: 10px"
                             title="Editar"
-                            @click="Obter(data.item.id)"
+                            @click="Teste(data.item.id)"
                           >
                             <i class="fa fa-edit text-black"></i>
                           </b-button>
-                          <!-- <b-button
-                            variant="danger"
-                            title="Remover"
-                            @click="Remover(data.item.id)"
-                          >
-                            <i class="fas fa-trash-alt text-black"></i>
-                          </b-button> -->
                         </div>
                       </template>
                       <template v-slot:cell(tipoPessoa)="data">
@@ -150,6 +88,9 @@
     >
       Você confirma a exclusão desse registro?
     </b-modal>
+    <div v-if="EditarProdutoCliente()">
+      <Contato :referenciaId="this.viewModel.id"> </Contato>
+    </div>
   </div>
 </template>
 
@@ -158,13 +99,15 @@ import RotateSquare from "../../components/RotateSquare";
 import PedidoCliente from "../../servico/PedidoClienteServico";
 import TipoPessoaPedidoEnum from "../../enums/TipoPessoaEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import Contato from "../../components/Contato";
 
 export default {
   components: {
     RotateSquare,
     PedidoCliente,
     TipoPessoaPedidoEnum,
-    TipoPessoaEnum
+    TipoPessoaEnum,
+    Contato
   },
   props: {
     pedidoId: {
@@ -183,6 +126,7 @@ export default {
       itensPorPagina: 5,
       itens: [],
       abrir: false,
+      editarProduto: false,
       fields: [
         { key: "pessoa", label: "Cliente", sortable: true },
         { key: "tipoPessoa", label: "Tipo Pessoa", sortable: true },
@@ -436,6 +380,13 @@ export default {
             duration: 5000
           });
         });
+    },
+    EditarProdutoCliente() {
+      return this.editarProduto;
+    },
+    Teste(value) {
+      console.log(value);
+      this.editarProduto = !this.editarProduto;
     }
   }
 };
