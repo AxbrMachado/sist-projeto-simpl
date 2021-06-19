@@ -10,21 +10,15 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="abrir = !abrir">
+            <header class="card-header" @click="true">
               <div class="d-flex">
-                <strong class="align-self-center">Cliente(s)</strong>
-                <small class="ml-2 mt-1">Clique para abrir/esconder</small>
-
-                <i
-                  :class="
-                    abrir
-                      ? 'ml-auto mt-1 fas fa-chevron-up'
-                      : 'ml-auto mt-1 fas fa-chevron-down'
-                  "
-                ></i>
+                <strong class="align-self-center"
+                  >Produtos {NOME CLIENTE}</strong
+                >
+                <i :class="'ml-auto mt-1 fas fa-chevron-up'"></i>
               </div>
             </header>
-            <div :class="abrir ? 'collapse-show' : 'collapse'">
+            <div :class="'collapse-show'">
               <div class="card-body">
                 <div class="row">
                   <div class="col-12">
@@ -36,7 +30,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum cliente encontrado."
+                      empty-text="Nenhum produto encontrado."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -48,17 +42,22 @@
                             variant="warning"
                             style="margin-right: 10px"
                             title="Editar"
-                            @click="SwitchEditarProdutoCliente(data.item.id)"
+                            @click="Obter(data.item.id)"
                           >
                             <i class="fa fa-edit text-black"></i>
                           </b-button>
+                          <b-button
+                            variant="danger"
+                            title="Remover"
+                            @click="Remover(data.item.id)"
+                          >
+                            <i class="fas fa-trash-alt text-black"></i>
+                          </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(tipoPessoa)="data">
-                        <div class="center">
-                          <span>{{
-                            ObterTipoPessoa(data.item.tipoPessoa)
-                          }}</span>
+                      <template v-slot:cell(valor)="data">
+                        <div class="left">
+                          <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
                     </b-table>
@@ -86,32 +85,19 @@
       @ok="ModalOk"
       @hidden="ModalCancel"
     >
-      Você confirma a exclusão desse registro?
+      Você confirma a exclusão desse produto?
     </b-modal>
-    <div v-if="EditarProdutoCliente()">
-      <PedidoClienteProduto :pedidoPessoaId="this.pedidoPessoaId">
-      </PedidoClienteProduto>
-    </div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import PedidoCliente from "../../servico/PedidoClienteServico";
-import TipoPessoaPedidoEnum from "../../enums/TipoPessoaEnum";
-import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
-import PedidoClienteProduto from "./PedidoClienteProduto.vue";
+import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
 
 export default {
-  components: {
-    RotateSquare,
-    PedidoCliente,
-    TipoPessoaPedidoEnum,
-    TipoPessoaEnum,
-    PedidoClienteProduto
-  },
+  components: { RotateSquare },
   props: {
-    pedidoId: {
+    pedidoPessoaId: {
       type: String,
       default: ""
     }
@@ -120,35 +106,33 @@ export default {
     return {
       modalRemover: false,
       itemRemover: null,
-      clienteOptions: [],
+      produtoOptions: [],
       loading: false,
       pagina: 1,
       total: 0,
       itensPorPagina: 10,
       itens: [],
-      abrir: false,
-      pedidoPessoaId: "",
-      editarProduto: false,
       fields: [
-        { key: "pessoa", label: "Cliente", sortable: true },
-        { key: "tipoPessoa", label: "Tipo Pessoa", sortable: true },
-        { key: "rota", label: "Rota", sortable: true },
+        { key: "produto", label: "Produto", sortable: true },
+        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        { key: "valor", label: "Valor", sortable: true },
+        { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "disponivel", label: "Disponivel", sortable: true },
+        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
-          label: "Produtos",
+          label: "Ações",
           sortable: false,
           thClass: "center, wd-120-px"
         }
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        pessoaId: "",
-        pessoa: {},
+        produtoId: "",
+        produto: {},
         pedidoId: "",
-        rota: "",
-        valorLimite: 0,
-        quantidadeLimite: 0,
-        tipoPessoaPedido: TipoPessoaPedidoEnum.Cliente
+        valor: 0,
+        quantidade: 0
       }
     };
   },
@@ -163,7 +147,7 @@ export default {
   created() {
     //let pedidoId = this.$route.params.id;
     //if (pedidoId) this.Obter(pedidoId);
-    // this.ObterClientesSelect();
+    // this.ObterProdutosSelect();
   },
   methods: {
     IsNovo() {
@@ -172,10 +156,10 @@ export default {
     ValidarForm(evt) {
       evt.preventDefault();
 
-      if (!this.viewModel.pessoa || this.viewModel.pessoa.id == undefined) {
+      if (!this.viewModel.produto || this.viewModel.produto.id == undefined) {
         this.loading = false;
         this.$notify({
-          data: ["Informe um cliente."],
+          data: ["Informe um produto."],
           type: "warn",
           duration: 5000
         });
@@ -187,7 +171,7 @@ export default {
     },
     Obter(id) {
       this.loading = true;
-      PedidoCliente.Obter(id)
+      PedidoProdutoClienteServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           //resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -204,7 +188,11 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      PedidoCliente.ObterGrid(val, this.itensPorPagina, this.pedidoId)
+      PedidoProdutoClienteServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.pedidoPessoaId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -229,11 +217,11 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      PedidoCliente.Remover(this.itemRemover)
+      PedidoProdutoClienteServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Cliente removido com sucesso."],
+            data: ["Produto removido com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -253,14 +241,14 @@ export default {
     Novo() {
       this.loading = true;
       this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      PedidoCliente.Novo(this.viewModel)
+      this.viewModel.produtoId = this.viewModel.produto.id;
+      PedidoProdutoClienteServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Cliente cadastrado com sucesso."],
+            data: ["Produto cadastrado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -277,14 +265,14 @@ export default {
     Editar() {
       this.loading = true;
       this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      PedidoCliente.Editar(this.viewModel)
+      this.viewModel.produtoId = this.viewModel.produto.id;
+      PedidoProdutoClienteServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Cliente editado com sucesso."],
+            data: ["Produto editado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -300,12 +288,11 @@ export default {
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
-      this.viewModel.pessoaId = "";
+      this.viewModel.produtoId = "";
       this.viewModel.pedidoId = "";
-      this.viewModel.rota = "";
-      this.viewModel.valorLimite = 0;
-      this.viewModel.quantidadeLimite = 0;
-      this.viewModel.pessoa = {};
+      this.viewModel.valor = 0;
+      this.viewModel.quantidade = 0;
+      this.viewModel.produto = {};
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -324,36 +311,39 @@ export default {
         return valor;
       }
     },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
+    // ObterProdutosSelect() {
+    //   this.$http({
+    //     url: "/produto/obter-select",
+    //     method: "GET"
+    //   })
+    //     .then((response) => {
+    //       this.produtoOptions = response.data;
+    //     })
+    //     .catch((erro) => {
+    //       this.$notify({
+    //         data: erro.response.data.erros,
+    //         type: "warn",
+    //         duration: 5000
+    //       });
+    //     });
+    // },
+    ObterProdutosVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url: "/produto/obter-v-select/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.produtoOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
         });
-      } else {
-        return valor;
-      }
-    },
-    ObterTipoPessoa(item) {
-      switch (item) {
-        case TipoPessoaEnum.Funcionario:
-          return "Funcionário";
-        case TipoPessoaEnum.Fornecedor:
-          return "Fornecedor";
-        case TipoPessoaEnum.Cliente:
-          return "Cliente";
-        case TipoPessoaEnum.Instituicao:
-          return "Instituição";
-        default:
-          return "Inválido";
-      }
-    },
-    EditarProdutoCliente() {
-      return this.editarProduto;
-    },
-    SwitchEditarProdutoCliente(value) {
-      this.pedidoPessoaId = value;
-      this.editarProduto = !this.editarProduto;
     }
   }
 };

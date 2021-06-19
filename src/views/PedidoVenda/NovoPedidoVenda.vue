@@ -180,7 +180,6 @@ export default {
   },
   watch: {
     contratoOptions: function (val) {
-      console.log("teste");
       //this.LoadContratoLicitacao(val);
     }
   },

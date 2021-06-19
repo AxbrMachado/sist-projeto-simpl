@@ -1,35 +1,35 @@
 import Vue from "vue";
-class ProdutoFornecedorServico {
+class PedidoProdutoClienteServico {
   Obter(id) {
     return Vue.prototype.$http({
-      url: "fornecedorproduto/obter/" + id,
+      url: "pedidopessoaproduto/obter/" + id,
       method: "GET"
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, produtoId) {
+  ObterGrid(pagina, itensPorPagina, pedidoPessoaId) {
     return Vue.prototype.$http({
       url:
-        "/fornecedorproduto/obter-grid?pagina=" +
+        "/pedidopessoaproduto/obter-grid-produto?pagina=" +
         pagina +
         "&ItensPorPagina=" +
         itensPorPagina +
-        "&produtoId=" +
-        produtoId,
+        "&pedidoPessoaId=" +
+        pedidoPessoaId,
       method: "GET"
     });
   }
 
   Remover(id) {
     return Vue.prototype.$http({
-      url: "fornecedorproduto/remover/" + id,
+      url: "pedidopessoaproduto/remover/" + id,
       method: "DELETE"
-    }); 
+    });
   }
 
   Novo(viewModel) {
     return Vue.prototype.$http({
-      url: "fornecedorproduto/novo",
+      url: "pedidopessoaproduto/novo",
       data: viewModel,
       method: "POST"
     });
@@ -37,11 +37,11 @@ class ProdutoFornecedorServico {
 
   Editar(viewModel) {
     return Vue.prototype.$http({
-      url: "fornecedorproduto/editar",
+      url: "pedidopessoaproduto/editar",
       data: viewModel,
       method: "PUT"
     });
   }
 }
 
-export default new ProdutoFornecedorServico();
+export default new PedidoProdutoClienteServico();
