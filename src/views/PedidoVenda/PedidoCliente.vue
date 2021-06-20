@@ -10,7 +10,8 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="abrir = !abrir">
+            <header class="card-header" @click="switchAbertura()">
+              <!-- <header class="card-header" @click="abrir = !abrir"> -->
               <div class="d-flex">
                 <strong class="align-self-center">Cliente(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
@@ -352,8 +353,20 @@ export default {
       return this.editarProduto;
     },
     SwitchEditarProdutoCliente(value) {
-      this.pedidoPessoaId = value;
-      this.editarProduto = !this.editarProduto;
+      if (this.pedidoPessoaId != value) {
+        this.pedidoPessoaId = value;
+        this.editarProduto = true;
+      } else {
+        this.pedidoPessoaId = value;
+        this.editarProduto = !this.editarProduto;
+      }
+    },
+    switchAbertura() {
+      this.abrir = !this.abrir;
+
+      if (!this.abrir) {
+        this.editarProduto = false;
+      }
     }
   }
 };

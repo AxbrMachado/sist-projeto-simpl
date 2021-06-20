@@ -10,15 +10,21 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="true">
+            <header class="card-header" @click="abrir = true">
               <div class="d-flex">
-                <strong class="align-self-center"
-                  >Produtos {NOME CLIENTE}</strong
-                >
-                <i :class="'ml-auto mt-1 fas fa-chevron-up'"></i>
+                <strong class="align-self-center">Produtos Cliente</strong>
+                <!-- <small class="ml-2 mt-1">Clique para abrir/esconder</small> -->
+
+                <i
+                  :class="
+                    abrir
+                      ? 'ml-auto mt-1 fas fa-chevron-up'
+                      : 'ml-auto mt-1 fas fa-chevron-down'
+                  "
+                ></i>
               </div>
             </header>
-            <div :class="'collapse-show'">
+            <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
                 <div class="row">
                   <div class="col-12">
@@ -108,7 +114,9 @@ export default {
       itemRemover: null,
       produtoOptions: [],
       loading: false,
+      abrir: true,
       pagina: 1,
+      abrir: true,
       total: 0,
       itensPorPagina: 10,
       itens: [],
