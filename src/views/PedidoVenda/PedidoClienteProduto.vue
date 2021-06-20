@@ -87,9 +87,11 @@
                           </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(valor)="data">
+                      <template v-slot:cell(valorUnitario)="data">
                         <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
+                          <span>{{
+                            FormataValor(data.item.valorUnitario)
+                          }}</span>
                         </div>
                       </template>
                     </b-table>
@@ -175,7 +177,7 @@ export default {
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        { key: "valor", label: "Valor  Un.", sortable: true },
+        { key: "valorUnitario", label: "Valor  Un.", sortable: true },
         { key: "quantidadeSolicitada", label: "Quantidade", sortable: true },
         { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
@@ -422,13 +424,16 @@ export default {
       this.filtro.produto = "";
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     RemoverCifrao(valor) {

@@ -89,9 +89,16 @@
                           </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(valor)="data">
+                      <template v-slot:cell(valorPedido)="data">
                         <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
+                          <span>{{ FormataValor(data.item.valorPedido) }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(valorUnitario)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorUnitario)
+                          }}</span>
                         </div>
                       </template>
                     </b-table>
@@ -330,13 +337,16 @@ export default {
       this.filtro.props = "";
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     RemoverCifrao(valor) {
