@@ -26,75 +26,34 @@
             </header>
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
-                <!-- <div class="row">
-                  <div class="col">
-                    <div class="form-group">
-                      <small
-                        >Campos com * são de preenchimento obrigatório</small
-                      >
-                    </div>
-                  </div>
-                </div>
                 <div class="row">
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <label for>* Produto</label>
-                      <v-select
-                        placeholder="Digite um produto.."
-                        v-model="viewModel.produto"
-                        :options="produtoOptions"
-                        required
-                        @search="ObterProdutosVSelect"
-                      >
-                        <template slot="no-options">
-                          Nenhum resultado para a busca.
-                        </template>
-                      </v-select>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Valor</label>
-                      <currency-input
-                        v-model="viewModel.valor"
+                      <label>Produto</label>
+                      <input
+                        type="text"
+                        v-model="filtro.produto"
                         class="form-control"
-                        placeholder="Digite o valor"
-                        required
                       />
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Quantidade</label>
-                      <vue-numeric
-                        v-bind:precision="3"
-                        v-bind:minus="false"
-                        thousand-separator="."
-                        decimal-separator=","
-                        v-model="viewModel.quantidade"
-                        class="form-control"
-                        placeholder="Digite a quantidade"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="btn-toolbar mb-3" role="toolbar">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-success mr-2" type="submit">
-                      Salvar
+                  <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
+                    <button
+                      class="btn btn-primary mr-2"
+                      type="button"
+                      @click="ObterGrid(1)"
+                    >
+                      Filtrar
                     </button>
-                  </div>
-                  <div class="btn-group" role="group">
                     <button
                       class="btn btn-secondary"
-                      type="reset"
-                      @click="abrir = !abrir"
+                      type="button"
+                      @click="Limpar()"
                     >
-                      Voltar
+                      Limpar
                     </button>
                   </div>
-                </div> -->
+                </div>
                 <div class="row">
                   <div class="col-12">
                     <b-table
@@ -168,6 +127,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
+import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
 
 export default {
   components: { RotateSquare },
@@ -185,22 +145,18 @@ export default {
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 5,
+      itensPorPagina: 10,
+      filtro: { produto: "" },
       itens: [],
       abrir: false,
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "valorUnitario", label: "Valor Un.", sortable: true },
+        { key: "quantidadeSolicitada", label: "Quantidade", sortable: true },
+        { key: "valorPedido", label: "Valor Total", sortable: true },
         { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true }
-        // {
-        //   key: "acoes",
-        //   label: "Ações",
-        //   sortable: false,
-        //   thClass: "center, wd-120-px"
-        // }
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
@@ -264,7 +220,13 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      PedidoProdutoServico.ObterGrid(val, this.itensPorPagina, this.pedidoId)
+
+      PedidoProdutoClienteServico.ObterGridTotal(
+        val,
+        this.itensPorPagina,
+        this.pedidoId,
+        this.filtro.produto
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -365,6 +327,7 @@ export default {
       this.viewModel.valor = 0;
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
+      this.filtro.props = "";
     },
     FormataValor(valor) {
       if (valor != null) {

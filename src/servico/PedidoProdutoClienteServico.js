@@ -22,6 +22,21 @@ class PedidoProdutoClienteServico {
     });
   }
 
+  ObterGridTotal(pagina, itensPorPagina, pedidoId, produto) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidopessoaproduto/obter-grid-produto-total?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&produto=" +
+        produto +
+        "&pedidoId=" +
+        pedidoId,
+      method: "GET"
+    });
+  }
+
   Remover(id) {
     return Vue.prototype.$http({
       url: "pedidopessoaproduto/remover/" + id,

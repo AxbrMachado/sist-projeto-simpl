@@ -392,8 +392,6 @@ export default {
       return this.editarProduto;
     },
     SwitchEditarProdutoCliente(value) {
-      console.log(value);
-
       if (1 == 2 && this.pedidoPessoaId != value) {
         this.pedidoPessoaId = value;
 
