@@ -44,6 +44,14 @@ class PedidoProdutoClienteServico {
       method: "PUT"
     });
   }
+
+  EditarQuantidade(viewModel) {
+    return Vue.prototype.$http({
+      url: "pedidopessoaproduto/editarquantidade",
+      data: viewModel,
+      method: "PUT"
+    });
+  }
 }
 
 export default new PedidoProdutoClienteServico();

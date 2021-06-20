@@ -73,19 +73,19 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            variant="warning"
+                            variant="info"
                             style="margin-right: 10px"
-                            title="Editar"
-                            @click="Obter(data.item.id)"
+                            title="Editar Quantidade"
+                            @click="Edicao(data.item.id)"
                           >
                             <i class="fa fa-edit text-black"></i>
                           </b-button>
                           <b-button
                             variant="danger"
-                            title="Remover"
+                            title="Zerar Quantidade"
                             @click="Remover(data.item.id)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
+                            <i class="fa fa-edit text-black"></i>
                           </b-button>
                         </div>
                       </template>
@@ -116,10 +116,32 @@
       title="Confirmar exclusão"
       class="modal-danger"
       ok-variant="danger"
-      @ok="ModalOk"
-      @hidden="ModalCancel"
+      @ok="ModalRemocaoOk"
+      @hidden="ModalRemocaoCancel"
     >
-      Você confirma a exclusão desse produto?
+      Confirma a remoção do produto desse cliente?
+    </b-modal>
+    <b-modal
+      v-model="modalEdicao"
+      title="Informar quantidade produto"
+      class="modal-danger"
+      ok-variant="danger"
+      @ok="ModalEdicaoOk"
+      @hidden="ModalEdicaoCancel"
+    >
+      <div class="form-group">
+        <label for>* Quantidade</label>
+        <vue-numeric
+          v-bind:precision="3"
+          v-bind:minus="false"
+          thousand-separator="."
+          decimal-separator=","
+          v-model="itemEdicaoQuantidade"
+          class="form-control"
+          placeholder="Digite a quantidade"
+          required
+        />
+      </div>
     </b-modal>
   </div>
 </template>
@@ -138,6 +160,9 @@ export default {
   },
   data() {
     return {
+      modalEdicao: false,
+      itemEdicao: null,
+      itemEdicaoQuantidade: 0,
       modalRemover: false,
       itemRemover: null,
       produtoOptions: [],
@@ -152,8 +177,8 @@ export default {
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "valor", label: "Valor  Un.", sortable: true },
+        { key: "quantidadeSolicitada", label: "Quantidade", sortable: true },
         { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
@@ -169,7 +194,10 @@ export default {
         produto: {},
         pedidoId: "",
         valor: 0,
-        quantidade: 0
+        quantidade: 0,
+        quantidadeSolicitada: 0,
+        quantidadeAtendida: 0,
+        quantidadeTroca: 0
       }
     };
   },
@@ -225,6 +253,11 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
+      this.viewModel.quantidadeSolicitada = 0;
+      this.itemEdicaoQuantidade = 0;
+      this.itemEdicao = null;
+      this.itemRemover = null;
+
       PedidoProdutoClienteServico.ObterGrid(
         val,
         this.itensPorPagina,
@@ -246,16 +279,52 @@ export default {
           });
         });
     },
-    ModalCancel(evento) {
+    ModalEdicaoCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+    },
+
+    ModalEdicaoOk(evento) {
+      evento.preventDefault();
+      this.modalEdicao = false;
+
+      if (!this.itemEdicao || !this.itemEdicaoQuantidade) return;
+      this.viewModel.id = this.itemEdicao;
+      this.viewModel.quantidadeSolicitada = this.itemEdicaoQuantidade;
+      this.viewModel.produtoId = this.$store.getters.emptyGuid;
+
+      PedidoProdutoClienteServico.Editar(this.viewModel)
+        .then(() => {
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Quantidade definida com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+
+    ModalRemocaoCancel(evento) {
       evento.preventDefault();
       this.itemRemover = null;
     },
-    ModalOk(evento) {
+    ModalRemocaoOk(evento) {
       evento.preventDefault();
       this.modalRemover = false;
-      if (!this.itemRemover) return;
 
-      PedidoProdutoClienteServico.Remover(this.itemRemover)
+      if (!this.itemRemover) return;
+      this.viewModel.id = this.itemRemover;
+      this.viewModel.quantidadeSolicitada = 0;
+      this.viewModel.produtoId = this.$store.getters.emptyGuid;
+
+      PedidoProdutoClienteServico.Editar(this.viewModel)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -271,10 +340,31 @@ export default {
             duration: 5000
           });
         });
+
+      //   PedidoProdutoClienteServico.Remover(this.itemRemover)
+      //     .then(() => {
+      //       this.ObterGrid(1);
+      //       this.$notify({
+      //         data: ["Produto removido com sucesso."],
+      //         type: "success",
+      //         duration: 5000
+      //       });
+      //     })
+      //     .catch((erro) => {
+      //       this.$notify({
+      //         data: erro.response.data.erros,
+      //         type: "warn",
+      //         duration: 5000
+      //       });
+      //     });
     },
     Remover(id) {
       this.modalRemover = true;
       this.itemRemover = id;
+    },
+    Edicao(id) {
+      this.modalEdicao = true;
+      this.itemEdicao = id;
     },
     Novo() {
       this.loading = true;
