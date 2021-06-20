@@ -9,7 +9,7 @@ class PedidoClienteServico {
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, pedidoId) {
+  ObterGrid(pagina, itensPorPagina, pedidoId, nome) {
     return Vue.prototype.$http({
       url:
         "/pedidopessoa/obter-grid?pagina=" +
@@ -18,6 +18,8 @@ class PedidoClienteServico {
         itensPorPagina +
         "&pedidoId=" +
         pedidoId +
+        "&nome=" +
+        nome +
         "&tipoPessoaContrato=" +
         TipoPessoaContratoEnum.Cliente,
       method: "GET"

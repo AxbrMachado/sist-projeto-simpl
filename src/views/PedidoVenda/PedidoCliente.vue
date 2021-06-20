@@ -28,6 +28,34 @@
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
                 <div class="row">
+                  <div class="col-lg-5 col-md-6 col-sm-12">
+                    <div class="form-group">
+                      <label>Descrição</label>
+                      <input
+                        type="text"
+                        v-model="filtro.nome"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
+                    <button
+                      class="btn btn-primary mr-2"
+                      type="button"
+                      @click="ObterGrid(1)"
+                    >
+                      Filtrar
+                    </button>
+                    <button
+                      class="btn btn-secondary"
+                      type="button"
+                      @click="Limpar()"
+                    >
+                      Limpar
+                    </button>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="col-12">
                     <b-table
                       :hover="true"
@@ -126,6 +154,7 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 10,
+      filtro: { nome: "" },
       itens: [],
       abrir: false,
       pedidoPessoaId: "",
@@ -204,8 +233,17 @@ export default {
         });
     },
     ObterGrid(val) {
+      if (this.filtro.nome) {
+        this.editarProduto = false;
+      }
+
       this.loading = true;
-      PedidoCliente.ObterGrid(val, this.itensPorPagina, this.pedidoId)
+      PedidoCliente.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.pedidoId,
+        this.filtro.nome
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -307,6 +345,7 @@ export default {
       this.viewModel.valorLimite = 0;
       this.viewModel.quantidadeLimite = 0;
       this.viewModel.pessoa = {};
+      this.filtro.nome = "";
     },
     FormataValor(valor) {
       if (valor != null) {
