@@ -30,7 +30,7 @@
                 <div class="row">
                   <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <label>Descrição</label>
+                      <label>Nome</label>
                       <input
                         type="text"
                         v-model="filtro.nome"

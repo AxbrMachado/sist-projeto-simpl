@@ -27,6 +27,34 @@
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
                 <div class="row">
+                  <div class="col-lg-5 col-md-6 col-sm-12">
+                    <div class="form-group">
+                      <label>Produto</label>
+                      <input
+                        type="text"
+                        v-model="filtro.produto"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
+                    <button
+                      class="btn btn-primary mr-2"
+                      type="button"
+                      @click="ObterGrid(1)"
+                    >
+                      Filtrar
+                    </button>
+                    <button
+                      class="btn btn-secondary"
+                      type="button"
+                      @click="Limpar()"
+                    >
+                      Limpar
+                    </button>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="col-12">
                     <b-table
                       :hover="true"
@@ -119,6 +147,7 @@ export default {
       abrir: true,
       total: 0,
       itensPorPagina: 10,
+      filtro: { produto: "" },
       itens: [],
       fields: [
         { key: "produto", label: "Produto", sortable: true },
@@ -199,7 +228,8 @@ export default {
       PedidoProdutoClienteServico.ObterGrid(
         val,
         this.itensPorPagina,
-        this.pedidoPessoaId
+        this.pedidoPessoaId,
+        this.filtro.produto
       )
         .then((resposta) => {
           this.loading = false;
@@ -301,6 +331,7 @@ export default {
       this.viewModel.valor = 0;
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
+      this.filtro.produto = "";
     },
     FormataValor(valor) {
       if (valor != null) {
