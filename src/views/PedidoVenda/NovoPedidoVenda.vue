@@ -93,7 +93,7 @@
                       disabled
                       v-model="viewModel.valor"
                       class="form-control"
-                      placeholder="Digite o valor"
+                      placeholder="0,00"
                     />
                   </div>
                 </div>

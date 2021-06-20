@@ -13,8 +13,6 @@
             <header class="card-header" @click="abrir = true">
               <div class="d-flex">
                 <strong class="align-self-center">Produtos Cliente</strong>
-                <!-- <small class="ml-2 mt-1">Clique para abrir/esconder</small> -->
-
                 <i
                   :class="
                     abrir
@@ -125,7 +123,7 @@
       v-model="modalEdicao"
       title="Informar quantidade produto"
       class="modal-danger"
-      ok-variant="danger"
+      ok-variant="info"
       @ok="ModalEdicaoOk"
       @hidden="ModalEdicaoCancel"
     >
