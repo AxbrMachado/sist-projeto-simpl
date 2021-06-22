@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="abrir = true">
+            <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
                 <strong class="align-self-center">Produtos Cliente</strong>
                 <i
@@ -95,7 +95,8 @@
                             title="Zerar Quantidade"
                             @click="Remover(data.item)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fas fa-trash-alt text-black"></i>
+                            <!-- <i class="fa fa-edit text-black"></i> -->
                           </b-button>
                         </div>
                       </template>
@@ -193,7 +194,11 @@ export default {
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valorUnitario", label: "Valor  Un.", sortable: true },
-        { key: "quantidadeSolicitada", label: "Qtd. Solicitada", sortable: true },
+        {
+          key: "quantidadeSolicitada",
+          label: "Qtd. Solicitada",
+          sortable: true
+        },
         { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
         { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
