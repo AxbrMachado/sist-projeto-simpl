@@ -85,17 +85,9 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            variant="warning"
-                            style="margin-right: 10px"
-                            title="Editar"
-                            @click="Obter(data.item.id)"
-                          >
-                            <i class="fa fa-edit text-black"></i>
-                          </b-button>
-                          <b-button
                             variant="danger"
                             title="Remover"
-                            @click="Remover(data.item.id)"
+                            @click="Remover(data.item)"
                           >
                             <i class="fas fa-trash-alt text-black"></i>
                           </b-button>
@@ -138,7 +130,7 @@
       @ok="ModalOk"
       @hidden="ModalCancel"
     >
-      Você confirma a exclusão desse registro?
+      Você confirma a exclusão desse produto do pedido?
     </b-modal>
   </div>
 </template>
@@ -178,7 +170,13 @@ export default {
         { key: "quantidadeSolicitada", label: "Quantidade", sortable: true },
         { key: "valorPedido", label: "Valor Total", sortable: true },
         { key: "disponivel", label: "Disponivel", sortable: true },
-        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true }
+        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
+        {
+          key: "acoes",
+          label: "Ações",
+          sortable: false,
+          thClass: "center, wd-120-px"
+        }
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
@@ -274,11 +272,11 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      PedidoProdutoServico.Remover(this.itemRemover)
+      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Produto removido com sucesso."],
+            data: ["Produtos removido com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -291,57 +289,9 @@ export default {
           });
         });
     },
-    Remover(id) {
+    Remover(item) {
       this.modalRemover = true;
-      this.itemRemover = id;
-    },
-    Novo() {
-      this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.produtoId = this.viewModel.produto.id;
-      PedidoProdutoServico.Novo(this.viewModel)
-        .then((resposta) => {
-          this.loading = false;
-          this.Limpar();
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Produto cadastrado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    Editar() {
-      this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.produtoId = this.viewModel.produto.id;
-      PedidoProdutoServico.Editar(this.viewModel)
-        .then(() => {
-          this.loading = false;
-          this.Limpar();
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Produto editado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
+      this.itemRemover = item.id;
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
@@ -372,40 +322,6 @@ export default {
       } else {
         return valor;
       }
-    },
-    // ObterProdutosSelect() {
-    //   this.$http({
-    //     url: "/produto/obter-select",
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.produtoOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 5000
-    //       });
-    //     });
-    // },
-    ObterProdutosVSelect(busca) {
-      if (!busca || busca.length <= 2) return;
-
-      this.$http({
-        url: "/produto/obter-v-select/" + busca,
-        method: "GET"
-      })
-        .then((response) => {
-          this.produtoOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
     }
   }
 };

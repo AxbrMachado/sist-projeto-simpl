@@ -47,6 +47,13 @@ class PedidoProdutoClienteServico {
       method: "DELETE"
     });
   }
+  
+  RemoverProdutoPedido(id) {
+    return Vue.prototype.$http({
+      url: "pedidopessoaproduto/removerprodutopedido/" + id,
+      method: "DELETE"
+    });
+  }
 
   Novo(viewModel) {
     return Vue.prototype.$http({
