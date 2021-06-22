@@ -197,18 +197,17 @@
 </template>
 
 <script>
-import RotateSquare from "../../components/RotateSquare";
-import DateTime from "../../util/DateTime";
-import DocumentoServico from "../../servico/DocumentoServico";
-import TipoDocumentoServico from "../../views/TipoDocumento/servico/TipoDocumentoServico";
-import ArquivoServico from "../../servico/ArquivoServico";
-import ModalArquivo from "../../components/ModalArquivo";
-import TipoDocumentoAnexoEnum from "../../enums/TipoDocumentoAnexoEnum";
+import RotateSquare from "./RotateSquare";
+import DateTime from "../util/DateTime";
+import DocumentoServico from "../servico/DocumentoServico";
+import TipoDocumentoServico from "../views/TipoDocumento/servico/TipoDocumentoServico";
+import ArquivoServico from "../servico/ArquivoServico";
+import ModalArquivo from "./ModalArquivo";
 
 export default {
   components: { RotateSquare, TipoDocumentoAnexoEnum, ModalArquivo },
   props: {
-    pedidoId: {
+    referenciaId: {
       type: String,
       default: ""
     }
@@ -244,8 +243,8 @@ export default {
         numero: "",
         observacao: "",
         validade: null,
-        pedidoId: this.pedidoId,
-        tipoDocumentoAnexo: TipoDocumentoAnexoEnum.Pedido,
+        referenciaId: "",
+        tipoDocumentoAnexo: TipoDocumentoAnexoEnum.Pessoa,
         arquivos: []
       }
     };
@@ -314,7 +313,6 @@ export default {
     },
     Obter(id) {
       this.loading = true;
-
       DocumentoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
@@ -335,8 +333,8 @@ export default {
       DocumentoServico.ObterGrid(
         val,
         this.itensPorPagina,
-        this.pedidoId,
-        TipoDocumentoAnexoEnum.Pedido
+        this.referenciaId,
+        TipoDocumentoAnexoEnum.Pessoa
       )
         .then((resposta) => {
           this.loading = false;
@@ -385,7 +383,7 @@ export default {
     },
     Novo() {
       this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
+      this.viewModel.referenciaId = this.referenciaId;
       DocumentoServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
@@ -408,7 +406,7 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
+      this.viewModel.referenciaId = this.referenciaId;
       DocumentoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
@@ -435,7 +433,6 @@ export default {
       this.viewModel.numero = "";
       this.viewModel.observacao = "";
       this.viewModel.validade = null;
-      this.viewModel.pedidoId = "";
       this.viewModel.arquivos = [];
     },
     FormatarData(validade) {

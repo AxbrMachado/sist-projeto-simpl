@@ -127,7 +127,7 @@ import DateTime from "../../util/DateTime";
 import DapServico from "../../servico/DapServico";
 import DapContrato from "./DapContrato";
 import Contato from "../../components/Contato";
-import NovoDocumento from "./NovoDocumento";
+import NovoDocumento from "../../components/NovoDocumento";
 
 export default {
   name: "NovoDap",

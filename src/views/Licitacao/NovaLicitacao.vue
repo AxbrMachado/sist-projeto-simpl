@@ -177,7 +177,7 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import DateTime from "../../util/DateTime";
 import LicitacaoContrato from "./LicitacaoContrato";
 import Contato from "../../components/Contato";
-import NovoDocumento from "./NovoDocumento";
+import NovoDocumento from "../../components/NovoDocumento";
 import StatusLicitacaoEnum from "../../enums/StatusLicitacaoEnum";
 
 export default {
