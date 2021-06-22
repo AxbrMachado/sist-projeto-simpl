@@ -35,6 +35,18 @@
                       />
                     </div>
                   </div>
+                  <div
+                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                    title="Apenas licitações vencidas."
+                  >
+                    <label for>Presente no Pedido</label>
+                    <b-form-checkbox
+                      v-model="filtro.produtosNoPedido"
+                      name="check-button"
+                      switch
+                    >
+                    </b-form-checkbox>
+                  </div>
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
                       class="btn btn-primary mr-2"
@@ -74,14 +86,14 @@
                             variant="info"
                             style="margin-right: 10px"
                             title="Editar Quantidade"
-                            @click="Edicao(data.item.id)"
+                            @click="Edicao(data.item)"
                           >
                             <i class="fa fa-edit text-black"></i>
                           </b-button>
                           <b-button
                             variant="danger"
                             title="Zerar Quantidade"
-                            @click="Remover(data.item.id)"
+                            @click="Remover(data.item)"
                           >
                             <i class="fa fa-edit text-black"></i>
                           </b-button>
@@ -172,7 +184,10 @@ export default {
       abrir: true,
       total: 0,
       itensPorPagina: 10,
-      filtro: { produto: "" },
+      filtro: {
+        produto: "",
+        produtosNoPedido: false
+      },
       itens: [],
       fields: [
         { key: "produto", label: "Produto", sortable: true },
@@ -262,7 +277,8 @@ export default {
         val,
         this.itensPorPagina,
         this.pedidoPessoaId,
-        this.filtro.produto
+        this.filtro.produto,
+        this.filtro.produtosNoPedido
       )
         .then((resposta) => {
           this.loading = false;
@@ -282,6 +298,7 @@ export default {
     ModalEdicaoCancel(evento) {
       evento.preventDefault();
       this.itemEdicao = null;
+      this.itemEdicaoQuantidade = 0;
     },
 
     ModalEdicaoOk(evento) {
@@ -358,13 +375,14 @@ export default {
       //       });
       //     });
     },
-    Remover(id) {
+    Remover(item) {
       this.modalRemover = true;
-      this.itemRemover = id;
+      this.itemRemover = item.id;
     },
-    Edicao(id) {
+    Edicao(item) {
       this.modalEdicao = true;
-      this.itemEdicao = id;
+      this.itemEdicao = item.id;
+      this.itemEdicaoQuantidade = item.quantidadeSolicitada;
     },
     Novo() {
       this.loading = true;
@@ -422,6 +440,7 @@ export default {
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
       this.filtro.produto = "";
+      this.filtro.produtosNoPedido = false;
     },
     FormataValor(valor) {
       if (valor) {

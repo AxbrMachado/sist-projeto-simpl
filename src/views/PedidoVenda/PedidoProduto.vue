@@ -37,6 +37,18 @@
                       />
                     </div>
                   </div>
+                  <div
+                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                    title="Apenas licitações vencidas."
+                  >
+                    <label for>Presente no Pedido</label>
+                    <b-form-checkbox
+                      v-model="filtro.produtosNoPedido"
+                      name="check-button"
+                      switch
+                    >
+                    </b-form-checkbox>
+                  </div>
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
                       class="btn btn-primary mr-2"
@@ -153,7 +165,10 @@ export default {
       pagina: 1,
       total: 0,
       itensPorPagina: 10,
-      filtro: { produto: "" },
+      filtro: {
+        produto: "",
+        produtosNoPedido: false
+      },
       itens: [],
       abrir: false,
       fields: [
@@ -232,7 +247,8 @@ export default {
         val,
         this.itensPorPagina,
         this.pedidoId,
-        this.filtro.produto
+        this.filtro.produto,
+        this.filtro.produtosNoPedido
       )
         .then((resposta) => {
           this.loading = false;
@@ -335,6 +351,7 @@ export default {
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
       this.filtro.props = "";
+      this.filtro.produtosNoPedido = false;
     },
     FormataValor(valor) {
       if (valor) {

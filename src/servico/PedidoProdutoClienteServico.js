@@ -7,7 +7,7 @@ class PedidoProdutoClienteServico {
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, pedidoPessoaId, produto) {
+  ObterGrid(pagina, itensPorPagina, pedidoPessoaId, produto, produtosNoPedido) {
     return Vue.prototype.$http({
       url:
         "/pedidopessoaproduto/obter-grid-produto?pagina=" +
@@ -16,13 +16,15 @@ class PedidoProdutoClienteServico {
         itensPorPagina +
         "&produto=" +
         produto +
+        "&produtosNoPedido=" +
+        produtosNoPedido +
         "&pedidoPessoaId=" +
         pedidoPessoaId,
       method: "GET"
     });
   }
 
-  ObterGridTotal(pagina, itensPorPagina, pedidoId, produto) {
+  ObterGridTotal(pagina, itensPorPagina, pedidoId, produto, produtosNoPedido) {
     return Vue.prototype.$http({
       url:
         "/pedidopessoaproduto/obter-grid-produto-total?pagina=" +
@@ -31,6 +33,8 @@ class PedidoProdutoClienteServico {
         itensPorPagina +
         "&produto=" +
         produto +
+        "&produtosNoPedido=" +
+        produtosNoPedido +
         "&pedidoId=" +
         pedidoId,
       method: "GET"
