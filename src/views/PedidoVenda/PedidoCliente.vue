@@ -102,6 +102,11 @@
                           }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(valor)="data">
+                        <div class="left">
+                          <span>{{ FormataValor(data.item.valor) }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -177,6 +182,7 @@ export default {
       fields: [
         { key: "pessoa", label: "Cliente", sortable: true },
         { key: "tipoPessoa", label: "Tipo Pessoa", sortable: true },
+        { key: "valor", label: "Valor Produtos", sortable: true },
         { key: "rota", label: "Rota", sortable: true },
         {
           key: "acoes",
@@ -371,22 +377,15 @@ export default {
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     RemoverCifrao(valor) {
       if (valor != null) {
         return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
       } else {
         return valor;
       }

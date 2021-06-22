@@ -193,7 +193,8 @@ export default {
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valorUnitario", label: "Valor  Un.", sortable: true },
-        { key: "quantidadeSolicitada", label: "Quantidade", sortable: true },
+        { key: "quantidadeSolicitada", label: "Qtd. Solicitada", sortable: true },
+        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
         { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
