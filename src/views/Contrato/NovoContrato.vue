@@ -146,7 +146,7 @@
       <ContratoCliente :contratoId="viewModel.id"> </ContratoCliente>
       <ContratoFornecedor :contratoId="viewModel.id"> </ContratoFornecedor>
       <ContratoProduto :contratoId="viewModel.id"> </ContratoProduto>
-      <NovoDocumento :contratoId="viewModel.id"> </NovoDocumento>
+      <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
   </div>

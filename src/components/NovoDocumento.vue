@@ -205,7 +205,7 @@ import ArquivoServico from "../servico/ArquivoServico";
 import ModalArquivo from "./ModalArquivo";
 
 export default {
-  components: { RotateSquare, TipoDocumentoAnexoEnum, ModalArquivo },
+  components: { RotateSquare, ModalArquivo },
   props: {
     referenciaId: {
       type: String,
@@ -244,7 +244,6 @@ export default {
         observacao: "",
         validade: null,
         referenciaId: "",
-        tipoDocumentoAnexo: TipoDocumentoAnexoEnum.Pessoa,
         arquivos: []
       }
     };
@@ -334,7 +333,6 @@ export default {
         val,
         this.itensPorPagina,
         this.referenciaId,
-        TipoDocumentoAnexoEnum.Pessoa
       )
         .then((resposta) => {
           this.loading = false;

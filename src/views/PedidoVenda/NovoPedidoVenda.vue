@@ -136,7 +136,7 @@
       <PedidoCliente :pedidoId="this.viewModel.id"> </PedidoCliente>
       <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor>
       <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto>
-      <NovoDocumento :pedidoId="this.viewModel.id"> </NovoDocumento>
+      <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
   </div>

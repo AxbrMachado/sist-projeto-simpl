@@ -165,7 +165,7 @@
     </form>
     <div v-if="IsEdicao()">
       <LicitacaoContrato :licitacaoId="viewModel.id"> </LicitacaoContrato>
-      <NovoDocumento :licitacaoId="viewModel.id"> </NovoDocumento>
+      <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="viewModel.id" />
     </div>
   </div>

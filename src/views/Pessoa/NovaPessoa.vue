@@ -243,7 +243,7 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <NovoDocumento :pessoaId="viewModel.id"> </NovoDocumento>
+      <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
       <NovoEndereco :pessoaId="viewModel.id"> </NovoEndereco>
       <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
