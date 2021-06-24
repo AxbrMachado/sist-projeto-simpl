@@ -6,7 +6,7 @@
         size="60px"
       ></RotateSquare>
     </div>
-    <form v-else @submit="ValidarForm">
+    <form v-else>
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
@@ -236,42 +236,6 @@ export default {
     // this.ObterProdutosSelect();
   },
   methods: {
-    IsNovo() {
-      return this.pedidoId === this.$store.getters.emptyGuid;
-    },
-    ValidarForm(evt) {
-      evt.preventDefault();
-
-      if (!this.viewModel.produto || this.viewModel.produto.id == undefined) {
-        this.loading = false;
-        this.$notify({
-          data: ["Informe um produto."],
-          type: "warn",
-          duration: 5000
-        });
-        return;
-      }
-
-      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.Novo();
-    },
-    Obter(id) {
-      this.loading = true;
-      PedidoProdutoClienteServico.Obter(id)
-        .then((resposta) => {
-          this.loading = false;
-          //resposta.data.validade = DateTime.formatar(resposta.data.validade);
-          this.viewModel = resposta.data;
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
     ObterGrid(val) {
       this.loading = true;
       this.viewModel.quantidadeSolicitada = 0;
@@ -363,23 +327,6 @@ export default {
             duration: 5000
           });
         });
-
-      //   PedidoProdutoClienteServico.Remover(this.itemRemover)
-      //     .then(() => {
-      //       this.ObterGrid(1);
-      //       this.$notify({
-      //         data: ["Produto removido com sucesso."],
-      //         type: "success",
-      //         duration: 5000
-      //       });
-      //     })
-      //     .catch((erro) => {
-      //       this.$notify({
-      //         data: erro.response.data.erros,
-      //         type: "warn",
-      //         duration: 5000
-      //       });
-      //     });
     },
     Remover(item) {
       this.modalRemover = true;
@@ -389,30 +336,6 @@ export default {
       this.modalEdicao = true;
       this.itemEdicao = item.id;
       this.itemEdicaoQuantidade = item.quantidadeSolicitada;
-    },
-    Novo() {
-      this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.produtoId = this.viewModel.produto.id;
-      PedidoProdutoClienteServico.Novo(this.viewModel)
-        .then((resposta) => {
-          this.loading = false;
-          this.Limpar();
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Produto cadastrado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
     },
     Editar() {
       this.loading = true;
@@ -467,40 +390,6 @@ export default {
       } else {
         return valor;
       }
-    },
-    // ObterProdutosSelect() {
-    //   this.$http({
-    //     url: "/produto/obter-select",
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.produtoOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 5000
-    //       });
-    //     });
-    // },
-    ObterProdutosVSelect(busca) {
-      if (!busca || busca.length <= 2) return;
-
-      this.$http({
-        url: "/produto/obter-v-select/" + busca,
-        method: "GET"
-      })
-        .then((response) => {
-          this.produtoOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
     }
   }
 };

@@ -6,7 +6,7 @@
         size="60px"
       ></RotateSquare>
     </div>
-    <form v-else @submit="ValidarForm">
+    <form v-else>
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
@@ -124,16 +124,6 @@
         </div>
       </div>
     </form>
-    <b-modal
-      v-model="modalRemover"
-      title="Confirmar exclusão"
-      class="modal-danger"
-      ok-variant="danger"
-      @ok="ModalOk"
-      @hidden="ModalCancel"
-    >
-      Você confirma a exclusão desse registro?
-    </b-modal>
     <div v-if="EditarProdutoCliente()">
       <PedidoClienteProduto :pedidoPessoaId="this.pedidoPessoaId">
       </PedidoClienteProduto>
@@ -164,7 +154,6 @@ export default {
   },
   data() {
     return {
-      modalRemover: false,
       itemRemover: null,
       clienteOptions: [],
       loading: false,
@@ -190,17 +179,7 @@ export default {
           sortable: false,
           thClass: "center, wd-120-px"
         }
-      ],
-      viewModel: {
-        id: this.$store.getters.emptyGuid,
-        pessoaId: "",
-        pessoa: {},
-        pedidoId: "",
-        rota: "",
-        valorLimite: 0,
-        quantidadeLimite: 0,
-        tipoPessoaPedido: TipoPessoaPedidoEnum.Cliente
-      }
+      ]
     };
   },
   mounted() {
@@ -217,42 +196,6 @@ export default {
     // this.ObterClientesSelect();
   },
   methods: {
-    IsNovo() {
-      return this.pedidoId === this.$store.getters.emptyGuid;
-    },
-    ValidarForm(evt) {
-      evt.preventDefault();
-
-      if (!this.viewModel.pessoa || this.viewModel.pessoa.id == undefined) {
-        this.loading = false;
-        this.$notify({
-          data: ["Informe um cliente."],
-          type: "warn",
-          duration: 5000
-        });
-        return;
-      }
-
-      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.Novo();
-    },
-    Obter(id) {
-      this.loading = true;
-      PedidoCliente.Obter(id)
-        .then((resposta) => {
-          this.loading = false;
-          //resposta.data.validade = DateTime.formatar(resposta.data.validade);
-          this.viewModel = resposta.data;
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
     ObterGrid(val) {
       if (this.filtro.nome) {
         this.editarProduto = false;
@@ -281,92 +224,7 @@ export default {
           });
         });
     },
-    ModalCancel(evento) {
-      evento.preventDefault();
-      this.itemRemover = null;
-    },
-    ModalOk(evento) {
-      evento.preventDefault();
-      this.modalRemover = false;
-      if (!this.itemRemover) return;
-
-      PedidoCliente.Remover(this.itemRemover)
-        .then(() => {
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Cliente removido com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    Remover(id) {
-      this.modalRemover = true;
-      this.itemRemover = id;
-    },
-    Novo() {
-      this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      PedidoCliente.Novo(this.viewModel)
-        .then((resposta) => {
-          this.loading = false;
-          this.Limpar();
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Cliente cadastrado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    Editar() {
-      this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      PedidoCliente.Editar(this.viewModel)
-        .then(() => {
-          this.loading = false;
-          this.Limpar();
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Cliente editado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
     Limpar() {
-      this.viewModel.id = this.$store.getters.emptyGuid;
-      this.viewModel.pessoaId = "";
-      this.viewModel.pedidoId = "";
-      this.viewModel.rota = "";
-      this.viewModel.valorLimite = 0;
-      this.viewModel.quantidadeLimite = 0;
-      this.viewModel.pessoa = {};
       this.filtro.nome = "";
       this.filtro.clienteComProduto = false;
     },
