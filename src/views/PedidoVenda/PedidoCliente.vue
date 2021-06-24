@@ -88,10 +88,10 @@
                           <b-button
                             variant="warning"
                             style="margin-right: 10px"
-                            title="Editar"
+                            title="Editar Produtos do Cliente"
                             @click="SwitchEditarProdutoCliente(data.item.id)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fas fa-cart-plus text-black"></i>
                           </b-button>
                         </div>
                       </template>
