@@ -145,7 +145,6 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
-import Contato from "../../components/Contato";
 import NovoDocumento from "../../components/NovoDocumento";
 import PedidoCliente from "./PedidoCliente";
 import PedidoProduto from "./PedidoProduto";
