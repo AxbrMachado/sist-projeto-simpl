@@ -136,7 +136,7 @@
       <PedidoCliente :pedidoId="this.viewModel.id"> </PedidoCliente>
       <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor>
       <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto>
-      <NovoDocumento :pedidoId="this.viewModel.id"> </NovoDocumento>
+      <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
   </div>
@@ -145,7 +145,8 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
-import NovoDocumento from "./NovoDocumento";
+import Contato from "../../components/Contato";
+import NovoDocumento from "../../components/NovoDocumento";
 import PedidoCliente from "./PedidoCliente";
 import PedidoProduto from "./PedidoProduto";
 import PedidoFornecedor from "./PedidoFornecedor";

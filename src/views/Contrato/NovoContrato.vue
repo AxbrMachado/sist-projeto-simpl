@@ -146,7 +146,7 @@
       <ContratoCliente :contratoId="viewModel.id"> </ContratoCliente>
       <ContratoFornecedor :contratoId="viewModel.id"> </ContratoFornecedor>
       <ContratoProduto :contratoId="viewModel.id"> </ContratoProduto>
-      <NovoDocumento :contratoId="viewModel.id"> </NovoDocumento>
+      <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
   </div>
@@ -159,7 +159,7 @@ import ContratoFornecedor from "./ContratoFornecedor";
 import ContratoCliente from "./ContratoCliente";
 import DateTime from "../../util/DateTime";
 import Contato from "../../components/Contato";
-import NovoDocumento from "./NovoDocumento";
+import NovoDocumento from "../../components/NovoDocumento";
 
 export default {
   name: "NovoContrato",

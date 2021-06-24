@@ -7,7 +7,7 @@ class DocumentoServico {
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, registroId, tipoDocumentoAnexo) {
+  ObterGrid(pagina, itensPorPagina, registroId) {
     return Vue.prototype.$http({
       url:
         "documento/obter-grid/" +
@@ -15,9 +15,7 @@ class DocumentoServico {
         "/" +
         itensPorPagina +
         "/" +
-        registroId +
-        "/" +
-        tipoDocumentoAnexo,
+        registroId,
       method: "GET"
     });
   }

@@ -243,7 +243,7 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <NovoDocumento :pessoaId="viewModel.id"> </NovoDocumento>
+      <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
       <NovoEndereco :pessoaId="viewModel.id"> </NovoEndereco>
       <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
@@ -255,7 +255,7 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import TipoSexoEnum from "../../enums/TipoSexoEnum";
 import RotateSquare from "../../components/RotateSquare";
 import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
-import NovoDocumento from "./NovoDocumento";
+import NovoDocumento from "../../components/NovoDocumento";
 import NovoEndereco from "./NovoEndereco";
 import DateTime from "../../util/DateTime";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
