@@ -1,7 +1,7 @@
 import Vue from "vue";
 import TipoPessoaContratoEnum from "./../enums/TipoPessoaContratoEnum";
 
-class DocumentoServico {
+class ContratoFornecedorServico {
   Obter(id) {
     return Vue.prototype.$http({
       url: "pessoacontrato/obter/" + id,
@@ -17,9 +17,9 @@ class DocumentoServico {
         "&ItensPorPagina=" +
         itensPorPagina +
         "&contratoId=" +
-        contratoId + 
+        contratoId +
         "&tipoPessoaContrato=" +
-        TipoPessoaContratoEnum.Fornecedor ,
+        TipoPessoaContratoEnum.Fornecedor,
       method: "GET"
     });
   }
@@ -48,4 +48,4 @@ class DocumentoServico {
   }
 }
 
-export default new DocumentoServico();
+export default new ContratoFornecedorServico();

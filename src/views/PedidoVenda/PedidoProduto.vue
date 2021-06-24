@@ -26,75 +26,46 @@
             </header>
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
-                <!-- <div class="row">
-                  <div class="col">
-                    <div class="form-group">
-                      <small
-                        >Campos com * são de preenchimento obrigatório</small
-                      >
-                    </div>
-                  </div>
-                </div>
                 <div class="row">
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <label for>* Produto</label>
-                      <v-select
-                        placeholder="Digite um produto.."
-                        v-model="viewModel.produto"
-                        :options="produtoOptions"
-                        required
-                        @search="ObterProdutosVSelect"
-                      >
-                        <template slot="no-options">
-                          Nenhum resultado para a busca.
-                        </template>
-                      </v-select>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Valor</label>
-                      <currency-input
-                        v-model="viewModel.valor"
+                      <label>Produto</label>
+                      <input
+                        type="text"
+                        v-model="filtro.produto"
                         class="form-control"
-                        placeholder="Digite o valor"
-                        required
                       />
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Quantidade</label>
-                      <vue-numeric
-                        v-bind:precision="3"
-                        v-bind:minus="false"
-                        thousand-separator="."
-                        decimal-separator=","
-                        v-model="viewModel.quantidade"
-                        class="form-control"
-                        placeholder="Digite a quantidade"
-                        required
-                      />
-                    </div>
+                  <div
+                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                    title="Apenas licitações vencidas."
+                  >
+                    <label for>Presente no Pedido</label>
+                    <b-form-checkbox
+                      v-model="filtro.produtosNoPedido"
+                      name="check-button"
+                      switch
+                    >
+                    </b-form-checkbox>
                   </div>
-                </div>
-                <div class="btn-toolbar mb-3" role="toolbar">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-success mr-2" type="submit">
-                      Salvar
+                  <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
+                    <button
+                      class="btn btn-primary mr-2"
+                      type="button"
+                      @click="ObterGrid(1)"
+                    >
+                      Filtrar
                     </button>
-                  </div>
-                  <div class="btn-group" role="group">
                     <button
                       class="btn btn-secondary"
-                      type="reset"
-                      @click="abrir = !abrir"
+                      type="button"
+                      @click="Limpar()"
                     >
-                      Voltar
+                      Limpar
                     </button>
                   </div>
-                </div> -->
+                </div>
                 <div class="row">
                   <div class="col-12">
                     <b-table
@@ -114,25 +85,24 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            variant="warning"
-                            style="margin-right: 10px"
-                            title="Editar"
-                            @click="Obter(data.item.id)"
-                          >
-                            <i class="fa fa-edit text-black"></i>
-                          </b-button>
-                          <b-button
                             variant="danger"
                             title="Remover"
-                            @click="Remover(data.item.id)"
+                            @click="Remover(data.item)"
                           >
                             <i class="fas fa-trash-alt text-black"></i>
                           </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(valor)="data">
+                      <template v-slot:cell(valorPedido)="data">
                         <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
+                          <span>{{ FormataValor(data.item.valorPedido) }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(valorUnitario)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorUnitario)
+                          }}</span>
                         </div>
                       </template>
                     </b-table>
@@ -160,7 +130,7 @@
       @ok="ModalOk"
       @hidden="ModalCancel"
     >
-      Você confirma a exclusão desse registro?
+      Você confirma a exclusão desse produto do pedido?
     </b-modal>
   </div>
 </template>
@@ -168,6 +138,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
+import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
 
 export default {
   components: { RotateSquare },
@@ -185,22 +156,27 @@ export default {
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 5,
+      itensPorPagina: 10,
+      filtro: {
+        produto: "",
+        produtosNoPedido: false
+      },
       itens: [],
       abrir: false,
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "valorUnitario", label: "Valor Un.", sortable: true },
+        { key: "quantidadeSolicitada", label: "Quantidade", sortable: true },
+        { key: "valorPedido", label: "Valor Total", sortable: true },
         { key: "disponivel", label: "Disponivel", sortable: true },
-        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true }
-        // {
-        //   key: "acoes",
-        //   label: "Ações",
-        //   sortable: false,
-        //   thClass: "center, wd-120-px"
-        // }
+        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
+        {
+          key: "acoes",
+          label: "Ações",
+          sortable: false,
+          thClass: "center, wd-120-px"
+        }
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
@@ -264,7 +240,14 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      PedidoProdutoServico.ObterGrid(val, this.itensPorPagina, this.pedidoId)
+
+      PedidoProdutoClienteServico.ObterGridTotal(
+        val,
+        this.itensPorPagina,
+        this.pedidoId,
+        this.filtro.produto,
+        this.filtro.produtosNoPedido
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -289,11 +272,11 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      PedidoProdutoServico.Remover(this.itemRemover)
+      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Produto removido com sucesso."],
+            data: ["Produtos removido com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -306,57 +289,9 @@ export default {
           });
         });
     },
-    Remover(id) {
+    Remover(item) {
       this.modalRemover = true;
-      this.itemRemover = id;
-    },
-    Novo() {
-      this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.produtoId = this.viewModel.produto.id;
-      PedidoProdutoServico.Novo(this.viewModel)
-        .then((resposta) => {
-          this.loading = false;
-          this.Limpar();
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Produto cadastrado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    Editar() {
-      this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.produtoId = this.viewModel.produto.id;
-      PedidoProdutoServico.Editar(this.viewModel)
-        .then(() => {
-          this.loading = false;
-          this.Limpar();
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Produto editado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
+      this.itemRemover = item.id;
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
@@ -365,15 +300,20 @@ export default {
       this.viewModel.valor = 0;
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
+      this.filtro.props = "";
+      this.filtro.produtosNoPedido = false;
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     RemoverCifrao(valor) {
@@ -382,40 +322,6 @@ export default {
       } else {
         return valor;
       }
-    },
-    // ObterProdutosSelect() {
-    //   this.$http({
-    //     url: "/produto/obter-select",
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.produtoOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 5000
-    //       });
-    //     });
-    // },
-    ObterProdutosVSelect(busca) {
-      if (!busca || busca.length <= 2) return;
-
-      this.$http({
-        url: "/produto/obter-v-select/" + busca,
-        method: "GET"
-      })
-        .then((response) => {
-          this.produtoOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
     }
   }
 };

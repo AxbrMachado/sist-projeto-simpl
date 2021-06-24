@@ -1,7 +1,7 @@
 import Vue from "vue";
 import TipoPessoaContratoEnum from "./../enums/TipoPessoaContratoEnum";
 
-class DocumentoServico {
+class PedidoClienteServico {
   Obter(id) {
     return Vue.prototype.$http({
       url: "pedidopessoa/obter/" + id,
@@ -9,7 +9,7 @@ class DocumentoServico {
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, pedidoId) {
+  ObterGrid(pagina, itensPorPagina, pedidoId, nome, clienteComProduto) {
     return Vue.prototype.$http({
       url:
         "/pedidopessoa/obter-grid?pagina=" +
@@ -18,8 +18,13 @@ class DocumentoServico {
         itensPorPagina +
         "&pedidoId=" +
         pedidoId +
+        "&nome=" +
+        nome +
         "&tipoPessoaContrato=" +
-        TipoPessoaContratoEnum.Cliente,
+        TipoPessoaContratoEnum.Cliente +
+        "&clienteComProduto=" +
+        clienteComProduto,
+
       method: "GET"
     });
   }
@@ -48,4 +53,4 @@ class DocumentoServico {
   }
 }
 
-export default new DocumentoServico();
+export default new PedidoClienteServico();

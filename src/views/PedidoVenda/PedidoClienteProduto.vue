@@ -12,9 +12,7 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Fornecedores</strong>
-                <small class="ml-2 mt-1">Clique para abrir/esconder</small>
-
+                <strong class="align-self-center">Produtos Cliente</strong>
                 <i
                   :class="
                     abrir
@@ -27,71 +25,42 @@
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
                 <div class="row">
-                  <div class="col">
+                  <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <small
-                        >Campos com * são de preenchimento obrigatório</small
-                      >
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                    <div class="form-group">
-                      <label for>* Fornecedor</label>
-                      <v-select
-                        placeholder="Digite um fornecedor.."
-                        v-model="viewModel.pessoa"
-                        :options="fornecedorOptions"
-                        required
-                        @search="ObterFornecedoresVSelect"
-                      >
-                        <template slot="no-options">
-                          Nenhum resultado para a busca.
-                        </template>
-                      </v-select>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Valor</label>
-                      <currency-input
-                        v-model="viewModel.valor"
+                      <label>Produto</label>
+                      <input
+                        type="text"
+                        v-model="filtro.produto"
                         class="form-control"
-                        placeholder="Digite o valor"
-                        required
                       />
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Quantidade</label>
-                      <vue-numeric
-                        v-bind:precision="3"
-                        v-bind:minus="false"
-                        thousand-separator="."
-                        decimal-separator=","
-                        v-model="viewModel.quantidade"
-                        class="form-control"
-                        placeholder="Digite a quantidade"
-                        required
-                      />
-                    </div>
+                  <div
+                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                    title="Apenas licitações vencidas."
+                  >
+                    <label for>Presente no Pedido</label>
+                    <b-form-checkbox
+                      v-model="filtro.produtosNoPedido"
+                      name="check-button"
+                      switch
+                    >
+                    </b-form-checkbox>
                   </div>
-                </div>
-                <div class="btn-toolbar mb-3" role="toolbar">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-success mr-2" type="submit">
-                      Salvar
+                  <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
+                    <button
+                      class="btn btn-primary mr-2"
+                      type="button"
+                      @click="ObterGrid(1)"
+                    >
+                      Filtrar
                     </button>
-                  </div>
-                  <div class="btn-group" role="group">
                     <button
                       class="btn btn-secondary"
-                      type="reset"
-                      @click="abrir = !abrir"
+                      type="button"
+                      @click="Limpar()"
                     >
-                      Voltar
+                      Limpar
                     </button>
                   </div>
                 </div>
@@ -105,7 +74,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum fornecedor encontrado."
+                      empty-text="Nenhum produto encontrado."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -114,39 +83,30 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            variant="warning"
+                            variant="info"
                             style="margin-right: 10px"
-                            title="Editar"
-                            @click="Obter(data.item.id)"
+                            title="Editar Quantidade"
+                            @click="Edicao(data.item)"
                           >
                             <i class="fa fa-edit text-black"></i>
                           </b-button>
                           <b-button
                             variant="danger"
-                            title="Remover"
-                            @click="Remover(data.item.id)"
+                            title="Zerar Quantidade"
+                            @click="Remover(data.item)"
                           >
                             <i class="fas fa-trash-alt text-black"></i>
+                            <!-- <i class="fa fa-edit text-black"></i> -->
                           </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(valor)="data">
+                      <template v-slot:cell(valorUnitario)="data">
                         <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(tipoFornecedor)="data">
-                        <div class="center">
                           <span>{{
-                            ObterNomeTipoFornecedor(data.item.tipoFornecedor)
+                            FormataValor(data.item.valorUnitario)
                           }}</span>
                         </div>
                       </template>
-                      <!-- <template v-slot:cell(valor)="data">
-                        <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
-                        </div>
-                      </template> -->
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -169,44 +129,79 @@
       title="Confirmar exclusão"
       class="modal-danger"
       ok-variant="danger"
-      @ok="ModalOk"
-      @hidden="ModalCancel"
+      @ok="ModalRemocaoOk"
+      @hidden="ModalRemocaoCancel"
     >
-      Você confirma a exclusão desse registro?
+      Confirma a remoção do produto desse cliente?
+    </b-modal>
+    <b-modal
+      v-model="modalEdicao"
+      title="Informar quantidade produto"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="ModalEdicaoOk"
+      @hidden="ModalEdicaoCancel"
+    >
+      <div class="form-group">
+        <label for>* Quantidade</label>
+        <vue-numeric
+          v-bind:precision="3"
+          v-bind:minus="false"
+          thousand-separator="."
+          decimal-separator=","
+          v-model="itemEdicaoQuantidade"
+          class="form-control"
+          placeholder="Digite a quantidade"
+          required
+        />
+      </div>
     </b-modal>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ProdutoFornecedor from "../../servico/ProdutoFornecedorServico";
-import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
-import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
 
 export default {
   components: { RotateSquare },
   props: {
-    produtoId: {
+    pedidoPessoaId: {
       type: String,
       default: ""
     }
   },
   data() {
     return {
+      modalEdicao: false,
+      itemEdicao: null,
+      itemEdicaoQuantidade: 0,
       modalRemover: false,
       itemRemover: null,
-      fornecedorOptions: [],
+      produtoOptions: [],
       loading: false,
+      abrir: true,
       pagina: 1,
+      abrir: true,
       total: 0,
-      itensPorPagina: 5,
+      itensPorPagina: 10,
+      filtro: {
+        produto: "",
+        produtosNoPedido: false
+      },
       itens: [],
-      abrir: false,
       fields: [
-        { key: "nome", label: "Fornecedor", sortable: true },
-        { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
-        { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "produto", label: "Produto", sortable: true },
+        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        { key: "valorUnitario", label: "Valor  Un.", sortable: true },
+        {
+          key: "quantidadeSolicitada",
+          label: "Qtd. Solicitada",
+          sortable: true
+        },
+        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
+        { key: "disponivel", label: "Disponivel", sortable: true },
+        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -217,9 +212,13 @@ export default {
       viewModel: {
         id: this.$store.getters.emptyGuid,
         produtoId: "",
+        produto: {},
+        pedidoId: "",
         valor: 0,
         quantidade: 0,
-        pessoa: {}
+        quantidadeSolicitada: 0,
+        quantidadeAtendida: 0,
+        quantidadeTroca: 0
       }
     };
   },
@@ -232,18 +231,21 @@ export default {
     }
   },
   created() {
-    // this.ObterFornecedorsSelect();
+    //let pedidoId = this.$route.params.id;
+    //if (pedidoId) this.Obter(pedidoId);
+    // this.ObterProdutosSelect();
   },
   methods: {
     IsNovo() {
-      return this.produtoId === this.$store.getters.emptyGuid;
+      return this.pedidoId === this.$store.getters.emptyGuid;
     },
     ValidarForm(evt) {
       evt.preventDefault();
-      if (!this.viewModel.pessoa || this.viewModel.pessoa.id == undefined) {
+
+      if (!this.viewModel.produto || this.viewModel.produto.id == undefined) {
         this.loading = false;
         this.$notify({
-          data: ["Informe um fornecedor."],
+          data: ["Informe um produto."],
           type: "warn",
           duration: 5000
         });
@@ -255,9 +257,10 @@ export default {
     },
     Obter(id) {
       this.loading = true;
-      ProdutoFornecedor.Obter(id)
+      PedidoProdutoClienteServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
+          //resposta.data.validade = DateTime.formatar(resposta.data.validade);
           this.viewModel = resposta.data;
         })
         .catch((erro) => {
@@ -271,7 +274,18 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
-      ProdutoFornecedor.ObterGrid(val, this.itensPorPagina, this.produtoId)
+      this.viewModel.quantidadeSolicitada = 0;
+      this.itemEdicaoQuantidade = 0;
+      this.itemEdicao = null;
+      this.itemRemover = null;
+
+      PedidoProdutoClienteServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.pedidoPessoaId,
+        this.filtro.produto,
+        this.filtro.produtosNoPedido
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -287,20 +301,26 @@ export default {
           });
         });
     },
-    ModalCancel(evento) {
+    ModalEdicaoCancel(evento) {
       evento.preventDefault();
-      this.itemRemover = null;
+      this.itemEdicao = null;
+      this.itemEdicaoQuantidade = 0;
     },
-    ModalOk(evento) {
-      evento.preventDefault();
-      this.modalRemover = false;
-      if (!this.itemRemover) return;
 
-      ProdutoFornecedor.Remover(this.itemRemover)
+    ModalEdicaoOk(evento) {
+      evento.preventDefault();
+      this.modalEdicao = false;
+
+      if (!this.itemEdicao || !this.itemEdicaoQuantidade) return;
+      this.viewModel.id = this.itemEdicao;
+      this.viewModel.quantidadeSolicitada = this.itemEdicaoQuantidade;
+      this.viewModel.produtoId = this.$store.getters.emptyGuid;
+
+      PedidoProdutoClienteServico.Editar(this.viewModel)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Fornecedor removido com sucesso."],
+            data: ["Quantidade definida com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -313,20 +333,74 @@ export default {
           });
         });
     },
-    Remover(id) {
+
+    ModalRemocaoCancel(evento) {
+      evento.preventDefault();
+      this.itemRemover = null;
+    },
+    ModalRemocaoOk(evento) {
+      evento.preventDefault();
+      this.modalRemover = false;
+
+      if (!this.itemRemover) return;
+      this.viewModel.id = this.itemRemover;
+      this.viewModel.quantidadeSolicitada = 0;
+      this.viewModel.produtoId = this.$store.getters.emptyGuid;
+
+      PedidoProdutoClienteServico.Editar(this.viewModel)
+        .then(() => {
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Produto removido com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+
+      //   PedidoProdutoClienteServico.Remover(this.itemRemover)
+      //     .then(() => {
+      //       this.ObterGrid(1);
+      //       this.$notify({
+      //         data: ["Produto removido com sucesso."],
+      //         type: "success",
+      //         duration: 5000
+      //       });
+      //     })
+      //     .catch((erro) => {
+      //       this.$notify({
+      //         data: erro.response.data.erros,
+      //         type: "warn",
+      //         duration: 5000
+      //       });
+      //     });
+    },
+    Remover(item) {
       this.modalRemover = true;
-      this.itemRemover = id;
+      this.itemRemover = item.id;
+    },
+    Edicao(item) {
+      this.modalEdicao = true;
+      this.itemEdicao = item.id;
+      this.itemEdicaoQuantidade = item.quantidadeSolicitada;
     },
     Novo() {
       this.loading = true;
-      this.viewModel.produtoId = this.produtoId;
-      ProdutoFornecedor.Novo(this.viewModel)
+      this.viewModel.pedidoId = this.pedidoId;
+      this.viewModel.produtoId = this.viewModel.produto.id;
+      PedidoProdutoClienteServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Fornecedor cadastrado com sucesso."],
+            data: ["Produto cadastrado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -342,14 +416,15 @@ export default {
     },
     Editar() {
       this.loading = true;
-      this.viewModel.produtoId = this.produtoId;
-      ProdutoFornecedor.Editar(this.viewModel)
+      this.viewModel.pedidoId = this.pedidoId;
+      this.viewModel.produtoId = this.viewModel.produto.id;
+      PedidoProdutoClienteServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({
-            data: ["Fornecedor editado com sucesso."],
+            data: ["Produto editado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -366,9 +441,12 @@ export default {
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.produtoId = "";
+      this.viewModel.pedidoId = "";
       this.viewModel.valor = 0;
       this.viewModel.quantidade = 0;
-      this.viewModel.pessoa = {};
+      this.viewModel.produto = {};
+      this.filtro.produto = "";
+      this.filtro.produtosNoPedido = false;
     },
     FormataValor(valor) {
       if (valor) {
@@ -390,13 +468,13 @@ export default {
         return valor;
       }
     },
-    // ObterFornecedorsSelect() {
+    // ObterProdutosSelect() {
     //   this.$http({
-    //     url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
+    //     url: "/produto/obter-select",
     //     method: "GET"
     //   })
     //     .then((response) => {
-    //       this.fornecedorOptions = response.data;
+    //       this.produtoOptions = response.data;
     //     })
     //     .catch((erro) => {
     //       this.$notify({
@@ -406,36 +484,15 @@ export default {
     //       });
     //     });
     // },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return valor;
-      }
-    },
-    ObterNomeTipoFornecedor(item) {
-      switch (item) {
-        case TipoFornecedorEnum.Avulso:
-          return "Avulso";
-        case TipoFornecedorEnum.Cooperado:
-          return "Cooperado";
-        default:
-          return "Inválido";
-      }
-    },
-    ObterFornecedoresVSelect(busca) {
+    ObterProdutosVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
       this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
+        url: "/produto/obter-v-select/" + busca,
         method: "GET"
       })
         .then((response) => {
-          this.fornecedorOptions = response.data;
+          this.produtoOptions = response.data;
         })
         .catch((erro) => {
           this.$notify({

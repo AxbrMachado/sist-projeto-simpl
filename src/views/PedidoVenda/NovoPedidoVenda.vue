@@ -93,7 +93,7 @@
                       disabled
                       v-model="viewModel.valor"
                       class="form-control"
-                      placeholder="Digite o valor"
+                      placeholder="0,00"
                     />
                   </div>
                 </div>
@@ -150,6 +150,7 @@ import NovoDocumento from "../../components/NovoDocumento";
 import PedidoCliente from "./PedidoCliente";
 import PedidoProduto from "./PedidoProduto";
 import PedidoFornecedor from "./PedidoFornecedor";
+import Contato from "../../components/Contato";
 
 export default {
   name: "NovoPedidoVenda",
@@ -177,6 +178,11 @@ export default {
         dataTermino: ""
       }
     };
+  },
+  watch: {
+    contratoOptions: function (val) {
+      //this.LoadContratoLicitacao(val);
+    }
   },
   created() {
     let pedidoId = this.$route.params.id;
@@ -317,6 +323,9 @@ export default {
       this.viewModel.valor = 0;
 
       this.ObterContratosSelect();
+    },
+    LoadContratoLicitacao(val) {
+      console.log(val);
     }
   }
 };

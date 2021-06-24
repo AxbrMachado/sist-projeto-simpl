@@ -1,5 +1,5 @@
 import Vue from "vue";
-class DocumentoServico {
+class UnidadeMedidaServico {
   Obter(id) {
     return Vue.prototype.$http({
       url: "unidadeMedida/obter/" + id,
@@ -44,4 +44,4 @@ class DocumentoServico {
   }
 }
 
-export default new DocumentoServico();
+export default new UnidadeMedidaServico();

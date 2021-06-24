@@ -1,7 +1,7 @@
 import Vue from "vue";
 import TipoPessoaContratoEnum from "./../enums/TipoPessoaContratoEnum";
 
-class DocumentoServico {
+class ContratoClienteServico {
   Obter(id) {
     return Vue.prototype.$http({
       url: "pessoacontrato/obter/" + id,
@@ -48,4 +48,4 @@ class DocumentoServico {
   }
 }
 
-export default new DocumentoServico();
+export default new ContratoClienteServico();

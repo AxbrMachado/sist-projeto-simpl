@@ -1,5 +1,5 @@
 import Vue from "vue";
-class DocumentoServico {
+class FornecedorProdutoServico {
     Obter(id) {
         return Vue.prototype.$http({
             url: "fornecedorProduto/obter/" + id,
@@ -45,4 +45,4 @@ class DocumentoServico {
 
 };
 
-export default new DocumentoServico();
+export default new FornecedorProdutoServico();

@@ -10,7 +10,8 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="abrir = !abrir">
+            <header class="card-header" @click="switchAbertura()">
+              <!-- <header class="card-header" @click="abrir = !abrir"> -->
               <div class="d-flex">
                 <strong class="align-self-center">Cliente(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
@@ -26,61 +27,46 @@
             </header>
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
-                <!-- <div class="row">
-                  <div class="col">
+                <div class="row">
+                  <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <small
-                        >Campos com * são de preenchimento obrigatório</small
-                      >
-                    </div>
-                  </div>
-                </div> -->
-                <!-- <div class="row">
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Cliente</label>
-                      <v-select
-                        placeholder="Digite um cliente.."
-                        v-model="viewModel.pessoa"
-                        :options="clienteOptions"
-                        required
-                        @search="ObterClientesVSelect"
-                      >
-                        <template slot="no-options">
-                          Nenhum resultado para a busca.
-                        </template>
-                      </v-select>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                    <div class="form-group">
-                      <label for>* Rota</label>
+                      <label>Nome</label>
                       <input
-                        v-model="viewModel.rota"
-                        class="form-control"
                         type="text"
-                        placeholder="Digite a descrição"
-                        required
+                        v-model="filtro.nome"
+                        class="form-control"
                       />
                     </div>
                   </div>
-                </div> -->
-                <!-- <div class="btn-toolbar mb-3" role="toolbar">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-success mr-2" type="submit">
-                      Salvar
-                    </button>
+                  <div
+                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                    title="Apenas licitações vencidas."
+                  >
+                    <label for>Com Produtos</label>
+                    <b-form-checkbox
+                      v-model="filtro.clienteComProduto"
+                      name="check-button"
+                      switch
+                    >
+                    </b-form-checkbox>
                   </div>
-                  <div class="btn-group" role="group">
+                  <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
+                    <button
+                      class="btn btn-primary mr-2"
+                      type="button"
+                      @click="ObterGrid(1)"
+                    >
+                      Filtrar
+                    </button>
                     <button
                       class="btn btn-secondary"
-                      type="reset"
-                      @click="abrir = !abrir"
+                      type="button"
+                      @click="Limpar()"
                     >
-                      Voltar
+                      Limpar
                     </button>
                   </div>
-                </div> -->
+                </div>
                 <div class="row">
                   <div class="col-12">
                     <b-table
@@ -103,17 +89,10 @@
                             variant="warning"
                             style="margin-right: 10px"
                             title="Editar"
-                            @click="Obter(data.item.id)"
+                            @click="SwitchEditarProdutoCliente(data.item.id)"
                           >
                             <i class="fa fa-edit text-black"></i>
                           </b-button>
-                          <!-- <b-button
-                            variant="danger"
-                            title="Remover"
-                            @click="Remover(data.item.id)"
-                          >
-                            <i class="fas fa-trash-alt text-black"></i>
-                          </b-button> -->
                         </div>
                       </template>
                       <template v-slot:cell(tipoPessoa)="data">
@@ -121,6 +100,11 @@
                           <span>{{
                             ObterTipoPessoa(data.item.tipoPessoa)
                           }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(valor)="data">
+                        <div class="left">
+                          <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
                     </b-table>
@@ -150,6 +134,10 @@
     >
       Você confirma a exclusão desse registro?
     </b-modal>
+    <div v-if="EditarProdutoCliente()">
+      <PedidoClienteProduto :pedidoPessoaId="this.pedidoPessoaId">
+      </PedidoClienteProduto>
+    </div>
   </div>
 </template>
 
@@ -158,13 +146,15 @@ import RotateSquare from "../../components/RotateSquare";
 import PedidoCliente from "../../servico/PedidoClienteServico";
 import TipoPessoaPedidoEnum from "../../enums/TipoPessoaEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import PedidoClienteProduto from "./PedidoClienteProduto.vue";
 
 export default {
   components: {
     RotateSquare,
     PedidoCliente,
     TipoPessoaPedidoEnum,
-    TipoPessoaEnum
+    TipoPessoaEnum,
+    PedidoClienteProduto
   },
   props: {
     pedidoId: {
@@ -180,12 +170,19 @@ export default {
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 5,
+      itensPorPagina: 10,
+      filtro: {
+        nome: "",
+        clienteComProduto: false
+      },
       itens: [],
       abrir: false,
+      pedidoPessoaId: "",
+      editarProduto: false,
       fields: [
         { key: "pessoa", label: "Cliente", sortable: true },
         { key: "tipoPessoa", label: "Tipo Pessoa", sortable: true },
+        { key: "valor", label: "Valor Produtos", sortable: true },
         { key: "rota", label: "Rota", sortable: true },
         {
           key: "acoes",
@@ -257,8 +254,18 @@ export default {
         });
     },
     ObterGrid(val) {
+      if (this.filtro.nome) {
+        this.editarProduto = false;
+      }
+
       this.loading = true;
-      PedidoCliente.ObterGrid(val, this.itensPorPagina, this.pedidoId)
+      PedidoCliente.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.pedidoId,
+        this.filtro.nome,
+        this.filtro.clienteComProduto
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -360,6 +367,8 @@ export default {
       this.viewModel.valorLimite = 0;
       this.viewModel.quantidadeLimite = 0;
       this.viewModel.pessoa = {};
+      this.filtro.nome = "";
+      this.filtro.clienteComProduto = false;
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -368,39 +377,15 @@ export default {
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     RemoverCifrao(valor) {
       if (valor != null) {
         return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
-    // ObterClientesSelect() {
-    //   this.$http({
-    //     // url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
-    //     url: "/pessoa/obter-select",
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.clienteOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 5000
-    //       });
-    //     });
-    // },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
       } else {
         return valor;
       }
@@ -419,23 +404,29 @@ export default {
           return "Inválido";
       }
     },
-    ObterClientesVSelect(busca) {
-      if (!busca || busca.length <= 2) return;
+    EditarProdutoCliente() {
+      return this.editarProduto;
+    },
+    SwitchEditarProdutoCliente(value) {
+      if (1 == 2 && this.pedidoPessoaId != value) {
+        this.pedidoPessoaId = value;
 
-      this.$http({
-        url: "/pessoa/obter-v-select/" + busca,
-        method: "GET"
-      })
-        .then((response) => {
-          this.clienteOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
+        if (this.editarProduto) {
+          // PedidoClienteProduto.ObterFGrid(1);
+        }
+
+        this.editarProduto = true;
+      } else {
+        this.pedidoPessoaId = value;
+        this.editarProduto = !this.editarProduto;
+      }
+    },
+    switchAbertura() {
+      this.abrir = !this.abrir;
+
+      if (!this.abrir) {
+        this.editarProduto = false;
+      }
     }
   }
 };
