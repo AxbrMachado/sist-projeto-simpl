@@ -155,10 +155,12 @@ import PedidoCliente from "./PedidoCliente";
 import PedidoFornecedor from "./PedidoFornecedor";
 import PedidoProduto from "./PedidoProduto";
 import Contato from "../../components/Contato";
+import Bus from "../../util/EventBus";
 
 export default {
   name: "NovoPedidoVenda",
   components: {
+    Bus,
     RotateSquare,
     NovoDocumento,
     PedidoCliente,
@@ -336,6 +338,7 @@ export default {
     },
     atualizarPedido() {
       this.Obter(this.viewModel.id);
+      Bus.$emit("atualizarProdutos", this.viewModel.id);
     }
   }
 };

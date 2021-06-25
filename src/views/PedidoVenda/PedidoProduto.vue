@@ -139,10 +139,14 @@
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
+import Bus from "../../util/EventBus";
 
 export default {
   name: "PedidoProduto",
-  components: { RotateSquare },
+  components: {
+    RotateSquare,
+    Bus
+  },
   props: {
     pedidoId: {
       type: String,
@@ -201,6 +205,9 @@ export default {
     //let pedidoId = this.$route.params.id;
     //if (pedidoId) this.Obter(pedidoId);
     // this.ObterProdutosSelect();
+    Bus.$on("atualizarProdutos", (data) => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
     IsNovo() {
