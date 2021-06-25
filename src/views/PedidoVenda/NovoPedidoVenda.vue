@@ -134,7 +134,11 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <PedidoCliente :pedidoId="this.viewModel.id"> </PedidoCliente>
+      <PedidoCliente
+        :pedidoId="this.viewModel.id"
+        @atualizarPedido="atualizarPedido"
+      >
+      </PedidoCliente>
       <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto>
       <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor>
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
@@ -328,7 +332,10 @@ export default {
       this.ObterContratosSelect();
     },
     LoadContratoLicitacao(val) {
-      console.log(val);
+      //console.log(val);
+    },
+    atualizarPedido() {
+      this.Obter(this.viewModel.id);
     }
   }
 };

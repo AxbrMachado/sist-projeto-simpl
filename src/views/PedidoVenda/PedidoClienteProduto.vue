@@ -164,6 +164,8 @@ import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
 
 export default {
+  name: "PedidoClienteProduto",
+  emits: ["atualizarCliente"],
   components: { RotateSquare },
   props: {
     pedidoPessoaId: {
@@ -283,6 +285,7 @@ export default {
       PedidoProdutoClienteServico.Editar(this.viewModel)
         .then(() => {
           this.ObterGrid(1);
+          this.$emit("atualizarCliente");
           this.$notify({
             data: ["Quantidade definida com sucesso."],
             type: "success",
@@ -314,6 +317,7 @@ export default {
       PedidoProdutoClienteServico.Editar(this.viewModel)
         .then(() => {
           this.ObterGrid(1);
+          this.$emit("atualizarCliente");
           this.$notify({
             data: ["Produto removido com sucesso."],
             type: "success",
@@ -385,7 +389,7 @@ export default {
       }
     },
     RemoverCifrao(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
       } else {
         return valor;

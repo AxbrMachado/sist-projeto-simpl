@@ -125,7 +125,10 @@
       </div>
     </form>
     <div v-if="EditarProdutoCliente()">
-      <PedidoClienteProduto :pedidoPessoaId="this.pedidoPessoaId">
+      <PedidoClienteProduto
+        :pedidoPessoaId="this.pedidoPessoaId"
+        @atualizarCliente="atualizarCliente"
+      >
       </PedidoClienteProduto>
     </div>
   </div>
@@ -139,6 +142,8 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import PedidoClienteProduto from "./PedidoClienteProduto.vue";
 
 export default {
+  name: "PedidoCliente",
+  emits: ["atualizarPedido"],
   components: {
     RotateSquare,
     PedidoCliente,
@@ -214,6 +219,8 @@ export default {
           this.itens = resposta.data.itens;
           this.total = resposta.data.total;
           this.itensPorPagina = resposta.data.itensPorPagina;
+          // this.editarProduto = false;
+          this.$emit("atualizarPedido");
         })
         .catch((erro) => {
           this.loading = false;
@@ -285,6 +292,9 @@ export default {
       if (!this.abrir) {
         this.editarProduto = false;
       }
+    },
+    atualizarCliente() {
+      this.ObterGrid(this.pagina);
     }
   }
 };

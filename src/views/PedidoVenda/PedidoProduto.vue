@@ -141,6 +141,7 @@ import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
 
 export default {
+  name: "PedidoProduto",
   components: { RotateSquare },
   props: {
     pedidoId: {
