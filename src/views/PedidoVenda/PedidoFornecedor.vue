@@ -26,75 +26,46 @@
             </header>
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
-                <!-- <div class="row">
-                  <div class="col">
-                    <div class="form-group">
-                      <small
-                        >Campos com * são de preenchimento obrigatório</small
-                      >
-                    </div>
-                  </div>
-                </div>
                 <div class="row">
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <label for>* Fornecedor</label>
-                      <v-select
-                        placeholder="Digite um fornecedor.."
-                        v-model="viewModel.pessoa"
-                        :options="fornecedorOptions"
-                        required
-                        @search="ObterFornecedoresVSelect"
-                      >
-                        <template slot="no-options">
-                          Nenhum resultado para a busca.
-                        </template>
-                      </v-select>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Valor Limite</label>
-                      <currency-input
-                        v-model="viewModel.valorLimite"
+                      <label>Fornecedor</label>
+                      <input
+                        type="text"
+                        v-model="filtro.fornecedor"
                         class="form-control"
-                        placeholder="Digite o valor limite"
-                        required
                       />
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                      <label for>* Quantidade Limite</label>
-                      <vue-numeric
-                        v-bind:precision="3"
-                        v-bind:minus="false"
-                        thousand-separator="."
-                        decimal-separator=","
-                        v-model="viewModel.quantidadeLimite"
-                        class="form-control"
-                        placeholder="Digite a quantidade limite"
-                        required
-                      />
-                    </div>
+                  <div
+                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                    title="Apenas fornecedores que fornecem produtos no pedido."
+                  >
+                    <label for>Fornecedor com Produto</label>
+                    <b-form-checkbox
+                      v-model="filtro.fornecedorComProduto"
+                      name="check-button"
+                      switch
+                    >
+                    </b-form-checkbox>
                   </div>
-                </div> -->
-                <!-- <div class="btn-toolbar mb-3" role="toolbar">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-success mr-2" type="submit">
-                      Salvar
+                  <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
+                    <button
+                      class="btn btn-primary mr-2"
+                      type="button"
+                      @click="ObterGrid(1)"
+                    >
+                      Filtrar
                     </button>
-                  </div>
-                  <div class="btn-group" role="group">
                     <button
                       class="btn btn-secondary"
-                      type="reset"
-                      @click="abrir = !abrir"
+                      type="button"
+                      @click="Limpar()"
                     >
-                      Voltar
+                      Limpar
                     </button>
                   </div>
-                </div> -->
+                </div>
                 <div class="row">
                   <div class="col-12">
                     <b-table
@@ -207,7 +178,11 @@ export default {
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 5,
+      itensPorPagina: 10,
+      filtro: {
+        fornecedor: "",
+        fornecedorComProduto: false
+      },
       itens: [],
       abrir: false,
       fields: [
@@ -288,9 +263,15 @@ export default {
           });
         });
     },
-    ObterGrid(val) {
+    ObterGrid(pagina) {
       this.loading = true;
-      PedidoFornecedorServico.ObterGrid(val, this.itensPorPagina, this.pedidoId)
+      PedidoFornecedorServico.ObterGridTotal(
+        pagina,
+        this.itensPorPagina,
+        this.pedidoId,
+        this.filtro.fornecedor,
+        this.filtro.fornecedorComProduto
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -391,6 +372,8 @@ export default {
       this.viewModel.valorLimite = 0;
       this.viewModel.quantidadeLimite = 0;
       this.viewModel.pessoa = {};
+      this.filtro.fornecedor = "";
+      this.filtro.fornecedorComProduto = false;
     },
     FormataValor(valor) {
       if (valor != null) {

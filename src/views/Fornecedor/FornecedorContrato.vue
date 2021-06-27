@@ -78,6 +78,13 @@
                       >
                         <i class="fa fa-edit text-black"></i>
                       </b-button>
+                      <b-button
+                        variant="danger"
+                        title="Remover"
+                        @click="Remover(data.item)"
+                      >
+                        <i class="fas fa-trash-alt text-black"></i>
+                      </b-button>
                     </div>
                   </template>
                   <template v-slot:cell(dataInicio)="data">
@@ -115,11 +122,22 @@
         </div>
       </div>
     </div>
+    <b-modal
+      v-model="modalRemover"
+      title="Confirmar exclusão"
+      class="modal-danger"
+      ok-variant="danger"
+      @ok="ModalOk"
+      @hidden="ModalCancel"
+    >
+      Você confirma a exclusão desse registro?
+    </b-modal>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import ContratoFornecedor from "../../servico/ContratoFornecedorServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import DateTime from "../../util/DateTime";
 
@@ -138,6 +156,8 @@ export default {
   data() {
     return {
       loading: false,
+      modalRemover: false,
+      itemRemover: null,
       abrir: false,
       itens: [],
       pagina: 1,
@@ -146,6 +166,7 @@ export default {
       filtro: { numero: "" },
       fields: [
         { key: "numero", label: "Número", sortable: true },
+        { key: "entidadeLicitacao", label: "Entidade", sortable: true },
         { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
         { key: "dataInicio", label: "Data Início", sortable: true },
@@ -214,6 +235,40 @@ export default {
     },
     IsNovo() {
       return this.pessoaId === this.$store.getters.emptyGuid;
+    },
+    ModalCancel(evento) {
+      evento.preventDefault();
+      this.itemRemover = null;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
+    },
+    ModalOk(evento) {
+      evento.preventDefault();
+      this.modalRemover = false;
+      console.log(this.itemRemover);
+
+      if (!this.itemRemover) return;
+
+      ContratoFornecedor.Remover(this.itemRemover)
+        .then(() => {
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Contrato removido com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    Remover(item) {
+      this.modalRemover = true;
+      this.itemRemover = item.id;
     },
     formatarData(value) {
       return new Date(value).toLocaleDateString();

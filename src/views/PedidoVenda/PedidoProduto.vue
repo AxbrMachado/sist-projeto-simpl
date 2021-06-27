@@ -39,7 +39,7 @@
                   </div>
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas licitações vencidas."
+                    title="Apenas produtos presentes no pedido."
                   >
                     <label for>Presente no Pedido</label>
                     <b-form-checkbox
@@ -202,9 +202,6 @@ export default {
     }
   },
   created() {
-    //let pedidoId = this.$route.params.id;
-    //if (pedidoId) this.Obter(pedidoId);
-    // this.ObterProdutosSelect();
     Bus.$on("atualizarProdutos", (data) => {
       this.ObterGrid(this.pagina);
     });
@@ -308,7 +305,7 @@ export default {
       this.viewModel.valor = 0;
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
-      this.filtro.props = "";
+      this.filtro.produto = "";
       this.filtro.produtosNoPedido = false;
     },
     FormataValor(valor) {

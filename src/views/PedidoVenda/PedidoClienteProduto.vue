@@ -37,7 +37,7 @@
                   </div>
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas licitações vencidas."
+                    title="Apenas clientes presentes no pedido."
                   >
                     <label for>Presente no Pedido</label>
                     <b-form-checkbox
