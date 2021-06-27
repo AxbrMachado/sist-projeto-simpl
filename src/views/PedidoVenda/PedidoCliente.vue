@@ -140,12 +140,14 @@ import PedidoCliente from "../../servico/PedidoClienteServico";
 import TipoPessoaPedidoEnum from "../../enums/TipoPessoaEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import PedidoClienteProduto from "./PedidoClienteProduto.vue";
+import Bus from "../../util/EventBus";
 
 export default {
   name: "PedidoCliente",
   emits: ["atualizarPedido"],
   components: {
     RotateSquare,
+    Bus,
     PedidoCliente,
     TipoPessoaPedidoEnum,
     TipoPessoaEnum,
@@ -199,16 +201,20 @@ export default {
     //let pedidoId = this.$route.params.id;
     //if (pedidoId) this.Obter(pedidoId);
     // this.ObterClientesSelect();
+
+    Bus.$on("remocao-produto-pedido", () => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
-    ObterGrid(val) {
+    ObterGrid(pagina) {
       if (this.filtro.nome) {
         this.editarProduto = false;
       }
 
       this.loading = true;
       PedidoCliente.ObterGrid(
-        val,
+        pagina,
         this.itensPorPagina,
         this.pedidoId,
         this.filtro.nome,

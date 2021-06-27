@@ -241,11 +241,13 @@
 import RotateSquare from "../../components/RotateSquare";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import Bus from "../../util/EventBus";
 
 export default {
   name: "PedidoVenda",
   components: {
-    RotateSquare
+    RotateSquare,
+    Bus
   },
   data() {
     return {

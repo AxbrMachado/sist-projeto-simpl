@@ -162,11 +162,15 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
+import Bus from "../../util/EventBus";
 
 export default {
   name: "PedidoClienteProduto",
   emits: ["atualizarCliente"],
-  components: { RotateSquare },
+  components: {
+    RotateSquare,
+    Bus
+  },
   props: {
     pedidoPessoaId: {
       type: String,
@@ -236,6 +240,10 @@ export default {
     //let pedidoId = this.$route.params.id;
     //if (pedidoId) this.Obter(pedidoId);
     // this.ObterProdutosSelect();
+
+    Bus.$on("remocao-produto-pedido", () => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
     ObterGrid(val) {
@@ -286,6 +294,7 @@ export default {
         .then(() => {
           this.ObterGrid(1);
           this.$emit("atualizarCliente");
+          Bus.$emit("alterado-produto-cliente");
           this.$notify({
             data: ["Quantidade definida com sucesso."],
             type: "success",
@@ -318,6 +327,7 @@ export default {
         .then(() => {
           this.ObterGrid(1);
           this.$emit("atualizarCliente");
+          Bus.$emit("alterado-produto-cliente");
           this.$notify({
             data: ["Produto removido com sucesso."],
             type: "success",

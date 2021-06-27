@@ -161,9 +161,13 @@ import PedidoFornecedorServico from "../../servico/PedidoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import Bus from "../../util/EventBus";
 
 export default {
-  components: { RotateSquare },
+  components: {
+    RotateSquare,
+    Bus
+  },
   props: {
     pedidoId: {
       type: String,
@@ -189,18 +193,13 @@ export default {
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
-        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        { key: "valorConsumido", label: "Valor Consumido", sortable: true },
         {
-          key: "quantidadeConsumida",
-          label: "Quantidade Consumida",
-          sortable: true
+          key: "acoes",
+          label: "Ações",
+          sortable: false,
+          thClass: "center, wd-120-px"
         }
-        // {
-        //   key: "acoes",
-        //   label: "Ações",
-        //   sortable: false,
-        //   thClass: "center, wd-120-px"
-        // }
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,

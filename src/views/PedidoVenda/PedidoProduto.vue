@@ -197,12 +197,12 @@ export default {
     this.ObterGrid(1);
   },
   watch: {
-    pagina: function (val) {
-      this.ObterGrid(val);
+    pagina: function (pagina) {
+      this.ObterGrid(pagina);
     }
   },
   created() {
-    Bus.$on("atualizarProdutos", (data) => {
+    Bus.$on("alterado-produto-cliente", () => {
       this.ObterGrid(this.pagina);
     });
   },
@@ -280,6 +280,7 @@ export default {
       PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
+          Bus.$emit("remocao-produto-pedido");
           this.$notify({
             data: ["Produtos removido com sucesso."],
             type: "success",

@@ -204,6 +204,10 @@ export default {
 
     if (pedidoId) this.Obter(pedidoId);
     this.ObterContratosSelect();
+
+    Bus.$on("remocao-produto-pedido", () => {
+      this.atualizarPedido();
+    });
   },
   methods: {
     ValidarForm(evt) {
@@ -338,7 +342,6 @@ export default {
     },
     atualizarPedido() {
       this.Obter(this.viewModel.id);
-      Bus.$emit("atualizarProdutos", this.viewModel.id);
     }
   }
 };
