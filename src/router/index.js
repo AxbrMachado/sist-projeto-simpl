@@ -70,7 +70,7 @@ export default new Router({
           name: "Dashboard",
           component: Dashboard,
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: ""
           }
         },
         //Cadastro de usuário
@@ -79,7 +79,7 @@ export default new Router({
           name: "Usuário",
           // component: Usuario,
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "Usuario.Visualizar"
           },
           component: {
             render(c) {
@@ -91,7 +91,7 @@ export default new Router({
               path: "",
               component: Usuario,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Usuario.Visualizar"
               }
             },
             {
@@ -99,7 +99,7 @@ export default new Router({
               name: "Editar",
               component: NovoUsuario,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Usuario.Adicionar"
               }
             },
             {
@@ -107,7 +107,7 @@ export default new Router({
               name: "Novo",
               component: NovoUsuario,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Usuario.Adicionar"
               }
             },
 
@@ -127,7 +127,7 @@ export default new Router({
           path: "licitacao",
           name: "Licitacao",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "Licitacao.Visualizar"
           },
           component: {
             render(c) {
@@ -139,7 +139,7 @@ export default new Router({
               path: "",
               component: Licitacao,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Licitacao.Visualizar"
               }
             },
             {
@@ -147,7 +147,7 @@ export default new Router({
               name: "Editar",
               component: NovaLicitacao,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Licitacao.Adicionar"
               }
             },
             {
@@ -155,7 +155,7 @@ export default new Router({
               name: "Novo",
               component: NovaLicitacao,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Licitacao.Adicionar"
               }
             }
           ]
@@ -166,7 +166,7 @@ export default new Router({
           path: "contrato",
           name: "Contrato",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "Contrato.Visualizar"
           },
           component: {
             render(c) {
@@ -178,7 +178,7 @@ export default new Router({
               path: "",
               component: Contrato,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Contrato.Visualizar"
               }
             },
             {
@@ -186,7 +186,7 @@ export default new Router({
               name: "Editar",
               component: NovoContrato,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Contrato.Adicionar"
               }
             },
             {
@@ -194,7 +194,7 @@ export default new Router({
               name: "Novo",
               component: NovoContrato,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Contrato.Adicionar"
               }
             }
           ]
@@ -205,7 +205,7 @@ export default new Router({
           path: "dap",
           name: "Dap",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "Dap.Visualizar"
           },
           component: {
             render(c) {
@@ -217,7 +217,7 @@ export default new Router({
               path: "",
               component: Dap,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Dap.Visualizar"
               }
             },
             {
@@ -225,7 +225,7 @@ export default new Router({
               name: "Editar",
               component: NovaDap,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Dap.Adicionar"
               }
             },
             {
@@ -233,7 +233,7 @@ export default new Router({
               name: "Novo",
               component: NovaDap,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Dap.Adicionar"
               }
             }
           ]
@@ -241,10 +241,10 @@ export default new Router({
 
         //Cadastro de pedido venda
         {
-          path: "pedidovenda",
+          path: "pedido-venda",
           name: "PedidoVenda",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "PedidoVenda.Visualizar"
           },
           component: {
             render(c) {
@@ -256,7 +256,7 @@ export default new Router({
               path: "",
               component: PedidoVenda,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "PedidoVenda.Visualizar"
               }
             },
             {
@@ -264,7 +264,7 @@ export default new Router({
               name: "Editar",
               component: NovoPedidoVenda,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "PedidoVenda.Adicionar"
               }
             },
             {
@@ -272,7 +272,7 @@ export default new Router({
               name: "Novo",
               component: NovoPedidoVenda,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "PedidoVenda.Adicionar"
               }
             }
           ]
@@ -283,7 +283,7 @@ export default new Router({
           path: "pessoa",
           name: "Pessoa",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "Pessoa.Visualizar"
           },
           component: {
             render(c) {
@@ -295,7 +295,7 @@ export default new Router({
               path: "",
               component: Pessoa,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Pessoa.Visualizar"
               }
             },
             {
@@ -303,7 +303,7 @@ export default new Router({
               name: "Editar",
               component: NovaPessoa,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Pessoa.Adicionar"
               }
             },
             {
@@ -311,7 +311,7 @@ export default new Router({
               name: "Novo",
               component: NovaPessoa,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Pessoa.Adicionar"
               }
             }
           ]
@@ -322,7 +322,7 @@ export default new Router({
           path: "fornecedor",
           name: "Fornecedor",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "Fornececdor.Visualizar"
           },
           component: {
             render(c) {
@@ -334,7 +334,7 @@ export default new Router({
               path: "",
               component: Fornecedor,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Fornececdor.Visualizar"
               }
             },
             {
@@ -342,7 +342,7 @@ export default new Router({
               name: "Editar",
               component: NovoFornecedor,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Fornececdor.Adicionar"
               }
             },
             {
@@ -350,7 +350,7 @@ export default new Router({
               name: "Novo",
               component: NovoFornecedor,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Fornececdor.Adicionar"
               }
             }
           ]
@@ -361,7 +361,7 @@ export default new Router({
           path: "produto",
           name: "Produto",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "Produto.Visualizar"
           },
           component: {
             render(c) {
@@ -373,7 +373,7 @@ export default new Router({
               path: "",
               component: Produto,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Produto.Visualizar"
               }
             },
             {
@@ -381,7 +381,7 @@ export default new Router({
               name: "Editar",
               component: NovoProduto,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Produto.Adicionar"
               }
             },
             {
@@ -389,7 +389,7 @@ export default new Router({
               name: "Novo",
               component: NovoProduto,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "Produto.Adicionar"
               }
             }
           ]
@@ -400,7 +400,7 @@ export default new Router({
           path: "tipo-documento",
           name: "TipoDocumento",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "TipoDocumento.Visualizar"
           },
           component: {
             render(c) {
@@ -412,7 +412,7 @@ export default new Router({
               path: "",
               component: TipoDocumento,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoDocumento.Visualizar"
               }
             },
             {
@@ -420,7 +420,7 @@ export default new Router({
               name: "Editar",
               component: NovoTipoDocumento,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoDocumento.Adicionar"
               }
             },
             {
@@ -428,7 +428,7 @@ export default new Router({
               name: "Novo",
               component: NovoTipoDocumento,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoDocumento.Adicionar"
               }
             }
           ]
@@ -439,7 +439,7 @@ export default new Router({
           path: "tipo-endereco",
           name: "TipoEndereco",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "TipoEndereco.Visualizar"
           },
           component: {
             render(c) {
@@ -451,7 +451,7 @@ export default new Router({
               path: "",
               component: TipoEndereco,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoEndereco.Visualizar"
               }
             },
             {
@@ -459,7 +459,7 @@ export default new Router({
               name: "Editar",
               component: NovoTipoEndereco,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoEndereco.Adicionar"
               }
             },
             {
@@ -467,7 +467,7 @@ export default new Router({
               name: "Novo",
               component: NovoTipoEndereco,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoEndereco.Adicionar"
               }
             }
           ]
@@ -478,7 +478,7 @@ export default new Router({
           path: "tipo-instituicao",
           name: "TipoInstituicao",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "TipoInstituicao.Visualizar"
           },
           component: {
             render(c) {
@@ -490,7 +490,7 @@ export default new Router({
               path: "",
               component: TipoInstituicao,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoInstituicao.Visualizar"
               }
             },
             {
@@ -498,7 +498,7 @@ export default new Router({
               name: "Editar",
               component: NovoTipoInstituicao,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoInstituicao.Adicionar"
               }
             },
             {
@@ -506,7 +506,7 @@ export default new Router({
               name: "Novo",
               component: NovoTipoInstituicao,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoInstituicao.Adicionar"
               }
             }
           ]
@@ -517,7 +517,7 @@ export default new Router({
           path: "tipo-produto",
           name: "TipoProduto",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "TipoProduto.Visualizar"
           },
           component: {
             render(c) {
@@ -529,7 +529,7 @@ export default new Router({
               path: "",
               component: TipoProduto,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoProduto.Visualizar"
               }
             },
             {
@@ -537,7 +537,7 @@ export default new Router({
               name: "Editar",
               component: NovoTipoProduto,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoProduto.Adicionar"
               }
             },
             {
@@ -545,58 +545,58 @@ export default new Router({
               name: "Novo",
               component: NovoTipoProduto,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoProduto.Adicionar"
               }
             }
           ]
         },
 
 
-          //Cadastro de tipo cliente
-          {
-            path: "tipo-cliente",
-            name: "TipoCliente",
-            meta: {
-              requiresAuth: true
-            },
-            component: {
-              render(c) {
-                return c("router-view");
-              }
-            },
-            children: [
-              {
-                path: "",
-                component: TipoCliente,
-                meta: {
-                  requiresAuth: true
-                }
-              },
-              {
-                path: "editar/:id",
-                name: "Editar",
-                component: NovoTipoCliente,
-                meta: {
-                  requiresAuth: true
-                }
-              },
-              {
-                path: "novo",
-                name: "Novo",
-                component: NovoTipoCliente,
-                meta: {
-                  requiresAuth: true
-                }
-              }
-            ]
+        //Cadastro de tipo cliente
+        {
+          path: "tipo-cliente",
+          name: "TipoCliente",
+          meta: {
+            requiresAuth: true, permission: "TipoCliente.Visualizar"
           },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: TipoCliente,
+              meta: {
+                requiresAuth: true, permission: "TipoCliente.Visualizar"
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoTipoCliente,
+              meta: {
+                requiresAuth: true, permission: "TipoCliente.Adicionar"
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoTipoCliente,
+              meta: {
+                requiresAuth: true, permission: "TipoCliente.Adicionar"
+              }
+            }
+          ]
+        },
 
         //Cadastro de tipo unidade medida
         {
           path: "tipo-unidade-medida",
           name: "TipoUnidadeMedida",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "TipoUnidadeMedida.Visualizar"
           },
           component: {
             render(c) {
@@ -608,7 +608,7 @@ export default new Router({
               path: "",
               component: TipoUnidadeMedida,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoUnidadeMedida.Visualizar"
               }
             },
             {
@@ -616,7 +616,7 @@ export default new Router({
               name: "Editar",
               component: NovoTipoUnidadeMedida,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoUnidadeMedida.Adicionar"
               }
             },
             {
@@ -624,7 +624,7 @@ export default new Router({
               name: "Novo",
               component: NovoTipoUnidadeMedida,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "TipoUnidadeMedida.Adicionar"
               }
             }
           ]
@@ -635,7 +635,7 @@ export default new Router({
           path: "unidade-medida",
           name: "UnidadeMedida",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "UnidadeMedida.Visualizar"
           },
           component: {
             render(c) {
@@ -647,7 +647,7 @@ export default new Router({
               path: "",
               component: UnidadeMedida,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "UnidadeMedida.Visualizar"
               }
             },
             {
@@ -655,7 +655,7 @@ export default new Router({
               name: "Editar",
               component: NovoUnidadeMedida,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "UnidadeMedida.Adicionar"
               }
             },
             {
@@ -663,7 +663,7 @@ export default new Router({
               name: "Novo",
               component: NovoUnidadeMedida,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "UnidadeMedida.Adicionar"
               }
             }
           ]
@@ -674,7 +674,7 @@ export default new Router({
           path: "grupo-usuario",
           name: "GrupoUsuario",
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "GrupoUsuario.Visualizar"
           },
           component: {
             render(c) {
@@ -686,7 +686,7 @@ export default new Router({
               path: "",
               component: GrupoUsuario,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "GrupoUsuario.Visualizar"
               }
             },
             {
@@ -694,7 +694,7 @@ export default new Router({
               name: "Editar",
               component: NovoGrupoUsuario,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "GrupoUsuario.Adicionar"
               }
             },
             {
@@ -702,7 +702,7 @@ export default new Router({
               name: "Permissão",
               component: Permissao,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "GrupoUsuario.Permissao"
               }
             },
             {
@@ -710,7 +710,7 @@ export default new Router({
               name: "Novo",
               component: NovoGrupoUsuario,
               meta: {
-                requiresAuth: true
+                requiresAuth: true, permission: "GrupoUsuario.Adicionar"
               }
             }
           ]
@@ -722,7 +722,7 @@ export default new Router({
           name: "Parametro",
           component: Parametro,
           meta: {
-            requiresAuth: true
+            requiresAuth: true, permission: "Parametro.Visualizar"
           }
         }
       ]
