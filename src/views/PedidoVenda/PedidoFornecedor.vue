@@ -32,7 +32,7 @@
                       <label>Fornecedor</label>
                       <input
                         type="text"
-                        v-model="filtro.fornecedor"
+                        v-model="filtro.nome"
                         class="form-control"
                       />
                     </div>
@@ -180,7 +180,7 @@ export default {
       total: 0,
       itensPorPagina: 10,
       filtro: {
-        fornecedor: "",
+        nome: "",
         fornecedorComProduto: false
       },
       itens: [],
@@ -269,7 +269,7 @@ export default {
         pagina,
         this.itensPorPagina,
         this.pedidoId,
-        this.filtro.fornecedor,
+        this.filtro.nome,
         this.filtro.fornecedorComProduto
       )
         .then((resposta) => {
@@ -372,7 +372,7 @@ export default {
       this.viewModel.valorLimite = 0;
       this.viewModel.quantidadeLimite = 0;
       this.viewModel.pessoa = {};
-      this.filtro.fornecedor = "";
+      this.filtro.nome = "";
       this.filtro.fornecedorComProduto = false;
     },
     FormataValor(valor) {

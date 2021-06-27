@@ -246,7 +246,7 @@ export default {
     ObterGrid(val) {
       this.loading = true;
 
-      PedidoProdutoClienteServico.ObterGridTotal(
+      PedidoProdutoServico.ObterGridTotal(
         val,
         this.itensPorPagina,
         this.pedidoId,
