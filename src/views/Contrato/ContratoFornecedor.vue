@@ -14,7 +14,6 @@
               <div class="d-flex">
                 <strong class="align-self-center">Fornecedores</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
-
                 <i
                   :class="
                     abrir
@@ -34,6 +33,14 @@
                       >
                     </div>
                   </div>
+                  <a
+                    @click="AdicionarTodos()"
+                    class="ml-auto btn btn-primary"
+                    href="/#/contrato/novo"
+                    title="Adicionar todos fornecedores ao contrato"
+                  >
+                    Adicionar Todos Fornecedores
+                  </a>
                 </div>
                 <div class="row">
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -89,7 +96,7 @@
                     <button
                       class="btn btn-secondary"
                       type="reset"
-                     @click="abrir = !abrir"
+                      @click="abrir = !abrir"
                     >
                       Voltar
                     </button>
@@ -181,6 +188,43 @@
     >
       Você confirma a exclusão desse registro?
     </b-modal>
+    <b-modal
+      v-model="modalAdicionarTodos"
+      title="Adicionar todos os fornecedores ao contrato"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="AdicionarTodosOk"
+      @hidden="AdicionarTodosCancel"
+    >
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
+          <div class="form-group">
+            <label for>* Valor Limite</label>
+            <currency-input
+              v-model="addTodosValorLimite"
+              class="form-control"
+              placeholder="Digite o valor limite"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
+          <div class="form-group">
+            <label for>* Quantidade Limite</label>
+            <vue-numeric
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="addTodosQuantidade"
+              class="form-control"
+              placeholder="Digite a quantidade limite"
+              required
+            />
+          </div>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -201,13 +245,16 @@ export default {
   },
   data() {
     return {
+      modalAdicionarTodos: false,
+      addTodosQuantidade: 0,
+      addTodosValorLimite: 0,
       modalRemover: false,
       itemRemover: null,
       fornecedorOptions: [],
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 5,
+      itensPorPagina: 10,
       itens: [],
       abrir: false,
       fields: [
@@ -290,6 +337,9 @@ export default {
     },
     ObterGrid(val) {
       this.loading = true;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
+      this.modalAdicionarTodos = false;
       ContratoFornecedor.ObterGrid(val, this.itensPorPagina, this.contratoId)
         .then((resposta) => {
           this.loading = false;
@@ -309,6 +359,8 @@ export default {
     ModalCancel(evento) {
       evento.preventDefault();
       this.itemRemover = null;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
     },
     ModalOk(evento) {
       evento.preventDefault();
@@ -404,7 +456,7 @@ export default {
     },
     FormataValorDecimal(valor) {
       return valor;
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
@@ -414,36 +466,23 @@ export default {
       }
     },
     RemoverCifrao(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
       } else {
         return valor;
       }
     },
-    // ObterFornecedorsSelect() {
-    //   this.$http({
-    //     url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.fornecedorOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 5000
-    //       });
-    //     });
-    // },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     ObterNomeTipoFornecedor(item) {
@@ -468,6 +507,57 @@ export default {
           this.fornecedorOptions = response.data;
         })
         .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    AdicionarTodos() {
+      this.modalAdicionarTodos = true;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
+    },
+    AdicionarTodosCancel(evento) {
+      evento.preventDefault();
+    },
+
+    AdicionarTodosOk(evento) {
+      evento.preventDefault();
+
+      if (!this.addTodosValorLimite || this.addTodosValorLimite <= 0) {
+        this.$notify({
+          data: ["Informe um valor límite."],
+          type: "warn",
+          duration: 3000
+        });
+        return;
+      }
+
+      if (!this.addTodosQuantidade) {
+        this.addTodosQuantidade = 0;
+      }
+
+      this.modalAdicionarTodos = false;
+
+      ContratoFornecedor.AdicionarTodosFornecedores(
+        this.contratoId,
+        this.addTodosValorLimite,
+        this.addTodosQuantidade
+      )
+        .then((resposta) => {
+          this.loading = false;
+          this.Limpar();
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Fornecedores cadastrados com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.loading = false;
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",

@@ -80,7 +80,6 @@ export default {
       })
         .then(() => {
           let indice = this.arquivos.indexOf(id);
-          console.log("indice", indice);
           this.arquivos.splice(indice, 1);
           this.$notify({
             data: ["Removido com sucesso."],
@@ -89,7 +88,6 @@ export default {
           });
         })
         .catch((erro) => {
-          console.log("erro", erro);
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
