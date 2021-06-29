@@ -66,6 +66,7 @@
                   <div class="form-group">
                     <label for>* Contrato</label>
                     <b-form-select
+                      :disabled="bloqueiaContrato == 1"
                       v-model="viewModel.contratoId"
                       :options="contratoOptions"
                       required
@@ -133,9 +134,13 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <PedidoCliente :pedidoId="this.viewModel.id"> </PedidoCliente>
-      <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor>
+      <PedidoCliente
+        :pedidoId="this.viewModel.id"
+        @atualizarPedido="atualizarPedido"
+      >
+      </PedidoCliente>
       <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto>
+      <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor>
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
@@ -147,13 +152,15 @@ import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
 import NovoDocumento from "../../components/NovoDocumento";
 import PedidoCliente from "./PedidoCliente";
-import PedidoProduto from "./PedidoProduto";
 import PedidoFornecedor from "./PedidoFornecedor";
+import PedidoProduto from "./PedidoProduto";
 import Contato from "../../components/Contato";
+import Bus from "../../util/EventBus";
 
 export default {
   name: "NovoPedidoVenda",
   components: {
+    Bus,
     RotateSquare,
     NovoDocumento,
     PedidoCliente,
@@ -163,6 +170,7 @@ export default {
   },
   data() {
     return {
+      bloqueiaContrato: 0,
       loading: false,
       tiposInstituicaoOptions: [],
       licitacaoOptions: [],
@@ -188,12 +196,18 @@ export default {
 
     if (pedidoId) {
       this.viewModel.id = pedidoId;
+      this.bloqueiaContrato = 1;
     } else {
       this.viewModel.id = this.$store.getters.emptyGuid;
+      this.bloqueiaContrato = 0;
     }
 
     if (pedidoId) this.Obter(pedidoId);
     this.ObterContratosSelect();
+
+    Bus.$on("remocao-produto-pedido", () => {
+      this.atualizarPedido();
+    });
   },
   methods: {
     ValidarForm(evt) {
@@ -324,7 +338,10 @@ export default {
       this.ObterContratosSelect();
     },
     LoadContratoLicitacao(val) {
-      console.log(val);
+      //console.log(val);
+    },
+    atualizarPedido() {
+      this.Obter(this.viewModel.id);
     }
   }
 };

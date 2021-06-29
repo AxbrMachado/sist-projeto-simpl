@@ -24,6 +24,25 @@ class PedidoFornecedorServico {
     });
   }
 
+  ObterGridTotal(pagina, itensPorPagina, pedidoId, nome, fornecedorComProduto) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoacontrato/obter-grid-fornecedor-total?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&nome=" +
+        nome +
+        "&fornecedorComProduto=" +
+        fornecedorComProduto +
+        "&pedidoId=" +
+        pedidoId +
+        "&tipoPessoaContrato=" +
+        TipoPessoaContratoEnum.Fornecedor,
+      method: "GET"
+    });
+  }
+
   Remover(id) {
     return Vue.prototype.$http({
       url: "pessoacontrato/remover/" + id,

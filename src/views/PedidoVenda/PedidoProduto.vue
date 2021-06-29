@@ -10,7 +10,8 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="abrir = !abrir">
+            <header class="card-header" @click="switchAbertura()">
+              <!-- <header class="card-header" @click="abrir = !abrir"> -->
               <div class="d-flex">
                 <strong class="align-self-center">Produtos(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
@@ -39,7 +40,7 @@
                   </div>
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas licitações vencidas."
+                    title="Apenas produtos presentes no pedido."
                   >
                     <label for>Presente no Pedido</label>
                     <b-form-checkbox
@@ -84,6 +85,15 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
+                          <b-button
+                            variant="warning"
+                            style="margin-right: 10px"
+                            title="Editar Fornecedores do Produtos"
+                            @click="SwitchEditarFornecedor(data.item)"
+                          >
+                            <i class="fas fa-binoculars"></i>
+                            <!-- <i class="fas fa-cart-plus text-black"></i> -->
+                          </b-button>
                           <b-button
                             variant="danger"
                             title="Remover"
@@ -132,6 +142,13 @@
     >
       Você confirma a exclusão desse produto do pedido?
     </b-modal>
+    <div v-if="EditarFornecedorProduto()">
+      <PedidoProdutoFornecedor
+        :pedidoProdutoId="this.pedidoProdutoId"
+        @atualizarproduto="atualizarproduto"
+      >
+      </PedidoProdutoFornecedor>
+    </div>
   </div>
 </template>
 
@@ -139,9 +156,17 @@
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
+import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
+
+import Bus from "../../util/EventBus";
 
 export default {
-  components: { RotateSquare },
+  name: "PedidoProduto",
+  components: {
+    RotateSquare,
+    Bus,
+    PedidoProdutoFornecedor
+  },
   props: {
     pedidoId: {
       type: String,
@@ -163,6 +188,7 @@ export default {
       },
       itens: [],
       abrir: false,
+      editarFornecedor: false,
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
@@ -192,14 +218,14 @@ export default {
     this.ObterGrid(1);
   },
   watch: {
-    pagina: function (val) {
-      this.ObterGrid(val);
+    pagina: function (pagina) {
+      this.ObterGrid(pagina);
     }
   },
   created() {
-    //let pedidoId = this.$route.params.id;
-    //if (pedidoId) this.Obter(pedidoId);
-    // this.ObterProdutosSelect();
+    Bus.$on("alterado-produto-cliente", () => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
     IsNovo() {
@@ -241,7 +267,7 @@ export default {
     ObterGrid(val) {
       this.loading = true;
 
-      PedidoProdutoClienteServico.ObterGridTotal(
+      PedidoProdutoServico.ObterGridTotal(
         val,
         this.itensPorPagina,
         this.pedidoId,
@@ -275,6 +301,7 @@ export default {
       PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
+          Bus.$emit("remocao-produto-pedido");
           this.$notify({
             data: ["Produtos removido com sucesso."],
             type: "success",
@@ -300,7 +327,7 @@ export default {
       this.viewModel.valor = 0;
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
-      this.filtro.props = "";
+      this.filtro.produto = "";
       this.filtro.produtosNoPedido = false;
     },
     FormataValor(valor) {
@@ -322,6 +349,33 @@ export default {
       } else {
         return valor;
       }
+    },
+    EditarFornecedorProduto() {
+      return this.editarFornecedor;
+    },
+    SwitchEditarFornecedor(item) {
+      if (1 == 2 && this.pedidoProdutoId != item.id) {
+        this.pedidoProdutoId = item.id;
+
+        if (this.editarFornecedor) {
+          // PedidoClienteProduto.ObterFGrid(1);
+        }
+
+        this.editarFornecedor = true;
+      } else {
+        this.pedidoProdutoId = item.id;
+        this.editarFornecedor = !this.editarFornecedor;
+      }
+    },
+    switchAbertura() {
+      this.abrir = !this.abrir;
+
+      if (!this.abrir) {
+        this.editarFornecedor = false;
+      }
+    },
+    atualizarproduto() {
+      this.ObterGrid(this.pagina);
     }
   }
 };

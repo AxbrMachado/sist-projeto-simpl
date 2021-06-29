@@ -46,6 +46,19 @@ class ContratoFornecedorServico {
       method: "PUT"
     });
   }
+
+  AdicionarTodosFornecedores(ContratoId, ValorLimite, QuantidadeLimite) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoacontrato/adicionar-todos-fornecedores?ContratoId=" +
+        ContratoId +
+        "&ValorLimite=" +
+        ValorLimite +
+        "&QuantidadeLimite=" +
+        QuantidadeLimite,
+      method: "GET"
+    });
+  }
 }
 
 export default new ContratoFornecedorServico();
