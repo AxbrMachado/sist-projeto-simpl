@@ -164,6 +164,7 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import Bus from "../../util/EventBus";
 
 export default {
+  name: "PedidoFornecedor",
   components: {
     RotateSquare,
     Bus

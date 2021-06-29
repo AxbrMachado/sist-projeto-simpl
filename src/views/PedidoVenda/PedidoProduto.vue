@@ -10,7 +10,8 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="abrir = !abrir">
+            <header class="card-header" @click="switchAbertura()">
+              <!-- <header class="card-header" @click="abrir = !abrir"> -->
               <div class="d-flex">
                 <strong class="align-self-center">Produtos(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
@@ -85,6 +86,15 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
+                            variant="warning"
+                            style="margin-right: 10px"
+                            title="Editar Fornecedores do Produtos"
+                            @click="SwitchEditarFornecedor(data.item)"
+                          >
+                            <i class="fas fa-binoculars"></i>
+                            <!-- <i class="fas fa-cart-plus text-black"></i> -->
+                          </b-button>
+                          <b-button
                             variant="danger"
                             title="Remover"
                             @click="Remover(data.item)"
@@ -132,6 +142,13 @@
     >
       Você confirma a exclusão desse produto do pedido?
     </b-modal>
+    <div v-if="EditarFornecedorProduto()">
+      <PedidoProdutoFornecedor
+        :pedidoProdutoId="this.pedidoProdutoId"
+        @atualizarproduto="atualizarproduto"
+      >
+      </PedidoProdutoFornecedor>
+    </div>
   </div>
 </template>
 
@@ -139,13 +156,16 @@
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
+import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
+
 import Bus from "../../util/EventBus";
 
 export default {
   name: "PedidoProduto",
   components: {
     RotateSquare,
-    Bus
+    Bus,
+    PedidoProdutoFornecedor
   },
   props: {
     pedidoId: {
@@ -168,6 +188,7 @@ export default {
       },
       itens: [],
       abrir: false,
+      editarFornecedor: false,
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
@@ -328,6 +349,33 @@ export default {
       } else {
         return valor;
       }
+    },
+    EditarFornecedorProduto() {
+      return this.editarFornecedor;
+    },
+    SwitchEditarFornecedor(item) {
+      if (1 == 2 && this.pedidoProdutoId != item.id) {
+        this.pedidoProdutoId = item.id;
+
+        if (this.editarFornecedor) {
+          // PedidoClienteProduto.ObterFGrid(1);
+        }
+
+        this.editarFornecedor = true;
+      } else {
+        this.pedidoProdutoId = item.id;
+        this.editarFornecedor = !this.editarFornecedor;
+      }
+    },
+    switchAbertura() {
+      this.abrir = !this.abrir;
+
+      if (!this.abrir) {
+        this.editarFornecedor = false;
+      }
+    },
+    atualizarproduto() {
+      this.ObterGrid(this.pagina);
     }
   }
 };
