@@ -46,6 +46,7 @@ const NovoFornecedor = () => import("@/views/Fornecedor/NovoFornecedor");
 const NovoGrupoUsuario = () => import("@/views/GrupoUsuario/NovoGrupoUsuario");
 const GrupoUsuario = () => import("@/views/GrupoUsuario/GrupoUsuario");
 const Permissao = () => import("@/views/GrupoUsuario/Permissao");
+const SemPermissao = () => import("@/views/GrupoUsuario/SemPermissao");
 
 Vue.use(Router);
 
@@ -73,6 +74,31 @@ export default new Router({
             requiresAuth: true, permission: ""
           }
         },
+
+        {
+          path: "sem-permissao",
+          name: "SemPermissao",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: SemPermissao,
+              meta: {
+                requiresAuth: true
+              }
+            },
+          ]
+        },
+
+
+
         //Cadastro de usuário
         {
           path: "usuario",
