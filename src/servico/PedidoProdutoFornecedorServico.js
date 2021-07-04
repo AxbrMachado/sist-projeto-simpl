@@ -83,11 +83,14 @@ class PedidoProdutoFornecedorServico {
     });
   }
 
-  EditarQuantidade(viewModel) {
+  EditarQuantidade(id, quantidade) {
     return Vue.prototype.$http({
-      url: "pedidoprodutofornecedor/editarquantidade",
-      data: viewModel,
-      method: "PUT"
+      url:
+        "/pedidoprodutofornecedor/editar-quantidade?id=" +
+        id +
+        "&quantidade=" +
+        quantidade,
+      method: "GET"
     });
   }
 }
