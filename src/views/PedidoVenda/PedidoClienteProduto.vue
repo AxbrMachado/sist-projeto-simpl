@@ -183,7 +183,6 @@ export default {
       itemEdicao: null,
       itemEdicaoQuantidade: 0,
       modalRemover: false,
-      itemRemover: null,
       produtoOptions: [],
       loading: false,
       abrir: true,
@@ -204,7 +203,7 @@ export default {
           label: "Qtd. Solicitada",
           sortable: true
         },
-        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
+        // { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
         { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
@@ -213,18 +212,7 @@ export default {
           sortable: false,
           thClass: "center, wd-120-px"
         }
-      ],
-      viewModel: {
-        id: this.$store.getters.emptyGuid,
-        produtoId: "",
-        produto: {},
-        pedidoId: "",
-        valor: 0,
-        quantidade: 0,
-        quantidadeSolicitada: 0,
-        quantidadeAtendida: 0,
-        quantidadeTroca: 0
-      }
+      ]
     };
   },
   mounted() {
@@ -247,10 +235,8 @@ export default {
   methods: {
     ObterGrid(val) {
       this.loading = true;
-      this.viewModel.quantidadeSolicitada = 0;
       this.itemEdicaoQuantidade = 0;
       this.itemEdicao = null;
-      this.itemRemover = null;
 
       PedidoProdutoClienteServico.ObterGrid(
         val,
@@ -285,11 +271,11 @@ export default {
       this.modalEdicao = false;
 
       if (!this.itemEdicao || !this.itemEdicaoQuantidade) return;
-      this.viewModel.id = this.itemEdicao;
-      this.viewModel.quantidadeSolicitada = this.itemEdicaoQuantidade;
-      this.viewModel.produtoId = this.$store.getters.emptyGuid;
 
-      PedidoProdutoClienteServico.Editar(this.viewModel)
+      PedidoProdutoClienteServico.EditarQuantidade(
+        this.itemEdicao.id,
+        this.itemEdicaoQuantidade
+      )
         .then(() => {
           this.ObterGrid(1);
           this.$emit("atualizarCliente");
@@ -311,18 +297,15 @@ export default {
 
     ModalRemocaoCancel(evento) {
       evento.preventDefault();
-      this.itemRemover = null;
+      this.itemEdicao = null;
     },
     ModalRemocaoOk(evento) {
       evento.preventDefault();
       this.modalRemover = false;
 
-      if (!this.itemRemover) return;
-      this.viewModel.id = this.itemRemover;
-      this.viewModel.quantidadeSolicitada = 0;
-      this.viewModel.produtoId = this.$store.getters.emptyGuid;
+      if (!this.itemEdicao) return;
 
-      PedidoProdutoClienteServico.Editar(this.viewModel)
+      PedidoProdutoClienteServico.EditarQuantidade(this.itemEdicao.id, 0)
         .then(() => {
           this.ObterGrid(1);
           this.$emit("atualizarCliente");
@@ -343,18 +326,17 @@ export default {
     },
     Remover(item) {
       this.modalRemover = true;
-      this.itemRemover = item.id;
+      this.itemEdicao = item;
     },
     Edicao(item) {
       this.modalEdicao = true;
-      this.itemEdicao = item.id;
+      this.itemEdicao = item;
       this.itemEdicaoQuantidade = item.quantidadeSolicitada;
     },
     Editar() {
       this.loading = true;
-      this.viewModel.pedidoId = this.pedidoId;
-      this.viewModel.produtoId = this.viewModel.produto.id;
-      PedidoProdutoClienteServico.Editar(this.viewModel)
+
+      PedidoProdutoClienteServico.Editar(this.itemEdicao)
         .then(() => {
           this.loading = false;
           this.Limpar();
@@ -375,12 +357,6 @@ export default {
         });
     },
     Limpar() {
-      this.viewModel.id = this.$store.getters.emptyGuid;
-      this.viewModel.produtoId = "";
-      this.viewModel.pedidoId = "";
-      this.viewModel.valor = 0;
-      this.viewModel.quantidade = 0;
-      this.viewModel.produto = {};
       this.filtro.produto = "";
       this.filtro.produtosNoPedido = false;
     },
