@@ -235,6 +235,9 @@ export default {
     Bus.$on("alterado-produto-cliente", () => {
       this.ObterGrid(this.pagina);
     });
+    Bus.$on("alterado-produto-fornecedor", () => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
     IsNovo() {

@@ -65,6 +65,17 @@ class PedidoFornecedorServico {
       method: "PUT"
     });
   }
+
+  RemoverFornecedorPedido(fornecedorId, pedidoId) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidoprodutofornecedor/remover-fornecedor-pedido?fornecedorId=" +
+        fornecedorId +
+        "&pedidoId=" +
+        pedidoId,
+      method: "GET"
+    });
+  }
 }
 
 export default new PedidoFornecedorServico();

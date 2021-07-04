@@ -247,6 +247,10 @@ export default {
       this.ObterGrid(this.pagina);
     });
 
+    Bus.$on("alterado-produto-fornecedor", () => {
+      this.ObterGrid(this.pagina);
+    });
+
     Bus.$on("remocao-produto-pedido", () => {
       this.ObterGrid(this.pagina);
     });
@@ -309,6 +313,7 @@ export default {
           this.ObterGrid(1);
           this.$emit("atualizarproduto");
           Bus.$emit("alterado-produto-cliente");
+          Bus.$emit("alterado-fornecedor-produto");
           this.$notify({
             data: ["Quantidade definida com sucesso."],
             type: "success",
