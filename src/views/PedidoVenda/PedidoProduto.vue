@@ -309,9 +309,9 @@ export default {
     ModalOk(evento) {
       evento.preventDefault();
       this.modalRemover = false;
-      if (!this.itemRemover) return;
+      if (!this.itemRemover.id) return;
 
-      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover)
+      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           Bus.$emit("remocao-produto-pedido");
@@ -331,7 +331,7 @@ export default {
     },
     Remover(item) {
       this.modalRemover = true;
-      this.itemRemover = item.id;
+      this.itemRemover = item;
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
