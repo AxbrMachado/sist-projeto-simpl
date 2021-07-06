@@ -108,6 +108,11 @@
                           }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(valorPedido)="data">
+                        <div class="left">
+                          <span>{{ FormataValor(data.item.valorPedido) }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(tipoFornecedor)="data">
                         <div class="center">
                           <span>{{
@@ -200,9 +205,13 @@ export default {
       fields: [
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
-        { key: "valorLimite", label: "Valor Limite Contrato", sortable: true },
-        { key: "valorConsumido", label: "Valor Total", sortable: true },
-        { key: "valorConsumidoPedido", label: "Valor Pedido", sortable: true },
+        { key: "valorLimite", label: "Limite Contrato", sortable: true },
+        { key: "valorPedido", label: "Atendido Pedido", sortable: true },
+        {
+          key: "valorConsumido",
+          label: "Total Atendido",
+          sortable: true
+        },
         {
           key: "acoes",
           label: "Ações",

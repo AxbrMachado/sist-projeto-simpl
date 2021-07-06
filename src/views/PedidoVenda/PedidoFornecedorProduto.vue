@@ -109,6 +109,11 @@
                           }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(valorTotal)="data">
+                        <div class="left">
+                          <span>{{ FormataValor(data.item.valorTotal) }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -199,13 +204,14 @@ export default {
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valorUnitario", label: "Valor  Un.", sortable: true },
+        { key: "valorTotal", label: "Valor  Total", sortable: true },
         {
           key: "quantidadeSolicitada",
-          label: "Qtd. Solicitada",
+          label: "Qtd. Atendida",
           sortable: true
         },
         // { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
-        { key: "disponivel", label: "Disponivel", sortable: true },
+        // { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
