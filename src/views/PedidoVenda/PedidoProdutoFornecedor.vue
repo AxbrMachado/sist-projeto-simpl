@@ -12,7 +12,7 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Fornecedores Produto</strong>
+                <strong class="align-self-center">Produto Fornecedor</strong>
                 <i
                   :class="
                     abrir
@@ -243,15 +243,15 @@ export default {
     }
   },
   created() {
-    Bus.$on("alterado-produto-cliente", () => {
-      this.ObterGrid(this.pagina);
-    });
-
     Bus.$on("alterado-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
 
     Bus.$on("remocao-produto-pedido", () => {
+      this.ObterGrid(this.pagina);
+    });
+
+    Bus.$on("remocao-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
   },
@@ -261,7 +261,7 @@ export default {
       this.itemEdicaoQuantidade = 0;
       this.itemEdicao = null;
 
-      PedidoProdutoFornecedorServico.ObterGrid(
+      PedidoProdutoFornecedorServico.ObterGridProduto(
         val,
         this.itensPorPagina,
         this.pedidoProdutoId,

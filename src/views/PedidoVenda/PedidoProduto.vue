@@ -238,6 +238,9 @@ export default {
     Bus.$on("alterado-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
+    Bus.$on("remocao-produto-fornecedor", () => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
     IsNovo() {

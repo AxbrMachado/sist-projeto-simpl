@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="abrir = !abrir">
+            <header class="card-header" @click="switchAbertura()">
               <div class="d-flex">
                 <strong class="align-self-center">Fornecedore(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
@@ -87,14 +87,14 @@
                           <b-button
                             variant="warning"
                             style="margin-right: 10px"
-                            title="Editar"
-                            @click="Obter(data.item)"
+                            title="Editar produtos do fornecedor"
+                            @click="SwitchEditarProdutos(data.item)"
                           >
                             <i class="fa fa-edit text-black"></i>
                           </b-button>
                           <b-button
                             variant="danger"
-                            title="Remover"
+                            title="Remover produtos do fornecedor"
                             @click="Remover(data.item)"
                           >
                             <i class="fas fa-trash-alt text-black"></i>
@@ -120,13 +120,6 @@
                           <span>{{ FormataValor(data.item.valorLimite) }}</span>
                         </div>
                       </template>
-                      <!-- <template v-slot:cell(quantidadeLimite)="data">
-                        <div class="left">
-                          <span>{{
-                            FormataValorDecimal(data.item.quantidadeLimite)
-                          }}</span>
-                        </div>
-                      </template> -->
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -154,6 +147,14 @@
     >
       Você confirma a exclusão dos produtos desse fornecedor no pedido?
     </b-modal>
+    <div v-if="EditarFornecedorProduto()">
+      <PedidoFornecedorProduto
+        :fornecedorId="this.fornecedorId"
+        :pedidoId="this.pedidoId"
+        @atualizarFornecedor="atualizarFornecedor"
+      >
+      </PedidoFornecedorProduto>
+    </div>
   </div>
 </template>
 
@@ -161,14 +162,15 @@
 import RotateSquare from "../../components/RotateSquare";
 import PedidoFornecedorServico from "../../servico/PedidoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
-import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import Bus from "../../util/EventBus";
+import PedidoFornecedorProduto from "./PedidoFornecedorProduto.vue";
 
 export default {
   name: "PedidoFornecedor",
   components: {
     RotateSquare,
-    Bus
+    Bus,
+    PedidoFornecedorProduto
   },
   props: {
     pedidoId: {
@@ -180,6 +182,7 @@ export default {
     return {
       modalRemover: false,
       itemEdicao: null,
+      fornecedorId: "",
       fornecedorOptions: [],
       loading: false,
       pagina: 1,
@@ -191,11 +194,13 @@ export default {
       },
       itens: [],
       abrir: false,
+      editarProdutos: false,
       fields: [
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
         { key: "valorLimite", label: "Valor Limite Contrato", sortable: true },
-        { key: "valorConsumido", label: "Valor Consumido", sortable: true },
+        { key: "valorConsumido", label: "Valor Total", sortable: true },
+        { key: "valorConsumidoPedido", label: "Valor Pedido", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -222,16 +227,19 @@ export default {
       this.ObterGrid(this.pagina);
     });
 
-    Bus.$on("alterado-produto-fornecedor", () => {
+    Bus.$on("alterado-produto-cliente", () => {
       this.ObterGrid(this.pagina);
     });
-
-    Bus.$on("alterado-produto-cliente", () => {
+    Bus.$on("remocao-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
   },
   methods: {
     ObterGrid(pagina) {
+      if (this.filtro.produto) {
+        this.editarProdutos = false;
+      }
+
       this.loading = true;
       PedidoFornecedorServico.ObterGridTotal(
         pagina,
@@ -337,6 +345,35 @@ export default {
         default:
           return "Inválido";
       }
+    },
+    EditarFornecedorProduto() {
+      return this.editarProdutos;
+    },
+    SwitchEditarProdutos(item) {
+      if (1 == 2 && this.pedidoId != item.pedidoId) {
+        this.pedidoId = item.pedidoId;
+        this.fornecedorId = item.fornecedorId;
+
+        if (this.editarProdutos) {
+          // PedidoFornecedorProduto.ObterFGrid(1);
+        }
+
+        this.editarProdutos = true;
+      } else {
+        this.pedidoId = item.pedidoId;
+        this.fornecedorId = item.fornecedorId;
+        this.editarProdutos = !this.editarProdutos;
+      }
+    },
+    switchAbertura() {
+      this.abrir = !this.abrir;
+
+      if (!this.abrir) {
+        this.editarProdutos = false;
+      }
+    },
+    atualizarFornecedor() {
+      this.ObterGrid(this.pagina);
     }
   }
 };
