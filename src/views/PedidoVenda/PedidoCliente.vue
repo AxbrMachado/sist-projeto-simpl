@@ -89,7 +89,7 @@
                             variant="warning"
                             style="margin-right: 10px"
                             title="Editar Produtos do Cliente"
-                            @click="SwitchEditarProdutoCliente(data.item.id)"
+                            @click="SwitchEditarProdutoCliente(data.item)"
                           >
                             <i class="fas fa-cart-plus text-black"></i>
                           </b-button>
@@ -127,6 +127,7 @@
     <div v-if="EditarProdutoCliente()">
       <PedidoClienteProduto
         :pedidoPessoaId="this.pedidoPessoaId"
+        :descricaoCliente="this.descricaoCliente"
         @atualizarCliente="atualizarCliente"
       >
       </PedidoClienteProduto>
@@ -174,6 +175,7 @@ export default {
       itens: [],
       abrir: false,
       pedidoPessoaId: "",
+      descricaoCliente: "",
       editarProduto: false,
       fields: [
         { key: "pessoa", label: "Cliente", sortable: true },
@@ -278,9 +280,9 @@ export default {
     EditarProdutoCliente() {
       return this.editarProduto;
     },
-    SwitchEditarProdutoCliente(value) {
-      if (1 == 2 && this.pedidoPessoaId != value) {
-        this.pedidoPessoaId = value;
+    SwitchEditarProdutoCliente(item) {
+      if (1 == 2 && this.pedidoPessoaId != item.id) {
+        this.pedidoPessoaId = item.id;
 
         if (this.editarProduto) {
           // PedidoClienteProduto.ObterFGrid(1);
@@ -288,8 +290,9 @@ export default {
 
         this.editarProduto = true;
       } else {
-        this.pedidoPessoaId = value;
+        this.pedidoPessoaId = item.id;
         this.editarProduto = !this.editarProduto;
+        this.descricaoCliente = item.pessoa;
       }
     },
     switchAbertura() {

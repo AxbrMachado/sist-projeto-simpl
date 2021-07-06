@@ -151,6 +151,7 @@
       <PedidoFornecedorProduto
         :fornecedorId="this.fornecedorId"
         :pedidoId="this.pedidoId"
+        :descricaoFornecedor="this.descricaoFornecedor"
         @atualizarFornecedor="atualizarFornecedor"
       >
       </PedidoFornecedorProduto>
@@ -195,6 +196,7 @@ export default {
       itens: [],
       abrir: false,
       editarProdutos: false,
+      descricaoFornecedor: "",
       fields: [
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
@@ -363,6 +365,7 @@ export default {
         this.pedidoId = item.pedidoId;
         this.fornecedorId = item.fornecedorId;
         this.editarProdutos = !this.editarProdutos;
+        this.descricaoFornecedor = item.pessoa;
       }
     },
     switchAbertura() {

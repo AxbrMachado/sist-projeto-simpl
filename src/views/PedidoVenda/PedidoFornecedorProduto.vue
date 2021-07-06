@@ -12,7 +12,9 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Fornecedor Produtos</strong>
+                <strong class="align-self-center"
+                  >Produtos - {{ this.descricaoFornecedor }}</strong
+                >
                 <i
                   :class="
                     abrir
@@ -173,7 +175,8 @@ export default {
   },
   props: {
     fornecedorId: { type: String, default: "" },
-    pedidoId: { type: String, default: "" }
+    pedidoId: { type: String, default: "" },
+    descricaoFornecedor: { type: String, default: "" }
   },
   data() {
     return {

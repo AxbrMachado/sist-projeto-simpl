@@ -145,6 +145,7 @@
     <div v-if="EditarFornecedorProduto()">
       <PedidoProdutoFornecedor
         :pedidoProdutoId="this.pedidoProdutoId"
+        :descricaoProduto="this.descricaoProduto"
         @atualizarproduto="atualizarproduto"
       >
       </PedidoProdutoFornecedor>
@@ -189,6 +190,7 @@ export default {
       itens: [],
       abrir: false,
       editarFornecedor: false,
+      descricaoProduto: "",
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
@@ -384,6 +386,7 @@ export default {
       } else {
         this.pedidoProdutoId = item.id;
         this.editarFornecedor = !this.editarFornecedor;
+        this.descricaoProduto = item.produto;
       }
     },
     switchAbertura() {
