@@ -213,10 +213,10 @@ export default {
       },
       itens: [],
       fields: [
-        { key: "fornecedor", label: "Nome", sortable: true },
+        { key: "fornecedor", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo", sortable: true },
-        { key: "valorLimite", label: "Valor Limite", sortable: true },
-        { key: "valorConsumido", label: "Valor Consumido", sortable: true },
+        { key: "valorLimite", label: "Limite Contrato", sortable: true },
+        // { key: "valorConsumido", label: "Valor Consumido", sortable: true },
         { key: "valorPedido", label: "Valor Pedido", sortable: true },
         { key: "quantidadePedido", label: "Qtd. Total Pedido", sortable: true },
         { key: "quantidadaAtendida", label: "Qtd. Atendida", sortable: true },

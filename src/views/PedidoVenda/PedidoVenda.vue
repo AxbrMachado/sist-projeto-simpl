@@ -289,6 +289,7 @@ export default {
       },
       fields: [
         { key: "numero", label: "Número", sortable: true },
+        { key: "descricao", label: "Descrição", sortable: true },
         { key: "dataEntrega", label: "Data Entrega", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "instituicao", label: "Instituição", sortable: true },

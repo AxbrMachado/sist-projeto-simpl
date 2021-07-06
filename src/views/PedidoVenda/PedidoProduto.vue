@@ -42,7 +42,7 @@
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
                     title="Apenas produtos presentes no pedido."
                   >
-                    <label for>Presente no Pedido</label>
+                    <label for>Produto Solicitado</label>
                     <b-form-checkbox
                       v-model="filtro.produtosNoPedido"
                       name="check-button"
@@ -195,6 +195,7 @@ export default {
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valorUnitario", label: "Valor Un.", sortable: true },
+        { key: "valorPedido", label: "Valor Total", sortable: true },
         {
           key: "quantidadeSolicitada",
           label: "Qtd. Solicitada",
@@ -205,8 +206,8 @@ export default {
           label: "Qtd. Atendida",
           sortable: true
         },
-        { key: "valorPedido", label: "Valor Total", sortable: true },
-        { key: "disponivel", label: "Disponivel", sortable: true },
+        { key: "quantidadePendente", label: "Qtd. Pendente", sortable: true },
+        // { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
