@@ -12,7 +12,9 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Fornecedores Produto</strong>
+                <strong class="align-self-center"
+                  >Fornecedores - {{ this.descricaoProduto }}</strong
+                >
                 <i
                   :class="
                     abrir
@@ -149,18 +151,18 @@
       @ok="ModalRemocaoOk"
       @hidden="ModalRemocaoCancel"
     >
-      Confirma a remoção do produto desse cliente?
+      Confirma a remoção do produto desse fornecedor?
     </b-modal>
     <b-modal
       v-model="modalEdicao"
-      title="Informar quantidade produto"
+      title="Quantidade produto atendida pelo fornecedor"
       class="modal-danger"
       ok-variant="info"
       @ok="ModalEdicaoOk"
       @hidden="ModalEdicaoCancel"
     >
       <div class="form-group">
-        <label for>* Quantidade</label>
+        <label for>* Quantidade Atendida</label>
         <vue-numeric
           v-bind:precision="3"
           v-bind:minus="false"
@@ -190,10 +192,8 @@ export default {
     Bus
   },
   props: {
-    pedidoProdutoId: {
-      type: String,
-      default: ""
-    }
+    pedidoProdutoId: { type: String, default: "" },
+    descricaoProduto: { type: String, default: "" }
   },
   data() {
     return {
@@ -201,7 +201,6 @@ export default {
       itemEdicao: null,
       itemEdicaoQuantidade: 0,
       modalRemover: false,
-      itemRemover: null,
       produtoOptions: [],
       loading: false,
       abrir: true,
@@ -219,6 +218,7 @@ export default {
         { key: "valorLimite", label: "Valor Limite", sortable: true },
         { key: "valorConsumido", label: "Valor Consumido", sortable: true },
         { key: "valorPedido", label: "Valor Pedido", sortable: true },
+        { key: "quantidadePedido", label: "Qtd. Total Pedido", sortable: true },
         { key: "quantidadaAtendida", label: "Qtd. Atendida", sortable: true },
         {
           key: "quantidadeConfirmada",
@@ -243,11 +243,15 @@ export default {
     }
   },
   created() {
-    //let pedidoId = this.$route.params.id;
-    //if (pedidoId) this.Obter(pedidoId);
-    // this.ObterProdutosSelect();
+    Bus.$on("alterado-produto-fornecedor", () => {
+      this.ObterGrid(this.pagina);
+    });
 
     Bus.$on("remocao-produto-pedido", () => {
+      this.ObterGrid(this.pagina);
+    });
+
+    Bus.$on("remocao-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
   },
@@ -256,9 +260,8 @@ export default {
       this.loading = true;
       this.itemEdicaoQuantidade = 0;
       this.itemEdicao = null;
-      this.itemRemover = null;
 
-      PedidoProdutoFornecedorServico.ObterGrid(
+      PedidoProdutoFornecedorServico.ObterGridProduto(
         val,
         this.itensPorPagina,
         this.pedidoProdutoId,
@@ -292,11 +295,25 @@ export default {
 
       if (!this.itemEdicao || !this.itemEdicaoQuantidade) return;
 
-      PedidoProdutoFornecedorServico.Editar(this.pedidoProdutoId)
+      if (this.itemEdicaoQuantidade > this.itemEdicao.quantidadePedido) {
+        this.loading = false;
+        this.$notify({
+          data: ["Quantidade maior que a solicitada no pedido."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
+      PedidoProdutoFornecedorServico.EditarQuantidade(
+        this.itemEdicao.id,
+        this.itemEdicaoQuantidade
+      )
         .then(() => {
           this.ObterGrid(1);
           this.$emit("atualizarproduto");
-          //   Bus.$emit("alterado-produto-cliente");
+          Bus.$emit("alterado-produto-cliente");
+          Bus.$emit("alterado-fornecedor-produto");
           this.$notify({
             data: ["Quantidade definida com sucesso."],
             type: "success",
@@ -314,21 +331,21 @@ export default {
 
     ModalRemocaoCancel(evento) {
       evento.preventDefault();
-      this.itemRemover = null;
+      this.itemEdicao = null;
     },
     ModalRemocaoOk(evento) {
       evento.preventDefault();
       this.modalRemover = false;
 
-      if (!this.itemRemover) return;
+      if (!this.itemEdicao) return;
 
-      PedidoProdutoFornecedorServico.Editar(this.pedidoProdutoId)
+      PedidoProdutoFornecedorServico.EditarQuantidade(this.itemEdicao.id, 0)
         .then(() => {
           this.ObterGrid(1);
           this.$emit("atualizarproduto");
-          //   Bus.$emit("alterado-produto-cliente");
+          Bus.$emit("alterado-produto-cliente");
           this.$notify({
-            data: ["Produto removido com sucesso."],
+            data: ["Quantidade removida com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -343,34 +360,13 @@ export default {
     },
     Remover(item) {
       this.modalRemover = true;
-      this.itemRemover = item.id;
+      this.itemEdicao = item;
     },
     Edicao(item) {
       this.modalEdicao = true;
-      this.itemEdicao = item.id;
+      this.itemEdicao = item;
       this.itemEdicaoQuantidade = item.quantidadeSolicitada;
-    },
-    Editar() {
-      this.loading = true;
-      PedidoProdutoFornecedorServico.Editar(this.pedidoProdutoId)
-        .then(() => {
-          this.loading = false;
-          this.Limpar();
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Produto editado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
+      this.itemEdicaoQuantidade = item.quantidadaAtendida;
     },
     Limpar() {
       this.filtro.fornecedor = "";

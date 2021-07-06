@@ -47,7 +47,7 @@ class PedidoProdutoClienteServico {
       method: "DELETE"
     });
   }
-  
+
   RemoverProdutoPedido(id) {
     return Vue.prototype.$http({
       url: "pedidopessoaproduto/removerprodutopedido/" + id,
@@ -71,11 +71,14 @@ class PedidoProdutoClienteServico {
     });
   }
 
-  EditarQuantidade(viewModel) {
+  EditarQuantidade(id, QuantidadeSolicitada) {
     return Vue.prototype.$http({
-      url: "pedidopessoaproduto/editarquantidade",
-      data: viewModel,
-      method: "PUT"
+      url:
+        "/pedidopessoaproduto/editar-quantidade?id=" +
+        id +
+        "&QuantidadeSolicitada=" +
+        QuantidadeSolicitada,
+      method: "GET"
     });
   }
 }

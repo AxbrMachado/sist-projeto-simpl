@@ -245,7 +245,6 @@ export default {
     ModalOk(evento) {
       evento.preventDefault();
       this.modalRemover = false;
-      console.log(this.itemRemover);
 
       if (!this.itemRemover) return;
 

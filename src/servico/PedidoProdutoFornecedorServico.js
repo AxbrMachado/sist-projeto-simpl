@@ -7,7 +7,7 @@ class PedidoProdutoFornecedorServico {
     });
   }
 
-  ObterGrid(
+  ObterGridProduto(
     pagina,
     itensPorPagina,
     pedidoProdutoId,
@@ -26,6 +26,32 @@ class PedidoProdutoFornecedorServico {
         fornecedorComProduto +
         "&pedidoProdutoId=" +
         pedidoProdutoId,
+      method: "GET"
+    });
+  }
+
+  ObterGridFornecedor(
+    pagina,
+    itensPorPagina,
+    pedidoId,
+    fornecedorId,
+    produto,
+    produtosNoFornecedor
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidoprodutofornecedor/obter-grid-produto-fornecedor?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&produto=" +
+        produto +
+        "&produtosNoFornecedor=" +
+        produtosNoFornecedor +
+        "&pedidoId=" +
+        pedidoId +
+        "&fornecedorId=" +
+        fornecedorId,
       method: "GET"
     });
   }
@@ -83,11 +109,22 @@ class PedidoProdutoFornecedorServico {
     });
   }
 
-  EditarQuantidade(viewModel) {
+  EditarQuantidade(id, quantidade) {
     return Vue.prototype.$http({
-      url: "pedidoprodutofornecedor/editarquantidade",
-      data: viewModel,
-      method: "PUT"
+      url:
+        "/pedidoprodutofornecedor/editar-quantidade?id=" +
+        id +
+        "&quantidade=" +
+        quantidade,
+      method: "GET"
+    });
+  }
+
+  RemoverProdutoFornecedorPedido(id) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidoprodutofornecedor/remover-produto-fornecedor-pedido?Id=" + id,
+      method: "GET"
     });
   }
 }

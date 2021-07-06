@@ -145,6 +145,7 @@
     <div v-if="EditarFornecedorProduto()">
       <PedidoProdutoFornecedor
         :pedidoProdutoId="this.pedidoProdutoId"
+        :descricaoProduto="this.descricaoProduto"
         @atualizarproduto="atualizarproduto"
       >
       </PedidoProdutoFornecedor>
@@ -189,11 +190,21 @@ export default {
       itens: [],
       abrir: false,
       editarFornecedor: false,
+      descricaoProduto: "",
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valorUnitario", label: "Valor Un.", sortable: true },
-        { key: "quantidadeSolicitada", label: "Quantidade", sortable: true },
+        {
+          key: "quantidadeSolicitada",
+          label: "Qtd. Solicitada",
+          sortable: true
+        },
+        {
+          key: "quantidadeAtendida",
+          label: "Qtd. Atendida",
+          sortable: true
+        },
         { key: "valorPedido", label: "Valor Total", sortable: true },
         { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
@@ -224,6 +235,12 @@ export default {
   },
   created() {
     Bus.$on("alterado-produto-cliente", () => {
+      this.ObterGrid(this.pagina);
+    });
+    Bus.$on("alterado-produto-fornecedor", () => {
+      this.ObterGrid(this.pagina);
+    });
+    Bus.$on("remocao-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
   },
@@ -267,6 +284,10 @@ export default {
     ObterGrid(val) {
       this.loading = true;
 
+      if (this.filtro.produto) {
+        this.editarFornecedor = false;
+      }
+
       PedidoProdutoServico.ObterGridTotal(
         val,
         this.itensPorPagina,
@@ -296,9 +317,9 @@ export default {
     ModalOk(evento) {
       evento.preventDefault();
       this.modalRemover = false;
-      if (!this.itemRemover) return;
+      if (!this.itemRemover.id) return;
 
-      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover)
+      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           Bus.$emit("remocao-produto-pedido");
@@ -318,7 +339,7 @@ export default {
     },
     Remover(item) {
       this.modalRemover = true;
-      this.itemRemover = item.id;
+      this.itemRemover = item;
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
@@ -365,6 +386,7 @@ export default {
       } else {
         this.pedidoProdutoId = item.id;
         this.editarFornecedor = !this.editarFornecedor;
+        this.descricaoProduto = item.produto;
       }
     },
     switchAbertura() {
