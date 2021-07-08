@@ -260,7 +260,7 @@ export default {
       instituicaoOptions: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 15,
       statusOptions: [
         { value: StatusPedidoEnum.Pendente, text: "Pendente" },
         { value: StatusPedidoEnum.Aberto, text: "Aberto" },
@@ -445,7 +445,10 @@ export default {
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     ObterContratoVSelect(busca) {

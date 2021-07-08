@@ -445,13 +445,16 @@ export default {
       this.viewModel.pessoa = {};
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     FormataValorDecimal(valor) {
@@ -470,19 +473,6 @@ export default {
         return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
       } else {
         return valor;
-      }
-    },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
       }
     },
     ObterNomeTipoFornecedor(item) {

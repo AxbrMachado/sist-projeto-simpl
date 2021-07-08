@@ -342,10 +342,17 @@ export default {
       return dataValidade.toLocaleDateString();
     },
     FormataValor(valor) {
-      return valor.toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL"
-      });
+      if (valor) {
+        return valor.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      } else {
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      }
     },
     ObterTiposInstituicoesSelect() {
       this.$http({
