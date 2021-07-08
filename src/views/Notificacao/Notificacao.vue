@@ -92,7 +92,7 @@
                     title="Visualizar notificação"
                     @click="Visualizar(data.item)"
                   >
-                    <i class="fas fa-eye text-black"></i>
+                    <i class="fas fa-eye"></i>
                   </b-button>
                 </div>
               </template>
@@ -158,7 +158,7 @@ export default {
       this.ObterGrid(this.pagina);
     },
     Lido() {
-      this.loading = true;
+      this.loading = false;
       NotificacaoServico.Lido(this.viewModel.id)
         .then((response) => {
           this.viewModel = null;
@@ -175,7 +175,7 @@ export default {
         });
     },
     ObterGrid(pagina) {
-      this.loading = true;
+      this.loading = false;
       NotificacaoServico.ObterGrid(pagina, this.itensPorPagina)
         .then((response) => {
           this.loading = false;

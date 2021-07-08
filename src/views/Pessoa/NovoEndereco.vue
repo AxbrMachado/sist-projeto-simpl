@@ -191,14 +191,14 @@
                         title="Editar"
                         @click="Obter(data.item.id)"
                       >
-                        <i class="fa fa-edit text-black"></i>
+                        <i class="fa fa-edit"></i>
                       </b-button>
                       <b-button
                         variant="danger"
                         title="Remover"
                         @click="Remover(data.item.id)"
                       >
-                        <i class="fas fa-trash-alt text-black"></i>
+                        <i class="fas fa-trash-alt"></i>
                       </b-button>
                     </div>
                   </template>
@@ -309,7 +309,7 @@ export default {
         .catch(() => {});
     },
     ObeterTipoEndereco() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoendereco/obter-select",
         method: "GET"
@@ -336,7 +336,7 @@ export default {
       else this.Novo();
     },
     Obter(id) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "endereco/obter/" + id,
         method: "GET"
@@ -356,7 +356,7 @@ export default {
         });
     },
     ObterGrid(val) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url:
           "endereco/obter-grid/" +
@@ -416,7 +416,7 @@ export default {
       this.itemRemover = id;
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.pessoaId = this.pessoaId;
       this.$http({
         url: "endereco/novo",
@@ -443,7 +443,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.pessoaId = this.pessoaId;
 
       this.$http({

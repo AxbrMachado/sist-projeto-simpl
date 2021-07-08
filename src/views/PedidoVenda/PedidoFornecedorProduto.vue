@@ -90,15 +90,15 @@
                             title="Editar Quantidade"
                             @click="Edicao(data.item)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fa fa-edit"></i>
                           </b-button> -->
                           <b-button
                             variant="danger"
                             title="Zerar Quantidade"
                             @click="Remover(data.item)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
-                            <!-- <i class="fa fa-edit text-black"></i> -->
+                            <i class="fas fa-trash-alt"></i>
+                            <!-- <i class="fa fa-edit"></i> -->
                           </b-button>
                         </div>
                       </template>
@@ -248,7 +248,7 @@ export default {
   },
   methods: {
     ObterGrid(val) {
-      this.loading = true;
+      this.loading = false;
       this.itemEdicaoQuantidade = 0;
       this.itemEdicao = null;
 
@@ -351,7 +351,7 @@ export default {
       this.itemEdicaoQuantidade = item.quantidadeSolicitada;
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
 
       //   PedidoProdutoFornecedorServico.Editar(this.itemEdicao)
       //     .then(() => {

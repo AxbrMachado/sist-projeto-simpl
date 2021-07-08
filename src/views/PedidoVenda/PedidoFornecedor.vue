@@ -90,14 +90,14 @@
                             title="Editar produtos do fornecedor"
                             @click="SwitchEditarProdutos(data.item)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fa fa-edit"></i>
                           </b-button>
                           <b-button
                             variant="danger"
                             title="Remover produtos do fornecedor"
                             @click="Remover(data.item)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
+                            <i class="fas fa-trash-alt"></i>
                           </b-button>
                         </div>
                       </template>
@@ -251,7 +251,7 @@ export default {
         this.editarProdutos = false;
       }
 
-      this.loading = true;
+      this.loading = false;
       PedidoFornecedorServico.ObterGridTotal(
         pagina,
         this.itensPorPagina,
@@ -309,7 +309,7 @@ export default {
       this.itemEdicao = item;
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       PedidoFornecedorServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;

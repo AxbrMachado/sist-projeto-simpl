@@ -158,7 +158,7 @@ export default {
       }
     },
     changePassword() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "recuperar-senha/" + this.email,
         method: "GET"
@@ -182,7 +182,7 @@ export default {
         Id: this.id,
         Senha: this.newPassword
       };
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "recuperar-senha/trocar-senha",
         data: vm,

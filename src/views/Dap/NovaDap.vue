@@ -178,7 +178,7 @@ export default {
       else this.Novo();
     },
     Obter(dapId) {
-      this.loading = true;
+      this.loading = false;
       DapServico.Obter(dapId)
         .then((resposta) => {
           this.loading = false;
@@ -195,7 +195,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       DapServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
@@ -216,7 +216,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       DapServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;

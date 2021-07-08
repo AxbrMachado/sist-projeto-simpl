@@ -229,7 +229,7 @@ export default {
       else this.Novo();
     },
     Obter(licitacaoId) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "licitacao/obter/" + licitacaoId,
         method: "GET"
@@ -254,7 +254,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "licitacao/novo",
         data: this.viewModel,
@@ -278,7 +278,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "licitacao/editar",
         data: this.viewModel,

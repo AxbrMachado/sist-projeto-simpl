@@ -76,7 +76,7 @@
                         title="Editar"
                         @click="Editar(data.item)"
                       >
-                        <i class="fa fa-edit text-black"></i>
+                        <i class="fa fa-edit"></i>
                       </b-button>
                     </div>
                   </template>
@@ -165,7 +165,7 @@ export default {
       this.$router.push("/contrato/editar/" + contrato.id);
     },
     ObterGrid(pagina) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url:
           "/dapcontrato/obter-grid-contrato?pagina=" +

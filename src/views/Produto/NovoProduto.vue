@@ -149,7 +149,7 @@ export default {
       else this.Novo();
     },
     Obter(produtoId) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "produto/obter/" + produtoId,
         method: "GET"
@@ -168,7 +168,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "produto/novo",
         data: this.viewModel,
@@ -193,7 +193,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "produto/editar",
         data: this.viewModel,

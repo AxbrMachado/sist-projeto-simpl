@@ -94,7 +94,7 @@ export default {
       else this.Novo();
     },
     Obter(tipoInstituicaoId) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoInstituicao/obter/" + tipoInstituicaoId,
         method: "GET"
@@ -113,7 +113,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoInstituicao/novo",
         data: this.viewModel,
@@ -138,7 +138,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoInstituicao/editar",
         data: this.viewModel,

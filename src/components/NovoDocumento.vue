@@ -143,14 +143,14 @@
                             title="Editar"
                             @click="Obter(data.item.id)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fa fa-edit"></i>
                           </b-button>
                           <b-button
                             variant="danger"
                             title="Remover"
                             @click="Remover(data.item.id)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
+                            <i class="fas fa-trash-alt"></i>
                           </b-button>
                         </div>
                       </template>
@@ -270,7 +270,7 @@ export default {
         });
         return;
       }
-      this.loading = true;
+      this.loading = false;
       ArquivoServico.Novo(this.arquivo)
         .then((resposta) => {
           this.loading = false;
@@ -287,7 +287,7 @@ export default {
         });
     },
     ObterTipoDocumento() {
-      this.loading = true;
+      this.loading = false;
       TipoDocumentoServico.ObterSelect()
         .then((resposta) => {
           this.loading = false;
@@ -311,7 +311,7 @@ export default {
       else this.NovoArquivo();
     },
     Obter(id) {
-      this.loading = true;
+      this.loading = false;
       DocumentoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
@@ -328,7 +328,7 @@ export default {
         });
     },
     ObterGrid(val) {
-      this.loading = true;
+      this.loading = false;
       DocumentoServico.ObterGrid(
         val,
         this.itensPorPagina,
@@ -380,7 +380,7 @@ export default {
       this.itemRemover = id;
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.referenciaId = this.referenciaId;
       DocumentoServico.Novo(this.viewModel)
         .then((resposta) => {
@@ -403,7 +403,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.referenciaId = this.referenciaId;
       DocumentoServico.Editar(this.viewModel)
         .then(() => {

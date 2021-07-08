@@ -202,7 +202,7 @@ export default {
       else this.Novo();
     },
     Obter(contratoId) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "contrato/obter/" + contratoId,
         method: "GET"
@@ -227,7 +227,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "contrato/novo",
         data: this.viewModel,
@@ -256,7 +256,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "contrato/editar",
         data: this.viewModel,

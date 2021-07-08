@@ -92,7 +92,6 @@
                             @click="AdicionarProdutoFornecedor(data.item)"
                           >
                             <i class="fas fa-times"></i>
-                            <!-- <i class="fas fa-check-circle text-black"></i> -->
                           </b-button>
                           <b-button
                             v-if="!isNoFornecedor(data.item)"
@@ -102,7 +101,6 @@
                             @click="RemoverProdutoFornecedor(data.item)"
                           >
                             <i class="fas fa-check"></i>
-                            <!-- <i class="fas fa-check-circle text-black"></i> -->
                           </b-button>
                           <b-button
                             v-if="!isNoFornecedor(data.item)"
@@ -111,7 +109,7 @@
                             title="Editar produto do fornecedor"
                             @click="Edicao(data.item)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fa fa-edit"></i>
                           </b-button>
                         </div>
                       </template>
@@ -225,8 +223,8 @@ export default {
     this.ObterGrid(1);
   },
   watch: {
-    pagina: function (val) {
-      this.ObterGrid(val);
+    pagina: function (pagina) {
+      this.ObterGrid(pagina);
     }
   },
   created() {},
@@ -236,7 +234,7 @@ export default {
     },
     ValidarForm(evt) {},
     Obter(item) {
-      this.loading = true;
+      this.loading = false;
       FornecedorProduto.Obter(item.id)
         .then((resposta) => {
           this.loading = false;
@@ -250,10 +248,10 @@ export default {
           });
         });
     },
-    ObterGrid(val) {
-      this.loading = true;
+    ObterGrid(pagina) {
+      this.loading = false;
       FornecedorProduto.ObterGridProduto(
-        val,
+        pagina,
         this.itensPorPagina,
         this.fornecedorId,
         this.filtro.produtosNoFornecedor,
@@ -277,7 +275,7 @@ export default {
     RemoverProdutoFornecedor(item) {
       FornecedorProduto.Remover(item.id)
         .then(() => {
-          this.ObterGrid(1);
+          this.ObterGrid(this.pagina);
           this.$notify({
             data: ["Produto removido com sucesso."],
             type: "success",
@@ -295,7 +293,7 @@ export default {
     AdicionarProdutoFornecedor(item) {
       FornecedorProduto.Adicionar(this.fornecedorId, item.produtoId)
         .then(() => {
-          this.ObterGrid(1);
+          this.ObterGrid(this.pagina);
           this.$notify({
             data: ["Produto adicionado com sucesso."],
             type: "success",
@@ -375,7 +373,7 @@ export default {
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
-          this.ObterGrid(1);
+          this.ObterGrid(this.pagina);
           this.$notify({
             data: ["Fornecedores cadastrados com sucesso."],
             type: "success",
