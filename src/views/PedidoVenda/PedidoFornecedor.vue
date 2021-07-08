@@ -193,7 +193,7 @@ export default {
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 10,
+      itensPorPagina: 15,
       filtro: {
         nome: "",
         fornecedorComProduto: false

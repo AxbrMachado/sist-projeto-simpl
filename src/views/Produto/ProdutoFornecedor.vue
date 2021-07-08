@@ -406,16 +406,7 @@ export default {
     //       });
     //     });
     // },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return valor;
-      }
-    },
+
     ObterNomeTipoFornecedor(item) {
       switch (item) {
         case TipoFornecedorEnum.Avulso:
