@@ -91,7 +91,7 @@
                             title="Editar Produtos do Cliente"
                             @click="SwitchEditarProdutoCliente(data.item)"
                           >
-                            <i class="fas fa-cart-plus text-black"></i>
+                            <i class="fas fa-cart-plus"></i>
                           </b-button>
                         </div>
                       </template>
@@ -214,7 +214,7 @@ export default {
         this.editarProduto = false;
       }
 
-      // this.loading = true;
+      // this.loading = false;
       PedidoCliente.ObterGrid(
         pagina,
         this.itensPorPagina,

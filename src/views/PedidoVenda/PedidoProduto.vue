@@ -92,14 +92,14 @@
                             @click="SwitchEditarFornecedor(data.item)"
                           >
                             <i class="fas fa-binoculars"></i>
-                            <!-- <i class="fas fa-cart-plus text-black"></i> -->
+                            <!-- <i class="fas fa-cart-plus"></i> -->
                           </b-button>
                           <b-button
                             variant="danger"
                             title="Remover"
                             @click="Remover(data.item)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
+                            <i class="fas fa-trash-alt"></i>
                           </b-button>
                         </div>
                       </template>
@@ -266,7 +266,7 @@ export default {
       else this.Novo();
     },
     Obter(id) {
-      this.loading = true;
+      this.loading = false;
       PedidoProdutoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
@@ -283,7 +283,7 @@ export default {
         });
     },
     ObterGrid(val) {
-      this.loading = true;
+      this.loading = false;
 
       if (this.filtro.produto) {
         this.editarFornecedor = false;

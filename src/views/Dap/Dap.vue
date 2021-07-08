@@ -121,14 +121,14 @@
                     title="Editar"
                     @click="Editar(data.item)"
                   >
-                    <i class="fa fa-edit text-black"></i>
+                    <i class="fa fa-edit"></i>
                   </b-button>
                   <b-button
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
-                    <i class="fas fa-trash-alt text-black"></i>
+                    <i class="fas fa-trash-alt"></i>
                   </b-button>
                 </div>
               </template>
@@ -271,7 +271,7 @@ export default {
       this.itemRemover = item;
     },
     ObterGrid(pagina) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "/dap/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"

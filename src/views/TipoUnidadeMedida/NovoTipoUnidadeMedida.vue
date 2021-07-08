@@ -99,7 +99,7 @@ export default {
       else this.Novo();
     },
     Obter(tipoUnidadeMedidaId) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoUnidadeMedida/obter/" + tipoUnidadeMedidaId,
         method: "GET"
@@ -118,7 +118,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoUnidadeMedida/novo",
         data: this.viewModel,
@@ -143,7 +143,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoUnidadeMedida/editar",
         data: this.viewModel,

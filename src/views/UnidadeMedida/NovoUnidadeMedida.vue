@@ -164,7 +164,7 @@ export default {
       else this.Novo();
     },
     Obter(unidadeMedidaId) {
-      this.loading = true;
+      this.loading = false;
       UnidadeMedidaServico.Obter(unidadeMedidaId)
         .then((resposta) => {
           this.loading = false;
@@ -180,7 +180,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       UnidadeMedidaServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
@@ -201,7 +201,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       UnidadeMedidaServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;

@@ -94,7 +94,7 @@ export default {
       return nome.replaceAll(".", " / ");
     },
     Salvar() {
-      this.loading = true;
+      this.loading = false;
       GrupoUsuarioServico.Permissao(this.viewModel)
         .then((resposta) => {
           this.loading = false;
@@ -115,7 +115,7 @@ export default {
         });
     },
     Obter(grupoId) {
-      this.loading = true;
+      this.loading = false;
       GrupoUsuarioServico.ObterPermissao(grupoId)
         .then((resposta) => {
           this.loading = false;

@@ -181,7 +181,7 @@ export default {
         });
     },
     Obter(usuarioId) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "usuario/obter/" + usuarioId,
         method: "GET"
@@ -200,7 +200,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "usuario/novo",
         data: this.viewModel,
@@ -225,7 +225,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "usuario/editar",
         data: this.viewModel,

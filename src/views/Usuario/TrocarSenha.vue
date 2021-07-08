@@ -121,7 +121,7 @@ export default {
       }
     },
     Trocar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "usuario/trocar-senha",
         data: this.viewModel,

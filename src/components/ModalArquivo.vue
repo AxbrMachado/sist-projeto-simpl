@@ -5,7 +5,7 @@
     @click="AbrirModal()"
     :title="TemArquivo() ? 'Visualizar arquivos' : 'Nenhum arquivo'"
   >
-    <i class="fas fa-download text-black"></i>
+    <i class="fas fa-download"></i>
     <b-modal
       v-model="abrir"
       title="Arquivo(s)"

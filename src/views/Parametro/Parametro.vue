@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     Salvar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "parametro/editar",
         data: this.viewModel,
@@ -79,7 +79,7 @@ export default {
         });
     },
     Obter() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url:
           "parametro/obter/" +
