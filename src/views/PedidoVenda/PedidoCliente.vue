@@ -214,7 +214,7 @@ export default {
         this.editarProduto = false;
       }
 
-      this.loading = true;
+      // this.loading = true;
       PedidoCliente.ObterGrid(
         pagina,
         this.itensPorPagina,

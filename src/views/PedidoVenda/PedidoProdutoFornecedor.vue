@@ -251,6 +251,10 @@ export default {
       this.ObterGrid(this.pagina);
     });
 
+    Bus.$on("alterado-produto-cliente", () => {
+      this.ObterGrid(this.pagina);
+    });
+
     Bus.$on("remocao-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
