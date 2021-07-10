@@ -150,6 +150,11 @@
                       <span>{{ FormataValor(data.item.valor) }}</span>
                     </div>
                   </template>
+                  <template v-slot:cell(valorProduto)="data">
+                    <div class="left">
+                      <span>{{ FormataValor(data.item.valorProduto) }}</span>
+                    </div>
+                  </template>
                   <template v-slot:cell(status)="data">
                     <div class="left">
                       <span>{{ ObterNomeStatusPedido(data.item.status) }}</span>
@@ -226,7 +231,8 @@ export default {
         { key: "numero", label: "Número", sortable: true },
         { key: "descricao", label: "Descrição", sortable: true },
         { key: "dataEntrega", label: "Data Entrega", sortable: true },
-        { key: "valor", label: "Valor", sortable: true },
+        { key: "valor", label: "Valor Pedido", sortable: true },
+        { key: "valorProduto", label: "Valor Produtos", sortable: true },
         { key: "instituicao", label: "Instituição", sortable: true },
         { key: "status", label: "Status", sortable: true },
         {
