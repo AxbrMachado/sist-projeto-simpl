@@ -118,6 +118,13 @@
                           <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(tipoPessoa)="data">
+                        <div class="center">
+                          <span>{{
+                            ObterTipoPessoa(data.item.tipoPessoa)
+                          }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -165,12 +172,14 @@
 import RotateSquare from "../../components/RotateSquare";
 import ContratoClienteServico from "../../servico/ContratoClienteServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
+import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
 export default {
   name: "ContratoClienteSelect",
   components: {
     RotateSquare,
-    TipoPessoaContratoEnum
+    TipoPessoaContratoEnum,
+    TipoPessoaEnum
   },
   props: {
     contratoId: {
@@ -352,6 +361,20 @@ export default {
       this.pessoaId = item.pessoaId;
       this.contratoClienteId = item.id;
       this.valorRota = item.rota;
+    },
+    ObterTipoPessoa(item) {
+      switch (item) {
+        case TipoPessoaEnum.Funcionario:
+          return "Funcionário";
+        case TipoPessoaEnum.Fornecedor:
+          return "Fornecedor";
+        case TipoPessoaEnum.Cliente:
+          return "Cliente";
+        case TipoPessoaEnum.Instituicao:
+          return "Instituição";
+        default:
+          return "Inválido";
+      }
     }
   }
 };
