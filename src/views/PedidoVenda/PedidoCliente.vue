@@ -86,7 +86,7 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            variant="warning"
+                            variant="primary"
                             style="margin-right: 10px"
                             title="Editar Produtos do Cliente"
                             @click="SwitchEditarProdutoCliente(data.item)"

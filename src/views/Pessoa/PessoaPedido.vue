@@ -131,10 +131,18 @@
                   <template v-slot:cell(acoes)="data">
                     <div class="btn-group-sm">
                       <b-button
-                        variant="warning"
+                        variant="primary"
                         style="margin-right: 10px"
-                        title="Editar"
-                        @click="Editar(data.item)"
+                        title="Visualizar Produtos"
+                        @click="SwitchVisualizarProdutoPedido(data.item)"
+                      >
+                        <i class="fas fa-cart-plus"></i>
+                      </b-button>
+                      <b-button
+                        variant="warning"
+                        style="margin-right: 00px"
+                        title="Abrir Pedido"
+                        @click="AbrirPedido(data.item)"
                       >
                         <i class="fa fa-edit"></i>
                       </b-button>
@@ -170,18 +178,28 @@
         </div>
       </div>
     </div>
+    <div v-if="VisualizarProdutoPedido()">
+      <PessoaPedidoProduto
+        :pessoaId="this.pessoaId"
+        :pedidoId="this.pedidoId"
+        :descricaoPedido="this.descricaoPedido"
+      >
+      </PessoaPedidoProduto>
+    </div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
+import PessoaPedidoProduto from "./PessoaPedidoProduto";
 import Bus from "../../util/EventBus";
 
 export default {
   name: "PessoaPedido",
   components: {
     RotateSquare,
+    PessoaPedidoProduto,
     Bus
   },
   props: {
@@ -192,6 +210,9 @@ export default {
       abrir: false,
       loading: false,
       itens: [],
+      visualizarProduto: false,
+      pedidoId: this.$store.getters.emptyGuid,
+      descricaoPedido: "",
       contratoOptions: [],
       statusOptions: [],
       instituicaoOptions: [],
@@ -257,12 +278,13 @@ export default {
       this.filtro.PedidoPendente = false;
       this.filtro.PedidoEntregue = false;
 
-      this.ObterGrid(1);
+      this.visualizarProduto = false;
     },
-    Editar(pedido) {
+    AbrirPedido(pedido) {
       this.$router.push("/pedidovenda/editar/" + pedido.id);
     },
     ObterGrid(pagina) {
+      this.visualizarProduto = false;
       this.loading = false;
       this.$http({
         url: "/pedido/obter-grid?pagina=" + pagina + this.MontaFiltro(),
@@ -368,6 +390,21 @@ export default {
             duration: 5000
           });
         });
+    },
+    VisualizarProdutoPedido() {
+      return this.visualizarProduto;
+    },
+    SwitchVisualizarProdutoPedido(item) {
+      this.pedidoId = item.pedidoId;
+      this.visualizarProduto = !this.visualizarProduto;
+      this.descricaoPedido = item.numero + " / " + item.descricao;
+    },
+    switchAbertura() {
+      this.abrir = !this.abrir;
+
+      if (!this.abrir) {
+        this.visualizarProduto = false;
+      }
     }
   }
 };
