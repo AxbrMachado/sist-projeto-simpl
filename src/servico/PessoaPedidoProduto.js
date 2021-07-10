@@ -1,6 +1,12 @@
 import Vue from "vue";
 class PessoaPedidoProduto {
-  ObterGrid(pagina, itensPorPagina, pedidoId, pessoaId, produto) {
+  ObterGridProdutoPedidoCliente(
+    pagina,
+    itensPorPagina,
+    pedidoId,
+    pessoaId,
+    produto
+  ) {
     return Vue.prototype.$http({
       url:
         "/pedidopessoaproduto/obter-grid-produto-pedido-cliente?pagina=" +
@@ -11,6 +17,21 @@ class PessoaPedidoProduto {
         pedidoId +
         "&pessoaId=" +
         pessoaId +
+        "&produto=" +
+        produto,
+      method: "GET"
+    });
+  }
+
+  ObterGridProdutoPedidoContrato(pagina, itensPorPagina, pedidoId, produto) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidopessoaproduto/obter-grid-produto-pedido-contrato?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&pedidoId=" +
+        pedidoId +
         "&produto=" +
         produto,
       method: "GET"

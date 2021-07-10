@@ -108,14 +108,14 @@ import PessoaPedidoProduto from "../../servico/PessoaPedidoProduto";
 import Bus from "../../util/EventBus";
 
 export default {
-  name: "PessoaPedidoProduto",
+  name: "ContratoPedidoProduto",
   components: {
     RotateSquare,
     Bus
   },
   props: {
+    contratoId: { type: String, default: "" },
     pedidoId: { type: String, default: "" },
-    pessoaId: { type: String, default: "" },
     descricaoPedido: { type: String, default: "" }
   },
   data() {
@@ -172,11 +172,10 @@ export default {
       this.itemEdicaoQuantidade = 0;
       this.itemEdicao = null;
 
-      PessoaPedidoProduto.ObterGridProdutoPedidoCliente(
+      PessoaPedidoProduto.ObterGridProdutoPedidoContrato(
         pagina,
         this.itensPorPagina,
         this.pedidoId,
-        this.pessoaId,
         this.filtro.produto
       )
         .then((resposta) => {
