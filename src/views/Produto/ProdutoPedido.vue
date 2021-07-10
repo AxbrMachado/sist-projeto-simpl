@@ -179,13 +179,13 @@ import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import Bus from "../../util/EventBus";
 
 export default {
-  name: "ContratoPedido",
+  name: "ProdutoPedido",
   components: {
     RotateSquare,
     Bus
   },
   props: {
-    contratoId: { type: String, default: "" }
+    produtoId: { type: String, default: "" }
   },
   data() {
     return {
@@ -289,8 +289,8 @@ export default {
       var filtros = filtros + "&Descricao=" + this.filtro.Descricao;
       var filtros = filtros + "&Numero=" + this.filtro.Numero;
 
-      if (this.contratoId) {
-        var filtros = filtros + "&ContratoId=" + this.contratoId;
+      if (this.produtoId) {
+        var filtros = filtros + "&ProdutoId=" + this.produtoId;
       }
 
       if (this.filtro.Status != 0) {
