@@ -137,7 +137,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import PedidoCliente from "../../servico/PedidoClienteServico";
+import PedidoClienteServico from "../../servico/PedidoClienteServico";
 import TipoPessoaPedidoEnum from "../../enums/TipoPessoaEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import PedidoClienteProduto from "./PedidoClienteProduto.vue";
@@ -149,7 +149,7 @@ export default {
   components: {
     RotateSquare,
     Bus,
-    PedidoCliente,
+    PedidoClienteServico,
     TipoPessoaPedidoEnum,
     TipoPessoaEnum,
     PedidoClienteProduto
@@ -215,7 +215,7 @@ export default {
       }
 
       // this.loading = false;
-      PedidoCliente.ObterGrid(
+      PedidoClienteServico.ObterGrid(
         pagina,
         this.itensPorPagina,
         this.pedidoId,

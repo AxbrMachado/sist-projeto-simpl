@@ -230,7 +230,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoFornecedor from "../../servico/ContratoFornecedorServico";
+import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
@@ -320,7 +320,7 @@ export default {
     },
     Obter(id) {
       this.loading = false;
-      ContratoFornecedor.Obter(id)
+      ContratoFornecedorServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           //resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -340,7 +340,7 @@ export default {
       this.addTodosQuantidade = 0;
       this.addTodosValorLimite = 0;
       this.modalAdicionarTodos = false;
-      ContratoFornecedor.ObterGrid(val, this.itensPorPagina, this.contratoId)
+      ContratoFornecedorServico.ObterGrid(val, this.itensPorPagina, this.contratoId)
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -367,7 +367,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ContratoFornecedor.Remover(this.itemRemover)
+      ContratoFornecedorServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -392,7 +392,7 @@ export default {
       this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      ContratoFornecedor.Novo(this.viewModel)
+      ContratoFornecedorServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -416,7 +416,7 @@ export default {
       this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      ContratoFornecedor.Editar(this.viewModel)
+      ContratoFornecedorServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
@@ -531,7 +531,7 @@ export default {
 
       this.modalAdicionarTodos = false;
 
-      ContratoFornecedor.AdicionarTodosFornecedores(
+      ContratoFornecedorServico.AdicionarTodosFornecedores(
         this.contratoId,
         this.addTodosValorLimite,
         this.addTodosQuantidade

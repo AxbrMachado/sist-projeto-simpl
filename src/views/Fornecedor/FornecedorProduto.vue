@@ -167,10 +167,10 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import FornecedorProduto from "../../servico/FornecedorProdutoServico";
+import FornecedorProdutoServico from "../../servico/FornecedorProdutoServico";
 
 export default {
-  name: "FornecedorProduto",
+  name: "FornecedorProdutoServico",
   components: { RotateSquare },
   props: {
     fornecedorId: {
@@ -246,7 +246,7 @@ export default {
     },
     Obter(id) {
       this.loading = false;
-      FornecedorProduto.Obter(id)
+      FornecedorProdutoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           //resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -263,7 +263,11 @@ export default {
     },
     ObterGrid(val) {
       this.loading = false;
-      FornecedorProduto.ObterGrid(val, this.itensPorPagina, this.fornecedorId)
+      FornecedorProdutoServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.fornecedorId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -288,7 +292,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      FornecedorProduto.Remover(this.itemRemover)
+      FornecedorProdutoServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -313,7 +317,7 @@ export default {
       this.loading = false;
       this.viewModel.fornecedorId = this.fornecedorId;
       this.viewModel.produtoId = this.viewModel.produto.id;
-      FornecedorProduto.Novo(this.viewModel)
+      FornecedorProdutoServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -337,7 +341,7 @@ export default {
       this.loading = false;
       this.viewModel.fornecedorId = this.fornecedorId;
       this.viewModel.produtoId = this.viewModel.produto.id;
-      FornecedorProduto.Editar(this.viewModel)
+      FornecedorProdutoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();

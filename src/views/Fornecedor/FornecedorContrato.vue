@@ -137,7 +137,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoFornecedor from "../../servico/ContratoFornecedorServico";
+import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import DateTime from "../../util/DateTime";
 
@@ -248,7 +248,7 @@ export default {
 
       if (!this.itemRemover) return;
 
-      ContratoFornecedor.Remover(this.itemRemover)
+      ContratoFornecedorServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({

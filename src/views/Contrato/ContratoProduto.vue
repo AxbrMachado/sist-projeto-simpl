@@ -167,7 +167,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoProduto from "../../servico/ContratoProdutoServico";
+import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
 
 export default {
   components: { RotateSquare },
@@ -246,7 +246,7 @@ export default {
     },
     Obter(id) {
       this.loading = false;
-      ContratoProduto.Obter(id)
+      ContratoProdutoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           //resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -263,7 +263,11 @@ export default {
     },
     ObterGrid(val) {
       this.loading = false;
-      ContratoProduto.ObterGrid(val, this.itensPorPagina, this.contratoId)
+      ContratoProdutoServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.contratoId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -288,7 +292,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ContratoProduto.Remover(this.itemRemover)
+      ContratoProdutoServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -313,7 +317,7 @@ export default {
       this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.produtoId = this.viewModel.produto.id;
-      ContratoProduto.Novo(this.viewModel)
+      ContratoProdutoServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -337,7 +341,7 @@ export default {
       this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.produtoId = this.viewModel.produto.id;
-      ContratoProduto.Editar(this.viewModel)
+      ContratoProdutoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
