@@ -136,6 +136,7 @@
       <FornecedorContrato :pessoaId="viewModel.id"> </FornecedorContrato>
       <FornecedorProdutoSelect :fornecedorId="viewModel.fornecedorId" />
       <!-- <FornecedorProduto :fornecedorId="viewModel.fornecedorId" /> -->
+      <FornecedorPedido :fornecedorId="viewModel.fornecedorId" />
       <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
   </div>
@@ -147,6 +148,7 @@ import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import RotateSquare from "../../components/RotateSquare";
 import FornecedorContrato from "./FornecedorContrato";
 import FornecedorProduto from "./FornecedorProduto";
+import FornecedorPedido from "./FornecedorPedido";
 import FornecedorProdutoSelect from "./FornecedorProdutoSelect";
 import DateTime from "../../util/DateTime";
 import Contato from "../../components/Contato";
@@ -161,6 +163,7 @@ export default {
     FornecedorProduto,
     FornecedorProdutoSelect,
     DateTime,
+    FornecedorPedido,
     Contato
   },
   data() {
