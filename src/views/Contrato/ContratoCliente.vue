@@ -155,14 +155,14 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoCliente from "../../servico/ContratoClienteServico";
+import ContratoClienteServico from "../../servico/ContratoClienteServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
 export default {
   components: {
     RotateSquare,
-    ContratoCliente,
+    ContratoClienteServico,
     TipoPessoaContratoEnum,
     TipoPessoaEnum
   },
@@ -180,7 +180,7 @@ export default {
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 5,
+      itensPorPagina: 2,
       itens: [],
       abrir: false,
       fields: [
@@ -241,7 +241,7 @@ export default {
     },
     Obter(id) {
       this.loading = false;
-      ContratoCliente.Obter(id)
+      ContratoClienteServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           //resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -258,7 +258,11 @@ export default {
     },
     ObterGrid(val) {
       this.loading = false;
-      ContratoCliente.ObterGrid(val, this.itensPorPagina, this.contratoId)
+      ContratoClienteServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.contratoId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -283,7 +287,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ContratoCliente.Remover(this.itemRemover)
+      ContratoClienteServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -308,7 +312,7 @@ export default {
       this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      ContratoCliente.Novo(this.viewModel)
+      ContratoClienteServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -332,7 +336,7 @@ export default {
       this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      ContratoCliente.Editar(this.viewModel)
+      ContratoClienteServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();

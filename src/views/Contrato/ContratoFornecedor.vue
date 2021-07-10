@@ -12,7 +12,7 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Fornecedores</strong>
+                <strong class="align-self-center">Fornecedor(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
                 <i
                   :class="

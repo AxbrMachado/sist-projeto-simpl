@@ -143,7 +143,9 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <ContratoCliente :contratoId="viewModel.id"> </ContratoCliente>
+      <!-- <ContratoCliente :contratoId="viewModel.id"> </ContratoCliente> -->
+      <ContratoClienteSelect :contratoId="viewModel.id">
+      </ContratoClienteSelect>
       <ContratoFornecedor :contratoId="viewModel.id"> </ContratoFornecedor>
       <ContratoProduto :contratoId="viewModel.id"> </ContratoProduto>
       <ContratoPedido :contratoId="viewModel.id"> </ContratoPedido>
@@ -158,6 +160,7 @@ import RotateSquare from "../../components/RotateSquare";
 import ContratoProduto from "./ContratoProduto";
 import ContratoFornecedor from "./ContratoFornecedor";
 import ContratoCliente from "./ContratoCliente";
+import ContratoClienteSelect from "./ContratoClienteSelect";
 import ContratoPedido from "./ContratoPedido";
 import DateTime from "../../util/DateTime";
 import Contato from "../../components/Contato";
@@ -171,6 +174,7 @@ export default {
     ContratoProduto,
     ContratoFornecedor,
     ContratoCliente,
+    ContratoClienteSelect,
     ContratoPedido,
     Contato
   },
