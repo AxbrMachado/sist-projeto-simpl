@@ -118,7 +118,7 @@ import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
 
 export default {
-  name: "ContratoProduto",
+  name: "ProdutoContrato",
   components: {
     RotateSquare,
     DateTime

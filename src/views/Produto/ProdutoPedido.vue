@@ -232,7 +232,7 @@ export default {
         { key: "descricao", label: "Descrição", sortable: true },
         { key: "dataEntrega", label: "Data Entrega", sortable: true },
         { key: "valor", label: "Valor Pedido", sortable: true },
-        { key: "valorProduto", label: "Valor Produtos", sortable: true },
+        { key: "valorProduto", label: "Valor Produto", sortable: true },
         { key: "instituicao", label: "Instituição", sortable: true },
         { key: "status", label: "Status", sortable: true },
         {

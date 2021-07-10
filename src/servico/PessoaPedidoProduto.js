@@ -37,6 +37,29 @@ class PessoaPedidoProduto {
       method: "GET"
     });
   }
+
+  ObterGridProdutoPedidoFornecedor(
+    pagina,
+    itensPorPagina,
+    pedidoId,
+    fornecedorId,
+    produto
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidopessoaproduto/obter-grid-produto-pedido-fornecedor?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&pedidoId=" +
+        pedidoId +
+        "&fornecedorId=" +
+        fornecedorId +
+        "&produto=" +
+        produto,
+      method: "GET"
+    });
+  }
 }
 
 export default new PessoaPedidoProduto();
