@@ -162,7 +162,7 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       filtro: { numero: "" },
       fields: [
         { key: "numero", label: "Número", sortable: true },
