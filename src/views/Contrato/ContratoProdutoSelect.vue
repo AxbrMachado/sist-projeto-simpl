@@ -106,7 +106,7 @@
                             v-if="!isProdutoVinculado(data.item)"
                             variant="info"
                             style="margin-right: 10px"
-                            title="Editar fornecedor do contrato"
+                            title="Editar produto do contrato"
                             @click="Edicao(data.item)"
                           >
                             <i class="fa fa-edit"></i>
@@ -151,7 +151,7 @@
     </form>
     <b-modal
       v-model="modalEditarInfoProduto"
-      title="Editar informação do fornecedor no contrato"
+      title="Editar informação do produto no contrato"
       class="modal-danger"
       ok-variant="info"
       @ok="EditarProduto"
@@ -171,7 +171,7 @@
         </div>
         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
           <div class="form-group">
-            <label for>* Quantidade Limite</label>
+            <label for>* Quantidade</label>
             <vue-numeric
               v-bind:precision="3"
               v-bind:minus="false"
