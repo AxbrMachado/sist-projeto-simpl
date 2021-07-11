@@ -133,7 +133,9 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <FornecedorContrato :pessoaId="viewModel.id"> </FornecedorContrato>
+      <FornecedorContratoSelect :pessoaId="viewModel.id">
+      </FornecedorContratoSelect>
+      <!-- <FornecedorContrato :pessoaId="viewModel.id"> </FornecedorContrato> -->
       <FornecedorProdutoSelect :fornecedorId="viewModel.fornecedorId" />
       <!-- <FornecedorProduto :fornecedorId="viewModel.fornecedorId" /> -->
       <FornecedorPedido :fornecedorId="viewModel.fornecedorId" />
@@ -147,9 +149,10 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import RotateSquare from "../../components/RotateSquare";
 import FornecedorContrato from "./FornecedorContrato";
+import FornecedorContratoSelect from "./FornecedorContratoSelect";
 import FornecedorProduto from "./FornecedorProduto";
-import FornecedorPedido from "./FornecedorPedido";
 import FornecedorProdutoSelect from "./FornecedorProdutoSelect";
+import FornecedorPedido from "./FornecedorPedido";
 import DateTime from "../../util/DateTime";
 import Contato from "../../components/Contato";
 
@@ -162,6 +165,7 @@ export default {
     FornecedorContrato,
     FornecedorProduto,
     FornecedorProdutoSelect,
+    FornecedorContratoSelect,
     DateTime,
     FornecedorPedido,
     Contato

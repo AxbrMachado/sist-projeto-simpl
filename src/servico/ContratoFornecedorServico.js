@@ -86,6 +86,32 @@ class ContratoFornecedorServico {
     });
   }
 
+  ObterGridFornecedor(
+    pagina,
+    itensPorPagina,
+    pessoaId,
+    vinculadoAoContrato,
+    descricao,
+    tipoPessoaContrato
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoacontrato/obter-grid-fornecedor?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&pessoaId=" +
+        pessoaId +
+        "&vinculadoAoContrato=" +
+        vinculadoAoContrato +
+        "&descricao=" +
+        descricao +
+        "&TipoPessoaContrato=" +
+        tipoPessoaContrato,
+      method: "GET"
+    });
+  }
+
   Adicionar(contratoId, pessoaId, tipoPessoaContrato) {
     return Vue.prototype.$http({
       url:
@@ -119,6 +145,29 @@ class ContratoFornecedorServico {
         tipoPessoaContrato +
         "&contratoId=" +
         contratoId,
+      method: "GET"
+    });
+  }
+
+  EditarContrato(
+    contratoClienteId,
+    valorLimite,
+    quantidadeLimite,
+    pessoaId,
+    tipoPessoaContrato
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoacontrato/editar-contrato-pessoa?id=" +
+        contratoClienteId +
+        "&valorLimite=" +
+        valorLimite +
+        "&quantidadeLimite=" +
+        quantidadeLimite +
+        "&tipoPessoaContrato=" +
+        tipoPessoaContrato +
+        "&pessoaId=" +
+        pessoaId,
       method: "GET"
     });
   }

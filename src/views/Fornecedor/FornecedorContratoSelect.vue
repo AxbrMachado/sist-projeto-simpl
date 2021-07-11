@@ -12,7 +12,7 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Produtos(s)</strong>
+                <strong class="align-self-center">Contrato(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
 
                 <i
@@ -29,21 +29,21 @@
                 <div class="row">
                   <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <label>Produto</label>
+                      <label>Descrição</label>
                       <input
                         type="text"
-                        v-model="filtro.produto"
+                        v-model="filtro.descricao"
                         class="form-control"
                       />
                     </div>
                   </div>
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas produtos presentes no fornecedor."
+                    title="Apenas contratos presentes no fornecedor."
                   >
                     <label for>Presente no Fornecedor</label>
                     <b-form-checkbox
-                      v-model="filtro.produtosNoFornecedor"
+                      v-model="filtro.contratosNoFornecedor"
                       name="check-button"
                       switch
                     >
@@ -76,7 +76,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum produto encontrado."
+                      empty-text="Nenhum contrato encontrado."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -88,8 +88,8 @@
                             v-if="isNoFornecedor(data.item)"
                             variant="danger"
                             style="margin-right: 10px"
-                            title="Produto não fornecido pelo fornecedor"
-                            @click="AdicionarProdutoFornecedor(data.item)"
+                            title="Contrato não vinculado ao fornecedor"
+                            @click="AdicionarContratoFornecedor(data.item)"
                           >
                             <i class="fas fa-times"></i>
                           </b-button>
@@ -97,8 +97,8 @@
                             v-if="!isNoFornecedor(data.item)"
                             variant="success"
                             style="margin-right: 10px"
-                            title="Produto fornecido pelo fornecedor"
-                            @click="RemoverProdutoFornecedor(data.item)"
+                            title="Contrato vinculado ao fornecedor"
+                            @click="RemoverContratoFornecedor(data.item)"
                           >
                             <i class="fas fa-check"></i>
                           </b-button>
@@ -106,11 +106,21 @@
                             v-if="!isNoFornecedor(data.item)"
                             variant="info"
                             style="margin-right: 10px"
-                            title="Editar produto do fornecedor"
+                            title="Editar contrato do fornecedor"
                             @click="Edicao(data.item)"
                           >
                             <i class="fa fa-edit"></i>
                           </b-button>
+                        </div>
+                      </template>
+                      <template v-slot:cell(dataInicio)="data">
+                        <div class="center">
+                          <span>{{ FormatarData(data.item.dataInicio) }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(dataTermino)="data">
+                        <div class="center">
+                          <span>{{ FormatarData(data.item.dataTermino) }}</span>
                         </div>
                       </template>
                       <template v-slot:cell(valor)="data">
@@ -118,10 +128,20 @@
                           <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
-                      <template v-slot:cell(quantidade)="data">
+                      <template v-slot:cell(valorLimite)="data">
+                        <div class="left">
+                          <span>{{ FormataValor(data.item.valorLimite) }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(descricao)="data">
+                        <div class="left">
+                          <span>{{ FormataDescricao(data.item) }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeLimite)="data">
                         <div class="left">
                           <span>{{
-                            FormataQuantidade(data.item.quantidade)
+                            FormataQuantidade(data.item.quantidadeLimite)
                           }}</span>
                         </div>
                       </template>
@@ -143,11 +163,11 @@
       </div>
     </form>
     <b-modal
-      v-model="modalEditarInfoProduto"
-      title="Editar dados do produto junto ao fornecedor"
+      v-model="modalEditarInfoContrato"
+      title="Editar dados do contrato junto ao fornecedor"
       class="modal-danger"
       ok-variant="info"
-      @ok="EditarProduto"
+      @ok="EditarContrato"
       @hidden="CancelEdicao"
     >
       <div class="row">
@@ -155,9 +175,9 @@
           <div class="form-group">
             <label for>* Valor</label>
             <currency-input
-              v-model="valorProduto"
+              v-model="valor"
               class="form-control"
-              placeholder="Digite o valor do produto para este fornecedor"
+              placeholder="Digite o valor do contrato para este fornecedor"
               required
             />
           </div>
@@ -170,7 +190,7 @@
               v-bind:minus="false"
               thousand-separator="."
               decimal-separator=","
-              v-model="quantidadeProduto"
+              v-model="quantidade"
               class="form-control"
               placeholder="Digite a quantidade disponível"
               required
@@ -184,38 +204,43 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import FornecedorProdutoServico from "../../servico/FornecedorProdutoServico";
+import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
+import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 
 export default {
-  name: "FornecedorProdutoSelect",
-  components: { RotateSquare },
+  name: "FornecedorContratoSelect",
+  components: { RotateSquare, TipoPessoaContratoEnum },
   props: {
-    fornecedorId: {
+    pessoaId: {
       type: String,
       default: ""
     }
   },
   data() {
     return {
-      modalEditarInfoProduto: false,
-      valorProduto: 0,
-      quantidadeProduto: 0,
-      fornecedorProdutoId: this.$store.getters.emptyGuid,
+      modalEditarInfoContrato: false,
+      valor: 0,
+      quantidade: 0,
+      pessoaContratoId: this.$store.getters.emptyGuid,
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 15,
+      itensPorPagina: 10,
       itens: [],
       abrir: false,
       filtro: {
-        produto: "",
-        produtosNoFornecedor: false
+        descricao: "",
+        contratosNoFornecedor: false
       },
       fields: [
-        { key: "produto", label: "Produto", sortable: true },
-        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "descricao", label: "Descrição", sortable: true },
+        // { key: "numero", label: "Número", sortable: true },
+        { key: "entidadeLicitacao", label: "Entidade", sortable: true },
+        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        { key: "valorLimite", label: "Valor Limite", sortable: true },
+        { key: "dataInicio", label: "Data Início", sortable: true },
+        { key: "dataTermino", label: "Data Término", sortable: true },
+        { key: "valor", label: "Valor Contrato", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -238,12 +263,13 @@ export default {
     ValidarForm(evt) {},
     ObterGrid(pagina) {
       this.loading = false;
-      FornecedorProdutoServico.ObterGridProduto(
+      ContratoFornecedorServico.ObterGridFornecedor(
         pagina,
         this.itensPorPagina,
-        this.fornecedorId,
-        this.filtro.produtosNoFornecedor,
-        this.filtro.produto
+        this.pessoaId,
+        this.filtro.contratosNoFornecedor,
+        this.filtro.descricao,
+        TipoPessoaContratoEnum.Fornecedor
       )
         .then((resposta) => {
           this.loading = false;
@@ -260,12 +286,12 @@ export default {
           });
         });
     },
-    RemoverProdutoFornecedor(item) {
-      FornecedorProdutoServico.Remover(item.id)
+    RemoverContratoFornecedor(item) {
+      ContratoFornecedorServico.Remover(item.id)
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto removido com sucesso."],
+            data: ["Contrato removido com sucesso."],
             type: "success",
             duration: 1000
           });
@@ -278,12 +304,16 @@ export default {
           });
         });
     },
-    AdicionarProdutoFornecedor(item) {
-      FornecedorProdutoServico.Adicionar(this.fornecedorId, item.produtoId)
+    AdicionarContratoFornecedor(item) {
+      ContratoFornecedorServico.Adicionar(
+        item.contratoId,
+        this.pessoaId,
+        TipoPessoaContratoEnum.Fornecedor
+      )
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto adicionado com sucesso."],
+            data: ["Contrato adicionado com sucesso."],
             type: "success",
             duration: 1000
           });
@@ -297,8 +327,8 @@ export default {
         });
     },
     Limpar() {
-      this.filtro.produto = "";
-      this.filtro.produtosNoFornecedor = false;
+      this.filtro.descricao = "";
+      this.filtro.contratosNoFornecedor = false;
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -316,10 +346,10 @@ export default {
     isNoFornecedor(item) {
       return item.id === this.$store.getters.emptyGuid;
     },
-    EditarProduto(evento) {
+    EditarContrato(evento) {
       evento.preventDefault();
 
-      if (!this.valorProduto || this.valorProduto <= 0) {
+      if (!this.valor || this.valor <= 0) {
         this.$notify({
           data: ["Informe um valor válido."],
           type: "warn",
@@ -328,23 +358,24 @@ export default {
         return;
       }
 
-      if (!this.quantidadeProduto) {
-        this.quantidadeProduto = 0;
+      if (!this.quantidade) {
+        this.quantidade = 0;
       }
 
-      this.modalEditarInfoProduto = false;
+      this.modalEditarInfoContrato = false;
 
-      FornecedorProdutoServico.EditarProduto(
-        this.fornecedorProdutoId,
-        this.valorProduto,
-        this.quantidadeProduto,
-        this.fornecedorId
+      ContratoFornecedorServico.EditarContrato(
+        this.pessoaContratoId,
+        this.valor,
+        this.quantidade,
+        this.pessoaId,
+        TipoPessoaContratoEnum.Fornecedor
       )
         .then((resposta) => {
           this.loading = false;
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto alterado com sucesso."],
+            data: ["Contrato alterado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -360,14 +391,14 @@ export default {
     },
     CancelEdicao(evento) {
       evento.preventDefault();
-      this.modalEditarInfoProduto = false;
+      this.modalEditarInfoContrato = false;
     },
     Edicao(item) {
-      this.modalEditarInfoProduto = true;
-      this.fornecedorProdutoId = item.id;
-      this.fornecedorId = item.fornecedorId;
-      this.valorProduto = item.valor ? item.valor : 0;
-      this.quantidadeProduto = item.quantidade ? item.quantidade : 0;
+      this.modalEditarInfoContrato = true;
+      this.pessoaContratoId = item.id;
+      this.pessoaId = item.pessoaId;
+      this.valor = item.valorLimite ? item.valorLimite : 0;
+      this.quantidade = item.quantidadeLimite ? item.quantidadeLimite : 0;
     },
     FormataQuantidade(valor) {
       if (valor != null) {
@@ -375,6 +406,12 @@ export default {
       } else {
         return 0;
       }
+    },
+    FormatarData(value) {
+      return new Date(value).toLocaleDateString();
+    },
+    FormataDescricao(value) {
+      return value.numero + " - " + value.descricao;
     }
   }
 };
