@@ -332,24 +332,6 @@ export default {
         });
       }
     },
-    ObterProdutosVSelect(busca) {
-      if (!busca || busca.length <= 2) return;
-
-      this.$http({
-        url: "/produto/obter-v-select/" + busca,
-        method: "GET"
-      })
-        .then((response) => {
-          this.produtoOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
     isNoFornecedor(item) {
       return item.id === this.$store.getters.emptyGuid;
     },
@@ -381,7 +363,7 @@ export default {
           this.loading = false;
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Fornecedores cadastrados com sucesso."],
+            data: ["Produto alterado com sucesso."],
             type: "success",
             duration: 5000
           });

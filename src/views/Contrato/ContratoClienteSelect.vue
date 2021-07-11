@@ -76,7 +76,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum produto encontrado."
+                      empty-text="Nenhum cliente encontrado."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -88,7 +88,7 @@
                             v-if="isClienteVinculado(data.item)"
                             variant="danger"
                             style="margin-right: 10px"
-                            title="Produto não fornecido pelo fornecedor"
+                            title="Cliente não vinculado ao contrato"
                             @click="AdicionarClienteContrato(data.item)"
                           >
                             <i class="fas fa-times"></i>
@@ -339,7 +339,7 @@ export default {
           this.loading = false;
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Fornecedores cadastrados com sucesso."],
+            data: ["Cliente alterado com sucesso."],
             type: "success",
             duration: 5000
           });
