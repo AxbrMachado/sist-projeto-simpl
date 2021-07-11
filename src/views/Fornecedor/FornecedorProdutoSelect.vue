@@ -118,6 +118,13 @@
                           <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidade)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidade)
+                          }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -398,6 +405,13 @@ export default {
       this.fornecedorId = item.fornecedorId;
       this.valorProduto = item.valor ? item.valor : 0;
       this.quantidadeProduto = item.quantidade ? item.quantidade : 0;
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

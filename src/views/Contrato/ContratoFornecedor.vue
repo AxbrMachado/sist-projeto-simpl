@@ -157,7 +157,7 @@
                       <template v-slot:cell(quantidadeLimite)="data">
                         <div class="left">
                           <span>{{
-                            FormataValorDecimal(data.item.quantidadeLimite)
+                            FormataQuantidade(data.item.quantidadeLimite)
                           }}</span>
                         </div>
                       </template>
@@ -340,7 +340,11 @@ export default {
       this.addTodosQuantidade = 0;
       this.addTodosValorLimite = 0;
       this.modalAdicionarTodos = false;
-      ContratoFornecedorServico.ObterGrid(val, this.itensPorPagina, this.contratoId)
+      ContratoFornecedorServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.contratoId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -457,17 +461,6 @@ export default {
         });
       }
     },
-    FormataValorDecimal(valor) {
-      return valor;
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return valor;
-      }
-    },
     RemoverCifrao(valor) {
       if (valor) {
         return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
@@ -554,6 +547,13 @@ export default {
             duration: 5000
           });
         });
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

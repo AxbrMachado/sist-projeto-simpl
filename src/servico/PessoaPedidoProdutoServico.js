@@ -1,5 +1,6 @@
 import Vue from "vue";
-class PessoaPedidoProduto {
+
+class PessoaPedidoProdutoServico {
   ObterGridProdutoPedidoCliente(
     pagina,
     itensPorPagina,
@@ -62,4 +63,4 @@ class PessoaPedidoProduto {
   }
 }
 
-export default new PessoaPedidoProduto();
+export default new PessoaPedidoProdutoServico();

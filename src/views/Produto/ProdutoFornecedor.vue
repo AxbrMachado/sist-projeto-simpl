@@ -142,11 +142,13 @@
                           }}</span>
                         </div>
                       </template>
-                      <!-- <template v-slot:cell(valor)="data">
+                      <template v-slot:cell(quantidade)="data">
                         <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
+                          <span>{{
+                            FormataQuantidade(data.item.quantidade)
+                          }}</span>
                         </div>
-                      </template> -->
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -271,7 +273,11 @@ export default {
     },
     ObterGrid(val) {
       this.loading = false;
-      ProdutoFornecedorServico.ObterGrid(val, this.itensPorPagina, this.produtoId)
+      ProdutoFornecedorServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.produtoId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -435,6 +441,13 @@ export default {
             duration: 5000
           });
         });
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

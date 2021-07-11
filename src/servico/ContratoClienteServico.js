@@ -29,7 +29,8 @@ class ContratoClienteServico {
     itensPorPagina,
     contratoId,
     vinculadoAoContrato,
-    nome
+    nome,
+    tipoPessoaContrato
   ) {
     return Vue.prototype.$http({
       url:
@@ -42,7 +43,9 @@ class ContratoClienteServico {
         "&vinculadoAoContrato=" +
         vinculadoAoContrato +
         "&nome=" +
-        nome,
+        nome +
+        "&TipoPessoaContrato=" +
+        tipoPessoaContrato,
       method: "GET"
     });
   }
@@ -79,7 +82,7 @@ class ContratoClienteServico {
   EditarCliente(contratoClienteId, rota, tipoPessoaContrato, contratoId) {
     return Vue.prototype.$http({
       url:
-        "/pessoacontrato/editar-cliente?id=" +
+        "/pessoacontrato/editar-contrato-pessoa?id=" +
         contratoClienteId +
         "&rota=" +
         rota +

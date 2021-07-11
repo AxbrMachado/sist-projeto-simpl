@@ -97,7 +97,7 @@
                             v-if="!isClienteVinculado(data.item)"
                             variant="success"
                             style="margin-right: 10px"
-                            title="Produto fornecido pelo fornecedor"
+                            title="Cliente vinculado ao contrato"
                             @click="RemoverClienteContrato(data.item)"
                           >
                             <i class="fas fa-check"></i>
@@ -106,7 +106,7 @@
                             v-if="!isClienteVinculado(data.item)"
                             variant="info"
                             style="margin-right: 10px"
-                            title="Editar produto do fornecedor"
+                            title="Editar cliente do contrato"
                             @click="Edicao(data.item)"
                           >
                             <i class="fa fa-edit"></i>
@@ -143,7 +143,7 @@
       </div>
     </form>
     <b-modal
-      v-model="modalEditarInfoProduto"
+      v-model="modalEditarInfoCliente"
       title="Editar rota do cliente junto a este contrato"
       class="modal-danger"
       ok-variant="info"
@@ -189,7 +189,7 @@ export default {
   },
   data() {
     return {
-      modalEditarInfoProduto: false,
+      modalEditarInfoCliente: false,
       valorRota: 0,
       pessoaId: this.$store.getters.emptyGuid,
       contratoClienteId: this.$store.getters.emptyGuid,
@@ -237,7 +237,8 @@ export default {
         this.itensPorPagina,
         this.contratoId,
         this.filtro.vinculadoAoContrato,
-        this.filtro.nome
+        this.filtro.nome,
+        TipoPessoaContratoEnum.Cliente
       )
         .then((resposta) => {
           this.loading = false;
@@ -326,7 +327,7 @@ export default {
         return;
       }
 
-      this.modalEditarInfoProduto = false;
+      this.modalEditarInfoCliente = false;
 
       ContratoClienteServico.EditarCliente(
         this.contratoClienteId,
@@ -354,10 +355,10 @@ export default {
     },
     CancelEdicao(evento) {
       evento.preventDefault();
-      this.modalEditarInfoProduto = false;
+      this.modalEditarInfoCliente = false;
     },
     Edicao(item) {
-      this.modalEditarInfoProduto = true;
+      this.modalEditarInfoCliente = true;
       this.pessoaId = item.pessoaId;
       this.contratoClienteId = item.id;
       this.valorRota = item.rota;

@@ -146,7 +146,9 @@
       <!-- <ContratoCliente :contratoId="viewModel.id"> </ContratoCliente> -->
       <ContratoClienteSelect :contratoId="viewModel.id">
       </ContratoClienteSelect>
-      <ContratoFornecedor :contratoId="viewModel.id"> </ContratoFornecedor>
+      <!-- <ContratoFornecedor :contratoId="viewModel.id"> </ContratoFornecedor> -->
+      <ContratoFornecedorSelect :contratoId="viewModel.id">
+      </ContratoFornecedorSelect>
       <ContratoProduto :contratoId="viewModel.id"> </ContratoProduto>
       <ContratoPedido :contratoId="viewModel.id"> </ContratoPedido>
       <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
@@ -159,6 +161,7 @@
 import RotateSquare from "../../components/RotateSquare";
 import ContratoProduto from "./ContratoProduto";
 import ContratoFornecedor from "./ContratoFornecedor";
+import ContratoFornecedorSelect from "./ContratoFornecedorSelect";
 import ContratoCliente from "./ContratoCliente";
 import ContratoClienteSelect from "./ContratoClienteSelect";
 import ContratoPedido from "./ContratoPedido";
@@ -175,6 +178,7 @@ export default {
     ContratoFornecedor,
     ContratoCliente,
     ContratoClienteSelect,
+    ContratoFornecedorSelect,
     ContratoPedido,
     Contato
   },

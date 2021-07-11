@@ -135,6 +135,13 @@
                           <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidade)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidade)
+                          }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -406,6 +413,13 @@ export default {
             duration: 5000
           });
         });
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

@@ -85,37 +85,44 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            v-if="isClienteVinculado(data.item)"
+                            v-if="isFornecedorVinculado(data.item)"
                             variant="danger"
                             style="margin-right: 10px"
                             title="Produto não fornecido pelo fornecedor"
-                            @click="AdicionarClienteContrato(data.item)"
+                            @click="AdicionarFornecedorContrato(data.item)"
                           >
                             <i class="fas fa-times"></i>
                           </b-button>
                           <b-button
-                            v-if="!isClienteVinculado(data.item)"
+                            v-if="!isFornecedorVinculado(data.item)"
                             variant="success"
                             style="margin-right: 10px"
-                            title="Produto fornecido pelo fornecedor"
-                            @click="RemoverClienteContrato(data.item)"
+                            title="Fornecedor vinculado ao contrato"
+                            @click="RemoverFornecedorContrato(data.item)"
                           >
                             <i class="fas fa-check"></i>
                           </b-button>
                           <b-button
-                            v-if="!isClienteVinculado(data.item)"
+                            v-if="!isFornecedorVinculado(data.item)"
                             variant="info"
                             style="margin-right: 10px"
-                            title="Editar produto do fornecedor"
+                            title="Editar fornecedor do contrato"
                             @click="Edicao(data.item)"
                           >
                             <i class="fa fa-edit"></i>
                           </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(valor)="data">
+                      <template v-slot:cell(valorLimite)="data">
                         <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
+                          <span>{{ FormataValor(data.item.valorLimite) }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeLimite)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeLimite)
+                          }}</span>
                         </div>
                       </template>
                       <template v-slot:cell(tipoPessoa)="data">
@@ -143,22 +150,36 @@
       </div>
     </form>
     <b-modal
-      v-model="modalEditarInfoProduto"
-      title="Editar rota do cliente junto a este contrato"
+      v-model="modalEditarInfoFornecedor"
+      title="Editar informação do fornecedor no contrato"
       class="modal-danger"
       ok-variant="info"
-      @ok="EditarCliente"
+      @ok="EditarFornecedor"
       @hidden="CancelEdicao"
     >
       <div class="row">
-        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
           <div class="form-group">
-            <label for>* Rota</label>
-            <input
-              v-model="valorRota"
+            <label for>* Valor Limite</label>
+            <currency-input
+              v-model="valorLimite"
               class="form-control"
-              type="text"
-              placeholder="Digite a rota"
+              placeholder="Informe valor limite"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
+          <div class="form-group">
+            <label for>* Quantidade Limite</label>
+            <vue-numeric
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="quantidadeLimite"
+              class="form-control"
+              placeholder="Informe quantidade limite"
               required
             />
           </div>
@@ -170,7 +191,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoClienteServico from "../../servico/ContratoClienteServico";
+import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
@@ -189,8 +210,9 @@ export default {
   },
   data() {
     return {
-      modalEditarInfoProduto: false,
-      valorRota: 0,
+      modalEditarInfoFornecedor: false,
+      valorLimite: 0,
+      quantidadeLimite: 0,
       pessoaId: this.$store.getters.emptyGuid,
       contratoClienteId: this.$store.getters.emptyGuid,
       loading: false,
@@ -204,9 +226,15 @@ export default {
         vinculadoAoContrato: false
       },
       fields: [
-        { key: "pessoa", label: "Cliente", sortable: true },
-        { key: "tipoPessoa", label: "Tipo Pessoa", sortable: true },
-        { key: "rota", label: "Rota", sortable: true },
+        { key: "pessoa", label: "Fornecedor", sortable: true },
+        { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
+        { key: "valorLimite", label: "Valor Limite", sortable: true },
+        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        {
+          key: "quantidadeConsumida",
+          label: "Quantidade Consumida",
+          sortable: true
+        },
         {
           key: "acoes",
           label: "Ações",
@@ -226,18 +254,16 @@ export default {
   },
   created() {},
   methods: {
-    IsNovo() {
-      return this.contratoId === this.$store.getters.emptyGuid;
-    },
     ValidarForm(evt) {},
     ObterGrid(pagina) {
       this.loading = false;
-      ContratoClienteServico.ObterGridContrato(
+      ContratoFornecedorServico.ObterGridContrato(
         pagina,
         this.itensPorPagina,
         this.contratoId,
         this.filtro.vinculadoAoContrato,
-        this.filtro.nome
+        this.filtro.nome,
+        TipoPessoaContratoEnum.Fornecedor
       )
         .then((resposta) => {
           this.loading = false;
@@ -254,12 +280,12 @@ export default {
           });
         });
     },
-    RemoverClienteContrato(item) {
-      ContratoClienteServico.Remover(item.id)
+    RemoverFornecedorContrato(item) {
+      ContratoFornecedorServico.Remover(item.id)
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Cliente removido com sucesso."],
+            data: ["Fornecedor removido com sucesso."],
             type: "success",
             duration: 1000
           });
@@ -272,16 +298,16 @@ export default {
           });
         });
     },
-    AdicionarClienteContrato(item) {
-      ContratoClienteServico.Adicionar(
+    AdicionarFornecedorContrato(item) {
+      ContratoFornecedorServico.Adicionar(
         this.contratoId,
         item.pessoaId,
-        TipoPessoaContratoEnum.Cliente
+        TipoPessoaContratoEnum.Fornecedor
       )
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Cliente vinculado com sucesso."],
+            data: ["Fornecedor vinculado com sucesso."],
             type: "success",
             duration: 1000
           });
@@ -311,27 +337,32 @@ export default {
         });
       }
     },
-    isClienteVinculado(item) {
+    isFornecedorVinculado(item) {
       return item.id === this.$store.getters.emptyGuid;
     },
-    EditarCliente(evento) {
+    EditarFornecedor(evento) {
       evento.preventDefault();
 
-      if (!this.valorRota) {
+      if (!this.valorLimite || this.valorLimite <= 0) {
         this.$notify({
-          data: ["Informe uma rota válida."],
+          data: ["Informe um valor limite válido."],
           type: "warn",
           duration: 3000
         });
         return;
       }
 
-      this.modalEditarInfoProduto = false;
+      if (!this.quantidadeLimite) {
+        this.quantidadeLimite = 0;
+      }
 
-      ContratoClienteServico.EditarCliente(
+      this.modalEditarInfoFornecedor = false;
+
+      ContratoFornecedorServico.EditarFornecedor(
         this.contratoClienteId,
-        this.valorRota,
-        TipoPessoaContratoEnum.Cliente,
+        this.valorLimite,
+        this.quantidadeLimite,
+        TipoPessoaContratoEnum.Fornecedor,
         this.contratoId
       )
         .then((resposta) => {
@@ -354,13 +385,14 @@ export default {
     },
     CancelEdicao(evento) {
       evento.preventDefault();
-      this.modalEditarInfoProduto = false;
+      this.modalEditarInfoFornecedor = false;
     },
     Edicao(item) {
-      this.modalEditarInfoProduto = true;
+      this.modalEditarInfoFornecedor = true;
       this.pessoaId = item.pessoaId;
       this.contratoClienteId = item.id;
-      this.valorRota = item.rota;
+      this.valorLimite = item.valorLimite;
+      this.quantidadeLimite = item.quantidadeLimite ? item.quantidadeLimite : 0;
     },
     ObterTipoPessoa(item) {
       switch (item) {
@@ -374,6 +406,13 @@ export default {
           return "Instituição";
         default:
           return "Inválido";
+      }
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
       }
     }
   }
