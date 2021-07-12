@@ -53,6 +53,18 @@
                   ></b-form-select>
                 </div>
               </div>
+              <div
+                class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                title="Presente em pedido."
+              >
+                <label for>Presente em pedido</label>
+                <b-form-checkbox
+                  v-model="filtro.presenteEmPedido"
+                  name="check-button"
+                  switch
+                >
+                </b-form-checkbox>
+              </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
                   class="btn btn-primary mr-2"
@@ -149,13 +161,14 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       tiposProdutoOptions: [],
       tiposUnidadeMedidaOptions: [],
       filtro: {
         descricao: "",
         tipoProdutoId: "",
-        tipoUnidadeMedidaId: ""
+        tipoUnidadeMedidaId: "",
+        presenteEmPedido: false
       },
       fields: [
         { key: "descricao", label: "Descrição", sortable: true },
@@ -186,8 +199,7 @@ export default {
       this.filtro.descricao = "";
       this.filtro.tipoProdutoId = "";
       this.filtro.tipoUnidadeMedidaId = "";
-
-      this.ObterGrid(1);
+      this.filtro.presenteEmPedido = false;
     },
     Editar(produto) {
       this.$router.push("/produto/editar/" + produto.id);
@@ -260,6 +272,9 @@ export default {
           filtros + "&tipoUnidadeMedidaId=" + this.filtro.tipoUnidadeMedidaId;
       }
 
+      var filtros =
+        filtros + "&PresenteEmPedido=" + this.filtro.presenteEmPedido;
+
       return filtros;
     },
     ObterTiposProdutoSelect() {
@@ -306,7 +321,7 @@ export default {
           currency: "BRL"
         });
       }
-    },
+    }
   }
 };
 </script>

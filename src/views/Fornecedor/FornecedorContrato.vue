@@ -107,6 +107,13 @@
                       <span>{{ FormataValor(data.item.valor) }}</span>
                     </div>
                   </template>
+                  <template v-slot:cell(quantidadeLimite)="data">
+                    <div class="left">
+                      <span>{{
+                        FormataQuantidade(data.item.quantidadeLimite)
+                      }}</span>
+                    </div>
+                  </template>
                 </b-table>
                 <b-pagination
                   v-model="pagina"
@@ -137,7 +144,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoFornecedor from "../../servico/ContratoFornecedorServico";
+import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import DateTime from "../../util/DateTime";
 
@@ -162,13 +169,13 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       filtro: { numero: "" },
       fields: [
         { key: "numero", label: "Número", sortable: true },
         { key: "entidadeLicitacao", label: "Entidade", sortable: true },
-        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
+        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         { key: "dataInicio", label: "Data Início", sortable: true },
         { key: "dataTermino", label: "Data Término", sortable: true },
         { key: "valor", label: "Valor Contrato", sortable: true },
@@ -248,7 +255,7 @@ export default {
 
       if (!this.itemRemover) return;
 
-      ContratoFornecedor.Remover(this.itemRemover)
+      ContratoFornecedorServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -283,6 +290,13 @@ export default {
           style: "currency",
           currency: "BRL"
         });
+      }
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
       }
     }
   }

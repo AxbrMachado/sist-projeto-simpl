@@ -12,7 +12,7 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Produtos(s)</strong>
+                <strong class="align-self-center">Produto(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
 
                 <i
@@ -29,7 +29,7 @@
                 <div class="row">
                   <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <label>Produto</label>
+                      <label>Nome</label>
                       <input
                         type="text"
                         v-model="filtro.produto"
@@ -39,11 +39,11 @@
                   </div>
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas produtos presentes no fornecedor."
+                    title="Apenas produtos vinculados ao contrato."
                   >
-                    <label for>Presente no Fornecedor</label>
+                    <label for>Vinculado ao contrato</label>
                     <b-form-checkbox
-                      v-model="filtro.produtosNoFornecedor"
+                      v-model="filtro.vinculadoAoContrato"
                       name="check-button"
                       switch
                     >
@@ -85,28 +85,28 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            v-if="isNoFornecedor(data.item)"
+                            v-if="isProdutoVinculado(data.item)"
                             variant="danger"
                             style="margin-right: 10px"
-                            title="Produto não fornecido pelo fornecedor"
-                            @click="AdicionarProdutoFornecedor(data.item)"
+                            title="Produto não vinculado ao contrato"
+                            @click="AdicionarProdutoContrato(data.item)"
                           >
                             <i class="fas fa-times"></i>
                           </b-button>
                           <b-button
-                            v-if="!isNoFornecedor(data.item)"
+                            v-if="!isProdutoVinculado(data.item)"
                             variant="success"
                             style="margin-right: 10px"
-                            title="Produto fornecido pelo fornecedor"
-                            @click="RemoverProdutoFornecedor(data.item)"
+                            title="Produto vinculado ao contrato"
+                            @click="RemoverProdutoContrato(data.item)"
                           >
                             <i class="fas fa-check"></i>
                           </b-button>
                           <b-button
-                            v-if="!isNoFornecedor(data.item)"
+                            v-if="!isProdutoVinculado(data.item)"
                             variant="info"
                             style="margin-right: 10px"
-                            title="Editar produto do fornecedor"
+                            title="Editar produto do contrato"
                             @click="Edicao(data.item)"
                           >
                             <i class="fa fa-edit"></i>
@@ -144,7 +144,7 @@
     </form>
     <b-modal
       v-model="modalEditarInfoProduto"
-      title="Editar dados do produto junto ao fornecedor"
+      title="Editar informação do produto no contrato"
       class="modal-danger"
       ok-variant="info"
       @ok="EditarProduto"
@@ -155,9 +155,9 @@
           <div class="form-group">
             <label for>* Valor</label>
             <currency-input
-              v-model="valorProduto"
+              v-model="valor"
               class="form-control"
-              placeholder="Digite o valor do produto para este fornecedor"
+              placeholder="Informe valor"
               required
             />
           </div>
@@ -170,9 +170,9 @@
               v-bind:minus="false"
               thousand-separator="."
               decimal-separator=","
-              v-model="quantidadeProduto"
+              v-model="quantidade"
               class="form-control"
-              placeholder="Digite a quantidade disponível"
+              placeholder="Informe quantidade"
               required
             />
           </div>
@@ -184,13 +184,19 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import FornecedorProdutoServico from "../../servico/FornecedorProdutoServico";
+import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
+import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
+import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
 export default {
-  name: "FornecedorProdutoSelect",
-  components: { RotateSquare },
+  name: "ContratoProdutoSelect",
+  components: {
+    RotateSquare,
+    TipoPessoaContratoEnum,
+    TipoPessoaEnum
+  },
   props: {
-    fornecedorId: {
+    contratoId: {
       type: String,
       default: ""
     }
@@ -198,9 +204,10 @@ export default {
   data() {
     return {
       modalEditarInfoProduto: false,
-      valorProduto: 0,
-      quantidadeProduto: 0,
-      fornecedorProdutoId: this.$store.getters.emptyGuid,
+      valor: 0,
+      quantidade: 0,
+      produtoId: this.$store.getters.emptyGuid,
+      contratoClienteId: this.$store.getters.emptyGuid,
       loading: false,
       pagina: 1,
       total: 0,
@@ -209,13 +216,14 @@ export default {
       abrir: false,
       filtro: {
         produto: "",
-        produtosNoFornecedor: false
+        vinculadoAoContrato: false
       },
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "tipoUnidadeMedida", label: "Un. Medida", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -238,11 +246,11 @@ export default {
     ValidarForm(evt) {},
     ObterGrid(pagina) {
       this.loading = false;
-      FornecedorProdutoServico.ObterGridProdutoFornecedor(
+      ContratoProdutoServico.ObterGridContratoProduto(
         pagina,
         this.itensPorPagina,
-        this.fornecedorId,
-        this.filtro.produtosNoFornecedor,
+        this.contratoId,
+        this.filtro.vinculadoAoContrato,
         this.filtro.produto
       )
         .then((resposta) => {
@@ -260,8 +268,8 @@ export default {
           });
         });
     },
-    RemoverProdutoFornecedor(item) {
-      FornecedorProdutoServico.Remover(item.id)
+    RemoverProdutoContrato(item) {
+      ContratoProdutoServico.Remover(item.id)
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
@@ -278,12 +286,12 @@ export default {
           });
         });
     },
-    AdicionarProdutoFornecedor(item) {
-      FornecedorProdutoServico.Adicionar(this.fornecedorId, item.produtoId)
+    AdicionarProdutoContrato(item) {
+      ContratoProdutoServico.Adicionar(this.contratoId, item.produtoId)
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto adicionado com sucesso."],
+            data: ["Produto vinculado com sucesso."],
             type: "success",
             duration: 1000
           });
@@ -298,7 +306,7 @@ export default {
     },
     Limpar() {
       this.filtro.produto = "";
-      this.filtro.produtosNoFornecedor = false;
+      this.filtro.vinculadoAoContrato = false;
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -313,13 +321,13 @@ export default {
         });
       }
     },
-    isNoFornecedor(item) {
+    isProdutoVinculado(item) {
       return item.id === this.$store.getters.emptyGuid;
     },
     EditarProduto(evento) {
       evento.preventDefault();
 
-      if (!this.valorProduto || this.valorProduto <= 0) {
+      if (!this.valor || this.valor <= 0) {
         this.$notify({
           data: ["Informe um valor válido."],
           type: "warn",
@@ -328,17 +336,18 @@ export default {
         return;
       }
 
-      if (!this.quantidadeProduto) {
-        this.quantidadeProduto = 0;
+      if (!this.quantidade) {
+        this.quantidade = 0;
       }
 
       this.modalEditarInfoProduto = false;
 
-      FornecedorProdutoServico.EditarFornecedorProduto(
-        this.fornecedorProdutoId,
-        this.valorProduto,
-        this.quantidadeProduto,
-        this.fornecedorId
+      ContratoProdutoServico.EditarContratoProduto(
+        this.contratoClienteId,
+        this.valor,
+        this.quantidade,
+        this.contratoId,
+        this.produtoId
       )
         .then((resposta) => {
           this.loading = false;
@@ -364,10 +373,10 @@ export default {
     },
     Edicao(item) {
       this.modalEditarInfoProduto = true;
-      this.fornecedorProdutoId = item.id;
-      this.fornecedorId = item.fornecedorId;
-      this.valorProduto = item.valor ? item.valor : 0;
-      this.quantidadeProduto = item.quantidade ? item.quantidade : 0;
+      this.produtoId = item.produtoId;
+      this.contratoClienteId = item.id;
+      this.valor = item.valor;
+      this.quantidade = item.quantidade ? item.quantidade : 0;
     },
     FormataQuantidade(valor) {
       if (valor != null) {

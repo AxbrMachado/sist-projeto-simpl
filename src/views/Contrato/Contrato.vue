@@ -78,6 +78,18 @@
                 >
                 </b-form-checkbox>
               </div>
+              <div
+                class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                title="Presente em pedido."
+              >
+                <label for>Presente em pedido</label>
+                <b-form-checkbox
+                  v-model="filtro.presenteEmPedido"
+                  name="check-button"
+                  switch
+                >
+                </b-form-checkbox>
+              </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
                   class="btn btn-primary mr-2"
@@ -184,14 +196,15 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       licitacaoOptions: [],
       filtro: {
         numero: "",
         descricao: "",
         contratoVencido: false,
         licitacaoId: "",
-        dataVencimento: ""
+        dataVencimento: "",
+        presenteEmPedido: false
       },
       fields: [
         { key: "descricao", label: "Descrição", sortable: true },
@@ -226,8 +239,7 @@ export default {
       this.filtro.contratoVencido = false;
       this.filtro.licitacaoId = "";
       this.filtro.dataVencimento = "";
-
-      this.ObterGrid(1);
+      this.filtro.presenteEmPedido = false;
     },
     Editar(contrato) {
       this.$router.push("/contrato/editar/" + contrato.id);
@@ -298,6 +310,9 @@ export default {
 
       var filtros = filtros + "&DataTermino=" + this.filtro.dataVencimento;
       var filtros = filtros + "&ContratoVencido=" + this.filtro.contratoVencido;
+
+      var filtros =
+        filtros + "&PresenteEmPedido=" + this.filtro.presenteEmPedido;
 
       return filtros;
     },

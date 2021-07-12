@@ -142,11 +142,13 @@
                           }}</span>
                         </div>
                       </template>
-                      <!-- <template v-slot:cell(valor)="data">
+                      <template v-slot:cell(quantidade)="data">
                         <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
+                          <span>{{
+                            FormataQuantidade(data.item.quantidade)
+                          }}</span>
                         </div>
-                      </template> -->
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -179,7 +181,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ProdutoFornecedor from "../../servico/ProdutoFornecedorServico";
+import ProdutoFornecedorServico from "../../servico/ProdutoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
@@ -255,7 +257,7 @@ export default {
     },
     Obter(id) {
       this.loading = false;
-      ProdutoFornecedor.Obter(id)
+      ProdutoFornecedorServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -271,7 +273,11 @@ export default {
     },
     ObterGrid(val) {
       this.loading = false;
-      ProdutoFornecedor.ObterGrid(val, this.itensPorPagina, this.produtoId)
+      ProdutoFornecedorServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.produtoId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -296,7 +302,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ProdutoFornecedor.Remover(this.itemRemover)
+      ProdutoFornecedorServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -320,7 +326,7 @@ export default {
     Novo() {
       this.loading = false;
       this.viewModel.produtoId = this.produtoId;
-      ProdutoFornecedor.Novo(this.viewModel)
+      ProdutoFornecedorServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -343,7 +349,7 @@ export default {
     Editar() {
       this.loading = false;
       this.viewModel.produtoId = this.produtoId;
-      ProdutoFornecedor.Editar(this.viewModel)
+      ProdutoFornecedorServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
@@ -435,6 +441,13 @@ export default {
             duration: 5000
           });
         });
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

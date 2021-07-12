@@ -245,6 +245,7 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
+      <PessoaPedido :pessoaId="viewModel.id"> </PessoaPedido>
       <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
       <NovoEndereco :pessoaId="viewModel.id"> </NovoEndereco>
       <Contato :referenciaId="viewModel.id"> </Contato>
@@ -259,6 +260,7 @@ import RotateSquare from "../../components/RotateSquare";
 import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
 import NovoDocumento from "../../components/NovoDocumento";
 import NovoEndereco from "./NovoEndereco";
+import PessoaPedido from "./PessoaPedido";
 import DateTime from "../../util/DateTime";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import Contato from "../../components/Contato";
@@ -269,6 +271,7 @@ export default {
     RotateSquare,
     NovoDocumento,
     NovoEndereco,
+    PessoaPedido,
     Contato
   },
   data() {

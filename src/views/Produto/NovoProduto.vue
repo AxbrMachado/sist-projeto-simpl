@@ -104,8 +104,12 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <ProdutoContrato :produtoId="viewModel.id"></ProdutoContrato>
-      <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor>
+      <!-- <ProdutoContrato :produtoId="viewModel.id"></ProdutoContrato> -->
+      <ProdutoContratoSelect :produtoId="viewModel.id"></ProdutoContratoSelect>
+      <!-- <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor> -->
+      <ProdutoFornecedorSelect :produtoId="viewModel.id">
+      </ProdutoFornecedorSelect>
+      <ProdutoPedido :produtoId="viewModel.id"> </ProdutoPedido>
     </div>
   </div>
 </template>
@@ -113,14 +117,20 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ProdutoFornecedor from "./ProdutoFornecedor";
+import ProdutoFornecedorSelect from "./ProdutoFornecedorSelect";
 import ProdutoContrato from "./ProdutoContrato";
+import ProdutoContratoSelect from "./ProdutoContratoSelect";
+import ProdutoPedido from "./ProdutoPedido";
 
 export default {
   name: "NovoProduto",
   components: {
     RotateSquare,
     ProdutoFornecedor,
-    ProdutoContrato
+    ProdutoContrato,
+    ProdutoContratoSelect,
+    ProdutoFornecedorSelect,
+    ProdutoPedido
   },
   data() {
     return {

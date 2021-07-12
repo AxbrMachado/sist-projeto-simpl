@@ -126,6 +126,27 @@
                           }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidadePedido)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadePedido)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadaAtendida)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadaAtendida)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeConfirmada)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeConfirmada)
+                          }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -404,6 +425,13 @@ export default {
           return "Avulso";
         default:
           return "Inválido";
+      }
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
       }
     }
   }

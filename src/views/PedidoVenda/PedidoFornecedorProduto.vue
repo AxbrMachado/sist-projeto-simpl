@@ -114,6 +114,13 @@
                           <span>{{ FormataValor(data.item.valorTotal) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidadeSolicitada)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeSolicitada)
+                          }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -395,6 +402,13 @@ export default {
         return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
       } else {
         return valor;
+      }
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
       }
     }
   }

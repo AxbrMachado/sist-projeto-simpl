@@ -17,9 +17,35 @@ class ContratoClienteServico {
         "&ItensPorPagina=" +
         itensPorPagina +
         "&contratoId=" +
-        contratoId + 
+        contratoId +
         "&tipoPessoaContrato=" +
-        TipoPessoaContratoEnum.Cliente ,
+        TipoPessoaContratoEnum.Cliente,
+      method: "GET"
+    });
+  }
+
+  ObterGridContrato(
+    pagina,
+    itensPorPagina,
+    contratoId,
+    vinculadoAoContrato,
+    nome,
+    tipoPessoaContrato
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoacontrato/obter-grid-contrato?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&contratoId=" +
+        contratoId +
+        "&vinculadoAoContrato=" +
+        vinculadoAoContrato +
+        "&nome=" +
+        nome +
+        "&TipoPessoaContrato=" +
+        tipoPessoaContrato,
       method: "GET"
     });
   }
@@ -36,6 +62,35 @@ class ContratoClienteServico {
       url: "pessoacontrato/novo",
       data: viewModel,
       method: "POST"
+    });
+  }
+
+  Adicionar(contratoId, pessoaId, tipoPessoaContrato) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoacontrato/adicionar?contratoId=" +
+        contratoId +
+        "&pessoaId=" +
+        pessoaId +
+        "&TipoPessoaContrato=" +
+        tipoPessoaContrato,
+
+      method: "GET"
+    });
+  }
+
+  EditarCliente(contratoClienteId, rota, tipoPessoaContrato, contratoId) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoacontrato/editar-contrato-pessoa?id=" +
+        contratoClienteId +
+        "&rota=" +
+        rota +
+        "&TipoPessoaContrato=" +
+        tipoPessoaContrato +
+        "&contratoId=" +
+        contratoId,
+      method: "GET"
     });
   }
 

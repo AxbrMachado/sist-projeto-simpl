@@ -187,7 +187,7 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       cooperadoOptions: [],
       tipoEnquadramentos: [
         { value: TipoEnquadramentoEnum.Grupo_A, text: "A" },

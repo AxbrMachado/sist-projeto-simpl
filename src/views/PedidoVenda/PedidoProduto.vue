@@ -86,7 +86,7 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            variant="warning"
+                            variant="primary"
                             style="margin-right: 10px"
                             title="Editar Fornecedores do Produtos"
                             @click="SwitchEditarFornecedor(data.item)"
@@ -112,6 +112,27 @@
                         <div class="left">
                           <span>{{
                             FormataValor(data.item.valorUnitario)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeSolicitada)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeSolicitada)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadePendente)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadePendente)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeAtendida)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeAtendida)
                           }}</span>
                         </div>
                       </template>
@@ -399,6 +420,13 @@ export default {
     },
     atualizarproduto() {
       this.ObterGrid(this.pagina);
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

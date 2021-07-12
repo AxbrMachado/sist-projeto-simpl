@@ -103,7 +103,7 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       fields: [
         { key: "nome", label: "Nome", sortable: true },
         { key: "email", label: "E-mail", sortable: true },
