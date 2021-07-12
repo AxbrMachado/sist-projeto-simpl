@@ -174,8 +174,8 @@ export default {
       fields: [
         { key: "numero", label: "Número", sortable: true },
         { key: "entidadeLicitacao", label: "Entidade", sortable: true },
-        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
+        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         { key: "dataInicio", label: "Data Início", sortable: true },
         { key: "dataTermino", label: "Data Término", sortable: true },
         { key: "valor", label: "Valor Contrato", sortable: true },
