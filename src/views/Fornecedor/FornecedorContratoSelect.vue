@@ -235,7 +235,7 @@ export default {
       fields: [
         { key: "descricao", label: "Descrição", sortable: true },
         // { key: "numero", label: "Número", sortable: true },
-        { key: "entidadeLicitacao", label: "Entidade", sortable: true },
+        // { key: "entidadeLicitacao", label: "Entidade", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
         { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         { key: "dataInicio", label: "Data Início", sortable: true },
@@ -411,7 +411,7 @@ export default {
       return new Date(value).toLocaleDateString();
     },
     FormataDescricao(value) {
-      return value.numero + " - " + value.descricao;
+      return value.numero + " - " + value.entidadeLicitacao;
     }
   }
 };
