@@ -12,7 +12,7 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Produtos(s)</strong>
+                <strong class="align-self-center">Fornecedor(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
 
                 <i
@@ -29,21 +29,21 @@
                 <div class="row">
                   <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <label>Produto</label>
+                      <label>Nome</label>
                       <input
                         type="text"
-                        v-model="filtro.produto"
+                        v-model="filtro.nome"
                         class="form-control"
                       />
                     </div>
                   </div>
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas produtos presentes no fornecedor."
+                    title="Apenas fornecedores vinculados ao produto."
                   >
-                    <label for>Presente no Fornecedor</label>
+                    <label for>Fornecedor Vinculado</label>
                     <b-form-checkbox
-                      v-model="filtro.produtosNoFornecedor"
+                      v-model="filtro.fornecedorVinculado"
                       name="check-button"
                       switch
                     >
@@ -76,7 +76,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum produto encontrado."
+                      empty-text="Nenhum fornecedor encontrado."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -85,28 +85,28 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            v-if="isNoFornecedor(data.item)"
+                            v-if="isNoProduto(data.item)"
                             variant="danger"
                             style="margin-right: 10px"
-                            title="Produto não fornecido pelo fornecedor"
-                            @click="AdicionarProdutoFornecedor(data.item)"
+                            title="Fornecedor não vinculado ao produto"
+                            @click="AdicionarFornecedorProduto(data.item)"
                           >
                             <i class="fas fa-times"></i>
                           </b-button>
                           <b-button
-                            v-if="!isNoFornecedor(data.item)"
+                            v-if="!isNoProduto(data.item)"
                             variant="success"
                             style="margin-right: 10px"
-                            title="Produto fornecido pelo fornecedor"
-                            @click="RemoverProdutoFornecedor(data.item)"
+                            title="Fornecedor vinculado a produto"
+                            @click="RemoverFornecedorProduto(data.item)"
                           >
                             <i class="fas fa-check"></i>
                           </b-button>
                           <b-button
-                            v-if="!isNoFornecedor(data.item)"
+                            v-if="!isNoProduto(data.item)"
                             variant="info"
                             style="margin-right: 10px"
-                            title="Editar produto do fornecedor"
+                            title="Editar fornecedor do produto"
                             @click="Edicao(data.item)"
                           >
                             <i class="fa fa-edit"></i>
@@ -122,6 +122,13 @@
                         <div class="left">
                           <span>{{
                             FormataQuantidade(data.item.quantidade)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(tipoFornecedor)="data">
+                        <div class="center">
+                          <span>{{
+                            ObterNomeTipoFornecedor(data.item.tipoFornecedor)
                           }}</span>
                         </div>
                       </template>
@@ -143,11 +150,11 @@
       </div>
     </form>
     <b-modal
-      v-model="modalEditarInfoProduto"
-      title="Editar dados do produto junto ao fornecedor"
+      v-model="modalEditarInfoFornecedor"
+      title="Editar dados do fornecedor junto ao produto"
       class="modal-danger"
       ok-variant="info"
-      @ok="EditarProduto"
+      @ok="EditarFornecedor"
       @hidden="CancelEdicao"
     >
       <div class="row">
@@ -155,7 +162,7 @@
           <div class="form-group">
             <label for>* Valor</label>
             <currency-input
-              v-model="valorProduto"
+              v-model="valor"
               class="form-control"
               placeholder="Digite o valor do produto para este fornecedor"
               required
@@ -170,7 +177,7 @@
               v-bind:minus="false"
               thousand-separator="."
               decimal-separator=","
-              v-model="quantidadeProduto"
+              v-model="quantidade"
               class="form-control"
               placeholder="Digite a quantidade disponível"
               required
@@ -185,22 +192,24 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import FornecedorProdutoServico from "../../servico/FornecedorProdutoServico";
+import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 
 export default {
-  name: "FornecedorProdutoSelect",
+  name: "ProdutoFornecedorSelect",
   components: { RotateSquare },
   props: {
-    fornecedorId: {
+    produtoId: {
       type: String,
       default: ""
     }
   },
   data() {
     return {
-      modalEditarInfoProduto: false,
-      valorProduto: 0,
-      quantidadeProduto: 0,
+      modalEditarInfoFornecedor: false,
+      valor: 0,
+      quantidade: 0,
       fornecedorProdutoId: this.$store.getters.emptyGuid,
+      fornecedorId: this.$store.getters.emptyGuid,
       loading: false,
       pagina: 1,
       total: 0,
@@ -208,12 +217,12 @@ export default {
       itens: [],
       abrir: false,
       filtro: {
-        produto: "",
-        produtosNoFornecedor: false
+        nome: "",
+        fornecedorVinculado: false
       },
       fields: [
-        { key: "produto", label: "Produto", sortable: true },
-        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        { key: "nome", label: "Fornecedor", sortable: true },
+        { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "quantidade", label: "Quantidade", sortable: true },
         {
@@ -238,12 +247,12 @@ export default {
     ValidarForm(evt) {},
     ObterGrid(pagina) {
       this.loading = false;
-      FornecedorProdutoServico.ObterGridProdutoFornecedor(
+      FornecedorProdutoServico.ObterGridFornecedorProduto(
         pagina,
         this.itensPorPagina,
-        this.fornecedorId,
-        this.filtro.produtosNoFornecedor,
-        this.filtro.produto
+        this.produtoId,
+        this.filtro.fornecedorVinculado,
+        this.filtro.nome
       )
         .then((resposta) => {
           this.loading = false;
@@ -260,12 +269,12 @@ export default {
           });
         });
     },
-    RemoverProdutoFornecedor(item) {
+    RemoverFornecedorProduto(item) {
       FornecedorProdutoServico.Remover(item.id)
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto removido com sucesso."],
+            data: ["Fornecedor removido com sucesso."],
             type: "success",
             duration: 1000
           });
@@ -278,12 +287,12 @@ export default {
           });
         });
     },
-    AdicionarProdutoFornecedor(item) {
-      FornecedorProdutoServico.Adicionar(this.fornecedorId, item.produtoId)
+    AdicionarFornecedorProduto(item) {
+      FornecedorProdutoServico.Adicionar(item.fornecedorId, this.produtoId)
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto adicionado com sucesso."],
+            data: ["Fornecedor adicionado com sucesso."],
             type: "success",
             duration: 1000
           });
@@ -297,8 +306,8 @@ export default {
         });
     },
     Limpar() {
-      this.filtro.produto = "";
-      this.filtro.produtosNoFornecedor = false;
+      this.filtro.nome = "";
+      this.filtro.fornecedorVinculado = false;
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -313,13 +322,13 @@ export default {
         });
       }
     },
-    isNoFornecedor(item) {
+    isNoProduto(item) {
       return item.id === this.$store.getters.emptyGuid;
     },
-    EditarProduto(evento) {
+    EditarFornecedor(evento) {
       evento.preventDefault();
 
-      if (!this.valorProduto || this.valorProduto <= 0) {
+      if (!this.valor || this.valor <= 0) {
         this.$notify({
           data: ["Informe um valor válido."],
           type: "warn",
@@ -328,23 +337,23 @@ export default {
         return;
       }
 
-      if (!this.quantidadeProduto) {
-        this.quantidadeProduto = 0;
+      if (!this.quantidade) {
+        this.quantidade = 0;
       }
 
-      this.modalEditarInfoProduto = false;
+      this.modalEditarInfoFornecedor = false;
 
       FornecedorProdutoServico.EditarFornecedorProduto(
         this.fornecedorProdutoId,
-        this.valorProduto,
-        this.quantidadeProduto,
+        this.valor,
+        this.quantidade,
         this.fornecedorId
       )
         .then((resposta) => {
           this.loading = false;
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto alterado com sucesso."],
+            data: ["Fornecedor alterado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -360,20 +369,30 @@ export default {
     },
     CancelEdicao(evento) {
       evento.preventDefault();
-      this.modalEditarInfoProduto = false;
+      this.modalEditarInfoFornecedor = false;
     },
     Edicao(item) {
-      this.modalEditarInfoProduto = true;
+      this.modalEditarInfoFornecedor = true;
       this.fornecedorProdutoId = item.id;
       this.fornecedorId = item.fornecedorId;
-      this.valorProduto = item.valor ? item.valor : 0;
-      this.quantidadeProduto = item.quantidade ? item.quantidade : 0;
+      this.valor = item.valor ? item.valor : 0;
+      this.quantidade = item.quantidade ? item.quantidade : 0;
     },
     FormataQuantidade(valor) {
       if (valor != null) {
         return valor;
       } else {
         return 0;
+      }
+    },
+    ObterNomeTipoFornecedor(item) {
+      switch (item) {
+        case TipoFornecedorEnum.Avulso:
+          return "Avulso";
+        case TipoFornecedorEnum.Cooperado:
+          return "Cooperado";
+        default:
+          return "Inválido";
       }
     }
   }

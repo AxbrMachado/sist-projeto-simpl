@@ -20,7 +20,7 @@ class FornecedorProdutoServico {
     });
   }
 
-  ObterGridProduto(
+  ObterGridProdutoFornecedor(
     pagina,
     itensPorPagina,
     fornecedorId,
@@ -43,6 +43,29 @@ class FornecedorProdutoServico {
     });
   }
 
+  ObterGridFornecedorProduto(
+    pagina,
+    itensPorPagina,
+    produtoId,
+    fornecedorVinculado,
+    nome
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/fornecedorProduto/obter-grid-fornecedor-produto?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&nome=" +
+        nome +
+        "&fornecedorVinculado=" +
+        fornecedorVinculado +
+        "&produtoId=" +
+        produtoId,
+      method: "GET"
+    });
+  }
+
   Remover(id) {
     return Vue.prototype.$http({
       url: "fornecedorProduto/remover/" + id,
@@ -58,7 +81,7 @@ class FornecedorProdutoServico {
     });
   }
 
-  EditarProduto(
+  EditarFornecedorProduto(
     fornecedorProdutoId,
     valorProduto,
     quantidadeProduto,

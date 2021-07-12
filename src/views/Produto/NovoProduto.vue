@@ -106,7 +106,9 @@
     <div v-if="IsEdicao()">
       <!-- <ProdutoContrato :produtoId="viewModel.id"></ProdutoContrato> -->
       <ProdutoContratoSelect :produtoId="viewModel.id"></ProdutoContratoSelect>
-      <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor>
+      <!-- <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor> -->
+      <ProdutoFornecedorSelect :produtoId="viewModel.id">
+      </ProdutoFornecedorSelect>
       <ProdutoPedido :produtoId="viewModel.id"> </ProdutoPedido>
     </div>
   </div>
@@ -115,9 +117,10 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ProdutoFornecedor from "./ProdutoFornecedor";
-import ProdutoPedido from "./ProdutoPedido";
+import ProdutoFornecedorSelect from "./ProdutoFornecedorSelect";
 import ProdutoContrato from "./ProdutoContrato";
 import ProdutoContratoSelect from "./ProdutoContratoSelect";
+import ProdutoPedido from "./ProdutoPedido";
 
 export default {
   name: "NovoProduto",
@@ -126,6 +129,7 @@ export default {
     ProdutoFornecedor,
     ProdutoContrato,
     ProdutoContratoSelect,
+    ProdutoFornecedorSelect,
     ProdutoPedido
   },
   data() {
