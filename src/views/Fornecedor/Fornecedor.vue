@@ -87,7 +87,7 @@
               <template v-slot:cell(tipoFornecedor)="data">
                 <div class="center">
                   <span>{{
-                    ObterTipoFornecedor(data.item.tipoFornecedor)
+                    ObterNomeTipoFornecedor(data.item.tipoFornecedor)
                   }}</span>
                 </div>
               </template>
@@ -248,8 +248,7 @@ export default {
           });
         });
     },
-
-    ObterTipoFornecedor(item) {
+    ObterNomeTipoFornecedor(item) {
       switch (item) {
         case TipoFornecedorEnum.Cooperado:
           return "Cooperado";

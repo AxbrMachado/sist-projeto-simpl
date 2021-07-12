@@ -118,6 +118,13 @@
                           <span>{{ FormataValor(data.item.valorLimite) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(tipoFornecedor)="data">
+                        <div class="center">
+                          <span>{{
+                            ObterNomeTipoFornecedor(data.item.tipoFornecedor)
+                          }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(quantidadeLimite)="data">
                         <div class="left">
                           <span>{{
@@ -194,12 +201,14 @@ import RotateSquare from "../../components/RotateSquare";
 import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 
 export default {
   name: "ContratoFornecedorSelect",
   components: {
     RotateSquare,
     TipoPessoaContratoEnum,
+    TipoFornecedorEnum,
     TipoPessoaEnum
   },
   props: {
@@ -413,6 +422,16 @@ export default {
         return valor;
       } else {
         return 0;
+      }
+    },
+    ObterNomeTipoFornecedor(item) {
+      switch (item) {
+        case TipoFornecedorEnum.Avulso:
+          return "Avulso";
+        case TipoFornecedorEnum.Cooperado:
+          return "Cooperado";
+        default:
+          return "Inválido";
       }
     }
   }
