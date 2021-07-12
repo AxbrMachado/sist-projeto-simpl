@@ -12,7 +12,7 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Produto(s)</strong>
+                <strong class="align-self-center">Contrato(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
 
                 <i
@@ -29,21 +29,21 @@
                 <div class="row">
                   <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
-                      <label>Nome</label>
+                      <label>Descricao</label>
                       <input
                         type="text"
-                        v-model="filtro.produto"
+                        v-model="filtro.descricao"
                         class="form-control"
                       />
                     </div>
                   </div>
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas produtos vinculados ao contrato."
+                    title="Apenas contratos vinculados ao produto."
                   >
-                    <label for>Vinculado ao contrato</label>
+                    <label for>Vinculado ao produto</label>
                     <b-form-checkbox
-                      v-model="filtro.vinculadoAoContrato"
+                      v-model="filtro.vinculadoAoProduto"
                       name="check-button"
                       switch
                     >
@@ -76,7 +76,7 @@
                       striped
                       :per-page="itensPorPagina"
                       show-empty
-                      empty-text="Nenhum produto encontrado."
+                      empty-text="Nenhum contrato encontrado."
                     >
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
@@ -85,32 +85,42 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            v-if="isProdutoVinculado(data.item)"
+                            v-if="isContratoVinculado(data.item)"
                             variant="danger"
                             style="margin-right: 10px"
-                            title="Produto não vinculado ao contrato"
-                            @click="AdicionarProdutoContrato(data.item)"
+                            title="Contrato não vinculado ao produto"
+                            @click="AdicionarContratoProduto(data.item)"
                           >
                             <i class="fas fa-times"></i>
                           </b-button>
                           <b-button
-                            v-if="!isProdutoVinculado(data.item)"
+                            v-if="!isContratoVinculado(data.item)"
                             variant="success"
                             style="margin-right: 10px"
-                            title="Produto vinculado ao contrato"
-                            @click="RemoverProdutoContrato(data.item)"
+                            title="Contrato vinculado ao produto"
+                            @click="RemoverContratoProduto(data.item)"
                           >
                             <i class="fas fa-check"></i>
                           </b-button>
                           <b-button
-                            v-if="!isProdutoVinculado(data.item)"
+                            v-if="!isContratoVinculado(data.item)"
                             variant="info"
                             style="margin-right: 10px"
-                            title="Editar produto do contrato"
+                            title="Editar contrato do produto"
                             @click="Edicao(data.item)"
                           >
                             <i class="fa fa-edit"></i>
                           </b-button>
+                        </div>
+                      </template>
+                      <template v-slot:cell(dataInicio)="data">
+                        <div class="center">
+                          <span>{{ FormatarData(data.item.dataInicio) }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(dataTermino)="data">
+                        <div class="center">
+                          <span>{{ FormatarData(data.item.dataTermino) }}</span>
                         </div>
                       </template>
                       <template v-slot:cell(valor)="data">
@@ -123,6 +133,11 @@
                           <span>{{
                             FormataQuantidade(data.item.quantidade)
                           }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(descricao)="data">
+                        <div class="left">
+                          <span>{{ FormataDescricao(data.item) }}</span>
                         </div>
                       </template>
                     </b-table>
@@ -143,11 +158,11 @@
       </div>
     </form>
     <b-modal
-      v-model="modalEditarInfoProduto"
-      title="Editar informação do produto no contrato"
+      v-model="modalEditarInfoContrato"
+      title="Editar informação do contrato no produto"
       class="modal-danger"
       ok-variant="info"
-      @ok="EditarProduto"
+      @ok="EditarContrato"
       @hidden="CancelEdicao"
     >
       <div class="row">
@@ -185,28 +200,24 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
-import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
-import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
 export default {
-  name: "ContratoProdutoSelect",
+  name: "ProdutoContratoSelect",
   components: {
-    RotateSquare,
-    TipoPessoaContratoEnum,
-    TipoPessoaEnum
+    RotateSquare
   },
   props: {
-    contratoId: {
+    produtoId: {
       type: String,
       default: ""
     }
   },
   data() {
     return {
-      modalEditarInfoProduto: false,
+      modalEditarInfoContrato: false,
       valor: 0,
       quantidade: 0,
-      produtoId: this.$store.getters.emptyGuid,
+      contratoId: this.$store.getters.emptyGuid,
       contratoClienteId: this.$store.getters.emptyGuid,
       loading: false,
       pagina: 1,
@@ -215,15 +226,18 @@ export default {
       itens: [],
       abrir: false,
       filtro: {
-        produto: "",
-        vinculadoAoContrato: false
+        descricao: "",
+        vinculadoAoProduto: false
       },
       fields: [
-        { key: "produto", label: "Produto", sortable: true },
-        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        { key: "descricao", label: "Descrição", sortable: true },
+        // { key: "numero", label: "Número", sortable: true },
+        // { key: "entidadeLicitacao", label: "Entidade", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "quantidade", label: "Quantidade", sortable: true },
-        { key: "tipoUnidadeMedida", label: "Un. Medida", sortable: true },
+        { key: "dataInicio", label: "Data Início", sortable: true },
+        { key: "dataTermino", label: "Data Término", sortable: true },
+        { key: "valor", label: "Valor Contrato", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -246,12 +260,12 @@ export default {
     ValidarForm(evt) {},
     ObterGrid(pagina) {
       this.loading = false;
-      ContratoProdutoServico.ObterGridContratoProduto(
+      ContratoProdutoServico.ObterGridProdutoContrato(
         pagina,
         this.itensPorPagina,
-        this.contratoId,
-        this.filtro.vinculadoAoContrato,
-        this.filtro.produto
+        this.produtoId,
+        this.filtro.vinculadoAoProduto,
+        this.filtro.descricao
       )
         .then((resposta) => {
           this.loading = false;
@@ -268,12 +282,12 @@ export default {
           });
         });
     },
-    RemoverProdutoContrato(item) {
+    RemoverContratoProduto(item) {
       ContratoProdutoServico.Remover(item.id)
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto removido com sucesso."],
+            data: ["Contrato removido com sucesso."],
             type: "success",
             duration: 1000
           });
@@ -286,12 +300,12 @@ export default {
           });
         });
     },
-    AdicionarProdutoContrato(item) {
-      ContratoProdutoServico.Adicionar(this.contratoId, item.produtoId)
+    AdicionarContratoProduto(item) {
+      ContratoProdutoServico.Adicionar(item.contratoId, this.produtoId)
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto vinculado com sucesso."],
+            data: ["Contrato vinculado com sucesso."],
             type: "success",
             duration: 1000
           });
@@ -305,8 +319,8 @@ export default {
         });
     },
     Limpar() {
-      this.filtro.produto = "";
-      this.filtro.vinculadoAoContrato = false;
+      this.filtro.descricao = "";
+      this.filtro.vinculadoAoProduto = false;
     },
     FormataValor(valor) {
       if (valor != null) {
@@ -321,10 +335,10 @@ export default {
         });
       }
     },
-    isProdutoVinculado(item) {
+    isContratoVinculado(item) {
       return item.id === this.$store.getters.emptyGuid;
     },
-    EditarProduto(evento) {
+    EditarContrato(evento) {
       evento.preventDefault();
 
       if (!this.valor || this.valor <= 0) {
@@ -340,7 +354,7 @@ export default {
         this.quantidade = 0;
       }
 
-      this.modalEditarInfoProduto = false;
+      this.modalEditarInfoContrato = false;
 
       ContratoProdutoServico.EditarContratoProduto(
         this.contratoClienteId,
@@ -353,7 +367,7 @@ export default {
           this.loading = false;
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto alterado com sucesso."],
+            data: ["Contrato alterado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -369,11 +383,11 @@ export default {
     },
     CancelEdicao(evento) {
       evento.preventDefault();
-      this.modalEditarInfoProduto = false;
+      this.modalEditarInfoContrato = false;
     },
     Edicao(item) {
-      this.modalEditarInfoProduto = true;
-      this.produtoId = item.produtoId;
+      this.modalEditarInfoContrato = true;
+      this.contratoId = item.contratoId;
       this.contratoClienteId = item.id;
       this.valor = item.valor;
       this.quantidade = item.quantidade ? item.quantidade : 0;
@@ -384,6 +398,12 @@ export default {
       } else {
         return 0;
       }
+    },
+    FormatarData(value) {
+      return new Date(value).toLocaleDateString();
+    },
+    FormataDescricao(value) {
+      return value.numero + " - " + value.entidadeLicitacao;
     }
   }
 };

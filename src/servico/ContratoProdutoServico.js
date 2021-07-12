@@ -43,7 +43,7 @@ class ContratoProdutoServico {
     });
   }
 
-  ObterGridContrato(
+  ObterGridContratoProduto(
     pagina,
     itensPorPagina,
     contratoId,
@@ -52,7 +52,7 @@ class ContratoProdutoServico {
   ) {
     return Vue.prototype.$http({
       url:
-        "/contratoProduto/obter-grid-contrato?pagina=" +
+        "/contratoProduto/obter-grid-contrato-produto?pagina=" +
         pagina +
         "&ItensPorPagina=" +
         itensPorPagina +
@@ -62,6 +62,29 @@ class ContratoProdutoServico {
         vinculadoAoContrato +
         "&produto=" +
         produto,
+      method: "GET"
+    });
+  }
+
+  ObterGridProdutoContrato(
+    pagina,
+    itensPorPagina,
+    produtoId,
+    vinculadoAoProduto,
+    descricao
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/contratoProduto/obter-grid-produto-contrato?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&produtoId=" +
+        produtoId +
+        "&vinculadoAoProduto=" +
+        vinculadoAoProduto +
+        "&descricao=" +
+        descricao,
       method: "GET"
     });
   }
@@ -78,7 +101,13 @@ class ContratoProdutoServico {
     });
   }
 
-  EditarProduto(contratoClienteId, valor, quantidade, contratoId, produtoId) {
+  EditarContratoProduto(
+    contratoClienteId,
+    valor,
+    quantidade,
+    contratoId,
+    produtoId
+  ) {
     return Vue.prototype.$http({
       url:
         "/contratoProduto/editar-contrato-produto?id=" +
