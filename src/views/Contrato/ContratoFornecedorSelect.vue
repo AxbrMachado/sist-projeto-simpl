@@ -27,6 +27,16 @@
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
                 <div class="row">
+                  <a
+                    @click="AdicionarTodos()"
+                    class="ml-auto btn btn-primary"
+                    href="/#/contrato/novo"
+                    title="Adicionar todos fornecedores ao contrato"
+                  >
+                    Adicionar Todos Fornecedores
+                  </a>
+                </div>
+                <div class="row">
                   <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
                       <label>Nome</label>
@@ -193,6 +203,43 @@
         </div>
       </div>
     </b-modal>
+    <b-modal
+      v-model="modalAdicionarTodos"
+      title="Adicionar todos os fornecedores ao contrato"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="AdicionarTodosOk"
+      @hidden="AdicionarTodosCancel"
+    >
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
+          <div class="form-group">
+            <label for>* Valor Limite</label>
+            <currency-input
+              v-model="addTodosValorLimite"
+              class="form-control"
+              placeholder="Digite o valor limite"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
+          <div class="form-group">
+            <label for>* Quantidade Limite</label>
+            <vue-numeric
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="addTodosQuantidade"
+              class="form-control"
+              placeholder="Digite a quantidade limite"
+              required
+            />
+          </div>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -219,6 +266,9 @@ export default {
   },
   data() {
     return {
+      modalAdicionarTodos: false,
+      addTodosQuantidade: 0,
+      addTodosValorLimite: 0,
       modalEditarInfoFornecedor: false,
       valorLimite: 0,
       quantidadeLimite: 0,
@@ -266,6 +316,8 @@ export default {
     ValidarForm(evt) {},
     ObterGrid(pagina) {
       this.loading = false;
+      this.modalAdicionarTodos = false;
+
       ContratoFornecedorServico.ObterGridContrato(
         pagina,
         this.itensPorPagina,
@@ -433,6 +485,57 @@ export default {
         default:
           return "Inválido";
       }
+    },
+    AdicionarTodos() {
+      this.modalAdicionarTodos = true;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
+    },
+    AdicionarTodosCancel(evento) {
+      evento.preventDefault();
+    },
+
+    AdicionarTodosOk(evento) {
+      evento.preventDefault();
+
+      if (!this.addTodosValorLimite || this.addTodosValorLimite <= 0) {
+        this.$notify({
+          data: ["Informe um valor límite."],
+          type: "warn",
+          duration: 3000
+        });
+        return;
+      }
+
+      if (!this.addTodosQuantidade) {
+        this.addTodosQuantidade = 0;
+      }
+
+      this.modalAdicionarTodos = false;
+
+      ContratoFornecedorServico.AdicionarTodosFornecedores(
+        this.contratoId,
+        this.addTodosValorLimite,
+        this.addTodosQuantidade
+      )
+        .then((resposta) => {
+          this.loading = false;
+          this.Limpar();
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Fornecedores cadastrados com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };
