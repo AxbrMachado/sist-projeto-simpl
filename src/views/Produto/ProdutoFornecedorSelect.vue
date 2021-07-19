@@ -169,7 +169,7 @@
             />
           </div>
         </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
+        <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
           <div class="form-group">
             <label for>* Quantidade</label>
             <vue-numeric
@@ -183,7 +183,7 @@
               required
             />
           </div>
-        </div>
+        </div> -->
       </div>
     </b-modal>
   </div>
@@ -224,7 +224,7 @@ export default {
         { key: "nome", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidade", label: "Quantidade", sortable: true },
+        // { key: "quantidade", label: "Quantidade", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -337,9 +337,9 @@ export default {
         return;
       }
 
-      if (!this.quantidade) {
-        this.quantidade = 0;
-      }
+      // if (!this.quantidade) {
+      //   this.quantidade = 0;
+      // }
 
       this.modalEditarInfoFornecedor = false;
 

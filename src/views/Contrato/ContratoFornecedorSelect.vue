@@ -288,7 +288,7 @@ export default {
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
-        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        // { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         {
           key: "quantidadeConsumida",
           label: "Quantidade Consumida",
