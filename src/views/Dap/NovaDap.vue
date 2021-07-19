@@ -90,6 +90,18 @@
                     </v-select>
                   </div>
                 </div>
+                <div
+                  class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                  title="Dap com fornecedor designado."
+                >
+                  <label for>Fornecedor Designado</label>
+                  <b-form-checkbox
+                    v-model="viewModel.fornecedorDesignado"
+                    name="check-button"
+                    switch
+                  >
+                  </b-form-checkbox>
+                </div>
               </div>
             </div>
             <div class="btn-toolbar mb-3 ml-3" role="toolbar">
@@ -153,6 +165,7 @@ export default {
         numero: "",
         validade: "",
         tipoEnquadramento: 0,
+        fornecedorDesignado: false,
         pessoas: []
       }
     };
@@ -263,6 +276,7 @@ export default {
       this.viewModel.numero = "";
       this.viewModel.validade = "";
       this.viewModel.tipoEnquadramento = 0;
+      this.viewModel.fornecedorDesignado = false;
       this.viewModel.pessoas = [];
     }
   }

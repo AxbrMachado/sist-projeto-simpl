@@ -81,6 +81,18 @@
                     ></b-form-select>
                   </div>
                 </div>
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label for>Código</label>
+                    <input
+                      v-model="viewModel.codigo"
+                      class="form-control"
+                      type="text"
+                      placeholder="Digite um código"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div class="btn-toolbar mb-3 ml-3" role="toolbar">
@@ -141,6 +153,7 @@ export default {
         id: this.$store.getters.emptyGuid,
         descricao: "",
         valorBase: 0,
+        codigo: "",
         tipoProdutoId: "",
         tipoUnidadeMedidaId: ""
       }

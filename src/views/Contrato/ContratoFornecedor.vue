@@ -70,7 +70,7 @@
                       />
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Quantidade Limite</label>
                       <vue-numeric
@@ -84,7 +84,7 @@
                         required
                       />
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="btn-toolbar mb-3" role="toolbar">
                   <div class="btn-group" role="group">

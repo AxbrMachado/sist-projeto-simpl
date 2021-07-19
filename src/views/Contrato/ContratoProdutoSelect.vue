@@ -118,13 +118,13 @@
                           <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
-                      <template v-slot:cell(quantidade)="data">
+                      <!-- <template v-slot:cell(quantidade)="data">
                         <div class="left">
                           <span>{{
                             FormataQuantidade(data.item.quantidade)
                           }}</span>
                         </div>
-                      </template>
+                      </template> -->
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -162,19 +162,14 @@
             />
           </div>
         </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
           <div class="form-group">
-            <label for>* Quantidade</label>
-            <vue-numeric
-              v-bind:precision="3"
-              v-bind:minus="false"
-              thousand-separator="."
-              decimal-separator=","
-              v-model="quantidade"
-              class="form-control"
-              placeholder="Informe quantidade"
+            <label for>* Unidade Medida</label>
+            <b-form-select
+              v-model="tipoUnidadeMedidaId"
+              :options="tiposUnidadeMedidaOptions"
               required
-            />
+            ></b-form-select>
           </div>
         </div>
       </div>
@@ -205,7 +200,8 @@ export default {
     return {
       modalEditarInfoProduto: false,
       valor: 0,
-      quantidade: 0,
+      tipoUnidadeMedidaId: "",
+      tiposUnidadeMedidaOptions: [],
       produtoId: this.$store.getters.emptyGuid,
       contratoClienteId: this.$store.getters.emptyGuid,
       loading: false,
@@ -222,7 +218,7 @@ export default {
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidade", label: "Quantidade", sortable: true },
+        // { key: "quantidade", label: "Quantidade", sortable: true },
         { key: "tipoUnidadeMedida", label: "Un. Medida", sortable: true },
         {
           key: "acoes",
@@ -241,7 +237,9 @@ export default {
       this.ObterGrid(pagina);
     }
   },
-  created() {},
+  created() {
+    this.ObterTiposUnidadeMedidaSelect();
+  },
   methods: {
     ValidarForm(evt) {},
     ObterGrid(pagina) {
@@ -336,8 +334,13 @@ export default {
         return;
       }
 
-      if (!this.quantidade) {
-        this.quantidade = 0;
+      if (!this.tipoUnidadeMedidaId) {
+        this.$notify({
+          data: ["Informe uma unidade válida."],
+          type: "warn",
+          duration: 3000
+        });
+        return;
       }
 
       this.modalEditarInfoProduto = false;
@@ -345,7 +348,7 @@ export default {
       ContratoProdutoServico.EditarContratoProduto(
         this.contratoClienteId,
         this.valor,
-        this.quantidade,
+        this.tipoUnidadeMedidaId,
         this.contratoId,
         this.produtoId
       )
@@ -376,7 +379,7 @@ export default {
       this.produtoId = item.produtoId;
       this.contratoClienteId = item.id;
       this.valor = item.valor;
-      this.quantidade = item.quantidade ? item.quantidade : 0;
+      this.tipoUnidadeMedidaId = item.tipoUnidadeMedidaId;
     },
     FormataQuantidade(valor) {
       if (valor != null) {
@@ -384,6 +387,22 @@ export default {
       } else {
         return 0;
       }
+    },
+    ObterTiposUnidadeMedidaSelect() {
+      this.$http({
+        url: "/tipoUnidadeMedida/obter-select",
+        method: "GET"
+      })
+        .then((response) => {
+          this.tiposUnidadeMedidaOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };

@@ -104,7 +104,7 @@ class ContratoProdutoServico {
   EditarContratoProduto(
     contratoClienteId,
     valor,
-    quantidade,
+    tipoUnidadeMedidaId,
     contratoId,
     produtoId
   ) {
@@ -114,8 +114,8 @@ class ContratoProdutoServico {
         contratoClienteId +
         "&valor=" +
         valor +
-        "&quantidade=" +
-        quantidade +
+        "&tipoUnidadeMedidaId=" +
+        tipoUnidadeMedidaId +
         "&contratoId=" +
         contratoId +
         "&produtoId=" +

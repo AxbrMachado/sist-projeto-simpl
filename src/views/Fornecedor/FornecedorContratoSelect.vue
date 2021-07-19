@@ -182,7 +182,7 @@
             />
           </div>
         </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
+        <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
           <div class="form-group">
             <label for>* Quantidade</label>
             <vue-numeric
@@ -196,7 +196,7 @@
               required
             />
           </div>
-        </div>
+        </div> -->
       </div>
     </b-modal>
   </div>
@@ -237,7 +237,7 @@ export default {
         // { key: "numero", label: "Número", sortable: true },
         // { key: "entidadeLicitacao", label: "Entidade", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
-        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        // { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         { key: "dataInicio", label: "Data Início", sortable: true },
         { key: "dataTermino", label: "Data Término", sortable: true },
         { key: "valor", label: "Valor Contrato", sortable: true },
@@ -358,9 +358,9 @@ export default {
         return;
       }
 
-      if (!this.quantidade) {
-        this.quantidade = 0;
-      }
+      // if (!this.quantidade) {
+      //   this.quantidade = 0;
+      // }
 
       this.modalEditarInfoContrato = false;
 

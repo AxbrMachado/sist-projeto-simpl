@@ -162,7 +162,7 @@
             />
           </div>
         </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
+        <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
           <div class="form-group">
             <label for>* Quantidade</label>
             <vue-numeric
@@ -176,7 +176,7 @@
               required
             />
           </div>
-        </div>
+        </div> -->
       </div>
     </b-modal>
   </div>
@@ -215,7 +215,7 @@ export default {
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidade", label: "Quantidade", sortable: true },
+        // { key: "quantidade", label: "Quantidade", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -328,9 +328,9 @@ export default {
         return;
       }
 
-      if (!this.quantidadeProduto) {
-        this.quantidadeProduto = 0;
-      }
+      // if (!this.quantidadeProduto) {
+      //   this.quantidadeProduto = 0;
+      // }
 
       this.modalEditarInfoProduto = false;
 
