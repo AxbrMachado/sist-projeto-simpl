@@ -90,6 +90,21 @@
                     </v-select>
                   </div>
                 </div>
+                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-3">
+                  <div class="form-group">
+                    <label for>Responsável</label>
+                    <v-select
+                      placeholder="Digite um responsável.."
+                      v-model="viewModel.responsavel"
+                      :options="responsaveisOptions"
+                      @search="ObterResponsavelVSelect"
+                    >
+                      <template slot="no-options">
+                        Nenhum resultado para a busca.
+                      </template>
+                    </v-select>
+                  </div>
+                </div>
                 <div
                   class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
                   title="Dap com fornecedor designado."
@@ -154,6 +169,7 @@ export default {
     return {
       loading: false,
       pessoasOptions: [],
+      responsaveisOptions: [],
       tipoEnquadramentos: [
         { value: TipoEnquadramentoEnum.Grupo_A, text: "A" },
         { value: TipoEnquadramentoEnum.Grupo_B, text: "B" },
@@ -166,6 +182,8 @@ export default {
         validade: "",
         tipoEnquadramento: 0,
         fornecedorDesignado: false,
+        responsavelId: "",
+        responsavel: [],
         pessoas: []
       }
     };
@@ -268,6 +286,26 @@ export default {
           });
         });
     },
+    ObterResponsavelVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url:
+          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.responsaveisOptions = response.data;
+          this.viewModel.responsavelId = response.data.id;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
     IsEdicao() {
       return this.viewModel.id !== this.$store.getters.emptyGuid;
     },
@@ -277,6 +315,8 @@ export default {
       this.viewModel.validade = "";
       this.viewModel.tipoEnquadramento = 0;
       this.viewModel.fornecedorDesignado = false;
+      this.viewModel.responsavelId = "";
+      this.viewModel.responsavel = "";
       this.viewModel.pessoas = [];
     }
   }
