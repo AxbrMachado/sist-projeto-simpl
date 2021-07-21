@@ -120,6 +120,26 @@ class PedidoProdutoFornecedorServico {
     });
   }
 
+  EditarFornecedorProduto(
+    id,
+    quantidade,
+    fornecedorDesignadoId,
+    quantidadeDesignada
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidoprodutofornecedor/editar-quantidade?id=" +
+        id +
+        "&quantidade=" +
+        quantidade +
+        "&fornecedorDesignadoId=" +
+        fornecedorDesignadoId +
+        "&quantidadeDesignada=" +
+        quantidadeDesignada,
+      method: "GET"
+    });
+  }
+
   RemoverProdutoFornecedorPedido(id) {
     return Vue.prototype.$http({
       url:

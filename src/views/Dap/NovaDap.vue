@@ -182,7 +182,6 @@ export default {
         validade: "",
         tipoEnquadramento: 0,
         fornecedorDesignado: false,
-        responsavelId: "",
         responsavel: [],
         pessoas: []
       }
@@ -296,7 +295,6 @@ export default {
       })
         .then((response) => {
           this.responsaveisOptions = response.data;
-          this.viewModel.responsavelId = response.data.id;
         })
         .catch((erro) => {
           this.$notify({
@@ -315,7 +313,6 @@ export default {
       this.viewModel.validade = "";
       this.viewModel.tipoEnquadramento = 0;
       this.viewModel.fornecedorDesignado = false;
-      this.viewModel.responsavelId = "";
       this.viewModel.responsavel = "";
       this.viewModel.pessoas = [];
     }
