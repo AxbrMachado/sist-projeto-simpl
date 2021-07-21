@@ -125,6 +125,20 @@
                           <span>{{ FormataValor(data.item.valorLimite) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(valorDesignado)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorDesignado)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeDesignada)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeDesignada)
+                          }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -206,12 +220,15 @@ export default {
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
         { key: "valorLimite", label: "Limite Contrato", sortable: true },
+        { key: "valorConsumido", label: "Total Consumido", sortable: true },
+        { key: "valorDesignado", label: "Total Designado", sortable: true },
         { key: "valorPedido", label: "Atendido Pedido", sortable: true },
-        {
-          key: "valorConsumido",
-          label: "Total Atendido",
-          sortable: true
-        },
+        // {
+        //   key: "fornecedorDesignado.label",
+        //   label: "Fornecedor Designado",
+        //   sortable: true
+        // },
+        // { key: "quantidadeDesignada", label: "Qtd. Designada", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -386,6 +403,13 @@ export default {
     },
     atualizarFornecedor() {
       this.ObterGrid(this.pagina);
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };
