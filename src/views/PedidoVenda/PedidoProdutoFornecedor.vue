@@ -140,6 +140,13 @@
                           }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidadeDesignada)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeDesignada)
+                          }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(quantidadeConfirmada)="data">
                         <div class="left">
                           <span>{{
@@ -182,18 +189,63 @@
       @ok="ModalEdicaoOk"
       @hidden="ModalEdicaoCancel"
     >
-      <div class="form-group">
-        <label for>* Quantidade Atendida</label>
-        <vue-numeric
-          v-bind:precision="3"
-          v-bind:minus="false"
-          thousand-separator="."
-          decimal-separator=","
-          v-model="itemEdicaoQuantidade"
-          class="form-control"
-          placeholder="Digite a quantidade"
-          required
-        />
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for>* Quantidade Atendida</label>
+            <vue-numeric
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="itemEdicaoQuantidade"
+              class="form-control"
+              placeholder="Digite a quantidade"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
+          <div class="form-group">
+            <hr />
+            <label for>Informaçõs de Fornecedor Designado</label>
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-8">
+                <div class="form-group">
+                  <label for>Fornecedor</label>
+                  <v-select
+                    placeholder="..."
+                    v-model="fornecedorDesignado"
+                    :options="fornecedoresDesignadosOptions"
+                    @search="ObterFornecedorDesignadoVSelect"
+                  >
+                    <template slot="no-options">
+                      Nenhum resultado para a busca.
+                    </template>
+                  </v-select>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="form-group">
+                  <label for>Quantidade</label>
+                  <vue-numeric
+                    v-bind:precision="3"
+                    v-bind:minus="false"
+                    thousand-separator="."
+                    decimal-separator=","
+                    v-model="itemEdicaoQuantidadeDesignada"
+                    class="form-control"
+                    placeholder="..."
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </b-modal>
   </div>
@@ -221,8 +273,11 @@ export default {
       modalEdicao: false,
       itemEdicao: null,
       itemEdicaoQuantidade: 0,
+      itemEdicaoQuantidadeDesignada: 0,
+      fornecedorDesignado: "",
       modalRemover: false,
       produtoOptions: [],
+      fornecedoresDesignadosOptions: [],
       loading: false,
       abrir: true,
       pagina: 1,
@@ -246,6 +301,12 @@ export default {
           label: "Qtd. Confirmada",
           sortable: true
         },
+        {
+          key: "fornecedorDesignado.label",
+          label: "Fornecedor Designado",
+          sortable: true
+        },
+        { key: "quantidadeDesignada", label: "Qtd. Designada", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -284,6 +345,8 @@ export default {
     ObterGrid(val) {
       this.loading = false;
       this.itemEdicaoQuantidade = 0;
+      this.itemEdicaoQuantidadeDesignada = 0;
+      this.fornecedorDesignado = "";
       this.itemEdicao = null;
 
       PedidoProdutoFornecedorServico.ObterGridProduto(
@@ -312,11 +375,13 @@ export default {
       evento.preventDefault();
       this.itemEdicao = null;
       this.itemEdicaoQuantidade = 0;
+      this.itemEdicaoQuantidadeDesignada = 0;
+      this.fornecedorDesignado = "";
     },
 
     ModalEdicaoOk(evento) {
       evento.preventDefault();
-      this.modalEdicao = false;
+      // this.modalEdicao = false;
 
       if (!this.itemEdicao || !this.itemEdicaoQuantidade) return;
 
@@ -330,9 +395,47 @@ export default {
         return;
       }
 
-      PedidoProdutoFornecedorServico.EditarQuantidade(
+      if (this.itemEdicaoQuantidadeDesignada > this.itemEdicaoQuantidade) {
+        this.loading = false;
+        this.$notify({
+          data: ["Quantidade designada maior que a atendida."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
+      if (this.itemEdicaoQuantidadeDesignada) {
+        if (!this.fornecedorDesignado) {
+          this.loading = false;
+          this.$notify({
+            data: ["Fornecedor designado deve ser informado."],
+            type: "warn",
+            duration: 5000
+          });
+          return;
+        }
+      }
+
+      if (this.fornecedorDesignado) {
+        if (!this.itemEdicaoQuantidadeDesignada) {
+          this.loading = false;
+          this.$notify({
+            data: ["Quantidade designada deve ser informada."],
+            type: "warn",
+            duration: 5000
+          });
+          return;
+        }
+      }
+
+      this.modalEdicao = false;
+
+      PedidoProdutoFornecedorServico.EditarFornecedorProduto(
         this.itemEdicao.id,
-        this.itemEdicaoQuantidade
+        this.itemEdicaoQuantidade,
+        this.fornecedorDesignado.id,
+        this.itemEdicaoQuantidadeDesignada
       )
         .then(() => {
           this.ObterGrid(1);
@@ -392,6 +495,9 @@ export default {
       this.itemEdicao = item;
       this.itemEdicaoQuantidade = item.quantidadeSolicitada;
       this.itemEdicaoQuantidade = item.quantidadaAtendida;
+      this.itemEdicaoQuantidadeDesignada = item.quantidadeDesignada;
+      this.fornecedorDesignado = item.fornecedorDesignado;
+      this.fornecedoresDesignadosOptions = [];
     },
     Limpar() {
       this.filtro.fornecedor = "";
@@ -433,6 +539,24 @@ export default {
       } else {
         return 0;
       }
+    },
+    ObterFornecedorDesignadoVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url: "/fornecedor/obter-v-select-fornecedor-designado/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.fornecedoresDesignadosOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };
