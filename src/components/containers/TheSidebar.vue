@@ -55,6 +55,7 @@ export default {
       menu[0]._children.push(Nav.Dashboard);
 
       menu[0]._children.push(Nav.Principal);
+      menu[0]._children.push(Nav.RateioPedido);
       menu[0]._children.push(Nav.PedidoVenda);
       menu[0]._children.push(Nav.Licitacao);
       menu[0]._children.push(Nav.Contrato);
@@ -74,6 +75,8 @@ export default {
       menu[0]._children.push(Nav.TipoUnidadeMedida);
       menu[0]._children.push(Nav.TipoInstituicao);
       menu[0]._children.push(Nav.UnidadeMedida);
+      menu[0]._children.push(Nav.Parametro);
+      
 
       return menu;
     }
