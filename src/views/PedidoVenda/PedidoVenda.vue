@@ -435,8 +435,12 @@ export default {
       }
     },
 
-    FormatarData(valor) {
-      return new Date(valor).toLocaleDateString();
+    FormatarData(value) {
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      } else {
+        return "";
+      }
     },
     FormataValor(valor) {
       if (valor) {

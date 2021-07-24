@@ -316,9 +316,12 @@ export default {
 
       return filtros;
     },
-    FormatarData(validade) {
-      var dataValidade = new Date(validade);
-      return dataValidade.toLocaleDateString();
+    FormatarData(value) {
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      } else {
+        return "";
+      }
     },
     FormataValor(valor) {
       if (valor) {

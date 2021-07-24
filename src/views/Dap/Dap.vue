@@ -354,9 +354,12 @@ export default {
       }
     },
 
-    FormatarData(validade) {
-      var dataValidade = new Date(validade);
-      return dataValidade.toLocaleDateString();
+    FormatarData(value) {
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      } else {
+        return "";
+      }
     },
     ObterCooperadoVSelect(busca) {
       if (!busca || busca.length <= 2) return;

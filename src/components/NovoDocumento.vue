@@ -329,11 +329,7 @@ export default {
     },
     ObterGrid(val) {
       this.loading = false;
-      DocumentoServico.ObterGrid(
-        val,
-        this.itensPorPagina,
-        this.referenciaId,
-      )
+      DocumentoServico.ObterGrid(val, this.itensPorPagina, this.referenciaId)
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -433,10 +429,9 @@ export default {
       this.viewModel.validade = null;
       this.viewModel.arquivos = [];
     },
-    FormatarData(validade) {
-      if (validade) {
-        var dataValidade = new Date(validade);
-        return dataValidade.toLocaleDateString();
+    FormatarData(value) {
+      if (value) {
+        return new Date(value).toLocaleDateString();
       } else {
         return "";
       }
