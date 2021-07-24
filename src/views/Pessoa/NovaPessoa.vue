@@ -234,7 +234,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/pessoa')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>

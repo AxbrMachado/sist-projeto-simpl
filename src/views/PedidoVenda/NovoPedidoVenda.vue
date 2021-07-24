@@ -123,7 +123,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/pedidovenda')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>

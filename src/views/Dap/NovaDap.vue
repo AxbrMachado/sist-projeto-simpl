@@ -129,7 +129,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/dap')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>
