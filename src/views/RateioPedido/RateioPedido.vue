@@ -5,14 +5,7 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Produto</strong>
-              <a
-                class="ml-auto btn btn-primary"
-                href="/#/produto/novo"
-                title="Adicionar nova produto"
-              >
-                Adicionar
-              </a>
+              <strong class="align-self-center">Rateios Pedido de Venda</strong>
             </div>
           </header>
           <div v-if="loading" class="loading-container">
@@ -33,7 +26,7 @@
                   />
                 </div>
               </div>
-              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+              <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                 <div class="form-group">
                   <label for>Tipo Produto</label>
                   <b-form-select
@@ -64,7 +57,7 @@
                   switch
                 >
                 </b-form-checkbox>
-              </div>
+              </div> -->
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
                   class="btn btn-primary mr-2"
@@ -91,7 +84,7 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhum produto encontrado."
+              empty-text="Nenhum rateio encontrado."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
@@ -115,9 +108,39 @@
                   </b-button>
                 </div>
               </template>
-              <template v-slot:cell(valorBase)="data">
+              <template v-slot:cell(dataEntrega)="data">
+                <div class="center">
+                  <span>{{ FormatarData(data.item.dataEntrega) }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(dataRateio)="data">
+                <div class="center">
+                  <span>{{ FormatarData(data.item.dataRateio) }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(valor)="data">
                 <div class="left">
-                  <span>{{ FormataValor(data.item.valorBase) }}</span>
+                  <span>{{ FormataValor(data.item.valor) }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(valorRateado)="data">
+                <div class="left">
+                  <span>{{ FormataValor(data.item.valorRateado) }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(status)="data">
+                <div class="left">
+                  <span>{{ ObterNomeStatusRateio(data.item.status) }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(manual)="data">
+                <div class="left">
+                  <span>{{ FormataBoolean(data.item.manual) }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(usuarioCadastro)="data">
+                <div class="left">
+                  <span>{{ FormatarUsuario(data.item) }}</span>
                 </div>
               </template>
             </b-table>
@@ -147,11 +170,17 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import RateioServico from "../../servico/RateioServico";
+import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
+import StatusRateioEnum from "../../enums/StatusRateioEnum";
+import Bus from "../../util/EventBus";
 
 export default {
-  name: "Produto",
+  name: "Rateio",
   components: {
-    RotateSquare
+    RotateSquare,
+    RateioServico,
+    Bus
   },
   data() {
     return {
@@ -171,10 +200,17 @@ export default {
         presenteEmPedido: false
       },
       fields: [
-        { key: "descricao", label: "Descrição", sortable: true },
-        { key: "valorBase", label: "Valor Base", sortable: true },
-        { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
+        { key: "pedido", label: "Pedido", sortable: true },
+        // { key: "instituicao", label: "Instituição", sortable: true },
+        { key: "dataEntrega", label: "Previsão Entrega", sortable: true },
+        { key: "statusPedido", label: "Status Pedido", sortable: true },
+        { key: "valor", label: "Valor", sortable: true },
+        { key: "valorRateado", label: "Valor Rateado", sortable: true },
+        { key: "manual", label: "Rateio Manual", sortable: true },
+
+        { key: "dataRateio", label: "Data Rateio", sortable: true },
+        { key: "status", label: "Status Rateio", sortable: true },
+        { key: "usuarioCadastro", label: "Usuário", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -191,8 +227,6 @@ export default {
   },
   mounted() {
     this.ObterGrid(1);
-    this.ObterTiposProdutoSelect();
-    this.ObterTiposUnidadeMedidaSelect();
   },
   methods: {
     Limpar() {
@@ -213,10 +247,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "produto/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      RateioServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -239,10 +270,11 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url: "/produto/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
+      RateioServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.descricao
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;
@@ -259,55 +291,50 @@ export default {
           });
         });
     },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Descricao=" + this.filtro.descricao;
-
-      if (this.filtro.tipoProdutoId) {
-        var filtros = filtros + "&tipoProdutoId=" + this.filtro.tipoProdutoId;
+    ObterNomeStatusPedido(item) {
+      switch (item) {
+        case StatusPedidoEnum.Pendente:
+          return "Pendente";
+        case StatusPedidoEnum.Pendente:
+          return "Pendente";
+        case StatusPedidoEnum.Aberto:
+          return "Aberto";
+        case StatusPedidoEnum.AguardandoProdutos:
+          return "Aguardando Produtos";
+        case StatusPedidoEnum.Incompleto:
+          return "Incompleto";
+        case StatusPedidoEnum.EmRota:
+          return "Em Rota";
+        case StatusPedidoEnum.Entregue:
+          return "Entregue";
+        case StatusPedidoEnum.Finalizado:
+          return "Finalizado";
+        case StatusPedidoEnum.Cancelado:
+          return "Cancelado";
+        default:
+          return "Inválido";
       }
-
-      if (this.filtro.tipoUnidadeMedidaId) {
-        var filtros =
-          filtros + "&tipoUnidadeMedidaId=" + this.filtro.tipoUnidadeMedidaId;
+    },
+    ObterNomeStatusRateio(item) {
+      switch (item) {
+        case StatusRateioEnum.Pendente:
+          return "Pendente";
+        case StatusRateioEnum.Completo:
+          return "Completo";
+        case StatusRateioEnum.Incompleto:
+          return "Incompleto";
+        case StatusRateioEnum.Cancelada:
+          return "Cancelado";
+        default:
+          return "Pendente";
       }
-
-      var filtros =
-        filtros + "&PresenteEmPedido=" + this.filtro.presenteEmPedido;
-
-      return filtros;
     },
-    ObterTiposProdutoSelect() {
-      this.$http({
-        url: "/tipoProduto/obter-select",
-        method: "GET"
-      })
-        .then((response) => {
-          this.tiposProdutoOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
-        .then((response) => {
-          this.tiposUnidadeMedidaOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
+    FormatarData(value) {
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      } else {
+        return "-";
+      }
     },
     FormataValor(valor) {
       if (valor) {
@@ -320,6 +347,18 @@ export default {
           style: "currency",
           currency: "BRL"
         });
+      }
+    },
+    FormataBoolean(item) {
+      return item == undefined ? "-" : item ? "Sim" : "Não";
+    },
+    FormatarUsuario(value) {
+      if (value.usuarioAlteracao) {
+        return value.usuarioAlteracao;
+      } else if (value.usuarioCadastro) {
+        return value.usuarioCadastro;
+      } else {
+        return "";
       }
     }
   }
