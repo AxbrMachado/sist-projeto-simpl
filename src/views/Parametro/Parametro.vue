@@ -60,6 +60,7 @@
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
                   <b-button
+                    v-if="!isVersaoSistema(data.item)"
                     variant="info"
                     style="margin-right: 10px"
                     title="Editar"
@@ -109,11 +110,44 @@
         <div class="col-lg-12 col-md-6 col-sm-12">
           <div class="form-group">
             <label>Parâmetro</label>
-            <input
-              type="text"
-              v-model="conteudoParametro"
-              class="form-control"
-            />
+            <div v-if="this.isString()">
+              <input
+                type="text"
+                v-model="conteudoParametro"
+                class="form-control"
+              />
+            </div>
+            <div v-if="this.isNumber()">
+              <vue-numeric
+                v-bind:precision="3"
+                v-bind:minus="false"
+                thousand-separator="."
+                decimal-separator=","
+                v-model="conteudoParametro"
+                class="form-control"
+                required
+              />
+            </div>
+            <div v-if="this.isDate()">
+              <input
+                v-model="conteudoParametroOriginal"
+                class="form-control"
+                type="date"
+              />
+            </div>
+            <div v-if="this.isBoolean()">
+              <b-form-select
+                v-model="conteudoParametroOriginal"
+                :options="opcoesBoolean"
+              ></b-form-select>
+            </div>
+            <div v-if="this.isInteger()">
+              <input
+                v-model="conteudoParametro"
+                class="form-control"
+                type="number"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -137,6 +171,7 @@
 import RotateSquare from "../../components/RotateSquare";
 import ParametroServico from "../../servico/ParametroServico";
 import ParametroTipoEnum from "../../enums/ParametroTipoEnum";
+import ParametroEnum from "../../enums/ParametroEnum";
 
 export default {
   name: "Parametro",
@@ -148,7 +183,13 @@ export default {
       modalEditarParametro: false,
       parametroId: "",
       conteudoParametro: "",
+      conteudoParametroOriginal: "",
       observacaoParametro: "",
+      itemEdicao: [],
+      opcoesBoolean: [
+        { value: 0, text: "Não" },
+        { value: 1, text: "Sim" }
+      ],
       loading: false,
       itens: [],
       pagina: 1,
@@ -184,7 +225,9 @@ export default {
     },
     Edicao(item) {
       this.modalEditarParametro = true;
+      this.itemEdicao = item;
       this.parametroId = item.id;
+      this.conteudoParametroOriginal = item.conteudoOriginal;
       this.conteudoParametro = this.FormatarConteudo(item);
       this.observacaoParametro = item.observacao;
     },
@@ -240,14 +283,21 @@ export default {
         case ParametroTipoEnum.Decimal:
           return parseFloat(value.conteudo);
         case ParametroTipoEnum.Long:
-          return Number(value.conteudo);
+          return parseInt(value.conteudo);
         case ParametroTipoEnum.Boolean:
-          return value.conteudo == "1";
+          value.conteudoOriginal = value.conteudo == "1" ? 1 : 0;
+          return value.conteudo == "1" ? "Sim" : "Não";
         case ParametroTipoEnum.Date:
-          return FormatarData(value.conteudo);
+          return this.FormatarDataConteudo(value.conteudo);
         default:
           return "Inválido";
       }
+    },
+    FormatarDataConteudo(value) {
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      }
+      return "";
     },
     CancelEdicao(evento) {
       evento.preventDefault();
@@ -256,13 +306,25 @@ export default {
     EditarParametro(evento) {
       evento.preventDefault();
 
-      if (!this.conteudoParametro) {
-        this.$notify({
-          data: ["Informe um parâmetro válido."],
-          type: "warn",
-          duration: 3000
-        });
-        return;
+      if (this.isDate() || this.isBoolean()) {
+        if (!this.conteudoParametroOriginal) {
+          this.$notify({
+            data: ["Informe um parâmetro válido."],
+            type: "warn",
+            duration: 3000
+          });
+          return;
+        }
+        this.conteudoParametro = this.conteudoParametroOriginal;
+      } else {
+        if (!this.conteudoParametro) {
+          this.$notify({
+            data: ["Informe um parâmetro válido."],
+            type: "warn",
+            duration: 3000
+          });
+          return;
+        }
       }
 
       if (!this.observacaoParametro) {
@@ -273,7 +335,7 @@ export default {
 
       ParametroServico.EditarParametro(
         this.parametroId,
-        this.conteudoParametro,
+        String(this.conteudoParametro),
         this.observacaoParametro
       )
         .then((resposta) => {
@@ -293,6 +355,33 @@ export default {
             duration: 5000
           });
         });
+    },
+    isVersaoSistema(value) {
+      return value.infoParametro == ParametroEnum.VersaoSistema;
+    },
+    FindTipoParametro() {
+      return this.itemEdicao.tipoParametro;
+    },
+    isString() {
+      return this.itemEdicao.tipoParametro == ParametroTipoEnum.String;
+    },
+    isNumber() {
+      return (
+        this.itemEdicao.tipoParametro == ParametroTipoEnum.Decimal ||
+        this.itemEdicao.tipoParametro == ParametroTipoEnum.Float
+      );
+    },
+    isInteger() {
+      return (
+        this.itemEdicao.tipoParametro == ParametroTipoEnum.Long ||
+        this.itemEdicao.tipoParametro == ParametroTipoEnum.Inteiro
+      );
+    },
+    isBoolean() {
+      return this.itemEdicao.tipoParametro == ParametroTipoEnum.Boolean;
+    },
+    isDate() {
+      return this.itemEdicao.tipoParametro == ParametroTipoEnum.Date;
     }
   }
 };
