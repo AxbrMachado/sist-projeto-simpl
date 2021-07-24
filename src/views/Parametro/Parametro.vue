@@ -60,10 +60,10 @@
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
                   <b-button
-                    variant="warning"
+                    variant="info"
                     style="margin-right: 10px"
                     title="Editar"
-                    @click="Editar(data.item)"
+                    @click="Edicao(data.item)"
                   >
                     <i class="fa fa-edit"></i>
                   </b-button>
@@ -97,6 +97,40 @@
         </div>
       </div>
     </div>
+    <b-modal
+      v-model="modalEditarParametro"
+      title="Editar Parâmetro"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="EditarParametro"
+      @hidden="CancelEdicao"
+    >
+      <div class="row">
+        <div class="col-lg-12 col-md-6 col-sm-12">
+          <div class="form-group">
+            <label>Parâmetro</label>
+            <input
+              type="text"
+              v-model="conteudoParametro"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-12">
+          <div class="form-group">
+            <label for>Observação</label>
+            <b-form-textarea
+              v-model="observacaoParametro"
+              rows="4"
+              max-rows="12"
+              placeholder="Observação"
+            ></b-form-textarea>
+          </div>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -111,6 +145,10 @@ export default {
   },
   data() {
     return {
+      modalEditarParametro: false,
+      parametroId: "",
+      conteudoParametro: "",
+      observacaoParametro: "",
       loading: false,
       itens: [],
       pagina: 1,
@@ -143,10 +181,12 @@ export default {
   methods: {
     Limpar() {
       this.filtro.descricao = "";
-      this.ObterGrid(1);
     },
-    Editar(parametro) {
-      this.$router.push("/parametro/editar/" + parametro.id);
+    Edicao(item) {
+      this.modalEditarParametro = true;
+      this.parametroId = item.id;
+      this.conteudoParametro = this.FormatarConteudo(item);
+      this.observacaoParametro = item.observacao;
     },
     ObterGrid(pagina) {
       this.loading = false;
@@ -208,6 +248,51 @@ export default {
         default:
           return "Inválido";
       }
+    },
+    CancelEdicao(evento) {
+      evento.preventDefault();
+      this.modalEditarParametro = false;
+    },
+    EditarParametro(evento) {
+      evento.preventDefault();
+
+      if (!this.conteudoParametro) {
+        this.$notify({
+          data: ["Informe um parâmetro válido."],
+          type: "warn",
+          duration: 3000
+        });
+        return;
+      }
+
+      if (!this.observacaoParametro) {
+        this.observacaoParametro = "";
+      }
+
+      this.modalEditarParametro = false;
+
+      ParametroServico.EditarParametro(
+        this.parametroId,
+        this.conteudoParametro,
+        this.observacaoParametro
+      )
+        .then((resposta) => {
+          this.loading = false;
+          this.ObterGrid(this.pagina);
+          this.$notify({
+            data: ["Parâmetro alterado com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };

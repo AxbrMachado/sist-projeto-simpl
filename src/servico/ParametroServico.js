@@ -42,6 +42,19 @@ class ParametroServico {
       method: "PUT"
     });
   }
+
+  EditarParametro(id, conteudo, observacao) {
+    return Vue.prototype.$http({
+      url:
+        "/parametro/editar-parametro?id=" +
+        id +
+        "&conteudo=" +
+        conteudo +
+        "&observacao=" +
+        observacao,
+      method: "GET"
+    });
+  }
 }
 
 export default new ParametroServico();

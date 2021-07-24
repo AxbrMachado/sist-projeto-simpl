@@ -358,10 +358,6 @@ export default {
         return;
       }
 
-      // if (!this.quantidade) {
-      //   this.quantidade = 0;
-      // }
-
       this.modalEditarInfoContrato = false;
 
       ContratoFornecedorServico.EditarContrato(
