@@ -495,7 +495,7 @@ export default {
       this.itemEdicao = item;
       this.itemEdicaoQuantidade = item.quantidadeSolicitada;
       this.itemEdicaoQuantidade = item.quantidadaAtendida;
-      this.itemEdicaoQuantidadeDesignada = item.quantidadeDesignada;
+      this.itemEdicaoQuantidadeDesignada = item.quantidadeDesignada ?? 0;
       this.fornecedorDesignado = item.fornecedorDesignado;
       this.fornecedoresDesignadosOptions = [];
     },
