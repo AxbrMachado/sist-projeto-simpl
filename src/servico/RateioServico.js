@@ -7,15 +7,34 @@ class RateioServico {
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, descricao) {
+  ObterGrid(
+    pagina,
+    itensPorPagina,
+    pedido,
+    instituicao,
+    statusPedido,
+    statusRateio,
+    dataEntrega,
+    dataRateio,
+    rateioManual
+  ) {
     return Vue.prototype.$http({
       url:
         "/rateio/obter-grid?pagina=" +
         pagina +
         "&ItensPorPagina=" +
         itensPorPagina +
-        "&descricao=" +
-        descricao,
+        "&Pedido=" +
+        pedido +
+        (!instituicao ? "" : "&InstituicaoId=" + instituicao) +
+        (!statusPedido ? "" : "&StatusPedido=" + statusPedido) +
+        (!statusRateio ? "" : "&Status=" + statusRateio) +
+        "&dataEntrega=" +
+        dataEntrega +
+        "&DataEntrega=" +
+        dataRateio +
+        "&Manual=" +
+        rateioManual,
       method: "GET"
     });
   }

@@ -18,46 +18,84 @@
             <div class="row">
               <div class="col-lg-2 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label>Descricao</label>
+                  <label>Pedido</label>
                   <input
                     type="text"
-                    v-model="filtro.descricao"
+                    v-model="filtro.pedido"
                     class="form-control"
                   />
                 </div>
               </div>
-              <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+              <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label for>Tipo Produto</label>
+                  <label for>Instituição</label>
+                  <v-select
+                    placeholder="Digite uma instituição.."
+                    v-model="filtro.instituicao"
+                    :options="instituicaoOptions"
+                    @search="ObterInstituicaoVSelect"
+                  >
+                    <template slot="no-options">
+                      Nenhum resultado para a busca.
+                    </template>
+                  </v-select>
+                </div>
+              </div>
+
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>Previsão Entrega</label>
+                  <input
+                    v-model="filtro.dataEntrega"
+                    class="form-control"
+                    type="date"
+                    placeholder="Digite a data de entrega"
+                  />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="form-group">
+                  <label for>Status Pedido</label>
                   <b-form-select
-                    v-model="filtro.tipoProdutoId"
-                    :options="tiposProdutoOptions"
-                    required
+                    v-model="filtro.statusPedido"
+                    :options="statusPedidoOptions"
                   ></b-form-select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <div class="form-group">
+                  <label for>Data Rateio</label>
+                  <input
+                    v-model="filtro.dataRateio"
+                    class="form-control"
+                    type="date"
+                    placeholder="Digite a data de entrega"
+                  />
                 </div>
               </div>
               <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                 <div class="form-group">
-                  <label for>Unidade Medida</label>
+                  <label for>Status Rateio</label>
                   <b-form-select
-                    v-model="filtro.tipoUnidadeMedidaId"
-                    :options="tiposUnidadeMedidaOptions"
-                    required
+                    v-model="filtro.statusRateio"
+                    :options="statusRateioOptions"
                   ></b-form-select>
                 </div>
               </div>
               <div
                 class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                title="Presente em pedido."
+                title="Apenas pedidos completos."
               >
-                <label for>Presente em pedido</label>
+                <label for>Rateio Manual</label>
                 <b-form-checkbox
-                  v-model="filtro.presenteEmPedido"
+                  v-model="filtro.rateioManual"
                   name="check-button"
                   switch
                 >
                 </b-form-checkbox>
-              </div> -->
+              </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
                   class="btn btn-primary mr-2"
@@ -143,6 +181,13 @@
                   <span>{{ FormatarUsuario(data.item) }}</span>
                 </div>
               </template>
+              <template v-slot:cell(statusPedido)="data">
+                <div class="left">
+                  <span>{{
+                    ObterNomeStatusPedido(data.item.statusPedido)
+                  }}</span>
+                </div>
+              </template>
             </b-table>
             <b-pagination
               v-model="pagina"
@@ -173,6 +218,8 @@ import RotateSquare from "../../components/RotateSquare";
 import RateioServico from "../../servico/RateioServico";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
+import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+
 import Bus from "../../util/EventBus";
 
 export default {
@@ -193,12 +240,36 @@ export default {
       itensPorPagina: 20,
       tiposProdutoOptions: [],
       tiposUnidadeMedidaOptions: [],
+      instituicaoOptions: [],
       filtro: {
-        descricao: "",
-        tipoProdutoId: "",
-        tipoUnidadeMedidaId: "",
-        presenteEmPedido: false
+        pedido: "",
+        instituicao: "",
+        statusPedido: null,
+        statusRateio: null,
+        dataEntrega: "",
+        dataRateio: "",
+        rateioManual: false
       },
+      statusPedidoOptions: [
+        { value: StatusPedidoEnum.Pendente, text: "Pendente" },
+        { value: StatusPedidoEnum.Aberto, text: "Aberto" },
+        {
+          value: StatusPedidoEnum.AguardandoProdutos,
+          text: "Aguardando Produtos"
+        },
+        { value: StatusPedidoEnum.Incompleto, text: "Incompleto" },
+        { value: StatusPedidoEnum.EmRota, text: "Em Rota" },
+        { value: StatusPedidoEnum.Entregue, text: "Entregue" },
+        { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
+        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" }
+      ],
+      statusRateioOptions: [
+        { value: StatusRateioEnum.Pendente, text: "Pendente" },
+        { value: StatusRateioEnum.Incompleto, text: "Finalizado" },
+        { value: StatusRateioEnum.Completo, text: "Cancelado" },
+        { value: StatusRateioEnum.Cancelada, text: "Aberto" }
+      ],
+
       fields: [
         { key: "pedido", label: "Pedido", sortable: true },
         // { key: "instituicao", label: "Instituição", sortable: true },
@@ -230,13 +301,16 @@ export default {
   },
   methods: {
     Limpar() {
-      this.filtro.descricao = "";
-      this.filtro.tipoProdutoId = "";
-      this.filtro.tipoUnidadeMedidaId = "";
-      this.filtro.presenteEmPedido = false;
+      this.filtro.pedido = "";
+      this.filtro.instituicao = "";
+      this.filtro.statusPedido = null;
+      this.filtro.statusRateio = null;
+      this.filtro.dataEntrega = "";
+      this.filtro.dataRateio = "";
+      this.filtro.rateioManual = false;
     },
-    Editar(produto) {
-      this.$router.push("/produto/editar/" + produto.id);
+    Editar(rateio) {
+      this.$router.push("/rateio/detalhe/" + rateio.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -251,7 +325,7 @@ export default {
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Produto removida com sucesso."],
+            data: ["Rateio removido com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -273,7 +347,13 @@ export default {
       RateioServico.ObterGrid(
         pagina,
         this.itensPorPagina,
-        this.filtro.descricao
+        this.filtro.pedido,
+        this.filtro.instituicao.id,
+        this.filtro.statusPedido,
+        this.filtro.statusRateio,
+        this.filtro.dataEntrega,
+        this.filtro.dataRateio,
+        this.filtro.rateioManual
       )
         .then((response) => {
           this.loading = false;
@@ -284,6 +364,25 @@ export default {
         })
         .catch((erro) => {
           this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ObterInstituicaoVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      this.$http({
+        url:
+          "/pessoa/obter-v-select/" + TipoPessoaEnum.Instituicao + "/" + busca,
+        method: "GET"
+      })
+        .then((response) => {
+          this.instituicaoOptions = response.data;
+        })
+        .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
@@ -326,7 +425,7 @@ export default {
         case StatusRateioEnum.Cancelada:
           return "Cancelado";
         default:
-          return "Pendente";
+          return "-";
       }
     },
     FormatarData(value) {
@@ -358,7 +457,7 @@ export default {
       } else if (value.usuarioCadastro) {
         return value.usuarioCadastro;
       } else {
-        return "";
+        return "-";
       }
     }
   }
