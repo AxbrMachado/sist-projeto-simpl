@@ -472,6 +472,7 @@ export default {
           this.ObterGrid(1);
           this.$emit("atualizarproduto");
           Bus.$emit("alterado-produto-cliente");
+          Bus.$emit("alterado-fornecedor-produto");
           this.$notify({
             data: ["Quantidade removida com sucesso."],
             type: "success",

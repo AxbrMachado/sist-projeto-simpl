@@ -225,8 +225,8 @@ export default {
           label: "Qtd. Solicitada",
           sortable: true
         },
-        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
-        { key: "quantidadePendente", label: "Qtd. Pendente", sortable: true },
+        // { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
+        // { key: "quantidadePendente", label: "Qtd. Pendente", sortable: true },
         // { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
@@ -252,6 +252,10 @@ export default {
     // this.ObterProdutosSelect();
 
     Bus.$on("remocao-produto-pedido", () => {
+      this.ObterGrid(this.pagina);
+    });
+
+    Bus.$on("alterado-fornecedor-produto", () => {
       this.ObterGrid(this.pagina);
     });
   },
