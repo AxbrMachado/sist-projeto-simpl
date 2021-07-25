@@ -434,7 +434,7 @@ export default {
       PedidoProdutoFornecedorServico.EditarFornecedorProduto(
         this.itemEdicao.id,
         this.itemEdicaoQuantidade,
-        this.fornecedorDesignado.id,
+        this.fornecedorDesignado?.id ?? null,
         this.itemEdicaoQuantidadeDesignada
       )
         .then(() => {

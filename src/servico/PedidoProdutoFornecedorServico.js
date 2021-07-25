@@ -132,8 +132,9 @@ class PedidoProdutoFornecedorServico {
         id +
         "&quantidade=" +
         quantidade +
-        "&fornecedorDesignadoId=" +
-        fornecedorDesignadoId +
+        (!fornecedorDesignadoId
+          ? ""
+          : "&fornecedorDesignadoId=" + fornecedorDesignadoId) +
         "&quantidadeDesignada=" +
         quantidadeDesignada,
       method: "GET"

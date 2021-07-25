@@ -61,6 +61,13 @@ class RateioServico {
       method: "PUT"
     });
   }
+
+  EfetuarRateio(pedidoId) {
+    return Vue.prototype.$http({
+      url: "rateio/efetuarRateio/" + pedidoId,
+      method: "GET"
+    });
+  }
 }
 
 export default new RateioServico();

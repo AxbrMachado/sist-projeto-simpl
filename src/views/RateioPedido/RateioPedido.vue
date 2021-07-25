@@ -130,19 +130,29 @@
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
                   <b-button
+                    v-if="isRateioRemovivel(data.item)"
                     variant="warning"
                     style="margin-right: 10px"
-                    title="Editar"
+                    title="Visualizar Rateio"
                     @click="Editar(data.item)"
                   >
                     <i class="fa fa-edit"></i>
                   </b-button>
                   <b-button
+                    v-if="isRateioRemovivel(data.item)"
                     variant="danger"
-                    title="Remover"
+                    style="margin-right: 10px"
+                    title="Excluir Rateio"
                     @click="Remover(data.item)"
                   >
                     <i class="fas fa-trash-alt"></i>
+                  </b-button>
+                  <b-button
+                    variant="info"
+                    title="Efetuar Rateio"
+                    @click="EfetuarRateio(data.item.pedidoId)"
+                  >
+                    <i class="fa fa-random"></i>
                   </b-button>
                 </div>
               </template>
@@ -207,6 +217,16 @@
             >
               Você confirma a exclusão desse registro?
             </b-modal>
+            <b-modal
+              v-model="modalRateio"
+              title="Confirmar execução rateio"
+              class="modal-danger"
+              ok-variant="info"
+              @ok="ModalRateioOk"
+              @hidden="ModalRateioCancel"
+            >
+              Você confirma a execução do rateio para este pedido?
+            </b-modal>
           </div>
         </div>
       </div>
@@ -233,6 +253,8 @@ export default {
     return {
       modalRemover: false,
       itemRemover: null,
+      modalRateio: false,
+      pedidoRateioId: null,
       loading: false,
       itens: [],
       pagina: 1,
@@ -309,8 +331,11 @@ export default {
       this.filtro.dataRateio = "";
       this.filtro.rateioManual = false;
     },
-    Editar(rateio) {
-      this.$router.push("/rateio/detalhe/" + rateio.id);
+    Editar(item) {
+      //POR ENQNTO NAO VAI ABRIR..
+      if (!item) {
+        this.$router.push("/rateio/detalhe/" + item.id);
+      }
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -459,6 +484,39 @@ export default {
       } else {
         return "-";
       }
+    },
+    isRateioRemovivel(item) {
+      return !(item.id === this.$store.getters.emptyGuid);
+    },
+    EfetuarRateio(pedidoId) {
+      this.modalRateio = true;
+      this.pedidoRateioId = pedidoId;
+    },
+    ModalRateioCancel(evento) {
+      evento.preventDefault();
+      this.pedidoRateioId = null;
+    },
+    ModalRateioOk(evento) {
+      evento.preventDefault();
+      this.modalRateio = false;
+      if (!this.pedidoRateioId) return;
+
+      RateioServico.EfetuarRateio(this.pedidoRateioId)
+        .then(() => {
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Rateio executado com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };
