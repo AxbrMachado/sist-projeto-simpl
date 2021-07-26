@@ -122,7 +122,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/fornecedor')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>

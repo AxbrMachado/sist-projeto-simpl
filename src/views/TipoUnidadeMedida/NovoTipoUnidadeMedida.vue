@@ -52,7 +52,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/tipo-unidade-medida')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>

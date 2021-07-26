@@ -404,7 +404,11 @@ export default {
       }
     },
     FormatarData(value) {
-      return new Date(value).toLocaleDateString();
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      } else {
+        return "";
+      }
     },
     FormataDescricao(value) {
       return value.numero + " - " + value.entidadeLicitacao;

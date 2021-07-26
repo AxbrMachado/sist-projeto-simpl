@@ -48,7 +48,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/usuario')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>

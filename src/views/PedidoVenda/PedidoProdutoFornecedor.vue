@@ -434,7 +434,7 @@ export default {
       PedidoProdutoFornecedorServico.EditarFornecedorProduto(
         this.itemEdicao.id,
         this.itemEdicaoQuantidade,
-        this.fornecedorDesignado.id,
+        this.fornecedorDesignado?.id ?? null,
         this.itemEdicaoQuantidadeDesignada
       )
         .then(() => {
@@ -472,6 +472,7 @@ export default {
           this.ObterGrid(1);
           this.$emit("atualizarproduto");
           Bus.$emit("alterado-produto-cliente");
+          Bus.$emit("alterado-fornecedor-produto");
           this.$notify({
             data: ["Quantidade removida com sucesso."],
             type: "success",
@@ -495,7 +496,7 @@ export default {
       this.itemEdicao = item;
       this.itemEdicaoQuantidade = item.quantidadeSolicitada;
       this.itemEdicaoQuantidade = item.quantidadaAtendida;
-      this.itemEdicaoQuantidadeDesignada = item.quantidadeDesignada;
+      this.itemEdicaoQuantidadeDesignada = item.quantidadeDesignada ?? 0;
       this.fornecedorDesignado = item.fornecedorDesignado;
       this.fornecedoresDesignadosOptions = [];
     },

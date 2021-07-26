@@ -337,10 +337,6 @@ export default {
         return;
       }
 
-      // if (!this.quantidade) {
-      //   this.quantidade = 0;
-      // }
-
       this.modalEditarInfoFornecedor = false;
 
       FornecedorProdutoServico.EditarFornecedorProduto(

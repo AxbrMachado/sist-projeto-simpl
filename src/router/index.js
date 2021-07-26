@@ -13,6 +13,9 @@ const Contrato = () => import("@/views/Contrato/Contrato");
 const NovoContrato = () => import("@/views/Contrato/NovoContrato");
 const Dap = () => import("@/views/Dap/Dap");
 const NovaDap = () => import("@/views/Dap/NovaDap");
+const RateioPedido = () => import("@/views/RateioPedido/RateioPedido");
+const RateioPedidoDetalhe = () =>
+  import("@/views/RateioPedido/RateioPedidoDetalhe");
 const PedidoVenda = () => import("@/views/PedidoVenda/PedidoVenda");
 const NovoPedidoVenda = () => import("@/views/PedidoVenda/NovoPedidoVenda");
 const Pessoa = () => import("@/views/Pessoa/Pessoa");
@@ -232,6 +235,37 @@ export default new Router({
               path: "novo",
               name: "Novo",
               component: NovaDap,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
+        //rateio pedido venda
+        {
+          path: "rateiopedido",
+          name: "RateioPedido",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: RateioPedido,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "detalhe/:id",
+              name: "Detalhe",
+              component: RateioPedidoDetalhe,
               meta: {
                 requiresAuth: true
               }
@@ -551,45 +585,44 @@ export default new Router({
           ]
         },
 
-
-          //Cadastro de tipo cliente
-          {
-            path: "tipo-cliente",
-            name: "TipoCliente",
-            meta: {
-              requiresAuth: true
-            },
-            component: {
-              render(c) {
-                return c("router-view");
-              }
-            },
-            children: [
-              {
-                path: "",
-                component: TipoCliente,
-                meta: {
-                  requiresAuth: true
-                }
-              },
-              {
-                path: "editar/:id",
-                name: "Editar",
-                component: NovoTipoCliente,
-                meta: {
-                  requiresAuth: true
-                }
-              },
-              {
-                path: "novo",
-                name: "Novo",
-                component: NovoTipoCliente,
-                meta: {
-                  requiresAuth: true
-                }
-              }
-            ]
+        //Cadastro de tipo cliente
+        {
+          path: "tipo-cliente",
+          name: "TipoCliente",
+          meta: {
+            requiresAuth: true
           },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: TipoCliente,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovoTipoCliente,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovoTipoCliente,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
 
         //Cadastro de tipo unidade medida
         {

@@ -153,7 +153,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/licitacao')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>

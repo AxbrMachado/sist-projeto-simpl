@@ -358,10 +358,6 @@ export default {
         return;
       }
 
-      // if (!this.quantidade) {
-      //   this.quantidade = 0;
-      // }
-
       this.modalEditarInfoContrato = false;
 
       ContratoFornecedorServico.EditarContrato(
@@ -408,7 +404,11 @@ export default {
       }
     },
     FormatarData(value) {
-      return new Date(value).toLocaleDateString();
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      } else {
+        return "";
+      }
     },
     FormataDescricao(value) {
       return value.numero + " - " + value.entidadeLicitacao;
