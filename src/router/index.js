@@ -610,17 +610,12 @@ export default new Router({
             }
           ]
         },
-
-<<<<<<< HEAD
-
-=======
->>>>>>> main
         //Cadastro de tipo cliente
         {
           path: "tipo-cliente",
           name: "TipoCliente",
           meta: {
-<<<<<<< HEAD
+
             requiresAuth: true, permission: "TipoCliente.Visualizar"
           },
           component: {
@@ -628,25 +623,14 @@ export default new Router({
               return c("router-view");
             }
           },
-=======
-            requiresAuth: true
-          },
-          component: {
-            render(c) {
-              return c("router-view");
-            }
-          },
->>>>>>> main
+
           children: [
             {
               path: "",
               component: TipoCliente,
               meta: {
-<<<<<<< HEAD
                 requiresAuth: true, permission: "TipoCliente.Visualizar"
-=======
-                requiresAuth: true
->>>>>>> main
+
               }
             },
             {
@@ -654,11 +638,8 @@ export default new Router({
               name: "Editar",
               component: NovoTipoCliente,
               meta: {
-<<<<<<< HEAD
                 requiresAuth: true, permission: "TipoCliente.Adicionar"
-=======
-                requiresAuth: true
->>>>>>> main
+
               }
             },
             {
@@ -666,11 +647,7 @@ export default new Router({
               name: "Novo",
               component: NovoTipoCliente,
               meta: {
-<<<<<<< HEAD
                 requiresAuth: true, permission: "TipoCliente.Adicionar"
-=======
-                requiresAuth: true
->>>>>>> main
               }
             }
           ]
