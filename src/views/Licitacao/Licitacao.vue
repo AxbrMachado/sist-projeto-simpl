@@ -130,14 +130,14 @@
                     title="Editar"
                     @click="Editar(data.item)"
                   >
-                    <i class="fa fa-edit text-black"></i>
+                    <i class="fa fa-edit"></i>
                   </b-button>
                   <b-button
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
-                    <i class="fas fa-trash-alt text-black"></i>
+                    <i class="fas fa-trash-alt"></i>
                   </b-button>
                 </div>
               </template>
@@ -201,7 +201,7 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       tiposInstituicaoOptions: [],
       instituicaoOptions: [],
       statusOptions: [
@@ -293,7 +293,7 @@ export default {
       this.itemRemover = item;
     },
     ObterGrid(pagina) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "/licitacao/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"
@@ -342,10 +342,17 @@ export default {
       return dataValidade.toLocaleDateString();
     },
     FormataValor(valor) {
-      return valor.toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL"
-      });
+      if (valor) {
+        return valor.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      } else {
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      }
     },
     ObterTiposInstituicoesSelect() {
       this.$http({

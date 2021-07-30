@@ -48,6 +48,8 @@
                   </v-select>
                 </div>
               </div>
+            </div>
+            <div class="row">
               <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                 <div class="form-group">
                   <label for>Tipo</label>
@@ -56,6 +58,18 @@
                     :options="tipoOptions"
                   ></b-form-select>
                 </div>
+              </div>
+              <div
+                class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                title="Presente em pedido."
+              >
+                <label for>Presente em pedido</label>
+                <b-form-checkbox
+                  v-model="filtro.presenteEmPedido"
+                  name="check-button"
+                  switch
+                >
+                </b-form-checkbox>
               </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
@@ -113,14 +127,14 @@
                     title="Editar"
                     @click="Editar(data.item)"
                   >
-                    <i class="fa fa-edit text-black"></i>
+                    <i class="fa fa-edit"></i>
                   </b-button>
                   <b-button
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
-                    <i class="fas fa-trash-alt text-black"></i>
+                    <i class="fas fa-trash-alt"></i>
                   </b-button>
                 </div>
               </template>
@@ -167,7 +181,7 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       tipoOptions: [
         { value: TipoPessoaEnum.Funcionario, text: "Funcionário" },
         { value: TipoPessoaEnum.Fornecedor, text: "Fornecedor" },
@@ -178,7 +192,8 @@ export default {
       filtro: {
         Nome: "",
         Cidade: "",
-        TipoPessoa: 0
+        TipoPessoa: 0,
+        presenteEmPedido: false
       },
       fields: [
         { key: "nome", label: "Nome", sortable: true },
@@ -207,8 +222,7 @@ export default {
       this.filtro.Nome = "";
       this.filtro.Cidade = "";
       this.filtro.TipoPessoa = 0;
-
-      this.ObterGrid(1);
+      this.filtro.presenteEmPedido = false;
     },
     Editar(pessoa) {
       this.$router.push("/pessoa/editar/" + pessoa.id);
@@ -247,7 +261,7 @@ export default {
       this.itemRemover = item;
     },
     ObterGrid(pagina) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "/pessoa/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"
@@ -279,6 +293,9 @@ export default {
       if (this.filtro.TipoPessoa != 0) {
         var filtros = filtros + "&TipoPessoa=" + this.filtro.TipoPessoa;
       }
+
+      var filtros =
+        filtros + "&PresenteEmPedido=" + this.filtro.presenteEmPedido;
 
       return filtros;
     },

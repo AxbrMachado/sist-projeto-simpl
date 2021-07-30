@@ -81,6 +81,18 @@
                     ></b-form-select>
                   </div>
                 </div>
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label for>Código</label>
+                    <input
+                      v-model="viewModel.codigo"
+                      class="form-control"
+                      type="text"
+                      placeholder="Digite um código"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div class="btn-toolbar mb-3 ml-3" role="toolbar">
@@ -93,7 +105,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/produto')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>
@@ -104,8 +116,12 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <ProdutoContrato :produtoId="viewModel.id"></ProdutoContrato>
-      <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor>
+      <!-- <ProdutoContrato :produtoId="viewModel.id"></ProdutoContrato> -->
+      <ProdutoContratoSelect :produtoId="viewModel.id"></ProdutoContratoSelect>
+      <!-- <ProdutoFornecedor :produtoId="viewModel.id"> </ProdutoFornecedor> -->
+      <ProdutoFornecedorSelect :produtoId="viewModel.id">
+      </ProdutoFornecedorSelect>
+      <ProdutoPedido :produtoId="viewModel.id"> </ProdutoPedido>
     </div>
   </div>
 </template>
@@ -113,14 +129,20 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ProdutoFornecedor from "./ProdutoFornecedor";
+import ProdutoFornecedorSelect from "./ProdutoFornecedorSelect";
 import ProdutoContrato from "./ProdutoContrato";
+import ProdutoContratoSelect from "./ProdutoContratoSelect";
+import ProdutoPedido from "./ProdutoPedido";
 
 export default {
   name: "NovoProduto",
   components: {
     RotateSquare,
     ProdutoFornecedor,
-    ProdutoContrato
+    ProdutoContrato,
+    ProdutoContratoSelect,
+    ProdutoFornecedorSelect,
+    ProdutoPedido
   },
   data() {
     return {
@@ -131,6 +153,7 @@ export default {
         id: this.$store.getters.emptyGuid,
         descricao: "",
         valorBase: 0,
+        codigo: "",
         tipoProdutoId: "",
         tipoUnidadeMedidaId: ""
       }
@@ -149,7 +172,7 @@ export default {
       else this.Novo();
     },
     Obter(produtoId) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "produto/obter/" + produtoId,
         method: "GET"
@@ -168,7 +191,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "produto/novo",
         data: this.viewModel,
@@ -193,7 +216,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "produto/editar",
         data: this.viewModel,

@@ -52,7 +52,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/tipo-documento')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>
@@ -94,7 +94,7 @@ export default {
       else this.Novo();
     },
     Obter(tipoDocumentoId) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoDocumento/obter/" + tipoDocumentoId,
         method: "GET"
@@ -113,7 +113,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoDocumento/novo",
         data: this.viewModel,
@@ -138,7 +138,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "tipoDocumento/editar",
         data: this.viewModel,

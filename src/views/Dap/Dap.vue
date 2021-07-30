@@ -82,6 +82,18 @@
                 >
                 </b-form-checkbox>
               </div>
+              <div
+                class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                title="Apenas daps com fornecedor designado."
+              >
+                <label for>Fornecedor Designado</label>
+                <b-form-checkbox
+                  v-model="filtro.fornecedorDesignado"
+                  name="check-button"
+                  switch
+                >
+                </b-form-checkbox>
+              </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
                   class="btn btn-primary mr-2"
@@ -121,14 +133,14 @@
                     title="Editar"
                     @click="Editar(data.item)"
                   >
-                    <i class="fa fa-edit text-black"></i>
+                    <i class="fa fa-edit"></i>
                   </b-button>
                   <b-button
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
-                    <i class="fas fa-trash-alt text-black"></i>
+                    <i class="fas fa-trash-alt"></i>
                   </b-button>
                 </div>
               </template>
@@ -142,6 +154,13 @@
               <template v-slot:cell(validade)="data">
                 <div class="center">
                   <span>{{ FormatarData(data.item.validade) }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(fornecedorDesignado)="data">
+                <div class="center">
+                  <span>{{
+                    FormatarFornecedorDesignado(data.item.fornecedorDesignado)
+                  }}</span>
                 </div>
               </template>
             </b-table>
@@ -187,7 +206,7 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       cooperadoOptions: [],
       tipoEnquadramentos: [
         { value: TipoEnquadramentoEnum.Grupo_A, text: "A" },
@@ -200,11 +219,17 @@ export default {
         tipoEnquadramento: 0,
         dataVencimento: "",
         dapVencida: false,
+        fornecedorDesignado: false,
         cooperado: ""
       },
       fields: [
         { key: "numero", label: "Número", sortable: true },
         { key: "tipoEnquadramento", label: "Enquadramento", sortable: true },
+        {
+          key: "fornecedorDesignado",
+          label: "Fornecedor Designado",
+          sortable: true
+        },
         { key: "validade", label: "Válidade", sortable: true },
         { key: "pessoaNome", label: "Cooperado", sortable: true },
         {
@@ -230,6 +255,7 @@ export default {
       this.filtro.tipoEnquadramento = 0;
       this.filtro.dataVencimento = "";
       this.filtro.dapVencida = false;
+      this.filtro.fornecedorDesignado = false;
       this.filtro.cooperado = "";
 
       this.ObterGrid(1);
@@ -271,7 +297,7 @@ export default {
       this.itemRemover = item;
     },
     ObterGrid(pagina) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "/dap/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"
@@ -308,6 +334,9 @@ export default {
       var filtros = filtros + "&Validade=" + this.filtro.dataVencimento;
       var filtros = filtros + "&DapVencida=" + this.filtro.dapVencida;
 
+      var filtros =
+        filtros + "&FornecedorDesignado=" + this.filtro.fornecedorDesignado;
+
       return filtros;
     },
     ObterNomeEnquadramento(item) {
@@ -325,9 +354,12 @@ export default {
       }
     },
 
-    FormatarData(validade) {
-      var dataValidade = new Date(validade);
-      return dataValidade.toLocaleDateString();
+    FormatarData(value) {
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      } else {
+        return "";
+      }
     },
     ObterCooperadoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
@@ -347,6 +379,9 @@ export default {
             duration: 5000
           });
         });
+    },
+    FormatarFornecedorDesignado(value) {
+      return value ? "Sim" : "Não";
     }
   }
 };

@@ -12,9 +12,8 @@
           <div class="card">
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
-                <strong class="align-self-center">Fornecedores</strong>
+                <strong class="align-self-center">Fornecedor(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
-
                 <i
                   :class="
                     abrir
@@ -34,6 +33,14 @@
                       >
                     </div>
                   </div>
+                  <a
+                    @click="AdicionarTodos()"
+                    class="ml-auto btn btn-primary"
+                    href="/#/contrato/novo"
+                    title="Adicionar todos fornecedores ao contrato"
+                  >
+                    Adicionar Todos Fornecedores
+                  </a>
                 </div>
                 <div class="row">
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -63,7 +70,7 @@
                       />
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for>* Quantidade Limite</label>
                       <vue-numeric
@@ -77,7 +84,7 @@
                         required
                       />
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="btn-toolbar mb-3" role="toolbar">
                   <div class="btn-group" role="group">
@@ -89,7 +96,7 @@
                     <button
                       class="btn btn-secondary"
                       type="reset"
-                     @click="abrir = !abrir"
+                      @click="abrir = !abrir"
                     >
                       Voltar
                     </button>
@@ -119,14 +126,14 @@
                             title="Editar"
                             @click="Obter(data.item.id)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fa fa-edit"></i>
                           </b-button>
                           <b-button
                             variant="danger"
                             title="Remover"
                             @click="Remover(data.item.id)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
+                            <i class="fas fa-trash-alt"></i>
                           </b-button>
                         </div>
                       </template>
@@ -150,7 +157,7 @@
                       <template v-slot:cell(quantidadeLimite)="data">
                         <div class="left">
                           <span>{{
-                            FormataValorDecimal(data.item.quantidadeLimite)
+                            FormataQuantidade(data.item.quantidadeLimite)
                           }}</span>
                         </div>
                       </template>
@@ -181,12 +188,49 @@
     >
       Você confirma a exclusão desse registro?
     </b-modal>
+    <b-modal
+      v-model="modalAdicionarTodos"
+      title="Adicionar todos os fornecedores ao contrato"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="AdicionarTodosOk"
+      @hidden="AdicionarTodosCancel"
+    >
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
+          <div class="form-group">
+            <label for>* Valor Limite</label>
+            <currency-input
+              v-model="addTodosValorLimite"
+              class="form-control"
+              placeholder="Digite o valor limite"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
+          <div class="form-group">
+            <label for>* Quantidade Limite</label>
+            <vue-numeric
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="addTodosQuantidade"
+              class="form-control"
+              placeholder="Digite a quantidade limite"
+              required
+            />
+          </div>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoFornecedor from "../../servico/ContratoFornecedorServico";
+import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
@@ -201,13 +245,16 @@ export default {
   },
   data() {
     return {
+      modalAdicionarTodos: false,
+      addTodosQuantidade: 0,
+      addTodosValorLimite: 0,
       modalRemover: false,
       itemRemover: null,
       fornecedorOptions: [],
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 5,
+      itensPorPagina: 10,
       itens: [],
       abrir: false,
       fields: [
@@ -272,8 +319,8 @@ export default {
       else this.Novo();
     },
     Obter(id) {
-      this.loading = true;
-      ContratoFornecedor.Obter(id)
+      this.loading = false;
+      ContratoFornecedorServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           //resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -289,8 +336,15 @@ export default {
         });
     },
     ObterGrid(val) {
-      this.loading = true;
-      ContratoFornecedor.ObterGrid(val, this.itensPorPagina, this.contratoId)
+      this.loading = false;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
+      this.modalAdicionarTodos = false;
+      ContratoFornecedorServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.contratoId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -309,13 +363,15 @@ export default {
     ModalCancel(evento) {
       evento.preventDefault();
       this.itemRemover = null;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
     },
     ModalOk(evento) {
       evento.preventDefault();
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ContratoFornecedor.Remover(this.itemRemover)
+      ContratoFornecedorServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -337,10 +393,10 @@ export default {
       this.itemRemover = id;
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      ContratoFornecedor.Novo(this.viewModel)
+      ContratoFornecedorServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -361,10 +417,10 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      ContratoFornecedor.Editar(this.viewModel)
+      ContratoFornecedorServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
@@ -393,55 +449,21 @@ export default {
       this.viewModel.pessoa = {};
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
         });
       } else {
-        return valor;
-      }
-    },
-    FormataValorDecimal(valor) {
-      return valor;
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
+        return (0.0).toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
         });
-      } else {
-        return valor;
       }
     },
     RemoverCifrao(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
-    // ObterFornecedorsSelect() {
-    //   this.$http({
-    //     url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.fornecedorOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 5000
-    //       });
-    //     });
-    // },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
       } else {
         return valor;
       }
@@ -474,6 +496,64 @@ export default {
             duration: 5000
           });
         });
+    },
+    AdicionarTodos() {
+      this.modalAdicionarTodos = true;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
+    },
+    AdicionarTodosCancel(evento) {
+      evento.preventDefault();
+    },
+
+    AdicionarTodosOk(evento) {
+      evento.preventDefault();
+
+      if (!this.addTodosValorLimite || this.addTodosValorLimite <= 0) {
+        this.$notify({
+          data: ["Informe um valor límite."],
+          type: "warn",
+          duration: 3000
+        });
+        return;
+      }
+
+      if (!this.addTodosQuantidade) {
+        this.addTodosQuantidade = 0;
+      }
+
+      this.modalAdicionarTodos = false;
+
+      ContratoFornecedorServico.AdicionarTodosFornecedores(
+        this.contratoId,
+        this.addTodosValorLimite,
+        this.addTodosQuantidade
+      )
+        .then((resposta) => {
+          this.loading = false;
+          this.Limpar();
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Fornecedores cadastrados com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

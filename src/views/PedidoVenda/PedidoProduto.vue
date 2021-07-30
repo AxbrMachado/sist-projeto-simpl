@@ -10,7 +10,8 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="abrir = !abrir">
+            <header class="card-header" @click="switchAbertura()">
+              <!-- <header class="card-header" @click="abrir = !abrir"> -->
               <div class="d-flex">
                 <strong class="align-self-center">Produtos(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
@@ -39,9 +40,9 @@
                   </div>
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas licitações vencidas."
+                    title="Apenas produtos presentes no pedido."
                   >
-                    <label for>Presente no Pedido</label>
+                    <label for>Produto Solicitado</label>
                     <b-form-checkbox
                       v-model="filtro.produtosNoPedido"
                       name="check-button"
@@ -85,11 +86,20 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
+                            variant="primary"
+                            style="margin-right: 10px"
+                            title="Editar Fornecedores do Produtos"
+                            @click="SwitchEditarFornecedor(data.item)"
+                          >
+                            <i class="fas fa-binoculars"></i>
+                            <!-- <i class="fas fa-cart-plus"></i> -->
+                          </b-button>
+                          <b-button
                             variant="danger"
                             title="Remover"
                             @click="Remover(data.item)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
+                            <i class="fas fa-trash-alt"></i>
                           </b-button>
                         </div>
                       </template>
@@ -102,6 +112,27 @@
                         <div class="left">
                           <span>{{
                             FormataValor(data.item.valorUnitario)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeSolicitada)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeSolicitada)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadePendente)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadePendente)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeAtendida)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeAtendida)
                           }}</span>
                         </div>
                       </template>
@@ -132,6 +163,14 @@
     >
       Você confirma a exclusão desse produto do pedido?
     </b-modal>
+    <div v-if="EditarFornecedorProduto()">
+      <PedidoProdutoFornecedor
+        :pedidoProdutoId="this.pedidoProdutoId"
+        :descricaoProduto="this.descricaoProduto"
+        @atualizarproduto="atualizarproduto"
+      >
+      </PedidoProdutoFornecedor>
+    </div>
   </div>
 </template>
 
@@ -139,9 +178,17 @@
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
+import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
+
+import Bus from "../../util/EventBus";
 
 export default {
-  components: { RotateSquare },
+  name: "PedidoProduto",
+  components: {
+    RotateSquare,
+    Bus,
+    PedidoProdutoFornecedor
+  },
   props: {
     pedidoId: {
       type: String,
@@ -156,20 +203,32 @@ export default {
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 10,
+      itensPorPagina: 15,
       filtro: {
         produto: "",
         produtosNoPedido: false
       },
       itens: [],
       abrir: false,
+      editarFornecedor: false,
+      descricaoProduto: "",
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valorUnitario", label: "Valor Un.", sortable: true },
-        { key: "quantidadeSolicitada", label: "Quantidade", sortable: true },
         { key: "valorPedido", label: "Valor Total", sortable: true },
-        { key: "disponivel", label: "Disponivel", sortable: true },
+        {
+          key: "quantidadeSolicitada",
+          label: "Qtd. Solicitada",
+          sortable: true
+        },
+        {
+          key: "quantidadeAtendida",
+          label: "Qtd. Atendida",
+          sortable: true
+        },
+        { key: "quantidadePendente", label: "Qtd. Pendente", sortable: true },
+        // { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
@@ -192,14 +251,20 @@ export default {
     this.ObterGrid(1);
   },
   watch: {
-    pagina: function (val) {
-      this.ObterGrid(val);
+    pagina: function (pagina) {
+      this.ObterGrid(pagina);
     }
   },
   created() {
-    //let pedidoId = this.$route.params.id;
-    //if (pedidoId) this.Obter(pedidoId);
-    // this.ObterProdutosSelect();
+    Bus.$on("alterado-produto-cliente", () => {
+      this.ObterGrid(this.pagina);
+    });
+    Bus.$on("alterado-produto-fornecedor", () => {
+      this.ObterGrid(this.pagina);
+    });
+    Bus.$on("remocao-produto-fornecedor", () => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
     IsNovo() {
@@ -222,7 +287,7 @@ export default {
       else this.Novo();
     },
     Obter(id) {
-      this.loading = true;
+      this.loading = false;
       PedidoProdutoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
@@ -239,9 +304,13 @@ export default {
         });
     },
     ObterGrid(val) {
-      this.loading = true;
+      this.loading = false;
 
-      PedidoProdutoClienteServico.ObterGridTotal(
+      if (this.filtro.produto) {
+        this.editarFornecedor = false;
+      }
+
+      PedidoProdutoServico.ObterGridTotal(
         val,
         this.itensPorPagina,
         this.pedidoId,
@@ -270,11 +339,12 @@ export default {
     ModalOk(evento) {
       evento.preventDefault();
       this.modalRemover = false;
-      if (!this.itemRemover) return;
+      if (!this.itemRemover.id) return;
 
-      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover)
+      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
+          Bus.$emit("remocao-produto-pedido");
           this.$notify({
             data: ["Produtos removido com sucesso."],
             type: "success",
@@ -291,7 +361,7 @@ export default {
     },
     Remover(item) {
       this.modalRemover = true;
-      this.itemRemover = item.id;
+      this.itemRemover = item;
     },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
@@ -300,7 +370,7 @@ export default {
       this.viewModel.valor = 0;
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
-      this.filtro.props = "";
+      this.filtro.produto = "";
       this.filtro.produtosNoPedido = false;
     },
     FormataValor(valor) {
@@ -321,6 +391,41 @@ export default {
         return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
       } else {
         return valor;
+      }
+    },
+    EditarFornecedorProduto() {
+      return this.editarFornecedor;
+    },
+    SwitchEditarFornecedor(item) {
+      if (1 == 2 && this.pedidoProdutoId != item.id) {
+        this.pedidoProdutoId = item.id;
+
+        if (this.editarFornecedor) {
+          // PedidoClienteProduto.ObterFGrid(1);
+        }
+
+        this.editarFornecedor = true;
+      } else {
+        this.pedidoProdutoId = item.id;
+        this.editarFornecedor = !this.editarFornecedor;
+        this.descricaoProduto = item.produto;
+      }
+    },
+    switchAbertura() {
+      this.abrir = !this.abrir;
+
+      if (!this.abrir) {
+        this.editarFornecedor = false;
+      }
+    },
+    atualizarproduto() {
+      this.ObterGrid(this.pagina);
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
       }
     }
   }

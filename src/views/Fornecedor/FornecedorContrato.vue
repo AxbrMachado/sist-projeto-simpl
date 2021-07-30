@@ -76,7 +76,14 @@
                         title="Editar"
                         @click="Editar(data.item)"
                       >
-                        <i class="fa fa-edit text-black"></i>
+                        <i class="fa fa-edit"></i>
+                      </b-button>
+                      <b-button
+                        variant="danger"
+                        title="Remover"
+                        @click="Remover(data.item)"
+                      >
+                        <i class="fas fa-trash-alt"></i>
                       </b-button>
                     </div>
                   </template>
@@ -100,6 +107,13 @@
                       <span>{{ FormataValor(data.item.valor) }}</span>
                     </div>
                   </template>
+                  <template v-slot:cell(quantidadeLimite)="data">
+                    <div class="left">
+                      <span>{{
+                        FormataQuantidade(data.item.quantidadeLimite)
+                      }}</span>
+                    </div>
+                  </template>
                 </b-table>
                 <b-pagination
                   v-model="pagina"
@@ -115,11 +129,22 @@
         </div>
       </div>
     </div>
+    <b-modal
+      v-model="modalRemover"
+      title="Confirmar exclusão"
+      class="modal-danger"
+      ok-variant="danger"
+      @ok="ModalOk"
+      @hidden="ModalCancel"
+    >
+      Você confirma a exclusão desse registro?
+    </b-modal>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import DateTime from "../../util/DateTime";
 
@@ -138,16 +163,19 @@ export default {
   data() {
     return {
       loading: false,
+      modalRemover: false,
+      itemRemover: null,
       abrir: false,
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       filtro: { numero: "" },
       fields: [
         { key: "numero", label: "Número", sortable: true },
-        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        { key: "entidadeLicitacao", label: "Entidade", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
+        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
         { key: "dataInicio", label: "Data Início", sortable: true },
         { key: "dataTermino", label: "Data Término", sortable: true },
         { key: "valor", label: "Valor Contrato", sortable: true },
@@ -177,9 +205,7 @@ export default {
       this.$router.push("/contrato/editar/" + contrato.contratoId);
     },
     ObterGrid(pagina) {
-      this.loading = true;
-
-      console.log(this.pessoaId);
+      this.loading = false;
 
       this.$http({
         url:
@@ -217,14 +243,61 @@ export default {
     IsNovo() {
       return this.pessoaId === this.$store.getters.emptyGuid;
     },
+    ModalCancel(evento) {
+      evento.preventDefault();
+      this.itemRemover = null;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
+    },
+    ModalOk(evento) {
+      evento.preventDefault();
+      this.modalRemover = false;
+
+      if (!this.itemRemover) return;
+
+      ContratoFornecedorServico.Remover(this.itemRemover)
+        .then(() => {
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Contrato removido com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    Remover(item) {
+      this.modalRemover = true;
+      this.itemRemover = item.id;
+    },
     formatarData(value) {
       return new Date(value).toLocaleDateString();
     },
     FormataValor(valor) {
-      return valor.toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL"
-      });
+      if (valor) {
+        return valor.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      } else {
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      }
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

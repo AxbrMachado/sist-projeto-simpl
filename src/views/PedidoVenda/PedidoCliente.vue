@@ -40,7 +40,7 @@
                   </div>
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas licitações vencidas."
+                    title="Apenas clientes com produtos no pedido."
                   >
                     <label for>Com Produtos</label>
                     <b-form-checkbox
@@ -86,12 +86,12 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            variant="warning"
+                            variant="primary"
                             style="margin-right: 10px"
-                            title="Editar"
-                            @click="SwitchEditarProdutoCliente(data.item.id)"
+                            title="Editar Produtos do Cliente"
+                            @click="SwitchEditarProdutoCliente(data.item)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fas fa-cart-plus"></i>
                           </b-button>
                         </div>
                       </template>
@@ -125,7 +125,11 @@
       </div>
     </form>
     <div v-if="EditarProdutoCliente()">
-      <PedidoClienteProduto :pedidoPessoaId="this.pedidoPessoaId">
+      <PedidoClienteProduto
+        :pedidoPessoaId="this.pedidoPessoaId"
+        :descricaoCliente="this.descricaoCliente"
+        @atualizarCliente="atualizarCliente"
+      >
       </PedidoClienteProduto>
     </div>
   </div>
@@ -133,15 +137,19 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import PedidoCliente from "../../servico/PedidoClienteServico";
+import PedidoClienteServico from "../../servico/PedidoClienteServico";
 import TipoPessoaPedidoEnum from "../../enums/TipoPessoaEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import PedidoClienteProduto from "./PedidoClienteProduto.vue";
+import Bus from "../../util/EventBus";
 
 export default {
+  name: "PedidoCliente",
+  emits: ["atualizarPedido"],
   components: {
     RotateSquare,
-    PedidoCliente,
+    Bus,
+    PedidoClienteServico,
     TipoPessoaPedidoEnum,
     TipoPessoaEnum,
     PedidoClienteProduto
@@ -159,7 +167,7 @@ export default {
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 10,
+      itensPorPagina: 15,
       filtro: {
         nome: "",
         clienteComProduto: false
@@ -167,6 +175,7 @@ export default {
       itens: [],
       abrir: false,
       pedidoPessoaId: "",
+      descricaoCliente: "",
       editarProduto: false,
       fields: [
         { key: "pessoa", label: "Cliente", sortable: true },
@@ -194,16 +203,20 @@ export default {
     //let pedidoId = this.$route.params.id;
     //if (pedidoId) this.Obter(pedidoId);
     // this.ObterClientesSelect();
+
+    Bus.$on("remocao-produto-pedido", () => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
-    ObterGrid(val) {
+    ObterGrid(pagina) {
       if (this.filtro.nome) {
         this.editarProduto = false;
       }
 
-      this.loading = true;
-      PedidoCliente.ObterGrid(
-        val,
+      // this.loading = false;
+      PedidoClienteServico.ObterGrid(
+        pagina,
         this.itensPorPagina,
         this.pedidoId,
         this.filtro.nome,
@@ -214,6 +227,8 @@ export default {
           this.itens = resposta.data.itens;
           this.total = resposta.data.total;
           this.itensPorPagina = resposta.data.itensPorPagina;
+          // this.editarProduto = false;
+          this.$emit("atualizarPedido");
         })
         .catch((erro) => {
           this.loading = false;
@@ -265,9 +280,9 @@ export default {
     EditarProdutoCliente() {
       return this.editarProduto;
     },
-    SwitchEditarProdutoCliente(value) {
-      if (1 == 2 && this.pedidoPessoaId != value) {
-        this.pedidoPessoaId = value;
+    SwitchEditarProdutoCliente(item) {
+      if (1 == 2 && this.pedidoPessoaId != item.id) {
+        this.pedidoPessoaId = item.id;
 
         if (this.editarProduto) {
           // PedidoClienteProduto.ObterFGrid(1);
@@ -275,8 +290,9 @@ export default {
 
         this.editarProduto = true;
       } else {
-        this.pedidoPessoaId = value;
+        this.pedidoPessoaId = item.id;
         this.editarProduto = !this.editarProduto;
+        this.descricaoCliente = item.pessoa;
       }
     },
     switchAbertura() {
@@ -285,6 +301,9 @@ export default {
       if (!this.abrir) {
         this.editarProduto = false;
       }
+    },
+    atualizarCliente() {
+      this.ObterGrid(this.pagina);
     }
   }
 };

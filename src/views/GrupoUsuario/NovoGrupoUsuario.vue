@@ -92,7 +92,7 @@ export default {
       else this.Novo();
     },
     Obter(grupoId) {
-      this.loading = true;
+      this.loading = false;
       GrupoUsuarioServico.Obter(grupoId)
         .then((resposta) => {
           this.loading = false;
@@ -108,7 +108,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       GrupoUsuarioServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
@@ -129,7 +129,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       GrupoUsuarioServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;

@@ -76,7 +76,7 @@
                         title="Editar"
                         @click="Editar(data.item)"
                       >
-                        <i class="fa fa-edit text-black"></i>
+                        <i class="fa fa-edit"></i>
                       </b-button>
                     </div>
                   </template>
@@ -132,7 +132,7 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       filtro: { numero: "" },
       fields: [
         { key: "numero", label: "Número", sortable: true },
@@ -165,7 +165,7 @@ export default {
       this.$router.push("/contrato/editar/" + contrato.id);
     },
     ObterGrid(pagina) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url:
           "/licitacaocontrato/obter-grid-contrato?pagina=" +

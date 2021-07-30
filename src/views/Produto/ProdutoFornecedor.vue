@@ -119,14 +119,14 @@
                             title="Editar"
                             @click="Obter(data.item.id)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fa fa-edit"></i>
                           </b-button>
                           <b-button
                             variant="danger"
                             title="Remover"
                             @click="Remover(data.item.id)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
+                            <i class="fas fa-trash-alt"></i>
                           </b-button>
                         </div>
                       </template>
@@ -142,11 +142,13 @@
                           }}</span>
                         </div>
                       </template>
-                      <!-- <template v-slot:cell(valor)="data">
+                      <template v-slot:cell(quantidade)="data">
                         <div class="left">
-                          <span>{{ FormataValor(data.item.valor) }}</span>
+                          <span>{{
+                            FormataQuantidade(data.item.quantidade)
+                          }}</span>
                         </div>
-                      </template> -->
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -179,7 +181,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ProdutoFornecedor from "../../servico/ProdutoFornecedorServico";
+import ProdutoFornecedorServico from "../../servico/ProdutoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
@@ -254,8 +256,8 @@ export default {
       else this.Novo();
     },
     Obter(id) {
-      this.loading = true;
-      ProdutoFornecedor.Obter(id)
+      this.loading = false;
+      ProdutoFornecedorServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -270,8 +272,12 @@ export default {
         });
     },
     ObterGrid(val) {
-      this.loading = true;
-      ProdutoFornecedor.ObterGrid(val, this.itensPorPagina, this.produtoId)
+      this.loading = false;
+      ProdutoFornecedorServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.produtoId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -296,7 +302,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ProdutoFornecedor.Remover(this.itemRemover)
+      ProdutoFornecedorServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -318,9 +324,9 @@ export default {
       this.itemRemover = id;
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.produtoId = this.produtoId;
-      ProdutoFornecedor.Novo(this.viewModel)
+      ProdutoFornecedorServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -341,9 +347,9 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.produtoId = this.produtoId;
-      ProdutoFornecedor.Editar(this.viewModel)
+      ProdutoFornecedorServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
@@ -406,16 +412,7 @@ export default {
     //       });
     //     });
     // },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return valor;
-      }
-    },
+
     ObterNomeTipoFornecedor(item) {
       switch (item) {
         case TipoFornecedorEnum.Avulso:
@@ -444,6 +441,13 @@ export default {
             duration: 5000
           });
         });
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

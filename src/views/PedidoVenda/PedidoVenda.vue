@@ -186,14 +186,14 @@
                     title="Editar"
                     @click="Editar(data.item)"
                   >
-                    <i class="fa fa-edit text-black"></i>
+                    <i class="fa fa-edit"></i>
                   </b-button>
                   <b-button
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
-                    <i class="fas fa-trash-alt text-black"></i>
+                    <i class="fas fa-trash-alt"></i>
                   </b-button>
                 </div>
               </template>
@@ -241,11 +241,13 @@
 import RotateSquare from "../../components/RotateSquare";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import Bus from "../../util/EventBus";
 
 export default {
   name: "PedidoVenda",
   components: {
-    RotateSquare
+    RotateSquare,
+    Bus
   },
   data() {
     return {
@@ -258,7 +260,7 @@ export default {
       instituicaoOptions: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 15,
       statusOptions: [
         { value: StatusPedidoEnum.Pendente, text: "Pendente" },
         { value: StatusPedidoEnum.Aberto, text: "Aberto" },
@@ -287,6 +289,7 @@ export default {
       },
       fields: [
         { key: "numero", label: "Número", sortable: true },
+        { key: "descricao", label: "Descrição", sortable: true },
         { key: "dataEntrega", label: "Data Entrega", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "instituicao", label: "Instituição", sortable: true },
@@ -360,7 +363,7 @@ export default {
       this.itemRemover = item;
     },
     ObterGrid(pagina) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "/pedido/obter-grid?pagina=" + pagina + this.MontaFiltro(),
         method: "GET"
@@ -432,8 +435,12 @@ export default {
       }
     },
 
-    FormatarData(valor) {
-      return new Date(valor).toLocaleDateString();
+    FormatarData(value) {
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      } else {
+        return "";
+      }
     },
     FormataValor(valor) {
       if (valor) {
@@ -442,7 +449,10 @@ export default {
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     ObterContratoVSelect(busca) {

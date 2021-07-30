@@ -16,6 +16,14 @@
               >
             </header>
             <div class="card-body">
+              <button
+                class="btn btn-info mr-2"
+                type="button"
+                @click="toggleAll()"
+              >
+                {{ this.descricaoBotao }}
+              </button>
+              <br /><br />
               <div class="row">
                 <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6">
                   <b-table striped responsive :items="viewModel.permissoes">
@@ -74,6 +82,8 @@ export default {
     return {
       loading: false,
       contaOptions: [],
+      descricaoBotao: "Marcar Todos",
+      toggle: true,
       nomeGrupo: "",
       viewModel: {
         permissoes: [],
@@ -94,7 +104,7 @@ export default {
       return nome.replaceAll(".", " / ");
     },
     Salvar() {
-      this.loading = true;
+      this.loading = false;
       GrupoUsuarioServico.Permissao(this.viewModel)
         .then((resposta) => {
           this.loading = false;
@@ -115,7 +125,7 @@ export default {
         });
     },
     Obter(grupoId) {
-      this.loading = true;
+      this.loading = false;
       GrupoUsuarioServico.ObterPermissao(grupoId)
         .then((resposta) => {
           this.loading = false;
@@ -129,6 +139,13 @@ export default {
             duration: 5000
           });
         });
+    },
+    toggleAll() {
+      this.viewModel.permissoes.forEach((permissao) => {
+        permissao.ativo = this.toggle;
+      });
+      this.toggle = !this.toggle;
+      this.descricaoBotao = this.toggle ? "Marcar Todos" : "Desmarcar Todos";
     }
   }
 };

@@ -13,6 +13,9 @@ const Contrato = () => import("@/views/Contrato/Contrato");
 const NovoContrato = () => import("@/views/Contrato/NovoContrato");
 const Dap = () => import("@/views/Dap/Dap");
 const NovaDap = () => import("@/views/Dap/NovaDap");
+const RateioPedido = () => import("@/views/RateioPedido/RateioPedido");
+const RateioPedidoDetalhe = () =>
+  import("@/views/RateioPedido/RateioPedidoDetalhe");
 const PedidoVenda = () => import("@/views/PedidoVenda/PedidoVenda");
 const NovoPedidoVenda = () => import("@/views/PedidoVenda/NovoPedidoVenda");
 const Pessoa = () => import("@/views/Pessoa/Pessoa");
@@ -260,6 +263,37 @@ export default new Router({
               component: NovaDap,
               meta: {
                 requiresAuth: true, permission: "Dap.Adicionar"
+              }
+            }
+          ]
+        },
+
+        //rateio pedido venda
+        {
+          path: "rateiopedido",
+          name: "RateioPedido",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: RateioPedido,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "detalhe/:id",
+              name: "Detalhe",
+              component: RateioPedidoDetalhe,
+              meta: {
+                requiresAuth: true
               }
             }
           ]
@@ -577,12 +611,16 @@ export default new Router({
           ]
         },
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
         //Cadastro de tipo cliente
         {
           path: "tipo-cliente",
           name: "TipoCliente",
           meta: {
+<<<<<<< HEAD
             requiresAuth: true, permission: "TipoCliente.Visualizar"
           },
           component: {
@@ -590,12 +628,25 @@ export default new Router({
               return c("router-view");
             }
           },
+=======
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+>>>>>>> main
           children: [
             {
               path: "",
               component: TipoCliente,
               meta: {
+<<<<<<< HEAD
                 requiresAuth: true, permission: "TipoCliente.Visualizar"
+=======
+                requiresAuth: true
+>>>>>>> main
               }
             },
             {
@@ -603,7 +654,11 @@ export default new Router({
               name: "Editar",
               component: NovoTipoCliente,
               meta: {
+<<<<<<< HEAD
                 requiresAuth: true, permission: "TipoCliente.Adicionar"
+=======
+                requiresAuth: true
+>>>>>>> main
               }
             },
             {
@@ -611,7 +666,11 @@ export default new Router({
               name: "Novo",
               component: NovoTipoCliente,
               meta: {
+<<<<<<< HEAD
                 requiresAuth: true, permission: "TipoCliente.Adicionar"
+=======
+                requiresAuth: true
+>>>>>>> main
               }
             }
           ]

@@ -14,6 +14,12 @@ const Menu = {
     _name: "CSidebarNavTitle",
     _children: ["Principal"]
   },
+  RateioPedido: {
+    _name: "CSidebarNavItem",
+    name: "Rateio Pedido Venda",
+    to: "/rateiopedido",
+    icon: "cil-chart-pie"
+  },
   PedidoVenda: {
     _name: "CSidebarNavItem",
     name: "Pedido Venda",
@@ -106,7 +112,7 @@ const Menu = {
     _name: "CSidebarNavItem",
     name: "Tipo Endereço",
     to: "/tipo-endereco",
-    icon: "cil-description"
+    icon: "cil-location-pin"
   },
 
   Licitacao: {
@@ -118,17 +124,17 @@ const Menu = {
 
   Parametro: {
     _name: "CSidebarNavItem",
-    name: "Parâmetro",
+    name: "Parâmetros",
     route: "/parametro",
     to: "/parametro",
-    icon: "cil-library"
+    icon: "cil-star"
   },
 
   GrupoUsuario: {
     _name: "CSidebarNavItem",
     name: "Grupo Usuário",
     to: "/grupo-usuario",
-    icon: "cil-library"
+    icon: "cil-lock-locked"
   }
 };
 

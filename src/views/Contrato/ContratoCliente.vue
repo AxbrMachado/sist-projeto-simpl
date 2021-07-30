@@ -105,14 +105,14 @@
                             title="Editar"
                             @click="Obter(data.item.id)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fa fa-edit"></i>
                           </b-button>
                           <b-button
                             variant="danger"
                             title="Remover"
                             @click="Remover(data.item.id)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
+                            <i class="fas fa-trash-alt"></i>
                           </b-button>
                         </div>
                       </template>
@@ -155,14 +155,14 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoCliente from "../../servico/ContratoClienteServico";
+import ContratoClienteServico from "../../servico/ContratoClienteServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 
 export default {
   components: {
     RotateSquare,
-    ContratoCliente,
+    ContratoClienteServico,
     TipoPessoaContratoEnum,
     TipoPessoaEnum
   },
@@ -180,7 +180,7 @@ export default {
       loading: false,
       pagina: 1,
       total: 0,
-      itensPorPagina: 5,
+      itensPorPagina: 2,
       itens: [],
       abrir: false,
       fields: [
@@ -240,8 +240,8 @@ export default {
       else this.Novo();
     },
     Obter(id) {
-      this.loading = true;
-      ContratoCliente.Obter(id)
+      this.loading = false;
+      ContratoClienteServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           //resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -257,8 +257,12 @@ export default {
         });
     },
     ObterGrid(val) {
-      this.loading = true;
-      ContratoCliente.ObterGrid(val, this.itensPorPagina, this.contratoId)
+      this.loading = false;
+      ContratoClienteServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.contratoId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -283,7 +287,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ContratoCliente.Remover(this.itemRemover)
+      ContratoClienteServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -305,10 +309,10 @@ export default {
       this.itemRemover = id;
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      ContratoCliente.Novo(this.viewModel)
+      ContratoClienteServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -329,10 +333,10 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.pessoaId = this.viewModel.pessoa.id;
-      ContratoCliente.Editar(this.viewModel)
+      ContratoClienteServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
@@ -362,13 +366,16 @@ export default {
       this.viewModel.pessoa = {};
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     RemoverCifrao(valor) {
@@ -395,16 +402,6 @@ export default {
     //       });
     //     });
     // },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return valor;
-      }
-    },
     ObterTipoPessoa(item) {
       switch (item) {
         case TipoPessoaEnum.Funcionario:

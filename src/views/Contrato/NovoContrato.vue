@@ -132,7 +132,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/contrato')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>
@@ -143,9 +143,16 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <ContratoCliente :contratoId="viewModel.id"> </ContratoCliente>
-      <ContratoFornecedor :contratoId="viewModel.id"> </ContratoFornecedor>
-      <ContratoProduto :contratoId="viewModel.id"> </ContratoProduto>
+      <!-- <ContratoCliente :contratoId="viewModel.id"> </ContratoCliente> -->
+      <ContratoClienteSelect :contratoId="viewModel.id">
+      </ContratoClienteSelect>
+      <!-- <ContratoFornecedor :contratoId="viewModel.id"> </ContratoFornecedor> -->
+      <ContratoFornecedorSelect :contratoId="viewModel.id">
+      </ContratoFornecedorSelect>
+      <ContratoProdutoSelect :contratoId="viewModel.id">
+      </ContratoProdutoSelect>
+      <!-- <ContratoProduto :contratoId="viewModel.id"> </ContratoProduto> -->
+      <ContratoPedido :contratoId="viewModel.id"> </ContratoPedido>
       <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
@@ -155,8 +162,12 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ContratoProduto from "./ContratoProduto";
+import ContratoProdutoSelect from "./ContratoProdutoSelect";
 import ContratoFornecedor from "./ContratoFornecedor";
+import ContratoFornecedorSelect from "./ContratoFornecedorSelect";
 import ContratoCliente from "./ContratoCliente";
+import ContratoClienteSelect from "./ContratoClienteSelect";
+import ContratoPedido from "./ContratoPedido";
 import DateTime from "../../util/DateTime";
 import Contato from "../../components/Contato";
 import NovoDocumento from "../../components/NovoDocumento";
@@ -169,6 +180,10 @@ export default {
     ContratoProduto,
     ContratoFornecedor,
     ContratoCliente,
+    ContratoClienteSelect,
+    ContratoFornecedorSelect,
+    ContratoProdutoSelect,
+    ContratoPedido,
     Contato
   },
   data() {
@@ -202,7 +217,7 @@ export default {
       else this.Novo();
     },
     Obter(contratoId) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "contrato/obter/" + contratoId,
         method: "GET"
@@ -227,7 +242,7 @@ export default {
         });
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "contrato/novo",
         data: this.viewModel,
@@ -256,7 +271,7 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url: "contrato/editar",
         data: this.viewModel,

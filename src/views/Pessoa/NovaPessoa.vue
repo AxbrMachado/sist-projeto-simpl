@@ -80,7 +80,9 @@
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                   <div class="form-group">
                     <label for>{{
-                      isPessoaJuridica() ? "* Fantasia" : "* Nome"
+                      isPessoaJuridica() && !isCooperado()
+                        ? "* Fantasia"
+                        : "* Nome"
                     }}</label>
                     <input
                       v-model="viewModel.nome"
@@ -94,7 +96,7 @@
 
                 <div
                   class="col-sm-12 col-md-4 col-lg-4 col-xl-4"
-                  v-if="isPessoaJuridica()"
+                  v-if="isPessoaJuridica() && !isCooperado()"
                 >
                   <div class="form-group">
                     <label for>Razão Social</label>
@@ -121,7 +123,7 @@
               <div class="row">
                 <div
                   class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
-                  v-if="isFuncionario()"
+                  v-if="isFuncionario() || isCooperado()"
                 >
                   <div class="form-group">
                     <label for> * Data Nascimento </label>
@@ -136,7 +138,7 @@
                 </div>
                 <div
                   class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
-                  v-if="isFuncionario()"
+                  v-if="isFuncionario() || isCooperado()"
                 >
                   <div class="form-group">
                     <label for>Estado Civil</label>
@@ -148,7 +150,7 @@
                 </div>
                 <div
                   class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
-                  v-if="isFuncionario()"
+                  v-if="isFuncionario() || isCooperado()"
                 >
                   <div class="form-group">
                     <label for>Sexo</label>
@@ -186,7 +188,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row" v-if="isCooperado() || isFuncionario()">
+              <div class="row" v-if="isFuncionario() || isCooperado()">
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
                     <label for>Nome Mãe</label>
@@ -232,7 +234,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/pessoa')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>
@@ -243,6 +245,7 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
+      <PessoaPedido :pessoaId="viewModel.id"> </PessoaPedido>
       <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
       <NovoEndereco :pessoaId="viewModel.id"> </NovoEndereco>
       <Contato :referenciaId="viewModel.id"> </Contato>
@@ -257,6 +260,7 @@ import RotateSquare from "../../components/RotateSquare";
 import TipoEstadoCivilEnum from "../../enums/TipoEstadoCivilEnum";
 import NovoDocumento from "../../components/NovoDocumento";
 import NovoEndereco from "./NovoEndereco";
+import PessoaPedido from "./PessoaPedido";
 import DateTime from "../../util/DateTime";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import Contato from "../../components/Contato";
@@ -267,6 +271,7 @@ export default {
     RotateSquare,
     NovoDocumento,
     NovoEndereco,
+    PessoaPedido,
     Contato
   },
   data() {

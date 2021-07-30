@@ -55,6 +55,7 @@ export default {
       menu[0]._children.push(Nav.Dashboard);
 
       menu[0]._children.push(Nav.Principal);
+      menu[0]._children.push(Nav.RateioPedido);
       menu[0]._children.push(Nav.PedidoVenda);
       menu[0]._children.push(Nav.Licitacao);
       menu[0]._children.push(Nav.Contrato);
@@ -65,6 +66,7 @@ export default {
       menu[0]._children.push(Nav.Dap);
       menu[0]._children.push(Nav.Produto);
       menu[0]._children.push(Nav.Configuracao);
+      menu[0]._children.push(Nav.Parametro);
       menu[0]._children.push(Nav.Usuarios);
       menu[0]._children.push(Nav.GrupoUsuario);
       menu[0]._children.push(Nav.TipoDocumento);
@@ -74,6 +76,7 @@ export default {
       menu[0]._children.push(Nav.TipoUnidadeMedida);
       menu[0]._children.push(Nav.TipoInstituicao);
       menu[0]._children.push(Nav.UnidadeMedida);
+      
 
       return menu;
     }

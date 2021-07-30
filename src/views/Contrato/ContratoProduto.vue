@@ -119,20 +119,27 @@
                             title="Editar"
                             @click="Obter(data.item.id)"
                           >
-                            <i class="fa fa-edit text-black"></i>
+                            <i class="fa fa-edit"></i>
                           </b-button>
                           <b-button
                             variant="danger"
                             title="Remover"
                             @click="Remover(data.item.id)"
                           >
-                            <i class="fas fa-trash-alt text-black"></i>
+                            <i class="fas fa-trash-alt"></i>
                           </b-button>
                         </div>
                       </template>
                       <template v-slot:cell(valor)="data">
                         <div class="left">
                           <span>{{ FormataValor(data.item.valor) }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidade)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidade)
+                          }}</span>
                         </div>
                       </template>
                     </b-table>
@@ -167,7 +174,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ContratoProduto from "../../servico/ContratoProdutoServico";
+import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
 
 export default {
   components: { RotateSquare },
@@ -245,8 +252,8 @@ export default {
       else this.Novo();
     },
     Obter(id) {
-      this.loading = true;
-      ContratoProduto.Obter(id)
+      this.loading = false;
+      ContratoProdutoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
           //resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -262,8 +269,12 @@ export default {
         });
     },
     ObterGrid(val) {
-      this.loading = true;
-      ContratoProduto.ObterGrid(val, this.itensPorPagina, this.contratoId)
+      this.loading = false;
+      ContratoProdutoServico.ObterGrid(
+        val,
+        this.itensPorPagina,
+        this.contratoId
+      )
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -288,7 +299,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      ContratoProduto.Remover(this.itemRemover)
+      ContratoProdutoServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -310,10 +321,10 @@ export default {
       this.itemRemover = id;
     },
     Novo() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.produtoId = this.viewModel.produto.id;
-      ContratoProduto.Novo(this.viewModel)
+      ContratoProdutoServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -334,10 +345,10 @@ export default {
         });
     },
     Editar() {
-      this.loading = true;
+      this.loading = false;
       this.viewModel.contratoId = this.contratoId;
       this.viewModel.produtoId = this.viewModel.produto.id;
-      ContratoProduto.Editar(this.viewModel)
+      ContratoProdutoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();
@@ -366,13 +377,16 @@ export default {
       this.viewModel.produto = {};
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
         });
       } else {
-        return valor;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
     },
     RemoverCifrao(valor) {
@@ -415,6 +429,13 @@ export default {
             duration: 5000
           });
         });
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };

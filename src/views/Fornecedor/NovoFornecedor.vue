@@ -122,7 +122,7 @@
                 <button
                   class="btn btn-secondary"
                   type="reset"
-                  @click="$router.push('/fornecedor')"
+                  @click="$router.go(-1)"
                 >
                   Voltar
                 </button>
@@ -133,8 +133,12 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <FornecedorContrato :pessoaId="viewModel.id"> </FornecedorContrato>
-      <FornecedorProduto :fornecedorId="viewModel.fornecedorId" />
+      <FornecedorContratoSelect :pessoaId="viewModel.id">
+      </FornecedorContratoSelect>
+      <!-- <FornecedorContrato :pessoaId="viewModel.id"> </FornecedorContrato> -->
+      <FornecedorProdutoSelect :fornecedorId="viewModel.fornecedorId" />
+      <!-- <FornecedorProduto :fornecedorId="viewModel.fornecedorId" /> -->
+      <FornecedorPedido :fornecedorId="viewModel.fornecedorId" />
       <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
   </div>
@@ -145,7 +149,10 @@ import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import RotateSquare from "../../components/RotateSquare";
 import FornecedorContrato from "./FornecedorContrato";
+import FornecedorContratoSelect from "./FornecedorContratoSelect";
 import FornecedorProduto from "./FornecedorProduto";
+import FornecedorProdutoSelect from "./FornecedorProdutoSelect";
+import FornecedorPedido from "./FornecedorPedido";
 import DateTime from "../../util/DateTime";
 import Contato from "../../components/Contato";
 
@@ -157,7 +164,10 @@ export default {
     RotateSquare,
     FornecedorContrato,
     FornecedorProduto,
+    FornecedorProdutoSelect,
+    FornecedorContratoSelect,
     DateTime,
+    FornecedorPedido,
     Contato
   },
   data() {

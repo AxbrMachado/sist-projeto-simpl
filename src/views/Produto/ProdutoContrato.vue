@@ -76,7 +76,7 @@
                         title="Editar"
                         @click="Editar(data.item)"
                       >
-                        <i class="fa fa-edit text-black"></i>
+                        <i class="fa fa-edit"></i>
                       </b-button>
                     </div>
                   </template>
@@ -93,6 +93,11 @@
                   <template v-slot:cell(valor)="data">
                     <div class="left">
                       <span>{{ FormataValor(data.item.valor) }}</span>
+                    </div>
+                  </template>
+                  <template v-slot:cell(quantidade)="data">
+                    <div class="left">
+                      <span>{{ FormataQuantidade(data.item.quantidade) }}</span>
                     </div>
                   </template>
                 </b-table>
@@ -118,7 +123,7 @@ import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
 
 export default {
-  name: "ContratoProduto",
+  name: "ProdutoContrato",
   components: {
     RotateSquare,
     DateTime
@@ -136,9 +141,10 @@ export default {
       itens: [],
       pagina: 1,
       total: 0,
-      itensPorPagina: 0,
+      itensPorPagina: 20,
       filtro: { numero: "" },
       fields: [
+        { key: "contrato", label: "Contrato", sortable: true },
         { key: "numero", label: "Número", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "quantidade", label: "Quantidade", sortable: true },
@@ -170,7 +176,7 @@ export default {
       this.$router.push("/contrato/editar/" + contrato.contratoId);
     },
     ObterGrid(pagina) {
-      this.loading = true;
+      this.loading = false;
       this.$http({
         url:
           "/contratoproduto/obter-grid?pagina=" +
@@ -209,10 +215,24 @@ export default {
       return new Date(value).toLocaleDateString();
     },
     FormataValor(valor) {
-      return valor.toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL"
-      });
+      if (valor) {
+        return valor.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      } else {
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+      }
+    },
+    FormataQuantidade(valor) {
+      if (valor != null) {
+        return valor;
+      } else {
+        return 0;
+      }
     }
   }
 };
