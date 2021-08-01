@@ -97,7 +97,7 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>Percentual Margem Rateio</label>
+                    <label for>Margem Rateio</label>
                     <vue-numeric
                       v-bind:precision="0"
                       v-bind:minus="false"
@@ -112,7 +112,7 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>Quantidade Miníma Rateio</label>
+                    <label for>Qtd. Miníma Rateio</label>
                     <vue-numeric
                       v-bind:precision="0"
                       v-bind:minus="false"
