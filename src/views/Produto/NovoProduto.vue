@@ -106,7 +106,6 @@
                       v-model="viewModel.margemRateio"
                       class="form-control"
                       placeholder="Margem ao efetuar rateio"
-                      required
                     />
                   </div>
                 </div>
@@ -121,7 +120,6 @@
                       v-model="viewModel.quantidadeMinimaRateio"
                       class="form-control"
                       placeholder="Minímo ao efetuar rateio"
-                      required
                     />
                   </div>
                 </div>

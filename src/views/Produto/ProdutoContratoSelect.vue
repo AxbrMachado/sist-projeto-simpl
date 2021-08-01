@@ -152,9 +152,7 @@
                       <template v-slot:cell(margemRateio)="data">
                         <div class="left">
                           <span>{{
-                            FormataValorMargemRateio(
-                              data.item.margemRateio
-                            )
+                            FormataValorMargemRateio(data.item.margemRateio)
                           }}</span>
                         </div>
                       </template>
@@ -458,8 +456,8 @@ export default {
       this.contratoId = item.contratoId;
       this.contratoClienteId = item.id;
       this.valor = item.valor;
-      this.margemRateio = item.margemRateio;
-      this.quantidadeMinimaRateio = item.quantidadeMinimaRateio;
+      this.margemRateio = item.margemRateio ?? 0;
+      this.quantidadeMinimaRateio = item.quantidadeMinimaRateio ?? 0;
       this.tipoUnidadeMedidaId = item.tipoUnidadeMedidaId;
     },
     FormataQuantidade(valor) {
