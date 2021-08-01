@@ -129,10 +129,10 @@
                   }}</span>
                 </div>
               </template>
-              <template v-slot:cell(percentualMargemRateio)="data">
+              <template v-slot:cell(margemRateio)="data">
                 <div class="left">
                   <span>{{
-                    FormataValorMargemRateio(data.item.percentualMargemRateio)
+                    FormataValorMargemRateio(data.item.margemRateio)
                   }}</span>
                 </div>
               </template>
@@ -198,7 +198,7 @@ export default {
           sortable: true
         },
         {
-          key: "percentualMargemRateio",
+          key: "margemRateio",
           label: "Margem Rateio",
           sortable: true
         },

@@ -105,7 +105,7 @@ class ContratoProdutoServico {
     contratoClienteId,
     valor,
     quantidadeMinimaRateio,
-    percentualMargemRateio,
+    margemRateio,
     tipoUnidadeMedidaId,
     contratoId,
     produtoId
@@ -118,8 +118,8 @@ class ContratoProdutoServico {
         valor +
         "&quantidadeMinimaRateio=" +
         quantidadeMinimaRateio +
-        "&percentualMargemRateio=" +
-        percentualMargemRateio +
+        "&margemRateio=" +
+        margemRateio +
         "&tipoUnidadeMedidaId=" +
         tipoUnidadeMedidaId +
         "&contratoId=" +

@@ -127,11 +127,11 @@
                           }}</span>
                         </div>
                       </template>
-                      <template v-slot:cell(percentualMargemRateio)="data">
+                      <template v-slot:cell(margemRateio)="data">
                         <div class="left">
                           <span>{{
                             FormataValorMargemRateio(
-                              data.item.percentualMargemRateio
+                              data.item.margemRateio
                             )
                           }}</span>
                         </div>
@@ -200,7 +200,7 @@
               v-bind:minus="false"
               thousand-separator="."
               decimal-separator=","
-              v-model="percentualMargemRateio"
+              v-model="margemRateio"
               class="form-control"
               placeholder="Margem ao efetuar rateio"
               required
@@ -250,7 +250,7 @@ export default {
     return {
       modalEditarInfoProduto: false,
       valor: 0,
-      percentualMargemRateio: 0,
+      margemRateio: 0,
       quantidadeMinimaRateio: 0,
       tipoUnidadeMedidaId: "",
       tiposUnidadeMedidaOptions: [],
@@ -277,7 +277,7 @@ export default {
           sortable: true
         },
         {
-          key: "percentualMargemRateio",
+          key: "margemRateio",
           label: "Margem Rateio",
           sortable: true
         },
@@ -411,7 +411,7 @@ export default {
         this.contratoClienteId,
         this.valor,
         this.quantidadeMinimaRateio,
-        this.percentualMargemRateio,
+        this.margemRateio,
         this.tipoUnidadeMedidaId,
         this.contratoId,
         this.produtoId
@@ -443,7 +443,7 @@ export default {
       this.produtoId = item.produtoId;
       this.contratoClienteId = item.id;
       this.valor = item.valor;
-      this.percentualMargemRateio = item.percentualMargemRateio;
+      this.margemRateio = item.margemRateio;
       this.quantidadeMinimaRateio = item.quantidadeMinimaRateio;
       this.tipoUnidadeMedidaId = item.tipoUnidadeMedidaId;
     },

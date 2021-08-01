@@ -103,7 +103,7 @@
                       v-bind:minus="false"
                       thousand-separator="."
                       decimal-separator=","
-                      v-model="viewModel.percentualMargemRateio"
+                      v-model="viewModel.margemRateio"
                       class="form-control"
                       placeholder="Margem ao efetuar rateio"
                       required
@@ -185,7 +185,7 @@ export default {
         id: this.$store.getters.emptyGuid,
         descricao: "",
         valorBase: 0,
-        percentualMargemRateio: 0,
+        margemRateio: 0,
         quantidadeMinimaRateio: 0,
         codigo: "",
         tipoProdutoId: "",
@@ -314,7 +314,7 @@ export default {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.descricao = "";
       this.viewModel.valorBase = 0;
-      this.viewModel.percentualMargemRateio = 0;
+      this.viewModel.margemRateio = 0;
       this.viewModel.quantidadeMinimaRateio = 0;
       this.viewModel.tipoProdutoId = "";
       this.viewModel.tipoUnidadeMedidaId = "";
