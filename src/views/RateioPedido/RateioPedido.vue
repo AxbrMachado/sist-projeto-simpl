@@ -149,11 +149,13 @@
                   </b-button>
                   <b-button
                     variant="info"
+                    style="margin-right: 10px"
                     title="Efetuar Rateio"
                     @click="EfetuarRateio(data.item.pedidoId)"
                   >
                     <i class="fa fa-random"></i>
                   </b-button>
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
                 </div>
               </template>
               <template v-slot:cell(dataEntrega)="data">
@@ -239,6 +241,7 @@ import RateioServico from "../../servico/RateioServico";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
 import Bus from "../../util/EventBus";
 
@@ -247,7 +250,8 @@ export default {
   components: {
     RotateSquare,
     RateioServico,
-    Bus
+    Bus,
+    ModalArquivoGrid
   },
   data() {
     return {

@@ -190,11 +190,13 @@
                   </b-button>
                   <b-button
                     variant="danger"
+                    style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
                 </div>
               </template>
               <template v-slot:cell(dataEntrega)="data">
@@ -242,12 +244,14 @@ import RotateSquare from "../../components/RotateSquare";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import Bus from "../../util/EventBus";
+import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
 export default {
   name: "PedidoVenda",
   components: {
     RotateSquare,
-    Bus
+    Bus,
+    ModalArquivoGrid
   },
   data() {
     return {

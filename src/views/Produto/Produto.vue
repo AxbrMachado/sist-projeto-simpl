@@ -108,11 +108,13 @@
                   </b-button>
                   <b-button
                     variant="danger"
+                    style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
                 </div>
               </template>
               <template v-slot:cell(valorBase)="data">
@@ -161,11 +163,13 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
 export default {
   name: "Produto",
   components: {
-    RotateSquare
+    RotateSquare,
+    ModalArquivoGrid
   },
   data() {
     return {

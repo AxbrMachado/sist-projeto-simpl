@@ -108,6 +108,7 @@
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button> -->
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
                 </div>
               </template>
             </b-table>
@@ -138,11 +139,13 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
+import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
 export default {
   name: "Fornecedor",
   components: {
-    RotateSquare
+    RotateSquare,
+    ModalArquivoGrid
   },
   data() {
     return {
