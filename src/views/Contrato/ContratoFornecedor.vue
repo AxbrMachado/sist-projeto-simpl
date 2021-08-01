@@ -149,6 +149,18 @@
                           }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(valorConsumido)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorConsumido)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(valorRestante)="data">
+                        <div class="left">
+                          <span>{{ FormataValorRestante(data.item) }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(valorLimite)="data">
                         <div class="left">
                           <span>{{ FormataValor(data.item.valorLimite) }}</span>
@@ -261,12 +273,14 @@ export default {
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
-        { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
-        {
-          key: "quantidadeConsumida",
-          label: "Quantidade Consumida",
-          sortable: true
-        },
+        // { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
+        { key: "valorConsumido", label: "Valor Consumido", sortable: true },
+        { key: "valorRestante", label: "Valor Disponível", sortable: true },
+        // {
+        //   key: "quantidadeConsumida",
+        //   label: "Quantidade Consumida",
+        //   sortable: true
+        // },
         {
           key: "acoes",
           label: "Ações",
@@ -554,6 +568,23 @@ export default {
       } else {
         return 0;
       }
+    },
+    FormataValorRestante(item) {
+      var valor = 0;
+      if (!item.valorLimite) {
+        valor = 0;
+      } else {
+        if (item.valorConsumido) {
+          valor = item.valorLimite - item.valorConsumido;
+        } else {
+          valor = item.valorLimite;
+        }
+      }
+
+      return valor.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     }
   }
 };

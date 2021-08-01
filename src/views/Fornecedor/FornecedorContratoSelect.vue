@@ -133,6 +133,18 @@
                           <span>{{ FormataValor(data.item.valorLimite) }}</span>
                         </div>
                       </template>
+                     <template v-slot:cell(valorConsumido)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorConsumido)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(valorRestante)="data">
+                        <div class="left">
+                          <span>{{ FormataValorRestante(data.item) }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(descricao)="data">
                         <div class="left">
                           <span>{{ FormataDescricao(data.item) }}</span>
@@ -238,9 +250,11 @@ export default {
         // { key: "entidadeLicitacao", label: "Entidade", sortable: true },
         { key: "valorLimite", label: "Valor Limite", sortable: true },
         // { key: "quantidadeLimite", label: "Quantidade Limite", sortable: true },
-        { key: "dataInicio", label: "Data Início", sortable: true },
-        { key: "dataTermino", label: "Data Término", sortable: true },
-        { key: "valor", label: "Valor Contrato", sortable: true },
+        { key: "valorConsumido", label: "Valor Consumido", sortable: true },
+        { key: "valorRestante", label: "Valor Disponível", sortable: true },
+        // { key: "dataInicio", label: "Data Início", sortable: true },
+        // { key: "dataTermino", label: "Data Término", sortable: true },
+        // { key: "valor", label: "Valor Contrato", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -412,6 +426,23 @@ export default {
     },
     FormataDescricao(value) {
       return value.numero + " - " + value.entidadeLicitacao;
+    },
+    FormataValorRestante(item) {
+      var valor = 0;
+      if (!item.valorLimite) {
+        valor = 0;
+      } else {
+        if (item.valorConsumido) {
+          valor = item.valorLimite - item.valorConsumido;
+        } else {
+          valor = item.valorLimite;
+        }
+      }
+
+      return valor.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     }
   }
 };
