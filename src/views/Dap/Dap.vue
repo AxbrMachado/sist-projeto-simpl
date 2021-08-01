@@ -179,9 +179,13 @@
               </template>
               <template v-slot:cell(fornecedorDesignado)="data">
                 <div class="center">
-                  <span>{{
-                    FormatarValorBooleano(data.item.fornecedorDesignado)
-                  }}</span>
+                  <span
+                    v-if="data.item.fornecedorDesignado"
+                    class="badge badge-success"
+                  >
+                    Sim
+                  </span>
+                  <span v-else class="badge badge-danger">Não</span>
                 </div>
               </template>
             </b-table>
@@ -415,9 +419,6 @@ export default {
             duration: 5000
           });
         });
-    },
-    FormatarValorBooleano(value) {
-      return value ? "Sim" : "Não";
     }
   }
 };

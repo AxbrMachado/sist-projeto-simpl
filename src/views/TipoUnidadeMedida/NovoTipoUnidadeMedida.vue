@@ -40,6 +40,18 @@
                     />
                   </div>
                 </div>
+                <div
+                  class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                  title="Permite efetuar rateio de produtos desta unidade com margem."
+                >
+                  <label for>Permite Margem Rateio</label>
+                  <b-form-checkbox
+                    v-model="viewModel.permiteMargemRateio"
+                    name="check-button"
+                    switch
+                  >
+                  </b-form-checkbox>
+                </div>
               </div>
             </div>
             <div class="btn-toolbar mb-3 ml-3" role="toolbar">
@@ -84,7 +96,8 @@ export default {
       contaOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        descricao: ""
+        descricao: "",
+        permiteMargemRateio: false,
       }
     };
   },

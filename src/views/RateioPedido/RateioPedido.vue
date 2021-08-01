@@ -184,8 +184,11 @@
                 </div>
               </template>
               <template v-slot:cell(manual)="data">
-                <div class="left">
-                  <span>{{ FormataBoolean(data.item.manual) }}</span>
+                <div class="center">
+                  <span v-if="!data.item.manual" class="badge badge-success">
+                    Sim
+                  </span>
+                  <span v-else class="badge badge-danger">Não</span>
                 </div>
               </template>
               <template v-slot:cell(usuarioCadastro)="data">
@@ -303,7 +306,7 @@ export default {
         { key: "statusPedido", label: "Status Pedido", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "valorRateado", label: "Valor Rateado", sortable: true },
-        { key: "manual", label: "Rateio Manual", sortable: true },
+        { key: "manual", label: "Rateio Automático", sortable: true },
 
         { key: "dataRateio", label: "Data Rateio", sortable: true },
         { key: "status", label: "Status Rateio", sortable: true },
@@ -476,9 +479,6 @@ export default {
           currency: "BRL"
         });
       }
-    },
-    FormataBoolean(item) {
-      return item == undefined ? "-" : item ? "Sim" : "Não";
     },
     FormatarUsuario(value) {
       if (value.usuarioAlteracao) {
