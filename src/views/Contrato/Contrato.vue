@@ -123,6 +123,8 @@
               </template>
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
+
                   <b-button
                     variant="warning"
                     style="margin-right: 10px"
@@ -182,11 +184,13 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
 export default {
   name: "Contrato",
   components: {
-    RotateSquare
+    RotateSquare,
+    ModalArquivoGrid
   },
   data() {
     return {

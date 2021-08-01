@@ -124,6 +124,8 @@
               </template>
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
+
                   <b-button
                     variant="warning"
                     style="margin-right: 10px"
@@ -187,11 +189,13 @@ import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import LicitacaoServico from "../../servico/LicitacaoServico";
 import StatusLicitacaoEnum from "../../enums/StatusLicitacaoEnum";
+import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
 export default {
   name: "Licitacao",
   components: {
-    RotateSquare
+    RotateSquare,
+    ModalArquivoGrid
   },
   data() {
     return {
