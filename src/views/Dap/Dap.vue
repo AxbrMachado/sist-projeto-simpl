@@ -94,6 +94,18 @@
                 >
                 </b-form-checkbox>
               </div>
+              <div
+                class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
+                title="Apenas daps com fornecedor excluído temporariamente de rateios."
+              >
+                <label for>Excluído Rateio</label>
+                <b-form-checkbox
+                  v-model="filtro.fornecedorExcluidoRateio"
+                  name="check-button"
+                  switch
+                >
+                </b-form-checkbox>
+              </div>
               <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                 <button
                   class="btn btn-primary mr-2"
@@ -137,11 +149,13 @@
                   </b-button>
                   <b-button
                     variant="danger"
+                    style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
                 </div>
               </template>
               <template v-slot:cell(tipoEnquadramento)="data">
@@ -156,11 +170,22 @@
                   <span>{{ FormatarData(data.item.validade) }}</span>
                 </div>
               </template>
-              <template v-slot:cell(fornecedorDesignado)="data">
+              <template v-slot:cell(limiteExclusaoRateio)="data">
                 <div class="center">
                   <span>{{
-                    FormatarFornecedorDesignado(data.item.fornecedorDesignado)
+                    FormatarData(data.item.limiteExclusaoRateio)
                   }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(fornecedorDesignado)="data">
+                <div class="center">
+                  <span
+                    v-if="data.item.fornecedorDesignado"
+                    class="badge badge-success"
+                  >
+                    Sim
+                  </span>
+                  <span v-else class="badge badge-danger">Não</span>
                 </div>
               </template>
             </b-table>
@@ -192,11 +217,13 @@
 import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
 export default {
   name: "Dap",
   components: {
-    RotateSquare
+    RotateSquare,
+    ModalArquivoGrid
   },
   data() {
     return {
@@ -220,6 +247,7 @@ export default {
         dataVencimento: "",
         dapVencida: false,
         fornecedorDesignado: false,
+        fornecedorExcluidoRateio: false,
         cooperado: ""
       },
       fields: [
@@ -231,6 +259,12 @@ export default {
           sortable: true
         },
         { key: "validade", label: "Válidade", sortable: true },
+        {
+          key: "limiteExclusaoRateio",
+          label: "Limite Exclusão Rateio",
+          sortable: true
+        },
+
         { key: "pessoaNome", label: "Cooperado", sortable: true },
         {
           key: "acoes",
@@ -256,6 +290,7 @@ export default {
       this.filtro.dataVencimento = "";
       this.filtro.dapVencida = false;
       this.filtro.fornecedorDesignado = false;
+      this.filtro.fornecedorExcluidoRateio = false;
       this.filtro.cooperado = "";
 
       this.ObterGrid(1);
@@ -337,6 +372,11 @@ export default {
       var filtros =
         filtros + "&FornecedorDesignado=" + this.filtro.fornecedorDesignado;
 
+      var filtros =
+        filtros +
+        "&FornecedorExcluidoRateio=" +
+        this.filtro.fornecedorExcluidoRateio;
+
       return filtros;
     },
     ObterNomeEnquadramento(item) {
@@ -379,9 +419,6 @@ export default {
             duration: 5000
           });
         });
-    },
-    FormatarFornecedorDesignado(value) {
-      return value ? "Sim" : "Não";
     }
   }
 };

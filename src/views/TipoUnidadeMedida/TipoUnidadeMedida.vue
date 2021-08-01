@@ -83,6 +83,17 @@
                   </b-button>
                 </div>
               </template>
+              <template v-slot:cell(permiteMargemRateio)="data">
+                <div class="center">
+                  <span
+                    v-if="data.item.permiteMargemRateio"
+                    class="badge badge-success"
+                  >
+                    Sim
+                  </span>
+                  <span v-else class="badge badge-danger">Não</span>
+                </div>
+              </template>
             </b-table>
             <b-pagination
               v-model="pagina"
@@ -128,6 +139,11 @@ export default {
       filtro: { descricao: "" },
       fields: [
         { key: "descricao", label: "Nome", sortable: true },
+        {
+          key: "permiteMargemRateio",
+          label: "Permite Margem Rateio",
+          sortable: true
+        },
         {
           key: "acoes",
           label: "Ações",
@@ -190,7 +206,10 @@ export default {
       this.loading = false;
       this.$http({
         url:
-          "/tipoUnidadeMedida/obter-grid?pagina=" + pagina + "&descricao=" + this.filtro.descricao,
+          "/tipoUnidadeMedida/obter-grid?pagina=" +
+          pagina +
+          "&descricao=" +
+          this.filtro.descricao,
         method: "GET"
       })
         .then((response) => {

@@ -140,6 +140,22 @@
                           <span>{{ FormataDescricao(data.item) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidadeMinimaRateio)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValorMinimoRateio(
+                              data.item.quantidadeMinimaRateio
+                            )
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(margemRateio)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValorMargemRateio(data.item.margemRateio)
+                          }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -188,6 +204,38 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for>Margem Rateio</label>
+            <vue-numeric
+              v-bind:precision="0"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="margemRateio"
+              class="form-control"
+              placeholder="Margem ao efetuar rateio"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for>Quantidade Miníma Rateio</label>
+            <vue-numeric
+              v-bind:precision="0"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="quantidadeMinimaRateio"
+              class="form-control"
+              placeholder="Minímo ao efetuar rateio"
+              required
+            />
+          </div>
+        </div>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -211,6 +259,8 @@ export default {
     return {
       modalEditarInfoContrato: false,
       valor: 0,
+      margemRateio: 0,
+      quantidadeMinimaRateio: 0,
       tipoUnidadeMedidaId: "",
       tiposUnidadeMedidaOptions: [],
       contratoId: this.$store.getters.emptyGuid,
@@ -231,9 +281,19 @@ export default {
         // { key: "entidadeLicitacao", label: "Entidade", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         // { key: "quantidade", label: "Quantidade", sortable: true },
-        { key: "dataInicio", label: "Data Início", sortable: true },
-        { key: "dataTermino", label: "Data Término", sortable: true },
-        { key: "valor", label: "Valor Contrato", sortable: true },
+        // { key: "dataInicio", label: "Data Início", sortable: true },
+        // { key: "dataTermino", label: "Data Término", sortable: true },
+        // { key: "valor", label: "Valor Contrato", sortable: true },
+        {
+          key: "quantidadeMinimaRateio",
+          label: "Qtd. Miníma Rateio",
+          sortable: true
+        },
+        {
+          key: "margemRateio",
+          label: "Margem Rateio",
+          sortable: true
+        },
         { key: "tipoUnidadeMedida", label: "Un. Medida", sortable: true },
         {
           key: "acoes",
@@ -363,6 +423,8 @@ export default {
       ContratoProdutoServico.EditarContratoProduto(
         this.contratoClienteId,
         this.valor,
+        this.quantidadeMinimaRateio,
+        this.margemRateio,
         this.tipoUnidadeMedidaId,
         this.contratoId,
         this.produtoId
@@ -394,6 +456,8 @@ export default {
       this.contratoId = item.contratoId;
       this.contratoClienteId = item.id;
       this.valor = item.valor;
+      this.margemRateio = item.margemRateio ?? 0;
+      this.quantidadeMinimaRateio = item.quantidadeMinimaRateio ?? 0;
       this.tipoUnidadeMedidaId = item.tipoUnidadeMedidaId;
     },
     FormataQuantidade(valor) {
@@ -428,6 +492,12 @@ export default {
             duration: 5000
           });
         });
+    },
+    FormataValorMinimoRateio(valor) {
+      return valor ? valor : "-";
+    },
+    FormataValorMargemRateio(valor) {
+      return valor ? valor + "%" : "-";
     }
   }
 };

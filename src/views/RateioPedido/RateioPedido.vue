@@ -149,11 +149,13 @@
                   </b-button>
                   <b-button
                     variant="info"
+                    style="margin-right: 10px"
                     title="Efetuar Rateio"
                     @click="EfetuarRateio(data.item.pedidoId)"
                   >
                     <i class="fa fa-random"></i>
                   </b-button>
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
                 </div>
               </template>
               <template v-slot:cell(dataEntrega)="data">
@@ -182,8 +184,11 @@
                 </div>
               </template>
               <template v-slot:cell(manual)="data">
-                <div class="left">
-                  <span>{{ FormataBoolean(data.item.manual) }}</span>
+                <div class="center">
+                  <span v-if="!data.item.manual" class="badge badge-success">
+                    Sim
+                  </span>
+                  <span v-else class="badge badge-danger">Não</span>
                 </div>
               </template>
               <template v-slot:cell(usuarioCadastro)="data">
@@ -239,6 +244,7 @@ import RateioServico from "../../servico/RateioServico";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
 import Bus from "../../util/EventBus";
 
@@ -247,7 +253,8 @@ export default {
   components: {
     RotateSquare,
     RateioServico,
-    Bus
+    Bus,
+    ModalArquivoGrid
   },
   data() {
     return {
@@ -299,7 +306,7 @@ export default {
         { key: "statusPedido", label: "Status Pedido", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "valorRateado", label: "Valor Rateado", sortable: true },
-        { key: "manual", label: "Rateio Manual", sortable: true },
+        { key: "manual", label: "Rateio Automático", sortable: true },
 
         { key: "dataRateio", label: "Data Rateio", sortable: true },
         { key: "status", label: "Status Rateio", sortable: true },
@@ -472,9 +479,6 @@ export default {
           currency: "BRL"
         });
       }
-    },
-    FormataBoolean(item) {
-      return item == undefined ? "-" : item ? "Sim" : "Não";
     },
     FormatarUsuario(value) {
       if (value.usuarioAlteracao) {

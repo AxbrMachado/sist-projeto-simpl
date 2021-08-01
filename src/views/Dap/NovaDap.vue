@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
                   <div class="form-group">
                     <label for>* Número</label>
                     <input
@@ -50,7 +50,7 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>* Tipo Enquadramento</label>
                     <b-form-select
@@ -59,7 +59,7 @@
                     ></b-form-select>
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>* Validade</label>
                     <input
@@ -69,6 +69,21 @@
                       placeholder="Digite a validade"
                       required
                     />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-3">
+                  <div class="form-group">
+                    <label for>Responsável</label>
+                    <v-select
+                      placeholder="Digite um responsável.."
+                      v-model="viewModel.responsavel"
+                      :options="responsaveisOptions"
+                      @search="ObterResponsavelVSelect"
+                    >
+                      <template slot="no-options">
+                        Nenhum resultado para a busca.
+                      </template>
+                    </v-select>
                   </div>
                 </div>
               </div>
@@ -90,19 +105,16 @@
                     </v-select>
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>Responsável</label>
-                    <v-select
-                      placeholder="Digite um responsável.."
-                      v-model="viewModel.responsavel"
-                      :options="responsaveisOptions"
-                      @search="ObterResponsavelVSelect"
-                    >
-                      <template slot="no-options">
-                        Nenhum resultado para a busca.
-                      </template>
-                    </v-select>
+                    <label for>Exclusão Rateio Até</label>
+                    <input
+                      v-model="viewModel.limiteExclusaoRateio"
+                      class="form-control"
+                      type="date"
+                      placeholder="Data limite onde os fornecedores da DAP ficam foram de rateios"
+                      required
+                    />
                   </div>
                 </div>
                 <div
@@ -180,6 +192,7 @@ export default {
         id: this.$store.getters.emptyGuid,
         numero: "",
         validade: "",
+        limiteExclusaoRateio: "",
         tipoEnquadramento: 0,
         fornecedorDesignado: false,
         responsavel: [],
@@ -213,6 +226,9 @@ export default {
         .then((resposta) => {
           this.loading = false;
           resposta.data.validade = DateTime.formatar(resposta.data.validade);
+          resposta.data.limiteExclusaoRateio = DateTime.formatar(
+            resposta.data.limiteExclusaoRateio
+          );
           this.viewModel = resposta.data;
         })
         .catch((erro) => {
@@ -311,6 +327,7 @@ export default {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.numero = "";
       this.viewModel.validade = "";
+      this.viewModel.limiteExclusaoRateio = "";
       this.viewModel.tipoEnquadramento = 0;
       this.viewModel.fornecedorDesignado = false;
       this.viewModel.responsavel = "";

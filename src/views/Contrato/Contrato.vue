@@ -123,8 +123,6 @@
               </template>
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
-                  <ModalArquivoGrid :referenciaId="data.item.id" />
-
                   <b-button
                     variant="warning"
                     style="margin-right: 10px"
@@ -135,11 +133,13 @@
                   </b-button>
                   <b-button
                     variant="danger"
+                    style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
                 </div>
               </template>
               <template v-slot:cell(dataInicio)="data">

@@ -108,16 +108,32 @@
                   </b-button>
                   <b-button
                     variant="danger"
+                    style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
+                  <ModalArquivoGrid :referenciaId="data.item.id" />
                 </div>
               </template>
               <template v-slot:cell(valorBase)="data">
                 <div class="left">
                   <span>{{ FormataValor(data.item.valorBase) }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(quantidadeMinimaRateio)="data">
+                <div class="left">
+                  <span>{{
+                    FormataValorMinimoRateio(data.item.quantidadeMinimaRateio)
+                  }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(margemRateio)="data">
+                <div class="left">
+                  <span>{{
+                    FormataValorMargemRateio(data.item.margemRateio)
+                  }}</span>
                 </div>
               </template>
             </b-table>
@@ -147,11 +163,13 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
 export default {
   name: "Produto",
   components: {
-    RotateSquare
+    RotateSquare,
+    ModalArquivoGrid
   },
   data() {
     return {
@@ -174,6 +192,16 @@ export default {
         { key: "descricao", label: "Descrição", sortable: true },
         { key: "valorBase", label: "Valor Base", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        {
+          key: "quantidadeMinimaRateio",
+          label: "Qtd. Miníma Rateio",
+          sortable: true
+        },
+        {
+          key: "margemRateio",
+          label: "Margem Rateio",
+          sortable: true
+        },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
@@ -321,6 +349,12 @@ export default {
           currency: "BRL"
         });
       }
+    },
+    FormataValorMinimoRateio(valor) {
+      return valor ? valor : "-";
+    },
+    FormataValorMargemRateio(valor) {
+      return valor ? valor + "%" : "-";
     }
   }
 };

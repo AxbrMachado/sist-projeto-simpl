@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
                   <div class="form-group">
                     <label for>* Descrição</label>
                     <input
@@ -50,7 +50,7 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>* Valor Base</label>
                     <currency-input
@@ -61,7 +61,7 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>* Tipo Produto</label>
                     <b-form-select
@@ -71,7 +71,7 @@
                     ></b-form-select>
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>* Unidade Medida</label>
                     <b-form-select
@@ -81,7 +81,9 @@
                     ></b-form-select>
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
                   <div class="form-group">
                     <label for>Código</label>
                     <input
@@ -90,6 +92,34 @@
                       type="text"
                       placeholder="Digite um código"
                       required
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
+                    <label for>Margem Rateio</label>
+                    <vue-numeric
+                      v-bind:precision="0"
+                      v-bind:minus="false"
+                      thousand-separator="."
+                      decimal-separator=","
+                      v-model="viewModel.margemRateio"
+                      class="form-control"
+                      placeholder="Margem ao efetuar rateio"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
+                    <label for>Qtd. Miníma Rateio</label>
+                    <vue-numeric
+                      v-bind:precision="0"
+                      v-bind:minus="false"
+                      thousand-separator="."
+                      decimal-separator=","
+                      v-model="viewModel.quantidadeMinimaRateio"
+                      class="form-control"
+                      placeholder="Minímo ao efetuar rateio"
                     />
                   </div>
                 </div>
@@ -153,6 +183,8 @@ export default {
         id: this.$store.getters.emptyGuid,
         descricao: "",
         valorBase: 0,
+        margemRateio: 0,
+        quantidadeMinimaRateio: 0,
         codigo: "",
         tipoProdutoId: "",
         tipoUnidadeMedidaId: ""
@@ -280,6 +312,8 @@ export default {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.descricao = "";
       this.viewModel.valorBase = 0;
+      this.viewModel.margemRateio = 0;
+      this.viewModel.quantidadeMinimaRateio = 0;
       this.viewModel.tipoProdutoId = "";
       this.viewModel.tipoUnidadeMedidaId = "";
     }
