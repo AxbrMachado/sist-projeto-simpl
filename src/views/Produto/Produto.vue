@@ -120,6 +120,20 @@
                   <span>{{ FormataValor(data.item.valorBase) }}</span>
                 </div>
               </template>
+              <template v-slot:cell(quantidadeMinimaRateio)="data">
+                <div class="left">
+                  <span>{{
+                    FormataValorMinimoRateio(data.item.quantidadeMinimaRateio)
+                  }}</span>
+                </div>
+              </template>
+              <template v-slot:cell(percentualMargemRateio)="data">
+                <div class="left">
+                  <span>{{
+                    FormataValorMargemRateio(data.item.percentualMargemRateio)
+                  }}</span>
+                </div>
+              </template>
             </b-table>
             <b-pagination
               v-model="pagina"
@@ -174,6 +188,16 @@ export default {
         { key: "descricao", label: "Descrição", sortable: true },
         { key: "valorBase", label: "Valor Base", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
+        {
+          key: "quantidadeMinimaRateio",
+          label: "Qtd. Miníma Rateio",
+          sortable: true
+        },
+        {
+          key: "percentualMargemRateio",
+          label: "Margem Rateio",
+          sortable: true
+        },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
@@ -321,6 +345,12 @@ export default {
           currency: "BRL"
         });
       }
+    },
+    FormataValorMinimoRateio(valor) {
+      return valor ? valor : "-";
+    },
+    FormataValorMargemRateio(valor) {
+      return valor ? valor + "%" : "-";
     }
   }
 };
