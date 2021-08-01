@@ -1,6 +1,6 @@
 const ParametroEnum = {
   QuantidadeMinimaProdutoRateio: 1,
-  PercentualMargemRateio: 2,
+  MargemRateio: 2,
   VersaoSistema: 3
 };
 
