@@ -195,6 +195,21 @@
             ></b-form-select>
           </div>
         </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
+          <div class="form-group">
+            <label for>Quantidade Limite</label>
+            <vue-numeric
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="quantidadeLimite"
+              class="form-control"
+              placeholder="Informe quantidade limite"
+              required
+            />
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
@@ -267,6 +282,7 @@ export default {
     return {
       modalEditarInfoProduto: false,
       valor: 0,
+      quantidadeLimite: 0,
       margemRateio: 0,
       quantidadeMinimaRateio: 0,
       tipoUnidadeMedidaId: "",
@@ -433,6 +449,7 @@ export default {
       ContratoProdutoServico.EditarContratoProduto(
         this.contratoClienteId,
         this.valor,
+        this.quantidadeLimite,
         this.quantidadeMinimaRateio,
         this.margemRateio,
         this.tipoUnidadeMedidaId,
@@ -466,6 +483,7 @@ export default {
       this.produtoId = item.produtoId;
       this.contratoClienteId = item.id;
       this.valor = item.valor;
+      this.quantidadeLimite = item.quantidade;
       this.margemRateio = item.margemRateio ?? 0;
       this.quantidadeMinimaRateio = item.quantidadeMinimaRateio ?? 0;
       this.tipoUnidadeMedidaId = item.tipoUnidadeMedidaId;
