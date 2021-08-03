@@ -118,10 +118,52 @@
                           <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(valorDesignado)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorDesignado)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(valorAtendido)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorAtendido)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(valorEntregue)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorEntregue)
+                          }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(quantidade)="data">
                         <div class="left">
                           <span>{{
                             FormataQuantidade(data.item.quantidade)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeAtendida)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeAtendida)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeDesignada)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeDesignada)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeEntregue)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeEntregue)
                           }}</span>
                         </div>
                       </template>
@@ -224,11 +266,12 @@ export default {
         { key: "nome", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
-        { key: "quantidadePedido", label: "Qtd. Pedido", sortable: true },
-        { key: "valorPedido", label: "Valor Pedido", sortable: true },
-        { key: "quantidadeSolicitada", label: "Qtd. Atendida", sortable: true },
-        { key: "valorTotal", label: "Valor  Atendido", sortable: true },
-        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
+        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
+        { key: "valorAtendido", label: "Valor Atendido", sortable: true },
+        { key: "quantidadeDesignada", label: "Qtd. Designada", sortable: true },
+        { key: "valorDesignado", label: "Valor Designado", sortable: true },
+        { key: "quantidadeEntregue", label: "Qtd. Entregue", sortable: true },
+        { key: "valorEntregue", label: "Valor Entregue", sortable: true },
         {
           key: "acoes",
           label: "Ações",
