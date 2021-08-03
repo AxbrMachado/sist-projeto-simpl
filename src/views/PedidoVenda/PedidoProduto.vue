@@ -125,7 +125,14 @@
                       <template v-slot:cell(quantidadePendente)="data">
                         <div class="left">
                           <span>{{
-                            FormataQuantidade(data.item.quantidadePendente)
+                            FormataQuantidadePendente(data.item)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(margemRateio)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValorMargemRateio(data.item.margemRateio)
                           }}</span>
                         </div>
                       </template>
@@ -227,6 +234,7 @@ export default {
           label: "Qtd. Atendida",
           sortable: true
         },
+        { key: "margemRateio", label: "% Rateio", sortable: true },
         { key: "quantidadePendente", label: "Qtd. Pendente", sortable: true },
         // { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
@@ -427,6 +435,12 @@ export default {
       } else {
         return 0;
       }
+    },
+    FormataQuantidadePendente(item) {
+      return item.quantidadeAtendidaSemMargem - item.quantidadeSolicitada;
+    },
+    FormataValorMargemRateio(valor) {
+      return valor ? valor + "%" : "-";
     }
   }
 };

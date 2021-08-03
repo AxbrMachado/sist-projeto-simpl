@@ -114,7 +114,7 @@ class PedidoProdutoFornecedorServico {
       url:
         "/pedidoprodutofornecedor/editar-quantidade?id=" +
         id +
-        "&quantidade=" +
+        "&quantidadeAtendida=" +
         quantidade,
       method: "GET"
     });
@@ -130,7 +130,7 @@ class PedidoProdutoFornecedorServico {
       url:
         "/pedidoprodutofornecedor/editar-quantidade?id=" +
         id +
-        "&quantidade=" +
+        "&quantidadeAtendida=" +
         quantidade +
         (!fornecedorDesignadoId
           ? ""

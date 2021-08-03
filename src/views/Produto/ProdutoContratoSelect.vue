@@ -135,6 +135,13 @@
                           }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidadeConsumida)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeConsumida)
+                          }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(descricao)="data">
                         <div class="left">
                           <span>{{ FormataDescricao(data.item) }}</span>
@@ -153,6 +160,13 @@
                         <div class="left">
                           <span>{{
                             FormataValorMargemRateio(data.item.margemRateio)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeDisponivel)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidadePendente(data.item)
                           }}</span>
                         </div>
                       </template>
@@ -205,34 +219,46 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
           <div class="form-group">
-            <label for>Margem Rateio</label>
-            <vue-numeric
-              v-bind:precision="0"
-              v-bind:minus="false"
-              thousand-separator="."
-              decimal-separator=","
-              v-model="margemRateio"
-              class="form-control"
-              placeholder="Margem ao efetuar rateio"
-              required
-            />
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
-          <div class="form-group">
-            <label for>Quantidade Miníma Rateio</label>
-            <vue-numeric
-              v-bind:precision="0"
-              v-bind:minus="false"
-              thousand-separator="."
-              decimal-separator=","
-              v-model="quantidadeMinimaRateio"
-              class="form-control"
-              placeholder="Minímo ao efetuar rateio"
-              required
-            />
+            <br />
+            <label for
+              >Definições de rateio especificas para produto no contrato</label
+            >
+            <br />
+            <br />
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+                <div class="form-group">
+                  <label for>Quantidade Miníma Rateio</label>
+                  <vue-numeric
+                    v-bind:precision="0"
+                    v-bind:minus="false"
+                    thousand-separator="."
+                    decimal-separator=","
+                    v-model="quantidadeMinimaRateio"
+                    class="form-control"
+                    placeholder="Minímo ao efetuar rateio"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+                <div class="form-group">
+                  <label for>Margem Rateio</label>
+                  <vue-numeric
+                    v-bind:precision="0"
+                    v-bind:minus="false"
+                    thousand-separator="."
+                    decimal-separator=","
+                    v-model="margemRateio"
+                    class="form-control"
+                    placeholder="Margem ao efetuar rateio"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -277,13 +303,14 @@ export default {
       },
       fields: [
         { key: "descricao", label: "Descrição", sortable: true },
-        // { key: "numero", label: "Número", sortable: true },
-        // { key: "entidadeLicitacao", label: "Entidade", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
-        // { key: "quantidade", label: "Quantidade", sortable: true },
-        // { key: "dataInicio", label: "Data Início", sortable: true },
-        // { key: "dataTermino", label: "Data Término", sortable: true },
-        // { key: "valor", label: "Valor Contrato", sortable: true },
+        { key: "quantidade", label: "Qtd. Contrato", sortable: true },
+        { key: "quantidadeConsumida", label: "Qtd. Consumida", sortable: true },
+        {
+          key: "quantidadeDisponivel",
+          label: "Qtd. Disponível",
+          sortable: true
+        },
         {
           key: "quantidadeMinimaRateio",
           label: "Qtd. Miníma Rateio",
@@ -498,6 +525,11 @@ export default {
     },
     FormataValorMargemRateio(valor) {
       return valor ? valor + "%" : "-";
+    },
+    FormataQuantidadePendente(item) {
+      return item.quantidadeConsumida >= item.quantidade
+        ? 0
+        : item.quantidade - item.quantidadeConsumida;
     }
   }
 };

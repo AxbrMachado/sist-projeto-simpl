@@ -206,12 +206,13 @@
           </div>
         </div>
       </div>
-
       <div class="row">
         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
           <div class="form-group">
-            <hr />
+            <br />
             <label for>Informaçõs de Fornecedor Designado</label>
+            <br />
+            <br />
             <div class="row">
               <div class="col-sm-12 col-md-3 col-lg-3 col-xl-8">
                 <div class="form-group">
