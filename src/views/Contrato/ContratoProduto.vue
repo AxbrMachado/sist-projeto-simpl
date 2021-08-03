@@ -389,29 +389,6 @@ export default {
         });
       }
     },
-    RemoverCifrao(valor) {
-      if (valor != null) {
-        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
-    // ObterProdutosSelect() {
-    //   this.$http({
-    //     url: "/produto/obter-select",
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.produtoOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 5000
-    //       });
-    //     });
-    // },
     ObterProdutosVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
@@ -431,11 +408,7 @@ export default {
         });
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     }
   }
 };

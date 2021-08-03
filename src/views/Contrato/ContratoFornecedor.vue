@@ -563,25 +563,13 @@ export default {
         });
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     },
     FormataValorRestante(item) {
-      var valor = 0;
-      if (!item.valorLimite) {
-        valor = 0;
-      } else {
-        if (item.valorConsumido) {
-          valor = item.valorLimite - item.valorConsumido;
-        } else {
-          valor = item.valorLimite;
-        }
-      }
-
-      return valor.toLocaleString("pt-br", {
+      return (item.valorConsumido >= item.valorLimite
+        ? 0
+        : item.valorLimite - item.valorConsumido
+      ).toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL"
       });

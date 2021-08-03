@@ -389,30 +389,6 @@ export default {
         });
       }
     },
-    RemoverCifrao(valor) {
-      if (valor != null) {
-        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
-    // ObterFornecedorsSelect() {
-    //   this.$http({
-    //     url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.fornecedorOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 5000
-    //       });
-    //     });
-    // },
-
     ObterNomeTipoFornecedor(item) {
       switch (item) {
         case TipoFornecedorEnum.Avulso:
@@ -443,11 +419,7 @@ export default {
         });
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     }
   }
 };

@@ -352,7 +352,7 @@ export default {
       this.filtro.fornecedorComProduto = false;
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
@@ -405,11 +405,7 @@ export default {
       this.ObterGrid(this.pagina);
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     }
   }
 };

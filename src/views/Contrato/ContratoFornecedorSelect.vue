@@ -400,7 +400,7 @@ export default {
       this.filtro.vinculadoAoContrato = false;
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
@@ -484,11 +484,7 @@ export default {
       }
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     },
     ObterNomeTipoFornecedor(item) {
       switch (item) {
@@ -552,18 +548,10 @@ export default {
         });
     },
     FormataValorRestante(item) {
-      var valor = 0;
-      if (!item.valorLimite) {
-        valor = 0;
-      } else {
-        if (item.valorConsumido) {
-          valor = item.valorLimite - item.valorConsumido;
-        } else {
-          valor = item.valorLimite;
-        }
-      }
-
-      return valor.toLocaleString("pt-br", {
+      return (item.valorConsumido >= item.valorLimite
+        ? 0
+        : item.valorLimite - item.valorConsumido
+      ).toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL"
       });

@@ -206,12 +206,13 @@
           </div>
         </div>
       </div>
-
       <div class="row">
         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
           <div class="form-group">
-            <hr />
+            <br />
             <label for>Informaçõs de Fornecedor Designado</label>
+            <br />
+            <br />
             <div class="row">
               <div class="col-sm-12 col-md-3 col-lg-3 col-xl-8">
                 <div class="form-group">
@@ -535,11 +536,7 @@ export default {
       }
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     },
     ObterFornecedorDesignadoVSelect(busca) {
       if (!busca || busca.length <= 2) return;

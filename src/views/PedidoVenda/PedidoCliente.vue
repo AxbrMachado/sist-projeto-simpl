@@ -244,7 +244,7 @@ export default {
       this.filtro.clienteComProduto = false;
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
@@ -254,13 +254,6 @@ export default {
           style: "currency",
           currency: "BRL"
         });
-      }
-    },
-    RemoverCifrao(valor) {
-      if (valor != null) {
-        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
       }
     },
     ObterTipoPessoa(item) {

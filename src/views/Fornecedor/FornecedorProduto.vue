@@ -389,13 +389,6 @@ export default {
         });
       }
     },
-    RemoverCifrao(valor) {
-      if (valor != null) {
-        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
     ObterProdutosVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
@@ -415,11 +408,7 @@ export default {
         });
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     }
   }
 };

@@ -135,6 +135,13 @@
                           }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidadeConsumida)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeConsumida)
+                          }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(descricao)="data">
                         <div class="left">
                           <span>{{ FormataDescricao(data.item) }}</span>
@@ -153,6 +160,13 @@
                         <div class="left">
                           <span>{{
                             FormataValorMargemRateio(data.item.margemRateio)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeDisponivel)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidadePendente(data.item)
                           }}</span>
                         </div>
                       </template>
@@ -184,7 +198,7 @@
       <div class="row">
         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
           <div class="form-group">
-            <label for>* Valor</label>
+            <label for>* Valor Unitário</label>
             <currency-input
               v-model="valor"
               class="form-control"
@@ -203,36 +217,63 @@
             ></b-form-select>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
           <div class="form-group">
-            <label for>Margem Rateio</label>
+            <label for>Quantidade Limite</label>
             <vue-numeric
-              v-bind:precision="0"
+              v-bind:precision="3"
               v-bind:minus="false"
               thousand-separator="."
               decimal-separator=","
-              v-model="margemRateio"
+              v-model="quantidadeLimite"
               class="form-control"
-              placeholder="Margem ao efetuar rateio"
+              placeholder="Informe quantidade limite"
               required
             />
           </div>
         </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
           <div class="form-group">
-            <label for>Quantidade Miníma Rateio</label>
-            <vue-numeric
-              v-bind:precision="0"
-              v-bind:minus="false"
-              thousand-separator="."
-              decimal-separator=","
-              v-model="quantidadeMinimaRateio"
-              class="form-control"
-              placeholder="Minímo ao efetuar rateio"
-              required
-            />
+            <br />
+            <label for
+              >Definições de rateio especificas para produto no contrato</label
+            >
+            <br />
+            <br />
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+                <div class="form-group">
+                  <label for>Quantidade Miníma Rateio</label>
+                  <vue-numeric
+                    v-bind:precision="0"
+                    v-bind:minus="false"
+                    thousand-separator="."
+                    decimal-separator=","
+                    v-model="quantidadeMinimaRateio"
+                    class="form-control"
+                    placeholder="Minímo ao efetuar rateio"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+                <div class="form-group">
+                  <label for>Margem Rateio</label>
+                  <vue-numeric
+                    v-bind:precision="0"
+                    v-bind:minus="false"
+                    thousand-separator="."
+                    decimal-separator=","
+                    v-model="margemRateio"
+                    class="form-control"
+                    placeholder="Margem ao efetuar rateio"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -259,6 +300,7 @@ export default {
     return {
       modalEditarInfoContrato: false,
       valor: 0,
+      quantidadeLimite: 0,
       margemRateio: 0,
       quantidadeMinimaRateio: 0,
       tipoUnidadeMedidaId: "",
@@ -277,13 +319,14 @@ export default {
       },
       fields: [
         { key: "descricao", label: "Descrição", sortable: true },
-        // { key: "numero", label: "Número", sortable: true },
-        // { key: "entidadeLicitacao", label: "Entidade", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
-        // { key: "quantidade", label: "Quantidade", sortable: true },
-        // { key: "dataInicio", label: "Data Início", sortable: true },
-        // { key: "dataTermino", label: "Data Término", sortable: true },
-        // { key: "valor", label: "Valor Contrato", sortable: true },
+        { key: "quantidade", label: "Qtd. Contrato", sortable: true },
+        { key: "quantidadeConsumida", label: "Qtd. Consumida", sortable: true },
+        {
+          key: "quantidadeDisponivel",
+          label: "Qtd. Disponível",
+          sortable: true
+        },
         {
           key: "quantidadeMinimaRateio",
           label: "Qtd. Miníma Rateio",
@@ -382,7 +425,7 @@ export default {
       this.filtro.vinculadoAoProduto = false;
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
@@ -423,6 +466,7 @@ export default {
       ContratoProdutoServico.EditarContratoProduto(
         this.contratoClienteId,
         this.valor,
+        this.quantidadeLimite,
         this.quantidadeMinimaRateio,
         this.margemRateio,
         this.tipoUnidadeMedidaId,
@@ -456,16 +500,13 @@ export default {
       this.contratoId = item.contratoId;
       this.contratoClienteId = item.id;
       this.valor = item.valor;
+      this.quantidadeLimite = item.quantidade;
       this.margemRateio = item.margemRateio ?? 0;
       this.quantidadeMinimaRateio = item.quantidadeMinimaRateio ?? 0;
       this.tipoUnidadeMedidaId = item.tipoUnidadeMedidaId;
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     },
     FormatarData(value) {
       if (value) {
@@ -498,6 +539,11 @@ export default {
     },
     FormataValorMargemRateio(valor) {
       return valor ? valor + "%" : "-";
+    },
+    FormataQuantidadePendente(item) {
+      return item.quantidadeConsumida >= item.quantidade
+        ? 0
+        : item.quantidade - item.quantidadeConsumida;
     }
   }
 };
