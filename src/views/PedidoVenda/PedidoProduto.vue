@@ -394,13 +394,6 @@ export default {
         });
       }
     },
-    RemoverCifrao(valor) {
-      if (valor != null) {
-        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
     EditarFornecedorProduto() {
       return this.editarFornecedor;
     },
@@ -430,11 +423,7 @@ export default {
       this.ObterGrid(this.pagina);
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     },
     FormataQuantidadePendente(item) {
       return item.quantidadeAtendidaSemMargem - item.quantidadeSolicitada;

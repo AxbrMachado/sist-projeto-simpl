@@ -118,10 +118,52 @@
                           <span>{{ FormataValor(data.item.valor) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(valorDesignado)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorDesignado)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(valorAtendido)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorAtendido)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(valorEntregue)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataValor(data.item.valorEntregue)
+                          }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(quantidade)="data">
                         <div class="left">
                           <span>{{
                             FormataQuantidade(data.item.quantidade)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeAtendida)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeAtendida)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeDesignada)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeDesignada)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeEntregue)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeEntregue)
                           }}</span>
                         </div>
                       </template>
@@ -162,21 +204,6 @@
             />
           </div>
         </div>
-        <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
-          <div class="form-group">
-            <label for>* Quantidade</label>
-            <vue-numeric
-              v-bind:precision="3"
-              v-bind:minus="false"
-              thousand-separator="."
-              decimal-separator=","
-              v-model="quantidadeProduto"
-              class="form-control"
-              placeholder="Digite a quantidade disponível"
-              required
-            />
-          </div>
-        </div> -->
       </div>
     </b-modal>
   </div>
@@ -215,7 +242,12 @@ export default {
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
-        // { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
+        { key: "valorAtendido", label: "Valor Atendido", sortable: true },
+        { key: "quantidadeDesignada", label: "Qtd. Designada", sortable: true },
+        { key: "valorDesignado", label: "Valor Designado", sortable: true },
+        { key: "quantidadeEntregue", label: "Qtd. Entregue", sortable: true },
+        { key: "valorEntregue", label: "Valor Entregue", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -300,19 +332,6 @@ export default {
       this.filtro.produto = "";
       this.filtro.produtosNoFornecedor = false;
     },
-    FormataValor(valor) {
-      if (valor != null) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
-    },
     isNoFornecedor(item) {
       return item.id === this.$store.getters.emptyGuid;
     },
@@ -369,12 +388,21 @@ export default {
       this.valorProduto = item.valor ? item.valor : 0;
       this.quantidadeProduto = item.quantidade ? item.quantidade : 0;
     },
-    FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
+    FormataValor(valor) {
+      if (valor) {
+        return valor.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       } else {
-        return 0;
+        return (0.0).toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
       }
+    },
+    FormataQuantidade(valor) {
+      return valor ? valor : 0;
     }
   }
 };

@@ -300,7 +300,7 @@ export default {
       this.filtro.vinculadoAoContrato = false;
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"

@@ -82,6 +82,11 @@
                           <span>{{ FormataValor(data.item.valorTotal) }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(valorPedido)="data">
+                        <div class="left">
+                          <span>{{ FormataValor(data.item.valorPedido) }}</span>
+                        </div>
+                      </template>
                       <template v-slot:cell(quantidadeSolicitada)="data">
                         <div class="left">
                           <span>{{
@@ -155,15 +160,10 @@ export default {
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valorUnitario", label: "Valor  Un.", sortable: true },
-        { key: "valorTotal", label: "Valor  Total", sortable: true },
-        {
-          key: "quantidadeSolicitada",
-          label: "Qtd. Solicitada",
-          sortable: true
-        },
-        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
-        { key: "quantidadePendente", label: "Qtd. Pendente", sortable: true },
-        // { key: "disponivel", label: "Disponivel", sortable: true },
+        { key: "quantidadePedido", label: "Qtd. Pedido", sortable: true },
+        { key: "valorPedido", label: "Valor Pedido", sortable: true },
+        { key: "quantidadeSolicitada", label: "Qtd. Atendida", sortable: true },
+        { key: "valorTotal", label: "Valor  Atendido", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true }
         // {
         //   key: "acoes",
@@ -239,11 +239,7 @@ export default {
       }
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     }
   }
 };

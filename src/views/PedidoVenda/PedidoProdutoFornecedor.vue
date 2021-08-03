@@ -536,11 +536,7 @@ export default {
       }
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     },
     ObterFornecedorDesignadoVSelect(busca) {
       if (!busca || busca.length <= 2) return;

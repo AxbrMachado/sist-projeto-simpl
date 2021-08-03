@@ -224,7 +224,11 @@ export default {
         { key: "nome", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
-        // { key: "quantidade", label: "Quantidade", sortable: true },
+        { key: "quantidadePedido", label: "Qtd. Pedido", sortable: true },
+        { key: "valorPedido", label: "Valor Pedido", sortable: true },
+        { key: "quantidadeSolicitada", label: "Qtd. Atendida", sortable: true },
+        { key: "valorTotal", label: "Valor  Atendido", sortable: true },
+        { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -310,7 +314,7 @@ export default {
       this.filtro.fornecedorVinculado = false;
     },
     FormataValor(valor) {
-      if (valor != null) {
+      if (valor) {
         return valor.toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL"
@@ -375,11 +379,7 @@ export default {
       this.quantidade = item.quantidade ? item.quantidade : 0;
     },
     FormataQuantidade(valor) {
-      if (valor != null) {
-        return valor;
-      } else {
-        return 0;
-      }
+      return valor ? valor : 0;
     },
     ObterNomeTipoFornecedor(item) {
       switch (item) {

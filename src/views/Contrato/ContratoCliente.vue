@@ -378,30 +378,6 @@ export default {
         });
       }
     },
-    RemoverCifrao(valor) {
-      if (valor != null) {
-        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
-    // ObterClientesSelect() {
-    //   this.$http({
-    //     // url: "/pessoa/obter-select/" + TipoPessoaEnum.Fornecedor,
-    //     url: "/pessoa/obter-select",
-    //     method: "GET"
-    //   })
-    //     .then((response) => {
-    //       this.clienteOptions = response.data;
-    //     })
-    //     .catch((erro) => {
-    //       this.$notify({
-    //         data: erro.response.data.erros,
-    //         type: "warn",
-    //         duration: 5000
-    //       });
-    //     });
-    // },
     ObterTipoPessoa(item) {
       switch (item) {
         case TipoPessoaEnum.Funcionario:
