@@ -191,10 +191,10 @@ export default {
         id: this.$store.getters.emptyGuid,
         numero: "",
         validade: "",
-        limiteExclusaoRateio: "",
+        limiteExclusaoRateio: null,
         tipoEnquadramento: 0,
         fornecedorDesignado: false,
-        responsavel: [],
+        responsavel: null,
         pessoas: []
       }
     };
@@ -326,10 +326,10 @@ export default {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.numero = "";
       this.viewModel.validade = "";
-      this.viewModel.limiteExclusaoRateio = "";
+      this.viewModel.limiteExclusaoRateio = null;
       this.viewModel.tipoEnquadramento = 0;
       this.viewModel.fornecedorDesignado = false;
-      this.viewModel.responsavel = "";
+      this.viewModel.responsavel = null;
       this.viewModel.pessoas = [];
     }
   }
