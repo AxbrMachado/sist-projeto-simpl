@@ -113,7 +113,6 @@
                       class="form-control"
                       type="date"
                       placeholder="Data limite onde os fornecedores da DAP ficam foram de rateios"
-                      required
                     />
                   </div>
                 </div>

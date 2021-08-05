@@ -96,10 +96,19 @@
                           </b-button>
                           <b-button
                             variant="danger"
+                            style="margin-right: 10px"
                             title="Remover"
                             @click="Remover(data.item)"
                           >
                             <i class="fas fa-trash-alt"></i>
+                          </b-button>
+                          <b-button
+                            v-if="produtoSolicitado(data.item)"
+                            variant="warning"
+                            title="Produto Designado"
+                            @click="edicaoProdutoDesignado(data.item)"
+                          >
+                            <i class="fas fa-apple-alt"></i>
                           </b-button>
                         </div>
                       </template>
@@ -170,6 +179,127 @@
     >
       Você confirma a exclusão desse produto do pedido?
     </b-modal>
+    <b-modal
+      v-model="modalProdutoDesignado"
+      title="Definir Produto Designado"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="modalProdutoDesignadoOk"
+      @hidden="modalProdutoDesignadoCancel"
+    >
+      <div class="row">
+        <div class="col-lg-5 col-md-6 col-sm-12">
+          <div class="form-group">
+            <label>Produto</label>
+            <input
+              disabled
+              type="text"
+              v-model="itemDescricaoProdutoOrigem"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for>Quantidade Solicitada</label>
+            <vue-numeric
+              disabled
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="itemQuantidadeSolicitada"
+              class="form-control"
+              placeholder="Digite a quantidade"
+              requerid
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
+          <div class="form-group">
+            <br />
+            <label for>Informações do produto designado</label>
+            <br />
+            <br />
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
+                <div class="form-group">
+                  <label for>Qtd. Designada</label>
+                  <vue-numeric
+                    v-bind:precision="3"
+                    v-bind:minus="false"
+                    thousand-separator="."
+                    decimal-separator=","
+                    v-model="itemQuantidadeProdutoDesignada"
+                    class="form-control"
+                    placeholder=""
+                    requerid
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-10">
+                <div class="form-group">
+                  <label for>Produto</label>
+                  <v-select
+                    placeholder=""
+                    v-model="itemProdutoDesignado"
+                    :options="produtosDesignadosOptions"
+                    @search="ObterProdutosDesignadosVSelect"
+                  >
+                    <template slot="no-options">
+                      Nenhum resultado para a busca.
+                    </template>
+                  </v-select>
+                </div>
+                <!-- <div class="btn-group-sm">
+                  <b-button
+                    class="btn btn-secondary"
+                    variant="success"
+                    title="Procurar produto mais proxímo"
+                  >
+                    <i class="fas fa-search-location"></i>
+                  </b-button>
+                </div> -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+                <div class="form-group">
+                  <label for>Qtd. Designada Equivalente</label>
+                  <vue-numeric
+                    disabled
+                    v-bind:precision="3"
+                    v-bind:minus="false"
+                    thousand-separator="."
+                    decimal-separator=","
+                    v-model="itemQuantidadeSolicitadaEquivalente"
+                    class="form-control"
+                    placeholder=""
+                    requerid
+                  />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+                <div class="form-group">
+                  <label for>Valor Equivalente</label>
+                  <currency-input
+                    disabled
+                    v-model="itemValorQuantidadeDesignada"
+                    class="form-control"
+                    placeholder="Digite o valor do contrato para este fornecedor"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </b-modal>
     <div v-if="EditarFornecedorProduto()">
       <PedidoProdutoFornecedor
         :pedidoProdutoId="this.pedidoProdutoId"
@@ -186,15 +316,16 @@ import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
 import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
-
 import Bus from "../../util/EventBus";
+import ProdutoServico from "../../servico/ProdutoServico";
 
 export default {
   name: "PedidoProduto",
   components: {
     RotateSquare,
     Bus,
-    PedidoProdutoFornecedor
+    PedidoProdutoFornecedor,
+    ProdutoServico
   },
   props: {
     pedidoId: {
@@ -204,6 +335,17 @@ export default {
   },
   data() {
     return {
+      modalProdutoDesignado: false,
+      itemQuantidadeSolicitada: 0,
+      itemQuantidadeSolicitadaEquivalente: 0,
+      itemDescricaoProdutoOrigem: "",
+      itemQuantidadeProdutoDesignada: 0,
+      itemValorQuantidadeDesignada: 0,
+      itemEdicao: null,
+
+      itemProdutoDesignado: "",
+      produtosDesignadosOptions: [],
+
       modalRemover: false,
       itemRemover: null,
       produtoOptions: [],
@@ -259,6 +401,10 @@ export default {
     this.ObterGrid(1);
   },
   watch: {
+    itemQuantidadeProdutoDesignada: function (quantidadeDesignada) {
+      this.buscaEquivalenciaProdutoDesignado(quantidadeDesignada);
+    },
+
     pagina: function (pagina) {
       this.ObterGrid(pagina);
     }
@@ -296,6 +442,9 @@ export default {
     },
     Obter(id) {
       this.loading = false;
+      this.itemEdicao = null;
+      this.itemProdutoDesignado = "";
+
       PedidoProdutoServico.Obter(id)
         .then((resposta) => {
           this.loading = false;
@@ -426,10 +575,175 @@ export default {
       return valor ? valor : 0;
     },
     FormataQuantidadePendente(item) {
-      return item.quantidadeAtendidaSemMargem - item.quantidadeSolicitada;
+      return item.quantidadeSolicitada - item.quantidadeAtendidaSemMargem;
     },
     FormataValorMargemRateio(valor) {
       return valor ? valor + "%" : "-";
+    },
+    edicaoProdutoDesignado(item) {
+      this.modalProdutoDesignado = true;
+      this.itemEdicao = item;
+      this.itemQuantidadeSolicitadaEquivalente = 18; //item.quantidadeProdutoDesignadoEquivalente ?? 0;
+      this.itemValorQuantidadeDesignada = 147.78; //item.valorProdutoDesignado ?? 0;
+
+      this.itemProdutoDesignado = item.produtoDesignado;
+      this.itemQuantidadeSolicitada = item.quantidadeSolicitada ?? 0;
+      this.itemDescricaoProdutoOrigem = item.produto;
+      this.itemQuantidadeProdutoDesignada =
+        item.quantidadeProdutoDesignado ?? 0;
+    },
+    modalProdutoDesignadoCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+      this.itemQuantidadeSolicitada = 0;
+      this.itemQuantidadeSolicitadaEquivalente = 0;
+      this.itemQuantidadeProdutoDesignada = 0;
+      this.itemValorQuantidadeDesignada = 0;
+      this.itemProdutoDesignado = "";
+      this.itemDescricaoProdutoOrigem = "";
+      this.produtosDesignadosOptions = [];
+    },
+
+    modalProdutoDesignadoOk(evento) {
+      evento.preventDefault();
+      // this.modalProdutoDesignado = false;
+
+      // if (!this.itemEdicao || !this.itemEdicaoQuantidade) return;
+
+      // if (this.itemEdicaoQuantidade > this.itemEdicao.quantidadePedido) {
+      //   this.loading = false;
+      //   this.$notify({
+      //     data: ["Quantidade maior que a solicitada no pedido."],
+      //     type: "warn",
+      //     duration: 5000
+      //   });
+      //   return;
+      // }
+
+      // if (this.itemEdicaoQuantidadeDesignada > this.itemEdicaoQuantidade) {
+      //   this.loading = false;
+      //   this.$notify({
+      //     data: ["Quantidade designada maior que a atendida."],
+      //     type: "warn",
+      //     duration: 5000
+      //   });
+      //   return;
+      // }
+
+      // if (this.itemEdicaoQuantidadeDesignada) {
+      //   if (!this.itemProdutoDesignado) {
+      //     this.loading = false;
+      //     this.$notify({
+      //       data: ["Fornecedor designado deve ser informado."],
+      //       type: "warn",
+      //       duration: 5000
+      //     });
+      //     return;
+      //   }
+      // }
+
+      // if (this.itemProdutoDesignado) {
+      //   if (!this.itemEdicaoQuantidadeDesignada) {
+      //     this.loading = false;
+      //     this.$notify({
+      //       data: ["Quantidade designada deve ser informada."],
+      //       type: "warn",
+      //       duration: 5000
+      //     });
+      //     return;
+      //   }
+      // }
+
+      // this.modalProdutoDesignado = false;
+
+      // PedidoProdutoFornecedorServico.EditarFornecedorProduto(
+      //   this.itemEdicao.id,
+      //   this.itemEdicaoQuantidade,
+      //   this.itemProdutoDesignado?.id ?? null,
+      //   this.itemEdicaoQuantidadeDesignada
+      // )
+      //   .then(() => {
+      //     this.ObterGrid(1);
+      //     this.$emit("atualizarproduto");
+      //     Bus.$emit("alterado-produto-cliente");
+      //     Bus.$emit("alterado-fornecedor-produto");
+      //     this.$notify({
+      //       data: ["Quantidade definida com sucesso."],
+      //       type: "success",
+      //       duration: 5000
+      //     });
+      //   })
+      //   .catch((erro) => {
+      //     this.$notify({
+      //       data: erro.response.data.erros,
+      //       type: "warn",
+      //       duration: 5000
+      //     });
+      //   });
+    },
+    produtoSolicitado(item) {
+      return item.quantidadeSolicitada ? true : false;
+    },
+    ObterProdutosDesignadosVSelect(descricao) {
+      if (!descricao || descricao.length <= 2) return;
+
+      if (
+        this.itemQuantidadeProdutoDesignada >
+        this.itemEdicao.quantidadeSolicitada
+      ) {
+        this.loading = false;
+        this.itemProdutoDesignado = "";
+        this.produtosDesignadosOptions = [];
+
+        this.$notify({
+          data: ["Quantidade designada maior que quantidade solicitada."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
+      if (!this.itemQuantidadeProdutoDesignada) {
+        this.loading = false;
+        this.itemProdutoDesignado = "";
+        this.produtosDesignadosOptions = [];
+        this.$notify({
+          data: ["Quantidade designada não informada."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
+      ProdutoServico.ObterVSelectProdutoDesignado(
+        descricao,
+        this.itemEdicao.contratoId,
+        this.itemEdicao.produtoId,
+        this.itemQuantidadeProdutoDesignada
+      )
+        .then((response) => {
+          this.produtosDesignadosOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    buscaEquivalenciaProdutoDesignado() {
+      console.clear();
+      if (this.itemQuantidadeProdutoDesignada) {
+        if (this.itemProdutoDesignado) {
+          console.log("Contrato             -> " + this.itemEdicao.contratoId);
+          console.log("Produto Origem       -> " + this.itemEdicao.produtoId);
+          console.log("Produto Designado    -> " + this.itemProdutoDesignado.label);
+          console.log("Produto Designado    -> " + this.itemProdutoDesignado.id);
+          console.log("Quantidade Designada -> " + this.itemQuantidadeProdutoDesignada
+          );
+        }
+      }
     }
   }
 };

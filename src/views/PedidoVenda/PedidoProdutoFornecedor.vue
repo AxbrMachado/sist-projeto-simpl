@@ -210,7 +210,7 @@
         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
           <div class="form-group">
             <br />
-            <label for>Informaçõs de Fornecedor Designado</label>
+            <label for>Informações de Fornecedor Designado</label>
             <br />
             <br />
             <div class="row">
