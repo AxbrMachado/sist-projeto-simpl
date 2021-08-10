@@ -59,6 +59,26 @@ class PedidoProdutoServico {
       method: "PUT"
     });
   }
+
+  ObterEquivalenciaProdutoDesignado(
+    produtoOriginal,
+    quantidadeDesignada,
+    produtoDesignado,
+    contrato
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidoproduto/obter-equivalencia-produto-designado?ProdutoId=" +
+        produtoOriginal +
+        "&QuantidadeProdutoDesignado=" +
+        quantidadeDesignada +
+        "&ProdutoDesignadoId=" +
+        produtoDesignado +
+        "&ContratoId=" +
+        contrato,
+      method: "GET"
+    });
+  }
 }
 
 export default new PedidoProdutoServico();

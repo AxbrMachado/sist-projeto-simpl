@@ -401,8 +401,12 @@ export default {
     this.ObterGrid(1);
   },
   watch: {
-    itemQuantidadeProdutoDesignada: function (quantidadeDesignada) {
-      this.buscaEquivalenciaProdutoDesignado(quantidadeDesignada);
+    itemQuantidadeProdutoDesignada: function () {
+      this.buscaEquivalenciaProdutoDesignado();
+    },
+
+    itemProdutoDesignado: function () {
+      this.buscaEquivalenciaProdutoDesignado();
     },
 
     pagina: function (pagina) {
@@ -583,8 +587,9 @@ export default {
     edicaoProdutoDesignado(item) {
       this.modalProdutoDesignado = true;
       this.itemEdicao = item;
-      this.itemQuantidadeSolicitadaEquivalente = 18; //item.quantidadeProdutoDesignadoEquivalente ?? 0;
-      this.itemValorQuantidadeDesignada = 147.78; //item.valorProdutoDesignado ?? 0;
+      this.itemQuantidadeSolicitadaEquivalente =
+        item.quantidadeProdutoDesignadoEquivalente ?? 0;
+      this.itemValorQuantidadeDesignada = item.valorProdutoDesignado ?? 0;
 
       this.itemProdutoDesignado = item.produtoDesignado;
       this.itemQuantidadeSolicitada = item.quantidadeSolicitada ?? 0;
@@ -733,16 +738,31 @@ export default {
         });
     },
     buscaEquivalenciaProdutoDesignado() {
-      console.clear();
-      if (this.itemQuantidadeProdutoDesignada) {
-        if (this.itemProdutoDesignado) {
-          console.log("Contrato             -> " + this.itemEdicao.contratoId);
-          console.log("Produto Origem       -> " + this.itemEdicao.produtoId);
-          console.log("Produto Designado    -> " + this.itemProdutoDesignado.label);
-          console.log("Produto Designado    -> " + this.itemProdutoDesignado.id);
-          console.log("Quantidade Designada -> " + this.itemQuantidadeProdutoDesignada
-          );
-        }
+      if (this.itemQuantidadeProdutoDesignada && this.itemProdutoDesignado) {
+        PedidoProdutoServico.ObterEquivalenciaProdutoDesignado(
+          this.itemEdicao.produtoId,
+          this.itemQuantidadeProdutoDesignada,
+          this.itemProdutoDesignado.id,
+          this.itemEdicao.contratoId
+        )
+          .then((resposta) => {
+            this.loading = false;
+            this.itemQuantidadeSolicitadaEquivalente =
+              resposta.data.quantidadeProdutoDesignadoEquivalente;
+            this.itemValorQuantidadeDesignada =
+              resposta.data.valorProdutoDesignado;
+          })
+          .catch((erro) => {
+            this.loading = false;
+            this.$notify({
+              data: erro.response.data.erros,
+              type: "warn",
+              duration: 5000
+            });
+          });
+      } else {
+        this.itemQuantidadeSolicitadaEquivalente = 0;
+        this.itemValorQuantidadeDesignada = 0;
       }
     }
   }
