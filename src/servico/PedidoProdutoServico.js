@@ -59,6 +59,56 @@ class PedidoProdutoServico {
       method: "PUT"
     });
   }
+
+  ObterEquivalenciaProdutoDesignado(
+    produtoOriginal,
+    quantidadeDesignada,
+    produtoDesignado,
+    contrato
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidoproduto/obter-equivalencia-produto-designado?ProdutoId=" +
+        produtoOriginal +
+        "&QuantidadeProdutoDesignado=" +
+        quantidadeDesignada +
+        "&ProdutoDesignadoId=" +
+        produtoDesignado +
+        "&ContratoId=" +
+        contrato,
+      method: "GET"
+    });
+  }
+
+  DefinirProdutoDesignado(
+    pedidoProdutoId,
+    quantidadeDesignada,
+    quantidadeDesignadaEquivalente,
+    produtoDesignado,
+    valorQuantidadeDesignada
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidoproduto/definir-produto-designado?id=" +
+        pedidoProdutoId +
+        "&QuantidadeProdutoDesignado=" +
+        quantidadeDesignada +
+        "&quantidadeProdutoDesignadoEquivalente=" +
+        quantidadeDesignadaEquivalente +
+        "&ProdutoDesignadoId=" +
+        produtoDesignado +
+        "&ValorProdutoDesignado=" +
+        valorQuantidadeDesignada,
+      method: "GET"
+    });
+  }
+
+  RemoverProdutoDesignado(pedidoProdutoId) {
+    return Vue.prototype.$http({
+      url: "/pedidoproduto/remover-produto-designado?id=" + pedidoProdutoId,
+      method: "GET"
+    });
+  }
 }
 
 export default new PedidoProdutoServico();

@@ -164,12 +164,14 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ModalArquivoGrid from "../../components/ModalArquivoGrid";
+import ProdutoServico from "../../servico/ProdutoServico";
 
 export default {
   name: "Produto",
   components: {
     RotateSquare,
-    ModalArquivoGrid
+    ModalArquivoGrid,
+    ProdutoServico
   },
   data() {
     return {
@@ -267,10 +269,13 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url: "/produto/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
+      ProdutoServico.ObterGrid(
+        this.pagina,
+        this.filtro.descricao,
+        this.filtro.tipoProdutoId,
+        this.filtro.tipoUnidadeMedidaId,
+        this.filtro.presenteEmPedido
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;
@@ -286,24 +291,6 @@ export default {
             duration: 5000
           });
         });
-    },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Descricao=" + this.filtro.descricao;
-
-      if (this.filtro.tipoProdutoId) {
-        var filtros = filtros + "&tipoProdutoId=" + this.filtro.tipoProdutoId;
-      }
-
-      if (this.filtro.tipoUnidadeMedidaId) {
-        var filtros =
-          filtros + "&tipoUnidadeMedidaId=" + this.filtro.tipoUnidadeMedidaId;
-      }
-
-      var filtros =
-        filtros + "&PresenteEmPedido=" + this.filtro.presenteEmPedido;
-
-      return filtros;
     },
     ObterTiposProdutoSelect() {
       this.$http({
