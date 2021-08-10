@@ -79,6 +79,29 @@ class PedidoProdutoServico {
       method: "GET"
     });
   }
+
+  DefinirProdutoDesignado(
+    pedidoProdutoId,
+    quantidadeDesignada,
+    quantidadeDesignadaEquivalente,
+    produtoDesignado,
+    valorQuantidadeDesignada
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidoproduto/definir-produto-designado?id=" +
+        pedidoProdutoId +
+        "&QuantidadeProdutoDesignado=" +
+        quantidadeDesignada +
+        "&quantidadeProdutoDesignadoEquivalente=" +
+        quantidadeDesignadaEquivalente +
+        "&ProdutoDesignadoId=" +
+        produtoDesignado +
+        "&ValorProdutoDesignado=" +
+        valorQuantidadeDesignada,
+      method: "GET"
+    });
+  }
 }
 
 export default new PedidoProdutoServico();

@@ -91,7 +91,6 @@
                       class="form-control"
                       type="text"
                       placeholder="Digite um código"
-                      required
                     />
                   </div>
                 </div>

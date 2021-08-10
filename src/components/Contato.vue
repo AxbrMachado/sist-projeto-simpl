@@ -227,7 +227,7 @@ export default {
 
       ContatoServico.Remover(this.itemRemover)
         .then(() => {
-          this.ObterGrid(1);
+          this.ObterGrid(this.pagina);
           this.$notify({
             data: ["Contato removido com sucesso."],
             type: "success",
@@ -292,7 +292,7 @@ export default {
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
-          this.ObterGrid(1);
+          this.ObterGrid(this.pagina);
           this.$notify({
             data: ["Contato cadastrado com sucesso."],
             type: "success",
@@ -314,7 +314,7 @@ export default {
         .then(() => {
           this.loading = false;
           this.Limpar();
-          this.ObterGrid(1);
+          this.ObterGrid(this.pagina);
           this.$notify({
             data: ["Contato editado com sucesso."],
             type: "success",

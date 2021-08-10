@@ -255,15 +255,6 @@
                     </template>
                   </v-select>
                 </div>
-                <!-- <div class="btn-group-sm">
-                  <b-button
-                    class="btn btn-secondary"
-                    variant="success"
-                    title="Procurar produto mais proxímo"
-                  >
-                    <i class="fas fa-search-location"></i>
-                  </b-button>
-                </div> -->
               </div>
             </div>
             <div class="row">
@@ -611,80 +602,66 @@ export default {
 
     modalProdutoDesignadoOk(evento) {
       evento.preventDefault();
-      // this.modalProdutoDesignado = false;
 
-      // if (!this.itemEdicao || !this.itemEdicaoQuantidade) return;
+      if (!this.itemEdicao) return;
 
-      // if (this.itemEdicaoQuantidade > this.itemEdicao.quantidadePedido) {
-      //   this.loading = false;
-      //   this.$notify({
-      //     data: ["Quantidade maior que a solicitada no pedido."],
-      //     type: "warn",
-      //     duration: 5000
-      //   });
-      //   return;
-      // }
+      if (!this.itemQuantidadeProdutoDesignada) {
+        this.loading = false;
+        this.$notify({
+          data: ["Quantidade desginada deve ser informada."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
 
-      // if (this.itemEdicaoQuantidadeDesignada > this.itemEdicaoQuantidade) {
-      //   this.loading = false;
-      //   this.$notify({
-      //     data: ["Quantidade designada maior que a atendida."],
-      //     type: "warn",
-      //     duration: 5000
-      //   });
-      //   return;
-      // }
+      if (
+        this.itemQuantidadeProdutoDesignada >
+        this.itemEdicao.quantidadeSolicitada
+      ) {
+        this.loading = false;
+        this.$notify({
+          data: ["Quantidade designada maior que a solicitada."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
 
-      // if (this.itemEdicaoQuantidadeDesignada) {
-      //   if (!this.itemProdutoDesignado) {
-      //     this.loading = false;
-      //     this.$notify({
-      //       data: ["Fornecedor designado deve ser informado."],
-      //       type: "warn",
-      //       duration: 5000
-      //     });
-      //     return;
-      //   }
-      // }
+      if (!this.itemProdutoDesignado) {
+        this.loading = false;
+        this.$notify({
+          data: ["Produto desginado deve ser informado."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
 
-      // if (this.itemProdutoDesignado) {
-      //   if (!this.itemEdicaoQuantidadeDesignada) {
-      //     this.loading = false;
-      //     this.$notify({
-      //       data: ["Quantidade designada deve ser informada."],
-      //       type: "warn",
-      //       duration: 5000
-      //     });
-      //     return;
-      //   }
-      // }
+      this.modalProdutoDesignado = false;
 
-      // this.modalProdutoDesignado = false;
-
-      // PedidoProdutoFornecedorServico.EditarFornecedorProduto(
-      //   this.itemEdicao.id,
-      //   this.itemEdicaoQuantidade,
-      //   this.itemProdutoDesignado?.id ?? null,
-      //   this.itemEdicaoQuantidadeDesignada
-      // )
-      //   .then(() => {
-      //     this.ObterGrid(1);
-      //     this.$emit("atualizarproduto");
-      //     Bus.$emit("alterado-produto-cliente");
-      //     Bus.$emit("alterado-fornecedor-produto");
-      //     this.$notify({
-      //       data: ["Quantidade definida com sucesso."],
-      //       type: "success",
-      //       duration: 5000
-      //     });
-      //   })
-      //   .catch((erro) => {
-      //     this.$notify({
-      //       data: erro.response.data.erros,
-      //       type: "warn",
-      //       duration: 5000
-      //     });
-      //   });
+      PedidoProdutoServico.DefinirProdutoDesignado(
+        this.itemEdicao.id,
+        this.itemQuantidadeProdutoDesignada,
+        this.itemQuantidadeSolicitadaEquivalente,
+        this.itemProdutoDesignado.id,
+        this.itemValorQuantidadeDesignada
+      )
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          this.$notify({
+            data: ["Produto desginado definido cm sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     },
     produtoSolicitado(item) {
       return item.quantidadeSolicitada ? true : false;
