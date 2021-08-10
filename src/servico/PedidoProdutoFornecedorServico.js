@@ -148,6 +148,13 @@ class PedidoProdutoFornecedorServico {
       method: "GET"
     });
   }
+
+  RemoverFornecedorDesignado(id) {
+    return Vue.prototype.$http({
+      url: "/pedidoprodutofornecedor/remover-fornecedor-designado/" + id,
+      method: "GET"
+    });
+  }
 }
 
 export default new PedidoProdutoFornecedorServico();

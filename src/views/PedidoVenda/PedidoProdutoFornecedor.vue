@@ -189,6 +189,18 @@
       @ok="ModalEdicaoOk"
       @hidden="ModalEdicaoCancel"
     >
+      <div v-if="FornecedorDesignadoDefinido()">
+        <div>
+          <button
+            class="btn btn-danger mr-2"
+            type="button"
+            @click="RemoveFornecedorDesignado()"
+          >
+            Remover Fornecedor Designado
+          </button>
+        </div>
+        <br />
+      </div>
       <div class="row">
         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
           <div class="form-group">
@@ -218,7 +230,7 @@
                 <div class="form-group">
                   <label for>Fornecedor</label>
                   <v-select
-                    placeholder="..."
+                    placeholder=""
                     v-model="fornecedorDesignado"
                     :options="fornecedoresDesignadosOptions"
                     @search="ObterFornecedorDesignadoVSelect"
@@ -239,7 +251,7 @@
                     decimal-separator=","
                     v-model="itemEdicaoQuantidadeDesignada"
                     class="form-control"
-                    placeholder="..."
+                    placeholder=""
                     required
                   />
                 </div>
@@ -349,6 +361,7 @@ export default {
       this.itemEdicaoQuantidadeDesignada = 0;
       this.fornecedorDesignado = "";
       this.itemEdicao = null;
+      this.modalEdicao = false;
 
       PedidoProdutoFornecedorServico.ObterGridProduto(
         val,
@@ -542,11 +555,41 @@ export default {
       if (!busca || busca.length <= 2) return;
 
       this.$http({
-        url: "/fornecedor/obter-v-select-fornecedor-designado/" + busca,
+        url:
+          "/fornecedor/obter-v-select-fornecedor-designado/" +
+          this.itemEdicao.fornecedorId +
+          "/" +
+          busca,
         method: "GET"
       })
         .then((response) => {
           this.fornecedoresDesignadosOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    FornecedorDesignadoDefinido() {
+      return this.itemEdicao && this.itemEdicao.fornecedorDesignado;
+    },
+    RemoveFornecedorDesignado() {
+      PedidoProdutoFornecedorServico.RemoverFornecedorDesignado(
+        this.itemEdicao.id
+      )
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          this.$emit("atualizarproduto");
+          Bus.$emit("alterado-produto-cliente");
+          Bus.$emit("alterado-fornecedor-produto");
+          this.$notify({
+            data: ["Quantidade definida com sucesso."],
+            type: "success",
+            duration: 5000
+          });
         })
         .catch((erro) => {
           this.$notify({

@@ -199,7 +199,6 @@
         </div>
         <br />
       </div>
-
       <div class="row">
         <div class="col-lg-5 col-md-6 col-sm-12">
           <div class="form-group">
@@ -645,7 +644,7 @@ export default {
       if (!this.itemProdutoDesignado) {
         this.loading = false;
         this.$notify({
-          data: ["Produto desginado deve ser informado."],
+          data: ["Produto designado deve ser informado."],
           type: "warn",
           duration: 5000
         });
@@ -664,7 +663,7 @@ export default {
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto desginado definido com sucesso."],
+            data: ["Produto designado definido com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -764,7 +763,7 @@ export default {
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto desginado removido com sucesso."],
+            data: ["Produto designado removido com sucesso."],
             type: "success",
             duration: 5000
           });
