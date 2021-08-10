@@ -187,6 +187,19 @@
       @ok="modalProdutoDesignadoOk"
       @hidden="modalProdutoDesignadoCancel"
     >
+      <div v-if="ProdutoDesignadoDefinido()">
+        <div>
+          <button
+            class="btn btn-danger mr-2"
+            type="button"
+            @click="RemoveProdutoDesignado()"
+          >
+            Remover Produto Designado
+          </button>
+        </div>
+        <br />
+      </div>
+
       <div class="row">
         <div class="col-lg-5 col-md-6 col-sm-12">
           <div class="form-group">
@@ -457,6 +470,7 @@ export default {
     },
     ObterGrid(val) {
       this.loading = false;
+      this.modalProdutoDesignado = false;
 
       if (this.filtro.produto) {
         this.editarFornecedor = false;
@@ -650,7 +664,7 @@ export default {
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Produto desginado definido cm sucesso."],
+            data: ["Produto desginado definido com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -741,6 +755,27 @@ export default {
         this.itemQuantidadeSolicitadaEquivalente = 0;
         this.itemValorQuantidadeDesignada = 0;
       }
+    },
+    ProdutoDesignadoDefinido() {
+      return this.itemEdicao && this.itemEdicao.produtoDesignado;
+    },
+    RemoveProdutoDesignado() {
+      PedidoProdutoServico.RemoverProdutoDesignado(this.itemEdicao.id)
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          this.$notify({
+            data: ["Produto desginado removido com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };

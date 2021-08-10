@@ -102,6 +102,13 @@ class PedidoProdutoServico {
       method: "GET"
     });
   }
+
+  RemoverProdutoDesignado(pedidoProdutoId) {
+    return Vue.prototype.$http({
+      url: "/pedidoproduto/remover-produto-designado?id=" + pedidoProdutoId,
+      method: "GET"
+    });
+  }
 }
 
 export default new PedidoProdutoServico();
