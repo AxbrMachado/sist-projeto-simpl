@@ -12,89 +12,103 @@
           <div class="card">
             <header class="card-header">
               <div class="d-flex">
-                <strong class="align-self-center"
-                  >{{
-                    viewModel.id == this.$store.getters.emptyGuid
-                      ? "Novo Pedido"
-                      : "Editar Pedido"
-                  }}
-                </strong>
-                <a
-                  @click="Limpar()"
-                  class="ml-auto btn btn-primary"
-                  href="/#/pedidovenda/novo"
-                  title="Adicionar novo pedido"
-                >
-                  Adicionar
-                </a>
+                <strong class="align-self-center">Rateio</strong>
               </div>
             </header>
             <div class="card-body">
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col">
                   <div class="form-group">
                     <small>Campos com * são de preenchimento obrigatório</small>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-1">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-6">
                   <div class="form-group">
-                    <label for>Número</label>
+                    <label for>Pedido</label>
                     <input
                       disabled
-                      v-model="viewModel.numero"
+                      v-model="viewModel.pedido"
                       class="form-control"
                       type="text"
-                      placeholder="Digite o número"
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>Descrição</label>
+                    <label for>Previsão Entrega</label>
                     <input
-                      v-model="viewModel.descricao"
+                      disabled
+                      v-model="viewModel.previsaEntrega"
                       class="form-control"
-                      type="text"
-                      placeholder="Digite a descrição"
+                      type="date"
                       required
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
-                    <label for>* Contrato</label>
+                    <label for>Status Pedido</label>
                     <b-form-select
-                      :disabled="bloqueiaContrato == 1"
-                      v-model="viewModel.contratoId"
-                      :options="contratoOptions"
-                      required
+                      disabled
+                      v-model="viewModel.statusPedido"
+                      :options="statusPedidoOptions"
                     ></b-form-select>
                   </div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>* Data Entrega</label>
+                    <label for>Data Rateio</label>
                     <input
-                      v-model="viewModel.dataEntrega"
+                      disabled
+                      v-model="viewModel.dataRateio"
                       class="form-control"
                       type="date"
-                      placeholder="Digite a data de entrega"
                       required
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>Valor</label>
+                    <label for>Status Rateio</label>
+                    <b-form-select
+                      disabled
+                      v-model="viewModel.status"
+                      :options="statusRateioOptions"
+                    ></b-form-select>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
+                    <label for>Valor Pedido</label>
                     <currency-input
                       disabled
-                      v-model="viewModel.valor"
+                      v-model="viewModel.valorPedido"
                       class="form-control"
-                      placeholder="0,00"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
+                    <label for>Valor Rateado</label>
+                    <currency-input
+                      disabled
+                      v-model="viewModel.valorRateado"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
+                    <label for>Rateio Automático</label>
+                    <input
+                      disabled
+                      v-model="viewModel.automatico"
+                      class="form-control"
+                      type="text"
                     />
                   </div>
                 </div>
@@ -134,13 +148,13 @@
       </div>
     </form>
     <div v-if="IsEdicao()">
-      <PedidoCliente
+      <!-- <PedidoCliente
         :pedidoId="this.viewModel.id"
-        @atualizarPedido="atualizarPedido"
+        @atualizarRateio="atualizarRateio"
       >
       </PedidoCliente>
       <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto>
-      <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor>
+      <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor> -->
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
@@ -151,110 +165,98 @@
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
 import NovoDocumento from "../../components/NovoDocumento";
-import PedidoCliente from "./PedidoCliente";
-import PedidoFornecedor from "./PedidoFornecedor";
-import PedidoProduto from "./PedidoProduto";
+import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
+import StatusRateioEnum from "../../enums/StatusRateioEnum";
+// import PedidoCliente from "./PedidoCliente";
+// import PedidoFornecedor from "./PedidoFornecedor";
+// import PedidoProduto from "./PedidoProduto";
 import Contato from "../../components/Contato";
 import Bus from "../../util/EventBus";
 
 export default {
-  name: "NovoPedidoVenda",
+  name: "DetalheRateioPedido",
   components: {
     Bus,
     RotateSquare,
     NovoDocumento,
-    PedidoCliente,
-    PedidoFornecedor,
-    PedidoProduto,
+    StatusPedidoEnum,
+    StatusRateioEnum,
     Contato
+
+    // PedidoCliente,
+    // PedidoFornecedor,
+    // PedidoProduto,
+    // Contato
   },
   data() {
     return {
-      bloqueiaContrato: 0,
+      descricaoRateio: "teste",
       loading: false,
+      statusPedidoOptions: [
+        { value: StatusPedidoEnum.Pendente, text: "Pendente" },
+        { value: StatusPedidoEnum.Aberto, text: "Aberto" },
+        {
+          value: StatusPedidoEnum.AguardandoProdutos,
+          text: "Aguardando Produtos"
+        },
+        { value: StatusPedidoEnum.Incompleto, text: "Incompleto" },
+        { value: StatusPedidoEnum.EmRota, text: "Em Rota" },
+        { value: StatusPedidoEnum.Entregue, text: "Entregue" },
+        { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
+        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" }
+      ],
+      statusRateioOptions: [
+        { value: StatusRateioEnum.Pendente, text: "Pendente" },
+        { value: StatusRateioEnum.Incompleto, text: "Finalizado" },
+        { value: StatusRateioEnum.Completo, text: "Cancelado" },
+        { value: StatusRateioEnum.Cancelada, text: "Aberto" }
+      ],
       tiposInstituicaoOptions: [],
       licitacaoOptions: [],
       contratoOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        descricao: "",
-        observacao: "",
-        contratoId: this.$store.getters.emptyGuid,
-        numero: 0,
-        dataEntrega: "",
-        dataTermino: ""
+        descricao: ""
       }
     };
   },
-  watch: {
-    contratoOptions: function (val) {
-      //this.LoadContratoLicitacao(val);
-    }
-  },
+  watch: {},
   created() {
-    let pedidoId = this.$route.params.id;
+    let rateioId = this.$route.params.id;
 
-    if (pedidoId) {
-      this.viewModel.id = pedidoId;
-      this.bloqueiaContrato = 1;
+    if (rateioId) {
+      this.viewModel.id = rateioId;
     } else {
       this.viewModel.id = this.$store.getters.emptyGuid;
-      this.bloqueiaContrato = 0;
     }
 
-    if (pedidoId) this.Obter(pedidoId);
+    if (rateioId) this.Obter(rateioId);
     this.ObterContratosSelect();
 
     Bus.$on("remocao-produto-pedido", () => {
-      this.atualizarPedido();
+      this.atualizarRateio();
     });
   },
   methods: {
     ValidarForm(evt) {
       evt.preventDefault();
-      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.Novo();
+      this.Editar();
     },
-    Obter(pedidoId) {
+    Obter(rateioId) {
       this.loading = false;
       this.$http({
-        url: "pedido/obter/" + pedidoId,
+        url: "rateio/obter/" + rateioId,
         method: "GET"
       })
         .then((resposta) => {
           this.loading = false;
-          resposta.data.dataEntrega = DateTime.formatar(
-            resposta.data.dataEntrega
+          resposta.data.previsaEntrega = DateTime.formatar(
+            resposta.data.previsaEntrega
           );
-          resposta.data.dataTermino = DateTime.formatar(
-            resposta.data.dataTermino
+          resposta.data.dataRateio = DateTime.formatar(
+            resposta.data.dataRateio
           );
           this.viewModel = resposta.data;
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    Novo() {
-      this.loading = false;
-      this.$http({
-        url: "pedido/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
-        .then(() => {
-          this.loading = false;
-          this.$router.push("/pedidovenda");
-          this.$notify({
-            data: ["Pedido cadastrado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
         })
         .catch((erro) => {
           this.loading = false;
@@ -268,37 +270,21 @@ export default {
     Editar() {
       this.loading = false;
       this.$http({
-        url: "pedido/editar",
+        url: "rateio/editar",
         data: this.viewModel,
         method: "PUT"
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/pedidovenda");
+          this.$router.push("/rateiopedido");
           this.$notify({
-            data: ["Pedido editado com sucesso."],
+            data: ["Rateio editado com sucesso."],
             type: "success",
             duration: 5000
           });
         })
         .catch((erro) => {
           this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    ObterInstituicoesSelect() {
-      this.$http({
-        url: "/licitacao/obter-select",
-        method: "GET"
-      })
-        .then((response) => {
-          this.licitacaoOptions = response.data;
-        })
-        .catch((erro) => {
           this.$notify({
             data: erro.response.data.erros,
             type: "warn",
@@ -337,10 +323,7 @@ export default {
 
       this.ObterContratosSelect();
     },
-    LoadContratoLicitacao(val) {
-      //console.log(val);
-    },
-    atualizarPedido() {
+    atualizarRateio() {
       this.Obter(this.viewModel.id);
     }
   }

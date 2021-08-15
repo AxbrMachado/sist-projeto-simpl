@@ -339,10 +339,7 @@ export default {
       this.filtro.rateioManual = false;
     },
     Editar(item) {
-      //POR ENQNTO NAO VAI ABRIR..
-      if (!item) {
-        this.$router.push("/rateio/detalhe/" + item.id);
-      }
+      this.$router.push("/rateiopedido/editar/" + item.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
