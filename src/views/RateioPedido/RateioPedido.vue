@@ -155,7 +155,18 @@
                   >
                     <i class="fa fa-random"></i>
                   </b-button>
+
                   <ModalArquivoGrid :referenciaId="data.item.id" />
+
+                  <b-button
+                    v-if="isRateioRemovivel(data.item)"
+                    variant="dark"
+                    style="margin-right: 10px"
+                    title="Imprmir informações pedido"
+                    @click="ImprimirPedidoRateado(data.item)"
+                  >
+                    <i class="fas fa-print"></i>
+                  </b-button>
                 </div>
               </template>
               <template v-slot:cell(dataEntrega)="data">
@@ -339,10 +350,7 @@ export default {
       this.filtro.rateioManual = false;
     },
     Editar(item) {
-      //POR ENQNTO NAO VAI ABRIR..
-      if (!item) {
-        this.$router.push("/rateio/detalhe/" + item.id);
-      }
+      this.$router.push("/rateiopedido/editar/" + item.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -521,6 +529,9 @@ export default {
             duration: 5000
           });
         });
+    },
+    ImprimirPedidoRateado(item) {
+      console.log("em breve impressao do pedido: " + item.pedidoId);
     }
   }
 };

@@ -126,7 +126,7 @@
                   v-if="isFuncionario() || isCooperado()"
                 >
                   <div class="form-group">
-                    <label for> * Data Nascimento </label>
+                    <label for>* Data Nascimento </label>
                     <input
                       v-model="viewModel.dataNascimento"
                       class="form-control"

@@ -40,7 +40,7 @@
               <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-1">
                   <div class="form-group">
-                    <label for> Número</label>
+                    <label for>Número</label>
                     <input
                       disabled
                       v-model="viewModel.numero"
@@ -52,7 +52,7 @@
                 </div>
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
                   <div class="form-group">
-                    <label for> Descrição</label>
+                    <label for>Descrição</label>
                     <input
                       v-model="viewModel.descricao"
                       class="form-control"
@@ -89,7 +89,7 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
-                    <label for> Valor</label>
+                    <label for>Valor</label>
                     <currency-input
                       disabled
                       v-model="viewModel.valor"
