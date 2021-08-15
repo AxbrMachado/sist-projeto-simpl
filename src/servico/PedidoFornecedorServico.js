@@ -24,7 +24,14 @@ class PedidoFornecedorServico {
     });
   }
 
-  ObterGridTotal(pagina, itensPorPagina, pedidoId, nome, fornecedorComProduto) {
+  ObterGridTotal(
+    pagina,
+    itensPorPagina,
+    pedidoId,
+    rateioId,
+    nome,
+    fornecedorComProduto
+  ) {
     return Vue.prototype.$http({
       url:
         "/pessoacontrato/obter-grid-fornecedor-total?pagina=" +
@@ -37,6 +44,8 @@ class PedidoFornecedorServico {
         fornecedorComProduto +
         "&pedidoId=" +
         pedidoId +
+        "&rateioId=" +
+        rateioId +
         "&tipoPessoaContrato=" +
         TipoPessoaContratoEnum.Fornecedor,
       method: "GET"

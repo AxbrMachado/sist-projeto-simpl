@@ -13,21 +13,23 @@
             <header class="card-header">
               <div class="d-flex">
                 <strong class="align-self-center">Rateio</strong>
+                <a
+                  @click="RecalcularRateioAutomatico()"
+                  class="ml-auto btn btn-danger"
+                  href="#"
+                  title="Recalcular rateio automático"
+                >
+                  Recalcular Rateio Automático
+                </a>
               </div>
             </header>
             <div class="card-body">
-              <!-- <div class="row">
-                <div class="col">
-                  <div class="form-group">
-                    <small>Campos com * são de preenchimento obrigatório</small>
-                  </div>
-                </div>
-              </div> -->
               <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-6">
                   <div class="form-group">
                     <label for>Pedido</label>
                     <input
+                      bold
                       disabled
                       v-model="viewModel.pedido"
                       class="form-control"
@@ -147,14 +149,23 @@
         </div>
       </div>
     </form>
-    <div v-if="IsEdicao()">
-      <!-- <PedidoCliente
-        :pedidoId="this.viewModel.id"
-        @atualizarRateio="atualizarRateio"
+    <b-modal
+      v-model="modalRateio"
+      title="Confirmar execução rateio"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="ModalRateioOk"
+      @hidden="ModalRateioCancel"
+    >
+      Você confirma a execução do rateio para este pedido?
+    </b-modal>
+    <div>
+      <RateioFornecedor
+        :rateioId="this.viewModel.id"
+        @atualizarRateio="AtualizarRateio"
       >
-      </PedidoCliente>
-      <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto>
-      <PedidoFornecedor :pedidoId="viewModel.id"> </PedidoFornecedor> -->
+      </RateioFornecedor>
+      <!-- <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto> -->
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
@@ -167,8 +178,9 @@ import DateTime from "../../util/DateTime";
 import NovoDocumento from "../../components/NovoDocumento";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
-// import PedidoCliente from "./PedidoCliente";
-// import PedidoFornecedor from "./PedidoFornecedor";
+import RateioFornecedor from "./RateioFornecedor";
+import RateioServico from "../../servico/RateioServico";
+
 // import PedidoProduto from "./PedidoProduto";
 import Contato from "../../components/Contato";
 import Bus from "../../util/EventBus";
@@ -181,17 +193,15 @@ export default {
     NovoDocumento,
     StatusPedidoEnum,
     StatusRateioEnum,
-    Contato
-
-    // PedidoCliente,
-    // PedidoFornecedor,
+    Contato,
+    RateioFornecedor,
+    RateioServico
     // PedidoProduto,
-    // Contato
   },
   data() {
     return {
-      descricaoRateio: "teste",
       loading: false,
+      modalRateio: false,
       statusPedidoOptions: [
         { value: StatusPedidoEnum.Pendente, text: "Pendente" },
         { value: StatusPedidoEnum.Aberto, text: "Aberto" },
@@ -222,20 +232,12 @@ export default {
   },
   watch: {},
   created() {
-    let rateioId = this.$route.params.id;
+    this.viewModel.id = this.$route.params.id;
+    this.Obter(this.$route.params.id);
 
-    if (rateioId) {
-      this.viewModel.id = rateioId;
-    } else {
-      this.viewModel.id = this.$store.getters.emptyGuid;
-    }
-
-    if (rateioId) this.Obter(rateioId);
-    this.ObterContratosSelect();
-
-    Bus.$on("remocao-produto-pedido", () => {
-      this.atualizarRateio();
-    });
+    // Bus.$on("remocao-produto-pedido", () => {
+    //   this.AtualizarRateio();
+    // });
   },
   methods: {
     ValidarForm(evt) {
@@ -292,13 +294,31 @@ export default {
           });
         });
     },
-    ObterContratosSelect() {
-      this.$http({
-        url: "/contrato/obter-select",
-        method: "GET"
-      })
-        .then((response) => {
-          this.contratoOptions = response.data;
+    AtualizarRateio() {
+      this.Obter(this.viewModel.id);
+    },
+    RecalcularRateioAutomatico() {
+      this.modalRateio = true;
+    },
+    ModalRateioCancel(evento) {
+      evento.preventDefault();
+      this.modalRateio = false;
+    },
+    ModalRateioOk(evento) {
+      evento.preventDefault();
+      this.modalRateio = false;
+
+      RateioServico.EfetuarRateio(this.viewModel.pedidoId)
+        .then((resposta) => {
+          this.viewModel.id = resposta.data;
+          this.Obter(resposta.data);
+          Bus.$emit("atualiza-fornecedores-rateio");
+          this.$router.push("/rateiopedido/editar/" + resposta.data);
+          this.$notify({
+            data: ["Rateio executado com sucesso."],
+            type: "success",
+            duration: 5000
+          });
         })
         .catch((erro) => {
           this.$notify({
@@ -308,22 +328,7 @@ export default {
           });
         });
     },
-    IsEdicao() {
-      return this.viewModel.id !== this.$store.getters.emptyGuid;
-    },
-    Limpar() {
-      this.viewModel.id = this.$store.getters.emptyGuid;
-      this.viewModel.descricao = "";
-      this.viewModel.observacao = "";
-      this.viewModel.contratoId = this.$store.getters.emptyGuid;
-      this.viewModel.numero = 0;
-      this.viewModel.dataEntrega = "";
-      this.viewModel.dataTermino = "";
-      this.viewModel.valor = 0;
-
-      this.ObterContratosSelect();
-    },
-    atualizarRateio() {
+    AtualizarRateio() {
       this.Obter(this.viewModel.id);
     }
   }
