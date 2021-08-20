@@ -64,13 +64,13 @@ router.beforeEach((to, from, next) => {
       next("/login");
       return;
     }
-    // if (
-    //   to.meta.permission &&
-    //   store.getters.getAutenticacao.permissoes.filter((x) => x === to.meta.permission)
-    //     .length <= 0
-    // ) {
-    //   next("/sem-permissao");
-    // }
+    if (
+      to.meta.permission &&
+      store.getters.getAutenticacao.permissoes.filter((x) => x === to.meta.permission)
+        .length <= 0
+    ) {
+      next("/sem-permissao");
+    }
     if (store.getters.isLoggedIn) {
       next();
       return;
