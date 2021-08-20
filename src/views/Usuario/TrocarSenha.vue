@@ -87,6 +87,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import UsuarioServico from "../../servico/UsuarioServico";
 
 export default {
   name: "NovoUsuario",
@@ -122,11 +123,8 @@ export default {
     },
     Trocar() {
       this.loading = false;
-      this.$http({
-        url: "usuario/trocar-senha",
-        data: this.viewModel,
-        method: "POST"
-      })
+
+      UsuarioServico.TrocarSenha(this.viewModelO)
         .then(() => {
           this.loading = false;
           this.$router.push("/");

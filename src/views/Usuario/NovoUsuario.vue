@@ -134,6 +134,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import GrupoUsuarioServico from "../../servico/GrupoUsuarioServico";
+import UsuarioServico from "../../servico/UsuarioServico";
 
 export default {
   name: "NovoUsuario",
@@ -182,10 +183,8 @@ export default {
     },
     Obter(usuarioId) {
       this.loading = false;
-      this.$http({
-        url: "usuario/obter/" + usuarioId,
-        method: "GET"
-      })
+
+      UsuarioServico.Obter(usuarioId)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -201,11 +200,8 @@ export default {
     },
     Novo() {
       this.loading = false;
-      this.$http({
-        url: "usuario/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+
+      UsuarioServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/usuario");
@@ -226,11 +222,8 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "usuario/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      UsuarioServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/usuario");
