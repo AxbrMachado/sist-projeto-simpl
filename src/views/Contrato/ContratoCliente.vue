@@ -158,13 +158,15 @@ import RotateSquare from "../../components/RotateSquare";
 import ContratoClienteServico from "../../servico/ContratoClienteServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import PessoaServico from "../../servico/PessoaServico";
 
 export default {
   components: {
     RotateSquare,
     ContratoClienteServico,
     TipoPessoaContratoEnum,
-    TipoPessoaEnum
+    TipoPessoaEnum,
+    PessoaServico
   },
   props: {
     contratoId: {
@@ -214,11 +216,7 @@ export default {
       this.ObterGrid(val);
     }
   },
-  created() {
-    //let contratoId = this.$route.params.id;
-    //if (contratoId) this.Obter(contratoId);
-    // this.ObterClientesSelect();
-  },
+  created() {},
   methods: {
     IsNovo() {
       return this.contratoId === this.$store.getters.emptyGuid;
@@ -365,18 +363,11 @@ export default {
       this.viewModel.quantidadeLimite = 0;
       this.viewModel.pessoa = {};
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     ObterTipoPessoa(item) {
       switch (item) {
@@ -395,10 +386,7 @@ export default {
     ObterClientesVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url: "/pessoa/obter-v-select/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca)
         .then((response) => {
           this.clienteOptions = response.data;
         })

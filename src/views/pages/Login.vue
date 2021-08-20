@@ -104,6 +104,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import LoginServico from "../../servico/LoginServico";
 
 export default {
   name: "Login",
@@ -140,11 +141,8 @@ export default {
     },
     Login() {
       this.loading = true;
-      this.$http({
-        url: "login/autenticar",
-        data: this.ViewModel,
-        method: "POST"
-      })
+
+      LoginServico.Autenticar(this.ViewModel)
         .then((resp) => {
           this.loading = false;
           // Add the following line:

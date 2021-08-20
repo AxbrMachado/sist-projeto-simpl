@@ -175,6 +175,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import FornecedorProdutoServico from "../../servico/FornecedorProdutoServico";
+import ProdutoServico from "../../servico/ProdutoServico";
 
 export default {
   name: "FornecedorProdutoServico",
@@ -376,26 +377,16 @@ export default {
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     ObterProdutosVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url: "/produto/obter-v-select/" + busca,
-        method: "GET"
-      })
+      ProdutoServico.ObterVSelect(busca)
         .then((response) => {
           this.produtoOptions = response.data;
         })

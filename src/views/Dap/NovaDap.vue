@@ -166,6 +166,7 @@ import DapServico from "../../servico/DapServico";
 import DapContrato from "./DapContrato";
 import Contato from "../../components/Contato";
 import NovoDocumento from "../../components/NovoDocumento";
+import PessoaServico from "../../servico/PessoaServico";
 
 export default {
   name: "NovoDap",
@@ -284,11 +285,7 @@ export default {
     ObterPessoasVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Fornecedor)
         .then((response) => {
           this.pessoasOptions = response.data;
         })
@@ -303,11 +300,7 @@ export default {
     ObterResponsavelVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Fornecedor)
         .then((response) => {
           this.responsaveisOptions = response.data;
         })

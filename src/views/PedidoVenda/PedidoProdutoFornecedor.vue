@@ -267,6 +267,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
+import FornecedorServico from "../../servico/FornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import Bus from "../../util/EventBus";
 
@@ -518,18 +519,11 @@ export default {
       this.filtro.fornecedor = "";
       this.filtro.fornecedorComProduto = false;
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     RemoverCifrao(valor) {
       if (valor) {
@@ -554,14 +548,11 @@ export default {
     ObterFornecedorDesignadoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/fornecedor/obter-v-select-fornecedor-designado/" +
-          this.itemEdicao.fornecedorId +
-          "/" +
-          busca,
-        method: "GET"
-      })
+      FornecedorServico.ObterVSelectFornecedorDesignado(
+        busca,
+        this.itemEdicao.fornecedorId
+      )
+
         .then((response) => {
           this.fornecedoresDesignadosOptions = response.data;
         })

@@ -246,10 +246,8 @@ export default {
     },
     Obter(rateioId) {
       this.loading = false;
-      this.$http({
-        url: "rateio/obter/" + rateioId,
-        method: "GET"
-      })
+
+      RateioServico.Obter(rateioId)
         .then((resposta) => {
           this.loading = false;
           resposta.data.previsaEntrega = DateTime.formatar(
@@ -271,11 +269,8 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "rateio/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      RateioServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/rateio-pedido");

@@ -344,18 +344,11 @@ export default {
       this.filtro.descricao = "";
       this.filtro.contratosNoFornecedor = false;
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     isNoFornecedor(item) {
       return item.id === this.$store.getters.emptyGuid;
@@ -414,11 +407,7 @@ export default {
       return valor ? valor : 0;
     },
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
     FormataDescricao(value) {
       return value.numero + " - " + value.entidadeLicitacao;

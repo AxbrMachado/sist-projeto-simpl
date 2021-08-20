@@ -67,6 +67,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import TipoClienteServico from "../../servico/TipoClienteServico";
 
 export default {
   name: "NovoTipoCliente",
@@ -95,10 +96,8 @@ export default {
     },
     Obter(tipoClienteId) {
       this.loading = false;
-      this.$http({
-        url: "tipoCliente/obter/" + tipoClienteId,
-        method: "GET"
-      })
+
+      TipoClienteServico.Obter(tipoClienteId)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -114,11 +113,8 @@ export default {
     },
     Novo() {
       this.loading = false;
-      this.$http({
-        url: "tipoCliente/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+
+      TipoClienteServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/tipo-cliente");
@@ -139,11 +135,8 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "tipoCliente/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      TipoClienteServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/tipo-cliente");

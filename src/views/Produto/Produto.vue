@@ -165,6 +165,7 @@
 import RotateSquare from "../../components/RotateSquare";
 import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 import ProdutoServico from "../../servico/ProdutoServico";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   name: "Produto",
@@ -243,10 +244,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "produto/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      ProdutoServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -293,10 +291,7 @@ export default {
         });
     },
     ObterTiposProdutoSelect() {
-      this.$http({
-        url: "/tipoProduto/obter-select",
-        method: "GET"
-      })
+      ProdutoServico.ObterSelect()
         .then((response) => {
           this.tiposProdutoOptions = response.data;
         })
@@ -309,10 +304,7 @@ export default {
         });
     },
     ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
+      TipoUnidadeMedidaServico.ObterSelect()
         .then((response) => {
           this.tiposUnidadeMedidaOptions = response.data;
         })
@@ -324,18 +316,11 @@ export default {
           });
         });
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     FormataValorMinimoRateio(valor) {
       return valor ? valor : "-";

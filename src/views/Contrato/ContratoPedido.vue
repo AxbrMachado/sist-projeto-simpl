@@ -193,6 +193,9 @@
 import RotateSquare from "../../components/RotateSquare";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import ContratoPedidoProduto from "./ContratoPedidoProduto";
+import ContratoServico from "../../servico/ContratoServico";
+import PedidoServico from "../../servico/PedidoServico";
+
 import Bus from "../../util/EventBus";
 
 export default {
@@ -281,15 +284,29 @@ export default {
       this.visualizarProduto = false;
     },
     AbrirPedido(pedido) {
-      this.$router.push("/pedidovenda/editar/" + pedido.id);
+      this.$router.push("/pedido-venda/editar/" + pedido.id);
     },
     ObterGrid(pagina) {
       this.visualizarProduto = false;
       this.loading = false;
-      this.$http({
-        url: "/pedido/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
+
+      PedidoServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.Descricao,
+        this.filtro.Numero,
+        this.contratoId,
+        null,
+        null,
+        null,
+        this.filtro.Status,
+        this.filtro.DataEntrega,
+        this.filtro.PedidoAvulso,
+        this.filtro.PedidoCompleto,
+        this.filtro.PedidoPendente,
+        this.filtro.PedidoEntregue,
+        this.filtro.Instituicao ? this.filtro.Instituicao.id : null
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;
@@ -306,32 +323,6 @@ export default {
           });
         });
     },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Descricao=" + this.filtro.Descricao;
-      var filtros = filtros + "&Numero=" + this.filtro.Numero;
-
-      if (this.contratoId) {
-        var filtros = filtros + "&ContratoId=" + this.contratoId;
-      }
-
-      if (this.filtro.Status != 0) {
-        var filtros = filtros + "&Status=" + this.filtro.Status;
-      }
-
-      var filtros = filtros + "&DataEntrega=" + this.filtro.DataEntrega;
-      var filtros = filtros + "&PedidoAvulso=" + this.filtro.PedidoAvulso;
-      var filtros = filtros + "&PedidoCompleto=" + this.filtro.PedidoCompleto;
-      var filtros = filtros + "&PedidoPendente=" + this.filtro.PedidoPendente;
-      var filtros = filtros + "&PedidoEntregue=" + this.filtro.PedidoEntregue;
-
-      if (this.filtro.Instituicao) {
-        var filtros = filtros + "&InstituicaoId=" + this.filtro.Instituicao.id;
-      }
-
-      return filtros;
-    },
-
     ObterNomeStatusPedido(item) {
       switch (item) {
         case StatusPedidoEnum.Pendente:
@@ -356,34 +347,19 @@ export default {
           return "Inválido";
       }
     },
-
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     ObterContratoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url: "/contrato/obter-v-select/" + busca,
-        method: "GET"
-      })
+      ContratoServico.ObterVSelect(busca)
         .then((response) => {
           this.contratoOptions = response.data;
         })

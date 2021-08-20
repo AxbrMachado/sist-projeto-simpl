@@ -184,6 +184,7 @@ import RotateSquare from "../../components/RotateSquare";
 import ProdutoFornecedorServico from "../../servico/ProdutoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import PessoaServico from "../../servico/PessoaServico";
 
 export default {
   components: { RotateSquare },
@@ -376,18 +377,11 @@ export default {
       this.viewModel.quantidade = 0;
       this.viewModel.pessoa = {};
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     ObterNomeTipoFornecedor(item) {
       switch (item) {
@@ -402,11 +396,7 @@ export default {
     ObterFornecedoresVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Fornecedor)
         .then((response) => {
           this.fornecedorOptions = response.data;
         })

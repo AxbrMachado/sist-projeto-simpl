@@ -182,6 +182,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import UnidadeMedidaServico from "../../servico/UnidadeMedidaServico";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   components: { RotateSquare },
@@ -386,24 +387,14 @@ export default {
       this.viewModel.tipoUnidadeMedidaBaseId = "";
       this.viewModel.observacao = "";
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
+      TipoUnidadeMedidaServico.ObterSelect()
         .then((response) => {
           this.tiposUnidadeMedidaOptions = response.data;
         })

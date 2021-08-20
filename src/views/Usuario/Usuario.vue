@@ -90,6 +90,8 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import UsuarioServico from "../../servico/UsuarioServico";
+
 export default {
   name: "Usuario",
   components: {
@@ -138,10 +140,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "usuario/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      UsuarioServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -164,10 +163,8 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url: "/usuario/obter-grid/" + pagina + "/20",
-        method: "GET"
-      })
+
+      UsuarioServico.ObterGrid(pagina)
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;

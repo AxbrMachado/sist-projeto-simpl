@@ -388,18 +388,11 @@ export default {
       this.valorProduto = item.valor ? item.valor : 0;
       this.quantidadeProduto = item.quantidade ? item.quantidade : 0;
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     FormataQuantidade(valor) {
       return valor ? valor : 0;

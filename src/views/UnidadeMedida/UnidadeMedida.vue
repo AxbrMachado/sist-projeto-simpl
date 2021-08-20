@@ -10,7 +10,7 @@
               >
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/unidadeMedida/novo"
+                href="/#/unidade-medida/novo"
                 title="Adicionar nova conversão unidade medida"
               >
                 Adicionar
@@ -112,6 +112,7 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import UnidadeMedidaServico from "../../servico/UnidadeMedidaServico";
 
 export default {
   name: "UnidadeMedida",
@@ -166,7 +167,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(unidadeMedida) {
-      this.$router.push("/unidadeMedida/editar/" + unidadeMedida.id);
+      this.$router.push("/unidade-medida/editar/" + unidadeMedida.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -177,10 +178,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "unidadeMedida/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      UnidadeMedidaServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -203,14 +201,13 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url:
-          "/unidadeMedida/obter-grid?pagina=" +
-          pagina +
-          "&descricao=" +
-          this.filtro.descricao,
-        method: "GET"
-      })
+
+      UnidadeMedidaServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.descricao
+      )
+
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;

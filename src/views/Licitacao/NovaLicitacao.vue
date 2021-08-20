@@ -179,6 +179,9 @@ import LicitacaoContrato from "./LicitacaoContrato";
 import Contato from "../../components/Contato";
 import NovoDocumento from "../../components/NovoDocumento";
 import StatusLicitacaoEnum from "../../enums/StatusLicitacaoEnum";
+import LicitacaoServico from "../../servico/LicitacaoServico";
+import PessoaServico from "../../servico/PessoaServico";
+import TipoInstituicaoServico from "../../servico/TipoInstituicaoServico";
 
 export default {
   name: "NovoLicitacao",
@@ -230,10 +233,8 @@ export default {
     },
     Obter(licitacaoId) {
       this.loading = false;
-      this.$http({
-        url: "licitacao/obter/" + licitacaoId,
-        method: "GET"
-      })
+
+      LicitacaoServico.Obter(licitacaoId)
         .then((resposta) => {
           this.loading = false;
           resposta.data.dataLicitacao = DateTime.formatar(
@@ -255,11 +256,8 @@ export default {
     },
     Novo() {
       this.loading = false;
-      this.$http({
-        url: "licitacao/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+
+      LicitacaoServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$notify({
@@ -279,11 +277,8 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "licitacao/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      LicitacaoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/licitacao");
@@ -304,10 +299,7 @@ export default {
     },
 
     ObterInstituicoesSelect() {
-      this.$http({
-        url: "/pessoa/obter-select/" + TipoPessoaEnum.Instituicao,
-        method: "GET"
-      })
+      PessoaServico.ObterSelect(TipoPessoaEnum.Instituicao)
         .then((response) => {
           this.instituicaoOptions = response.data;
         })
@@ -321,10 +313,7 @@ export default {
     },
 
     ObterTiposInstituicoesSelect() {
-      this.$http({
-        url: "/tipoInstituicao/obter-select",
-        method: "GET"
-      })
+      TipoInstituicaoServico.ObterSelect()
         .then((response) => {
           this.tiposInstituicaoOptions = response.data;
         })

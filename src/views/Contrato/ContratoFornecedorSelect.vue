@@ -399,18 +399,11 @@ export default {
       this.filtro.nome = "";
       this.filtro.vinculadoAoContrato = false;
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     isFornecedorVinculado(item) {
       return item.id === this.$store.getters.emptyGuid;
@@ -548,9 +541,10 @@ export default {
         });
     },
     FormataValorRestante(item) {
-      return (item.valorConsumido >= item.valorLimite
-        ? 0
-        : item.valorLimite - item.valorConsumido
+      return (
+        item.valorConsumido >= item.valorLimite
+          ? 0
+          : item.valorLimite - item.valorConsumido
       ).toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL"

@@ -155,6 +155,7 @@ import FornecedorProdutoSelect from "./FornecedorProdutoSelect";
 import FornecedorPedido from "./FornecedorPedido";
 import DateTime from "../../util/DateTime";
 import Contato from "../../components/Contato";
+import PessoaServico from "../../servico/PessoaServico";
 
 export default {
   name: "NovoFornecedor",
@@ -207,10 +208,8 @@ export default {
     // },
     Obter(id) {
       this.loadingPessoa = true;
-      this.$http({
-        url: "pessoa/obter/" + id,
-        method: "GET"
-      })
+
+      PessoaServico.Obter(id)
         .then((resposta) => {
           this.loadingPessoa = false;
           resposta.data.dataNascimento = DateTime.formatar(
@@ -230,11 +229,8 @@ export default {
 
     Editar() {
       this.loadingPessoa = true;
-      this.$http({
-        url: "pessoa/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      PessoaServico.Editar(this.viewModel)
         .then(() => {
           this.loadingPessoa = false;
           this.$router.push("/fornecedor");

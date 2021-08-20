@@ -188,6 +188,8 @@ import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import LicitacaoServico from "../../servico/LicitacaoServico";
+import PessoaServico from "../../servico/PessoaServico";
+import TipoInstituicaoServico from "../../servico/TipoInstituicaoServico";
 import StatusLicitacaoEnum from "../../enums/StatusLicitacaoEnum";
 import ModalArquivoGrid from "../../components/ModalArquivoGrid";
 
@@ -272,10 +274,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "licitacao/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      LicitacaoServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -298,10 +297,17 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url: "/licitacao/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
+
+      LicitacaoServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.Numero,
+        this.filtro.Instituicao ? this.filtro.Instituicao.id : null,
+        this.filtro.Status,
+        this.filtro.TipoInstituicao,
+        this.filtro.DataVencimento,
+        this.filtro.LicitacaoVencida
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;
@@ -318,51 +324,19 @@ export default {
           });
         });
     },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Numero=" + this.filtro.Numero;
 
-      if (this.filtro.Instituicao) {
-        var filtros = filtros + "&PessoaId=" + this.filtro.Instituicao.id;
-      }
-
-      if (this.filtro.Status) {
-        var filtros = filtros + "&Status=" + this.filtro.Status;
-      }
-
-      if (this.filtro.TipoInstituicao != 0) {
-        var filtros =
-          filtros + "&TipoInstituicaoId=" + this.filtro.TipoInstituicao;
-      }
-
-      var filtros = filtros + "&DataVencimento=" + this.filtro.DataVencimento;
-      var filtros =
-        filtros + "&LicitacaoVencida=" + this.filtro.LicitacaoVencida;
-
-      return filtros;
-    },
     formatarData(validade) {
       var dataValidade = new Date(validade);
       return dataValidade.toLocaleDateString();
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     ObterTiposInstituicoesSelect() {
-      this.$http({
-        url: "/tipoInstituicao/obter-select",
-        method: "GET"
-      })
+      TipoInstituicaoServico.ObterSelect()
         .then((response) => {
           this.tiposInstituicaoOptions = response.data;
         })
@@ -377,11 +351,7 @@ export default {
     ObterInstituicaoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Instituicao + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Instituicao)
         .then((response) => {
           this.instituicaoOptions = response.data;
         })

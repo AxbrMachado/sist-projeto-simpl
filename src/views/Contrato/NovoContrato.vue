@@ -171,6 +171,9 @@ import ContratoPedido from "./ContratoPedido";
 import DateTime from "../../util/DateTime";
 import Contato from "../../components/Contato";
 import NovoDocumento from "../../components/NovoDocumento";
+import ContratoServico from "../../servico/ContratoServico";
+import LicitacaoServico from "../../servico/LicitacaoServico";
+import TipoInstituicaoServico from "../../servico/TipoInstituicaoServico";
 
 export default {
   name: "NovoContrato",
@@ -218,10 +221,8 @@ export default {
     },
     Obter(contratoId) {
       this.loading = false;
-      this.$http({
-        url: "contrato/obter/" + contratoId,
-        method: "GET"
-      })
+
+      ContratoServico.Obter(contratoId)
         .then((resposta) => {
           this.loading = false;
           resposta.data.dataInicio = DateTime.formatar(
@@ -243,11 +244,7 @@ export default {
     },
     Novo() {
       this.loading = false;
-      this.$http({
-        url: "contrato/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+      ContratoServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           // this.$router.push(
@@ -272,11 +269,7 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "contrato/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+      ContratoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/contrato");
@@ -297,10 +290,7 @@ export default {
     },
 
     ObterInstituicoesSelect() {
-      this.$http({
-        url: "/licitacao/obter-select",
-        method: "GET"
-      })
+      LicitacaoServico.ObterSelect()
         .then((response) => {
           this.licitacaoOptions = response.data;
         })
@@ -314,10 +304,7 @@ export default {
     },
 
     ObterTiposInstituicoesSelect() {
-      this.$http({
-        url: "/tipoInstituicao/obter-select",
-        method: "GET"
-      })
+      TipoInstituicaoServico.ObterSelect()
         .then((response) => {
           this.tiposInstituicaoOptions = response.data;
         })

@@ -121,6 +121,7 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   name: "TipoUnidadeMedida",
@@ -178,10 +179,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "tipoUnidadeMedida/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      TipoUnidadeMedidaServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -204,14 +202,12 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url:
-          "/tipoUnidadeMedida/obter-grid?pagina=" +
-          pagina +
-          "&descricao=" +
-          this.filtro.descricao,
-        method: "GET"
-      })
+
+      TipoUnidadeMedidaServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.descricao
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;

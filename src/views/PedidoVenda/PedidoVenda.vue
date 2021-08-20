@@ -8,7 +8,7 @@
               <strong class="align-self-center">Pedidos</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/pedidovenda/novo"
+                href="/#/pedido-venda/novo"
                 title="Adicionar novo pedido"
               >
                 Adicionar
@@ -245,6 +245,9 @@ import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import Bus from "../../util/EventBus";
 import ModalArquivoGrid from "../../components/ModalArquivoGrid";
+import PedidoServico from "../../servico/PedidoServico";
+import ContratoServico from "../../servico/ContratoServico";
+import PessoaServico from "../../servico/PessoaServico";
 
 export default {
   name: "PedidoVenda",
@@ -331,7 +334,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(pedido) {
-      this.$router.push("/pedidovenda/editar/" + pedido.id);
+      this.$router.push("/pedido-venda/editar/" + pedido.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
@@ -342,10 +345,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "pedido/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      PedidoServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -366,12 +366,27 @@ export default {
       this.modalRemover = true;
       this.itemRemover = item;
     },
+
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url: "/pedido/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
+
+      PedidoServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.Descricao,
+        this.filtro.Numero,
+        this.filtro.Contrato ? this.filtro.Contrato.id : null,
+        null,
+        null,
+        null,
+        this.filtro.Status,
+        this.filtro.DataEntrega,
+        this.filtro.PedidoAvulso,
+        this.filtro.PedidoCompleto,
+        this.filtro.PedidoPendente,
+        this.filtro.PedidoEntregue,
+        this.filtro.Instituicao ? this.filtro.Instituicao.id : null
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;
@@ -388,32 +403,6 @@ export default {
           });
         });
     },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Descricao=" + this.filtro.Descricao;
-      var filtros = filtros + "&Numero=" + this.filtro.Numero;
-
-      if (this.filtro.Contrato) {
-        var filtros = filtros + "&ContratoId=" + this.filtro.Contrato.id;
-      }
-
-      if (this.filtro.Status != 0) {
-        var filtros = filtros + "&Status=" + this.filtro.Status;
-      }
-
-      var filtros = filtros + "&DataEntrega=" + this.filtro.DataEntrega;
-      var filtros = filtros + "&PedidoAvulso=" + this.filtro.PedidoAvulso;
-      var filtros = filtros + "&PedidoCompleto=" + this.filtro.PedidoCompleto;
-      var filtros = filtros + "&PedidoPendente=" + this.filtro.PedidoPendente;
-      var filtros = filtros + "&PedidoEntregue=" + this.filtro.PedidoEntregue;
-
-      if (this.filtro.Instituicao) {
-        var filtros = filtros + "&InstituicaoId=" + this.filtro.Instituicao.id;
-      }
-
-      return filtros;
-    },
-
     ObterNomeStatusPedido(item) {
       switch (item) {
         case StatusPedidoEnum.Pendente:
@@ -438,34 +427,19 @@ export default {
           return "Inválido";
       }
     },
-
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     ObterContratoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url: "/contrato/obter-v-select/" + busca,
-        method: "GET"
-      })
+      ContratoServico.ObterVSelect(busca)
         .then((response) => {
           this.contratoOptions = response.data;
         })
@@ -480,11 +454,7 @@ export default {
     ObterInstituicaoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Instituicao + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Instituicao)
         .then((response) => {
           this.instituicaoOptions = response.data;
         })

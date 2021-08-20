@@ -147,6 +147,7 @@ import RotateSquare from "../../components/RotateSquare";
 import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import DateTime from "../../util/DateTime";
+import PessoaContratoServico from "../../servico/PessoaContrato";
 
 export default {
   name: "FornecedorContrato",
@@ -207,18 +208,12 @@ export default {
     ObterGrid(pagina) {
       this.loading = false;
 
-      this.$http({
-        url:
-          "/pessoacontrato/obter-grid?pagina=" +
-          pagina +
-          "&numero=" +
-          this.filtro.numero +
-          "&TipoPessoaContrato=" +
-          TipoPessoaContratoEnum.Fornecedor +
-          "&pessoaId=" +
-          this.pessoaId,
-        method: "GET"
-      })
+      PessoaContratoServico.ObterGrid(
+        pagina,
+        this.filtro.numero,
+        TipoPessoaContratoEnum.Fornecedor,
+        this.pessoaId
+      )
         .then((response) => {
           this.loading = false;
           response.data.itens.forEach((item) => {
@@ -279,18 +274,11 @@ export default {
     formatarData(value) {
       return new Date(value).toLocaleDateString();
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     FormataQuantidade(valor) {
       return valor ? valor : 0;

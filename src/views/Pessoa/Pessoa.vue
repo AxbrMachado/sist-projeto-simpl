@@ -170,6 +170,8 @@ import RotateSquare from "../../components/RotateSquare";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import ModalArquivoGrid from "../../components/ModalArquivoGrid";
+import PessoaServico from "../../servico/PessoaServico";
+import PessoaEnderecoServico from "../../servico/PessoaEnderecoServico";
 
 export default {
   name: "Pessoa",
@@ -240,10 +242,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "pessoa/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      PessoaServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -266,10 +265,15 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url: "/pessoa/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
+
+      PessoaServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.Nome,
+        this.filtro.Cidade ? this.filtro.Cidade.label : null,
+        this.filtro.TipoPessoa,
+        this.filtro.presenteEmPedido
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;
@@ -285,23 +289,6 @@ export default {
             duration: 5000
           });
         });
-    },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Nome=" + this.filtro.Nome;
-
-      if (this.filtro.Cidade) {
-        var filtros = filtros + "&Cidade=" + this.filtro.Cidade.label;
-      }
-
-      if (this.filtro.TipoPessoa != 0) {
-        var filtros = filtros + "&TipoPessoa=" + this.filtro.TipoPessoa;
-      }
-
-      var filtros =
-        filtros + "&PresenteEmPedido=" + this.filtro.presenteEmPedido;
-
-      return filtros;
     },
     ObterTipoPessoa(item) {
       switch (item) {
@@ -330,10 +317,7 @@ export default {
     ObterCidadesVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url: "/pessoaendereco/obter-v-select/" + busca,
-        method: "GET"
-      })
+      PessoaEnderecoServico.ObterVSelect(busca)
         .then((response) => {
           this.cidadeOptions = response.data;
         })

@@ -218,6 +218,8 @@ import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import ModalArquivoGrid from "../../components/ModalArquivoGrid";
+import DapServico from "../../servico/DapServico";
+import PessoaServico from "../../servico/PessoaServico";
 
 export default {
   name: "Dap",
@@ -307,10 +309,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "dap/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      DapServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -333,10 +332,18 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url: "/dap/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
+
+      DapServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.numero,
+        this.filtro.tipoEnquadramento,
+        this.filtro.cooperado ? this.filtro.cooperado.id : null,
+        this.filtro.dataVencimento,
+        this.filtro.dapVencida,
+        this.filtro.fornecedorDesignado,
+        this.filtro.fornecedorExcluidoRateio
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;
@@ -353,32 +360,6 @@ export default {
           });
         });
     },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Numero=" + this.filtro.numero;
-
-      if (this.filtro.tipoEnquadramento) {
-        var filtros =
-          filtros + "&TipoEnquadramento=" + this.filtro.tipoEnquadramento;
-      }
-
-      if (this.filtro.cooperado) {
-        var filtros = filtros + "&PessoaId=" + this.filtro.cooperado.id;
-      }
-
-      var filtros = filtros + "&Validade=" + this.filtro.dataVencimento;
-      var filtros = filtros + "&DapVencida=" + this.filtro.dapVencida;
-
-      var filtros =
-        filtros + "&FornecedorDesignado=" + this.filtro.fornecedorDesignado;
-
-      var filtros =
-        filtros +
-        "&FornecedorExcluidoRateio=" +
-        this.filtro.fornecedorExcluidoRateio;
-
-      return filtros;
-    },
     ObterNomeEnquadramento(item) {
       switch (item) {
         case TipoEnquadramentoEnum.Grupo_A:
@@ -393,22 +374,13 @@ export default {
           return "Inválido";
       }
     },
-
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
     ObterCooperadoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Fornecedor)
         .then((response) => {
           this.cooperadoOptions = response.data;
         })

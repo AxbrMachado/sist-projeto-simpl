@@ -200,7 +200,7 @@
 import RotateSquare from "./RotateSquare";
 import DateTime from "../util/DateTime";
 import DocumentoServico from "../servico/DocumentoServico";
-import TipoDocumentoServico from "../views/TipoDocumento/servico/TipoDocumentoServico";
+import TipoDocumentoServico from "../servico/TipoDocumentoServico";
 import ArquivoServico from "../servico/ArquivoServico";
 import ModalArquivo from "./ModalArquivo";
 
@@ -430,11 +430,7 @@ export default {
       this.viewModel.arquivos = [];
     },
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     }
   }
 };

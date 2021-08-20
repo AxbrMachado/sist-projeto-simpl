@@ -24,7 +24,7 @@ const Menu = {
   PedidoVenda: {
     _name: "CSidebarNavItem",
     name: "Pedido Venda",
-    to: "/pedidovenda",
+    to: "/pedido-venda",
     icon: "cil-list",
     permission: "PedidoVenda"
   },

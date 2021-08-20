@@ -252,6 +252,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import RateioServico from "../../servico/RateioServico";
+import PessoaServico from "../../servico/PessoaServico";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
@@ -414,11 +415,7 @@ export default {
     ObterInstituicaoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Instituicao + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Instituicao)
         .then((response) => {
           this.instituicaoOptions = response.data;
         })
@@ -469,24 +466,13 @@ export default {
       }
     },
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "-";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     FormatarUsuario(value) {
       if (value.usuarioAlteracao) {

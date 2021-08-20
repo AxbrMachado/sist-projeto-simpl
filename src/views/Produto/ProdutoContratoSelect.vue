@@ -284,6 +284,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   name: "ProdutoContratoSelect",
@@ -424,18 +425,11 @@ export default {
       this.filtro.descricao = "";
       this.filtro.vinculadoAoProduto = false;
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     isContratoVinculado(item) {
       return item.id === this.$store.getters.emptyGuid;
@@ -509,20 +503,13 @@ export default {
       return valor ? valor : 0;
     },
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
     FormataDescricao(value) {
       return value.numero + " - " + value.entidadeLicitacao;
     },
     ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
+      TipoUnidadeMedidaServico.ObterSelect()
         .then((response) => {
           this.tiposUnidadeMedidaOptions = response.data;
         })

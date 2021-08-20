@@ -112,6 +112,7 @@
 import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import DateTime from "../../util/DateTime";
+import DapContratoServico from "../../servico/DapContratoServico";
 
 export default {
   name: "DapContrato",
@@ -166,16 +167,13 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url:
-          "/dapcontrato/obter-grid-contrato?pagina=" +
-          pagina +
-          "&numero=" +
-          this.filtro.numero +
-          "&dapId=" +
-          this.dapId,
-        method: "GET"
-      })
+
+      DapContratoServico.ObterGridContrato(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.numero,
+        this.dapId
+      )
         .then((response) => {
           this.loading = false;
           response.data.itens.forEach((item) => {

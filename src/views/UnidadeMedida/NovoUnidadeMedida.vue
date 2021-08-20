@@ -56,10 +56,10 @@
                   <div class="form-group">
                     <label for>* Quantidade</label>
                     <vue-numeric
-                        v-bind:precision="3"
-                        v-bind:minus="false"
-                        thousand-separator="."
-                        decimal-separator=","
+                      v-bind:precision="3"
+                      v-bind:minus="false"
+                      thousand-separator="."
+                      decimal-separator=","
                       v-model="viewModel.valor"
                       class="form-control"
                       placeholder="Digite a quantidade"
@@ -118,6 +118,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import UnidadeMedidaServico from "../../servico/UnidadeMedidaServico";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   name: "NovoUnidadeMedida",
@@ -184,7 +185,7 @@ export default {
       UnidadeMedidaServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/unidadeMedida");
+          this.$router.push("/unidade-medida");
           this.$notify({
             data: ["Conversão cadastrada com sucesso."],
             type: "success",
@@ -205,7 +206,7 @@ export default {
       UnidadeMedidaServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/unidadeMedida");
+          this.$router.push("/unidade-medida");
           this.$notify({
             data: ["Conversão editado com sucesso."],
             type: "success",
@@ -222,10 +223,7 @@ export default {
         });
     },
     ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
+      TipoUnidadeMedidaServico.ObterSelect()
         .then((response) => {
           this.tiposUnidadeMedidaOptions = response.data;
         })

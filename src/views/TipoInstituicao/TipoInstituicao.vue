@@ -110,6 +110,7 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import TipoInstituicaoServico from "../../servico/TipoInstituicaoServico";
 
 export default {
   name: "TipoInstituicao",
@@ -162,10 +163,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "tipoInstituicao/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      TipoInstituicaoServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -188,11 +186,12 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url:
-          "/tipoInstituicao/obter-grid?pagina=" + pagina + "&descricao=" + this.filtro.descricao,
-        method: "GET"
-      })
+
+      TipoInstituicaoServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.descricao
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;

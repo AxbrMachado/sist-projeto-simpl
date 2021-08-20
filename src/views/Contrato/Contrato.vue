@@ -185,12 +185,16 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ModalArquivoGrid from "../../components/ModalArquivoGrid";
+import LicitacaoServico from "../../servico/LicitacaoServico";
+import ContratoServico from "../../servico/ContratoServico";
 
 export default {
   name: "Contrato",
   components: {
     RotateSquare,
-    ModalArquivoGrid
+    ModalArquivoGrid,
+    LicitacaoServico,
+    ContratoServico
   },
   data() {
     return {
@@ -257,10 +261,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "contrato/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      ContratoServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -283,10 +284,17 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url: "/contrato/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
+
+      ContratoServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.descricao,
+        this.filtro.numero,
+        this.filtro.licitacaoId,
+        this.filtro.dataVencimento,
+        this.filtro.contratoVencido,
+        this.filtro.presenteEmPedido
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;
@@ -303,48 +311,17 @@ export default {
           });
         });
     },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Descricao=" + this.filtro.descricao;
-      var filtros = filtros + "&Numero=" + this.filtro.numero;
-
-      if (this.filtro.licitacaoId) {
-        var filtros = filtros + "&LicitacaoId=" + this.filtro.licitacaoId;
-      }
-
-      var filtros = filtros + "&DataTermino=" + this.filtro.dataVencimento;
-      var filtros = filtros + "&ContratoVencido=" + this.filtro.contratoVencido;
-
-      var filtros =
-        filtros + "&PresenteEmPedido=" + this.filtro.presenteEmPedido;
-
-      return filtros;
-    },
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     ObterInstituicoesSelect() {
-      this.$http({
-        url: "/licitacao/obter-select",
-        method: "GET"
-      })
+      LicitacaoServico.ObterInstituicoesSelect()
         .then((response) => {
           this.licitacaoOptions = response.data;
         })

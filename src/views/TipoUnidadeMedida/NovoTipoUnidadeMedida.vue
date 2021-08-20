@@ -83,6 +83,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import TipoUnidadeMedidaConversao from "./TipoUnidadeMedidaConversao";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   name: "NovoTipoUnidadeMedida",
@@ -97,7 +98,7 @@ export default {
       viewModel: {
         id: this.$store.getters.emptyGuid,
         descricao: "",
-        permiteMargemRateio: false,
+        permiteMargemRateio: false
       }
     };
   },
@@ -113,10 +114,8 @@ export default {
     },
     Obter(tipoUnidadeMedidaId) {
       this.loading = false;
-      this.$http({
-        url: "tipoUnidadeMedida/obter/" + tipoUnidadeMedidaId,
-        method: "GET"
-      })
+
+      TipoUnidadeMedidaServico.Obter(tipoUnidadeMedidaId)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -132,11 +131,8 @@ export default {
     },
     Novo() {
       this.loading = false;
-      this.$http({
-        url: "tipoUnidadeMedida/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+
+      TipoUnidadeMedidaServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/tipo-unidade-medida");
@@ -157,11 +153,8 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "tipoUnidadeMedida/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      TipoUnidadeMedidaServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/tipo-unidade-medida");

@@ -101,13 +101,6 @@
                   >
                     <i class="fa fa-edit"></i>
                   </b-button>
-                  <!-- <b-button
-                    variant="danger"
-                    title="Remover"
-                    @click="Remover(data.item)"
-                  >
-                    <i class="fas fa-trash-alt"></i>
-                  </b-button> -->
                   <ModalArquivoGrid :referenciaId="data.item.id" />
                 </div>
               </template>
@@ -140,6 +133,7 @@
 import RotateSquare from "../../components/RotateSquare";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import ModalArquivoGrid from "../../components/ModalArquivoGrid";
+import FornecedorServico from "../../servico/FornecedorServico";
 
 export default {
   name: "Fornecedor",
@@ -198,10 +192,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "fornecedor/remover/" + this.itemRemover.id,
-        method: "DELETE"
-      })
+      FornecedorServico.Remover(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -224,17 +215,12 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url:
-          "/fornecedor/obter-grid?pagina=" +
-          pagina +
-          "&nome=" +
-          this.filtro.nome +
-          "&presenteEmPedido=" +
-          this.filtro.presenteEmPedido,
 
-        method: "GET"
-      })
+      FornecedorServico.ObterGrid(
+        pagina,
+        this.filtro.nome,
+        this.filtro.presenteEmPedido
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;

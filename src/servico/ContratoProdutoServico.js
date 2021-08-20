@@ -7,15 +7,15 @@ class ContratoProdutoServico {
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, contratoId) {
+  ObterGrid(pagina, numero, produtoId) {
     return Vue.prototype.$http({
       url:
         "/contratoproduto/obter-grid?pagina=" +
         pagina +
-        "&ItensPorPagina=" +
-        itensPorPagina +
-        "&contratoId=" +
-        contratoId,
+        "&numero=" +
+        numero +
+        "&produtoId=" +
+        produtoId,
       method: "GET"
     });
   }

@@ -264,6 +264,7 @@ import RotateSquare from "../../components/RotateSquare";
 import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   name: "ContratoProdutoSelect",
@@ -407,18 +408,11 @@ export default {
       this.filtro.produto = "";
       this.filtro.vinculadoAoContrato = false;
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     isProdutoVinculado(item) {
       return item.id === this.$store.getters.emptyGuid;
@@ -492,10 +486,7 @@ export default {
       return valor ? valor : 0;
     },
     ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
+      TipoUnidadeMedidaServico.ObterSelect()
         .then((response) => {
           this.tiposUnidadeMedidaOptions = response.data;
         })
