@@ -43,6 +43,7 @@ class PedidoServico {
     Descricao,
     Numero,
     contratoId,
+    fornecedorId,
     Status,
     DataEntrega,
     PedidoAvulso,
@@ -60,6 +61,7 @@ class PedidoServico {
         (Descricao ? "&Descricao=" + Descricao : "") +
         (Numero ? "&Numero=" + Numero : "") +
         (contratoId ? "&ContratoId=" + contratoId : "") +
+        (fornecedorId ? "&FornecedorId=" + fornecedorId : "") +
         (Status ? "&Status=" + Status : "") +
         (DataEntrega ? "&DataEntrega=" + DataEntrega : "") +
         (PedidoAvulso ? "&PedidoAvulso=" + PedidoAvulso : "") +

@@ -193,6 +193,9 @@
 import RotateSquare from "../../components/RotateSquare";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import FornecedorPedidoProduto from "./FornecedorPedidoProduto";
+import ContratoServico from "../../servico/ContratoServico";
+import PedidoServico from "../../servico/PedidoServico";
+
 import Bus from "../../util/EventBus";
 
 export default {
@@ -286,10 +289,22 @@ export default {
     ObterGrid(pagina) {
       this.visualizarProduto = false;
       this.loading = false;
-      this.$http({
-        url: "/pedido/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
+
+      PedidoServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.Descricao,
+        this.filtro.Numero,
+        null,
+        this.fornecedorId,
+        this.filtro.Status,
+        this.filtro.DataEntrega,
+        this.filtro.PedidoAvulso,
+        this.filtro.PedidoCompleto,
+        this.filtro.PedidoPendente,
+        this.filtro.PedidoEntregue,
+        null
+      )
         .then((response) => {
           this.loading = false;
           this.itens = response.data.itens;
@@ -306,32 +321,6 @@ export default {
           });
         });
     },
-    MontaFiltro() {
-      var filtros = "";
-      var filtros = filtros + "&Descricao=" + this.filtro.Descricao;
-      var filtros = filtros + "&Numero=" + this.filtro.Numero;
-
-      if (this.fornecedorId) {
-        var filtros = filtros + "&FornecedorId=" + this.fornecedorId;
-      }
-
-      if (this.filtro.Status != 0) {
-        var filtros = filtros + "&Status=" + this.filtro.Status;
-      }
-
-      var filtros = filtros + "&DataEntrega=" + this.filtro.DataEntrega;
-      var filtros = filtros + "&PedidoAvulso=" + this.filtro.PedidoAvulso;
-      var filtros = filtros + "&PedidoCompleto=" + this.filtro.PedidoCompleto;
-      var filtros = filtros + "&PedidoPendente=" + this.filtro.PedidoPendente;
-      var filtros = filtros + "&PedidoEntregue=" + this.filtro.PedidoEntregue;
-
-      if (this.filtro.Instituicao) {
-        var filtros = filtros + "&InstituicaoId=" + this.filtro.Instituicao.id;
-      }
-
-      return filtros;
-    },
-
     ObterNomeStatusPedido(item) {
       switch (item) {
         case StatusPedidoEnum.Pendente:
@@ -368,10 +357,7 @@ export default {
     ObterContratoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url: "/contrato/obter-v-select/" + busca,
-        method: "GET"
-      })
+      ContratoServico.ObterVSelect(busca)
         .then((response) => {
           this.contratoOptions = response.data;
         })

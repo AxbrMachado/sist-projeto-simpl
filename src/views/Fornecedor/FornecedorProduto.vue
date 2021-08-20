@@ -175,6 +175,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import FornecedorProdutoServico from "../../servico/FornecedorProdutoServico";
+import ProdutoServico from "../../servico/ProdutoServico";
 
 export default {
   name: "FornecedorProdutoServico",
@@ -385,10 +386,7 @@ export default {
     ObterProdutosVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url: "/produto/obter-v-select/" + busca,
-        method: "GET"
-      })
+      ProdutoServico.ObterVSelect(busca)
         .then((response) => {
           this.produtoOptions = response.data;
         })
