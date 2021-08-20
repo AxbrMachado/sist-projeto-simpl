@@ -1,12 +1,5 @@
 import Vue from "vue";
 class PessoaServico {
-  ObterClientesVSelect(filtro) {
-    return Vue.prototype.$http({
-      url: "pessoa/obter-v-select/" + filtro,
-      method: "GET"
-    });
-  }
-
   ObterVSelect(filtro, tipo) {
     return Vue.prototype.$http({
       url: "/pessoa/obter-v-select/" + (tipo ? tipo + "/" : "") + "/" + filtro,
@@ -17,6 +10,13 @@ class PessoaServico {
   ObterVSelect(filtro) {
     return Vue.prototype.$http({
       url: "pessoa/obter-v-select/" + filtro,
+      method: "GET"
+    });
+  }
+
+  ObterSelect(tipoPessoa) {
+    return Vue.prototype.$http({
+      url: "/pessoa/obter-select/" + tipoPessoa,
       method: "GET"
     });
   }
@@ -50,32 +50,6 @@ class PessoaServico {
       method: "DELETE"
     });
   }
-
-  //   ObterGrid(
-  //     pagina,
-  //     itensPorPagina,
-  //     descricao,
-  //     numero,
-  //     licitacaoId,
-  //     dataVencimento,
-  //     pessoaVencido,
-  //     presenteEmPedido
-  //   ) {
-  //     return Vue.prototype.$http({
-  //       url:
-  //         "/pessoa/obter-grid?pagina=" +
-  //         pagina +
-  //         "&ItensPorPagina=" +
-  //         itensPorPagina +
-  //         (descricao ? "&Descricao=" + descricao : "") +
-  //         (numero ? "&Numero=" + numero : "") +
-  //         (licitacaoId ? "&LicitacaoId=" + licitacaoId : "") +
-  //         (dataVencimento ? "&DataTermino=" + dataVencimento : "") +
-  //         (pessoaVencido ? "&ContratoVencido=" + pessoaVencido : "") +
-  //         (presenteEmPedido ? "&PresenteEmPedido=" + presenteEmPedido : ""),
-  //       method: "GET"
-  //     });
-  //   }
 }
 
 export default new PessoaServico();

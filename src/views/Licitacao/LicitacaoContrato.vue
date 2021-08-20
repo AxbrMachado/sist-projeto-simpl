@@ -112,6 +112,7 @@
 import RotateSquare from "../../components/RotateSquare";
 import TipoEnquadramentoEnum from "../../enums/TipoEnquadramentoEnum";
 import DateTime from "../../util/DateTime";
+import LicitacaoContratoServico from "../../servico/LicitacaoContratoServico";
 
 export default {
   name: "LicitacaoContrato",
@@ -166,16 +167,13 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url:
-          "/licitacaocontrato/obter-grid-contrato?pagina=" +
-          pagina +
-          "&numero=" +
-          this.filtro.numero +
-          "&licitacaoId=" +
-          this.licitacaoId,
-        method: "GET"
-      })
+
+      LicitacaoContratoServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.numero,
+        this.licitacaoId
+      )
         .then((response) => {
           this.loading = false;
           response.data.itens.forEach((item) => {
