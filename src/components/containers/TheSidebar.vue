@@ -165,7 +165,7 @@ export default {
       if (
         Nav.TipoUnidadeMedida.permission &&
         permissao.filter((x) => x.startsWith(Nav.TipoUnidadeMedida.permission))
-          .length > 0 || 1 == 1
+          .length > 0
       )
         menu[0]._children.push(Nav.TipoUnidadeMedida);
 
