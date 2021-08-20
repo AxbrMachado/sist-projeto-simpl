@@ -24,7 +24,7 @@ const Menu = {
   PedidoVenda: {
     _name: "CSidebarNavItem",
     name: "Pedido Venda",
-    to: "/pedidovenda",
+    to: "/pedido-venda",
     icon: "cil-list",
     permission: "PedidoVenda"
   },
@@ -110,7 +110,7 @@ const Menu = {
   UnidadeMedida: {
     _name: "CSidebarNavItem",
     name: "Conversão Unidade Medida",
-    to: "/unidadeMedida",
+    to: "/unidade-medida",
     icon: "cil-description",
     permission: "UnidadeMedida"
   },

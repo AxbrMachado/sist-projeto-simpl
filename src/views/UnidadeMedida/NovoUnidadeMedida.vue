@@ -185,7 +185,7 @@ export default {
       UnidadeMedidaServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/unidadeMedida");
+          this.$router.push("/unidade-medida");
           this.$notify({
             data: ["Conversão cadastrada com sucesso."],
             type: "success",
@@ -206,7 +206,7 @@ export default {
       UnidadeMedidaServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/unidadeMedida");
+          this.$router.push("/unidade-medida");
           this.$notify({
             data: ["Conversão editado com sucesso."],
             type: "success",

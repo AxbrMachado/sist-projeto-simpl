@@ -10,7 +10,7 @@
               >
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/unidadeMedida/novo"
+                href="/#/unidade-medida/novo"
                 title="Adicionar nova conversão unidade medida"
               >
                 Adicionar
@@ -167,7 +167,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(unidadeMedida) {
-      this.$router.push("/unidadeMedida/editar/" + unidadeMedida.id);
+      this.$router.push("/unidade-medida/editar/" + unidadeMedida.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();

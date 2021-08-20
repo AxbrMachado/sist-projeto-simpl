@@ -316,7 +316,7 @@ export default new Router({
 
         //Cadastro de pedido venda
         {
-          path: "pedidovenda",
+          path: "pedido-venda",
           name: "PedidoVenda",          
           meta: {
             requiresAuth: true,
@@ -746,7 +746,7 @@ export default new Router({
 
         //Cadastro de unidade medida
         {
-          path: "unidadeMedida",
+          path: "unidade-medida",
           name: "UnidadeMedida",
           meta: {
             requiresAuth: true,

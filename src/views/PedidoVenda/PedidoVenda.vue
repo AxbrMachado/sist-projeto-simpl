@@ -8,7 +8,7 @@
               <strong class="align-self-center">Pedidos</strong>
               <a
                 class="ml-auto btn btn-primary"
-                href="/#/pedidovenda/novo"
+                href="/#/pedido-venda/novo"
                 title="Adicionar novo pedido"
               >
                 Adicionar
@@ -331,7 +331,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(pedido) {
-      this.$router.push("/pedidovenda/editar/" + pedido.id);
+      this.$router.push("/pedido-venda/editar/" + pedido.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();

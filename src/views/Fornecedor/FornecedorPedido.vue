@@ -284,7 +284,7 @@ export default {
       this.visualizarProduto = false;
     },
     AbrirPedido(pedido) {
-      this.$router.push("/pedidovenda/editar/" + pedido.id);
+      this.$router.push("/pedido-venda/editar/" + pedido.id);
     },
     ObterGrid(pagina) {
       this.visualizarProduto = false;

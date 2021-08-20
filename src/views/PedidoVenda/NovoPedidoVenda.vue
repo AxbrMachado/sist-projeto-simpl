@@ -22,7 +22,7 @@
                 <a
                   @click="Limpar()"
                   class="ml-auto btn btn-primary"
-                  href="/#/pedidovenda/novo"
+                  href="/#/pedido-venda/novo"
                   title="Adicionar novo pedido"
                 >
                   Adicionar
@@ -249,7 +249,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/pedidovenda");
+          this.$router.push("/pedido-venda");
           this.$notify({
             data: ["Pedido cadastrado com sucesso."],
             type: "success",
@@ -274,7 +274,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/pedidovenda");
+          this.$router.push("/pedido-venda");
           this.$notify({
             data: ["Pedido editado com sucesso."],
             type: "success",

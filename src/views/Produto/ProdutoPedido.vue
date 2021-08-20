@@ -266,7 +266,7 @@ export default {
       this.ObterGrid(1);
     },
     Editar(pedido) {
-      this.$router.push("/pedidovenda/editar/" + pedido.id);
+      this.$router.push("/pedido-venda/editar/" + pedido.id);
     },
     ObterGrid(pagina) {
       this.loading = false;
