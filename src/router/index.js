@@ -285,7 +285,7 @@ export default new Router({
 
         //rateio pedido venda
         {
-          path: "rateiopedido",
+          path: "rateio-pedido",
           name: "RateioPedido",
           meta: {
             requiresAuth: true

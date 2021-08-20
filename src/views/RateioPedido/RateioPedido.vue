@@ -350,7 +350,7 @@ export default {
       this.filtro.rateioManual = false;
     },
     Editar(item) {
-      this.$router.push("/rateiopedido/editar/" + item.id);
+      this.$router.push("/rateio-pedido/editar/" + item.id);
     },
     ModalCancel(evento) {
       evento.preventDefault();
