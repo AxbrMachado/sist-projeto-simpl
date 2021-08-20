@@ -7,15 +7,15 @@ class UnidadeMedidaServico {
     });
   }
 
-  ObterGrid(pagina, itensPorPagina, tipoUnidadeMedidaId) {
+  ObterGrid(pagina, itensPorPagina, descricao) {
     return Vue.prototype.$http({
       url:
         "/unidadeMedida/obter-grid?pagina=" +
         pagina +
         "&ItensPorPagina=" +
         itensPorPagina +
-        "&tipoUnidadeMedidaId=" +
-        tipoUnidadeMedidaId,
+        "&descricao=" +
+        descricao,
       method: "GET"
     });
   }

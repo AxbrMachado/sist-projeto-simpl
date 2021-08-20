@@ -110,7 +110,7 @@ const Menu = {
   UnidadeMedida: {
     _name: "CSidebarNavItem",
     name: "Conversão Unidade Medida",
-    to: "/unidademedida",
+    to: "/unidadeMedida",
     icon: "cil-description",
     permission: "UnidadeMedida"
   },
