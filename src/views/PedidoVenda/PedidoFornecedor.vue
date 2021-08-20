@@ -352,18 +352,11 @@ export default {
       this.filtro.nome = "";
       this.filtro.fornecedorComProduto = false;
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     ObterNomeTipoFornecedor(item) {
       switch (item) {

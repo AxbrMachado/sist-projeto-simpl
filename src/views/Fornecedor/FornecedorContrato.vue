@@ -279,18 +279,11 @@ export default {
     formatarData(value) {
       return new Date(value).toLocaleDateString();
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     FormataQuantidade(valor) {
       return valor ? valor : 0;

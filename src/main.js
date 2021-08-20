@@ -66,8 +66,9 @@ router.beforeEach((to, from, next) => {
     }
     if (
       to.meta.permission &&
-      store.getters.getAutenticacao.permissoes.filter((x) => x === to.meta.permission)
-        .length <= 0
+      store.getters.getAutenticacao.permissoes.filter(
+        (x) => x === to.meta.permission
+      ).length <= 0
     ) {
       next("/sem-permissao");
     }

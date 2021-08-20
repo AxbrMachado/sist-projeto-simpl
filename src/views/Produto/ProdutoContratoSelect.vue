@@ -424,18 +424,11 @@ export default {
       this.filtro.descricao = "";
       this.filtro.vinculadoAoProduto = false;
     },
-    FormataValor(valor) {
-      if (valor) {
-        return valor.toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      } else {
-        return (0.0).toLocaleString("pt-br", {
-          style: "currency",
-          currency: "BRL"
-        });
-      }
+    FormataValor(value) {
+      return (value ? value : 0.0).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });
     },
     isContratoVinculado(item) {
       return item.id === this.$store.getters.emptyGuid;
