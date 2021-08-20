@@ -278,7 +278,7 @@ export default {
       })
         .then(() => {
           this.loading = false;
-          this.$router.push("/rateiopedido");
+          this.$router.push("/rateio-pedido");
           this.$notify({
             data: ["Rateio editado com sucesso."],
             type: "success",
@@ -313,7 +313,7 @@ export default {
           this.viewModel.id = resposta.data;
           this.Obter(resposta.data);
           Bus.$emit("atualiza-fornecedores-rateio");
-          this.$router.push("/rateiopedido/editar/" + resposta.data);
+          this.$router.push("/rateio-pedido/editar/" + resposta.data);
           this.$notify({
             data: ["Rateio executado com sucesso."],
             type: "success",

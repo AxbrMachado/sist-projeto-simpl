@@ -51,32 +51,137 @@ export default {
         _name: "CSidebarNav",
         _children: []
       });
+      console.log(Nav);
+      let permissao = this.$store.getters.getAutenticacao.permissoes;
+      console.log(permissao);
 
       menu[0]._children.push(Nav.Dashboard);
-
       menu[0]._children.push(Nav.Principal);
-      menu[0]._children.push(Nav.RateioPedido);
-      menu[0]._children.push(Nav.PedidoVenda);
-      menu[0]._children.push(Nav.Licitacao);
-      menu[0]._children.push(Nav.Contrato);
 
-      menu[0]._children.push(Nav.Pessoa);
-      menu[0]._children.push(Nav.Fornecedor);
+      if (
+        Nav.RateioPedido.permission &&
+        permissao.filter((x) => x.startsWith(Nav.RateioPedido.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.RateioPedido);
 
-      menu[0]._children.push(Nav.Dap);
-      menu[0]._children.push(Nav.Produto);
+      if (
+        Nav.PedidoVenda.permission &&
+        permissao.filter((x) => x.startsWith(Nav.PedidoVenda.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.PedidoVenda);
+
+      if (
+        Nav.Licitacao.permission &&
+        permissao.filter((x) => x.startsWith(Nav.Licitacao.permission)).length >
+          0
+      )
+        menu[0]._children.push(Nav.Licitacao);
+
+      if (
+        Nav.Contrato.permission &&
+        permissao.filter((x) => x.startsWith(Nav.Contrato.permission)).length >
+          0
+      )
+        menu[0]._children.push(Nav.Contrato);
+
+      if (
+        Nav.Pessoa.permission &&
+        permissao.filter((x) => x.startsWith(Nav.Pessoa.permission)).length > 0
+      )
+        menu[0]._children.push(Nav.Pessoa);
+
+      if (
+        Nav.Fornecedor.permission &&
+        permissao.filter((x) => x.startsWith(Nav.Fornecedor.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.Fornecedor);
+
+      if (
+        Nav.Dap.permission &&
+        permissao.filter((x) => x.startsWith(Nav.Dap.permission)).length > 0
+      )
+        menu[0]._children.push(Nav.Dap);
+
+      if (
+        Nav.Produto.permission &&
+        permissao.filter((x) => x.startsWith(Nav.Produto.permission)).length > 0
+      )
+        menu[0]._children.push(Nav.Produto);
+
       menu[0]._children.push(Nav.Configuracao);
-      menu[0]._children.push(Nav.Parametro);
-      menu[0]._children.push(Nav.Usuarios);
-      menu[0]._children.push(Nav.GrupoUsuario);
-      menu[0]._children.push(Nav.TipoDocumento);
-      menu[0]._children.push(Nav.TipoEndereco);
-      menu[0]._children.push(Nav.TipoProduto);
-      menu[0]._children.push(Nav.TipoCliente);
-      menu[0]._children.push(Nav.TipoUnidadeMedida);
-      menu[0]._children.push(Nav.TipoInstituicao);
-      menu[0]._children.push(Nav.UnidadeMedida);
-      
+
+      if (
+        Nav.Parametro.permission &&
+        permissao.filter((x) => x.startsWith(Nav.Parametro.permission)).length >
+          0
+      )
+        menu[0]._children.push(Nav.Parametro);
+
+      if (
+        Nav.Usuarios.permission &&
+        permissao.filter((x) => x.startsWith(Nav.Usuarios.permission)).length >
+          0
+      )
+        menu[0]._children.push(Nav.Usuarios);
+
+      if (
+        Nav.GrupoUsuario.permission &&
+        permissao.filter((x) => x.startsWith(Nav.GrupoUsuario.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.GrupoUsuario);
+
+      if (
+        Nav.TipoDocumento.permission &&
+        permissao.filter((x) => x.startsWith(Nav.TipoDocumento.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.TipoDocumento);
+
+      if (
+        Nav.TipoEndereco.permission &&
+        permissao.filter((x) => x.startsWith(Nav.TipoEndereco.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.TipoEndereco);
+
+      if (
+        Nav.TipoProduto.permission &&
+        permissao.filter((x) => x.startsWith(Nav.TipoProduto.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.TipoProduto);
+
+      if (
+        Nav.TipoCliente.permission &&
+        permissao.filter((x) => x.startsWith(Nav.TipoCliente.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.TipoCliente);
+
+      if (
+        Nav.TipoUnidadeMedida.permission &&
+        permissao.filter((x) => x.startsWith(Nav.TipoUnidadeMedida.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.TipoUnidadeMedida);
+
+      if (
+        Nav.TipoInstituicao.permission &&
+        permissao.filter((x) => x.startsWith(Nav.TipoInstituicao.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.TipoInstituicao);
+
+      if (
+        Nav.UnidadeMedida.permission &&
+        permissao.filter((x) => x.startsWith(Nav.UnidadeMedida.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.UnidadeMedida);
 
       return menu;
     }
