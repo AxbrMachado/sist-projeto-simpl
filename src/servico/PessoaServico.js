@@ -7,9 +7,9 @@ class PessoaServico {
     });
   }
 
-  ObterClientesVSelect(filtro, tipo) {
+  ObterVSelect(filtro, tipo) {
     return Vue.prototype.$http({
-      url: "/pessoa/obter-v-select/" + tipo + "/" + filtro,
+      url: "/pessoa/obter-v-select/" + (tipo ? tipo + "/" : "") + "/" + filtro,
       method: "GET"
     });
   }

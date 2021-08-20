@@ -386,7 +386,7 @@ export default {
     ObterClientesVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      PessoaServico.ObterClientesVSelect(busca)
+      PessoaServico.ObterVSelect(busca)
         .then((response) => {
           this.clienteOptions = response.data;
         })

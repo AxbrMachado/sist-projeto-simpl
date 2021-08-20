@@ -485,7 +485,7 @@ export default {
     ObterFornecedoresVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      PessoaServico.ObterClientesVSelect(busca, TipoPessoaEnum.Fornecedor)
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Fornecedor)
         .then((response) => {
           this.fornecedorOptions = response.data;
         })
