@@ -7,6 +7,13 @@ class ContratoServico {
     });
   }
 
+  ObterSelect() {
+    return Vue.prototype.$http({
+      url: "/contrato/obter-select",
+      method: "GET"
+    });
+  }
+
   Obter(id) {
     return Vue.prototype.$http({
       url: "contrato/obter/" + id,

@@ -7,6 +7,17 @@ class FornecedorServico {
     });
   }
 
+  ObterVSelectFornecedorDesignado(busca, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "/fornecedor/obter-v-select-fornecedor-designado/" +
+        fornecedorId +
+        "/" +
+        busca,
+      method: "GET"
+    });
+  }
+
   Remover(id) {
     return Vue.prototype.$http({
       url: "fornecedor/remover/" + id,

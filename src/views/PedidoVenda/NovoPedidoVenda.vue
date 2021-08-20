@@ -150,6 +150,9 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
+import PedidoServico from "../../servico/PedidoServico";
+import ContratoServico from "../../servico/ContratoServico";
+import LicitacaoServico from "../../servico/LicitacaoServico";
 import NovoDocumento from "../../components/NovoDocumento";
 import PedidoCliente from "./PedidoCliente";
 import PedidoFornecedor from "./PedidoFornecedor";
@@ -217,10 +220,8 @@ export default {
     },
     Obter(pedidoId) {
       this.loading = false;
-      this.$http({
-        url: "pedido/obter/" + pedidoId,
-        method: "GET"
-      })
+
+      PedidoServico.Obter(pedidoId)
         .then((resposta) => {
           this.loading = false;
           resposta.data.dataEntrega = DateTime.formatar(
@@ -242,11 +243,8 @@ export default {
     },
     Novo() {
       this.loading = false;
-      this.$http({
-        url: "pedido/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+
+      PedidoServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/pedido-venda");
@@ -267,11 +265,8 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "pedido/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      PedidoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/pedido-venda");
@@ -291,10 +286,7 @@ export default {
         });
     },
     ObterInstituicoesSelect() {
-      this.$http({
-        url: "/licitacao/obter-select",
-        method: "GET"
-      })
+      LicitacaoServico.ObterSelect()
         .then((response) => {
           this.licitacaoOptions = response.data;
         })
@@ -307,10 +299,7 @@ export default {
         });
     },
     ObterContratosSelect() {
-      this.$http({
-        url: "/contrato/obter-select",
-        method: "GET"
-      })
+      ContratoServico.ObterSelect()
         .then((response) => {
           this.contratoOptions = response.data;
         })
