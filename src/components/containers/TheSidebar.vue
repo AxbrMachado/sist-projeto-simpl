@@ -51,9 +51,9 @@ export default {
         _name: "CSidebarNav",
         _children: []
       });
-      console.log(Nav);
+      // console.log(Nav);
       let permissao = this.$store.getters.getAutenticacao.permissoes;
-      console.log(permissao);
+      // console.log(permissao);
 
       menu[0]._children.push(Nav.Dashboard);
       menu[0]._children.push(Nav.Principal);
