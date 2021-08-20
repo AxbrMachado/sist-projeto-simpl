@@ -200,7 +200,7 @@
 import RotateSquare from "./RotateSquare";
 import DateTime from "../util/DateTime";
 import DocumentoServico from "../servico/DocumentoServico";
-import TipoDocumentoServico from "../views/TipoDocumento/servico/TipoDocumentoServico";
+import TipoDocumentoServico from "../servico/TipoDocumentoServico";
 import ArquivoServico from "../servico/ArquivoServico";
 import ModalArquivo from "./ModalArquivo";
 

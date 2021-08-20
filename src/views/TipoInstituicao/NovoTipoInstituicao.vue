@@ -67,6 +67,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import TipoInstituicaoServico from "../../servico/TipoInstituicaoServico";
 
 export default {
   name: "NovoTipoInstituicao",
@@ -95,10 +96,8 @@ export default {
     },
     Obter(tipoInstituicaoId) {
       this.loading = false;
-      this.$http({
-        url: "tipoInstituicao/obter/" + tipoInstituicaoId,
-        method: "GET"
-      })
+      
+      TipoInstituicaoServico.Obter(tipoInstituicaoId)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -114,11 +113,8 @@ export default {
     },
     Novo() {
       this.loading = false;
-      this.$http({
-        url: "tipoInstituicao/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+      
+      TipoInstituicaoServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/tipo-instituicao");
@@ -139,11 +135,8 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "tipoInstituicao/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+      
+      TipoInstituicaoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/tipo-instituicao");

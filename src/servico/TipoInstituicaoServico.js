@@ -16,14 +16,14 @@ class TipoInstituicaoServico {
 
   Obter(id) {
     return Vue.prototype.$http({
-      url: "dap/obter/" + id,
+      url: "tipoInstituicao/obter/" + id,
       method: "GET"
     });
   }
 
   Novo(viewModel) {
     return Vue.prototype.$http({
-      url: "dap/novo",
+      url: "tipoInstituicao/novo",
       data: viewModel,
       method: "POST"
     });
@@ -31,30 +31,24 @@ class TipoInstituicaoServico {
 
   Editar(viewModel) {
     return Vue.prototype.$http({
-      url: "dap/editar",
+      url: "tipoInstituicao/editar",
       data: viewModel,
       method: "PUT"
     });
   }
 
-  //   ObterGrid(
-  //     pagina,
-  //     descricao,
-  //     tipoProduto,
-  //     tipoinstituicao,
-  //     presenteEmPedido
-  //   ) {
-  //     return Vue.prototype.$http({
-  //       url:
-  //         "/tipoinstituicao/obter-grid?pagina=" +
-  //         pagina +
-  //         (descricao ? "&Descricao=" + descricao : "") +
-  //         (tipoProduto ? "&tipoProdutoId=" + tipoProduto : "") +
-  //         (tipoinstituicao ? "&TipoUnidadeMedidaId=" + tipoinstituicao : "") +
-  //         (presenteEmPedido ? "&PresenteEmPedido=" + presenteEmPedido : ""),
-  //       method: "GET"
-  //     });
-  //   }
+  ObterGrid(pagina, itensPorPagina, descricao) {
+    return Vue.prototype.$http({
+      url:
+        "/tipoInstituicao/obter-grid?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        "&descricao=" +
+        descricao,
+      method: "GET"
+    });
+  }
 }
 
 export default new TipoInstituicaoServico();

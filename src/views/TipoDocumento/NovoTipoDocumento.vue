@@ -67,6 +67,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import TipoDocumentoServico from "../../servico/TipoDocumentoServico";
 
 export default {
   name: "NovoTipoDocumento",
@@ -93,12 +94,11 @@ export default {
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
+
     Obter(tipoDocumentoId) {
       this.loading = false;
-      this.$http({
-        url: "tipoDocumento/obter/" + tipoDocumentoId,
-        method: "GET"
-      })
+
+      TipoDocumentoServico.Obter(tipoDocumentoId)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -114,11 +114,8 @@ export default {
     },
     Novo() {
       this.loading = false;
-      this.$http({
-        url: "tipoDocumento/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+
+      TipoDocumentoServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/tipo-documento");
@@ -139,11 +136,8 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "tipoDocumento/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      TipoDocumentoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/tipo-documento");

@@ -182,6 +182,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import UnidadeMedidaServico from "../../servico/UnidadeMedidaServico";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   components: { RotateSquare },
@@ -393,10 +394,7 @@ export default {
       });
     },
     ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
+      TipoUnidadeMedidaServico.ObterSelect()
         .then((response) => {
           this.tiposUnidadeMedidaOptions = response.data;
         })

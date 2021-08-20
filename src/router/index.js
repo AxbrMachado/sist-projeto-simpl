@@ -746,7 +746,7 @@ export default new Router({
 
         //Cadastro de unidade medida
         {
-          path: "unidade-medida",
+          path: "unidadeMedida",
           name: "UnidadeMedida",
           meta: {
             requiresAuth: true,
