@@ -438,13 +438,8 @@ export default {
           return "Inválido";
       }
     },
-
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {

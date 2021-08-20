@@ -430,11 +430,7 @@ export default {
       this.viewModel.arquivos = [];
     },
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     }
   }
 };

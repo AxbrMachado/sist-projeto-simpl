@@ -502,11 +502,7 @@ export default {
       return valor ? valor : 0;
     },
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
     FormataDescricao(value) {
       return value.numero + " - " + value.entidadeLicitacao;

@@ -393,13 +393,8 @@ export default {
           return "Inválido";
       }
     },
-
     FormatarData(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      } else {
-        return "";
-      }
+      return value ? new Date(value).toLocaleDateString() : "";
     },
     ObterCooperadoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
