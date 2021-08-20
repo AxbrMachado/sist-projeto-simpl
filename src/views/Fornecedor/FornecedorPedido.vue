@@ -297,6 +297,8 @@ export default {
         this.filtro.Numero,
         null,
         this.fornecedorId,
+        null,
+        null,
         this.filtro.Status,
         this.filtro.DataEntrega,
         this.filtro.PedidoAvulso,

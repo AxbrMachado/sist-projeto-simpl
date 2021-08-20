@@ -336,10 +336,7 @@ export default {
       });
     },
     ObterTiposInstituicoesSelect() {
-      this.$http({
-        url: "/tipoInstituicao/obter-select",
-        method: "GET"
-      })
+      TipoInstituicaoServico.ObterSelect()
         .then((response) => {
           this.tiposInstituicaoOptions = response.data;
         })
@@ -354,11 +351,7 @@ export default {
     ObterInstituicaoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Instituicao + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Instituicao)
         .then((response) => {
           this.instituicaoOptions = response.data;
         })

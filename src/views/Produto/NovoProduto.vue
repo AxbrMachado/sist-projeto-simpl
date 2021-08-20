@@ -162,6 +162,9 @@ import ProdutoFornecedorSelect from "./ProdutoFornecedorSelect";
 import ProdutoContrato from "./ProdutoContrato";
 import ProdutoContratoSelect from "./ProdutoContratoSelect";
 import ProdutoPedido from "./ProdutoPedido";
+import ProdutoServico from "../../servico/ProdutoServico";
+import TipoProdutoServico from "../../servico/TipoProdutoServico";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   name: "NovoProduto",
@@ -204,10 +207,8 @@ export default {
     },
     Obter(produtoId) {
       this.loading = false;
-      this.$http({
-        url: "produto/obter/" + produtoId,
-        method: "GET"
-      })
+
+      ProdutoServico.Obter(produtoId)
         .then((resposta) => {
           this.loading = false;
           this.viewModel = resposta.data;
@@ -223,11 +224,8 @@ export default {
     },
     Novo() {
       this.loading = false;
-      this.$http({
-        url: "produto/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+
+      ProdutoServico.Novo(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/produto");
@@ -248,11 +246,8 @@ export default {
     },
     Editar() {
       this.loading = false;
-      this.$http({
-        url: "produto/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      ProdutoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/produto");
@@ -273,10 +268,7 @@ export default {
     },
 
     ObterTiposProdutoSelect() {
-      this.$http({
-        url: "/tipoProduto/obter-select",
-        method: "GET"
-      })
+      TipoProdutoServico.ObterSelect()
         .then((response) => {
           this.tiposProdutoOptions = response.data;
         })
@@ -289,10 +281,7 @@ export default {
         });
     },
     ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
+      TipoUnidadeMedidaServico.ObterSelect()
         .then((response) => {
           this.tiposUnidadeMedidaOptions = response.data;
         })

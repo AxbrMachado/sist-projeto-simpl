@@ -193,6 +193,9 @@
 import RotateSquare from "../../components/RotateSquare";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import PessoaPedidoProduto from "./PessoaPedidoProduto";
+import PessoaServico from "../../servico/PessoaServico";
+import PedidoServico from "../../servico/PedidoServico";
+import ContratoServico from "../../servico/ContratoServico";
 import Bus from "../../util/EventBus";
 
 export default {
@@ -283,29 +286,7 @@ export default {
     AbrirPedido(pedido) {
       this.$router.push("/pedido-venda/editar/" + pedido.id);
     },
-    ObterGrid(pagina) {
-      this.visualizarProduto = false;
-      this.loading = false;
-      this.$http({
-        url: "/pedido/obter-grid?pagina=" + pagina + this.MontaFiltro(),
-        method: "GET"
-      })
-        .then((response) => {
-          this.loading = false;
-          this.itens = response.data.itens;
-          this.total = response.data.total;
-          this.pagina = response.data.pagina;
-          this.itensPorPagina = response.data.itensPorPagina;
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
+
     MontaFiltro() {
       var filtros = "";
       var filtros = filtros + "&Descricao=" + this.filtro.Descricao;
@@ -331,7 +312,43 @@ export default {
 
       return filtros;
     },
+    ObterGrid(pagina) {
+      this.visualizarProduto = false;
+      this.loading = false;
 
+      PedidoServico.ObterGrid(
+        pagina,
+        this.itensPorPagina,
+        this.filtro.Descricao,
+        this.filtro.Numero,
+        null,
+        null,
+        this.pessoaId,
+        null,
+        this.filtro.Status,
+        this.filtro.DataEntrega,
+        this.filtro.PedidoAvulso,
+        this.filtro.PedidoCompleto,
+        this.filtro.PedidoPendente,
+        this.filtro.PedidoEntregue,
+        this.filtro.Instituicao ? this.filtro.Instituicao.id : null
+      )
+        .then((response) => {
+          this.loading = false;
+          this.itens = response.data.itens;
+          this.total = response.data.total;
+          this.pagina = response.data.pagina;
+          this.itensPorPagina = response.data.itensPorPagina;
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
     ObterNomeStatusPedido(item) {
       switch (item) {
         case StatusPedidoEnum.Pendente:
@@ -368,10 +385,7 @@ export default {
     ObterContratoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url: "/contrato/obter-v-select/" + busca,
-        method: "GET"
-      })
+      ContratoServico.ObterVSelect(busca)
         .then((response) => {
           this.contratoOptions = response.data;
         })

@@ -7,16 +7,23 @@ class ProdutoServico {
     });
   }
 
+  ObterSelect() {
+    return Vue.prototype.$http({
+      url: "/produto/obter-select",
+      method: "GET"
+    });
+  }
+
   Obter(id) {
     return Vue.prototype.$http({
-      url: "dap/obter/" + id,
+      url: "produto/obter/" + id,
       method: "GET"
     });
   }
 
   Novo(viewModel) {
     return Vue.prototype.$http({
-      url: "dap/novo",
+      url: "produto/novo",
       data: viewModel,
       method: "POST"
     });
@@ -24,7 +31,7 @@ class ProdutoServico {
 
   Editar(viewModel) {
     return Vue.prototype.$http({
-      url: "dap/editar",
+      url: "produto/editar",
       data: viewModel,
       method: "PUT"
     });

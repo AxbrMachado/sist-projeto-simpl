@@ -1,15 +1,22 @@
 import Vue from "vue";
-class TipoProdutoServico {
+class PessoaEnderecoServico {
   Obter(id) {
     return Vue.prototype.$http({
-      url: "tipoproduto/obter/" + id,
+      url: "pessoaendereco/obter/" + id,
       method: "GET"
     });
   }
 
   ObterSelect() {
     return Vue.prototype.$http({
-      url: "/tipoproduto/obter-select",
+      url: "/pessoaendereco/obter-select",
+      method: "GET"
+    });
+  }
+
+  ObterVSelect(filtro) {
+    return Vue.prototype.$http({
+      url: "/pessoaendereco/obter-v-select/" + filtro,
       method: "GET"
     });
   }
@@ -17,7 +24,7 @@ class TipoProdutoServico {
   ObterGrid(pagina, itensPorPagina, descricao) {
     return Vue.prototype.$http({
       url:
-        "/tipoproduto/obter-grid?pagina=" +
+        "/pessoaendereco/obter-grid?pagina=" +
         pagina +
         "&ItensPorPagina=" +
         itensPorPagina +
@@ -29,14 +36,14 @@ class TipoProdutoServico {
 
   Remover(id) {
     return Vue.prototype.$http({
-      url: "tipoproduto/remover/" + id,
+      url: "pessoaendereco/remover/" + id,
       method: "DELETE"
     });
   }
 
   Novo(viewModel) {
     return Vue.prototype.$http({
-      url: "tipoproduto/novo",
+      url: "pessoaendereco/novo",
       data: viewModel,
       method: "POST"
     });
@@ -44,11 +51,11 @@ class TipoProdutoServico {
 
   Editar(viewModel) {
     return Vue.prototype.$http({
-      url: "tipoproduto/editar",
+      url: "pessoaendereco/editar",
       data: viewModel,
       method: "PUT"
     });
   }
 }
 
-export default new TipoProdutoServico();
+export default new PessoaEnderecoServico();

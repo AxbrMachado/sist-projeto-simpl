@@ -264,6 +264,8 @@ import PessoaPedido from "./PessoaPedido";
 import DateTime from "../../util/DateTime";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import Contato from "../../components/Contato";
+import PessoaServico from "../../servico/PessoaServico";
+import TipoClienteServico from "../../servico/TipoClienteServico";
 
 export default {
   name: "NovaPessoa",
@@ -353,10 +355,8 @@ export default {
     // },
     Obter(id) {
       this.loadingPessoa = true;
-      this.$http({
-        url: "pessoa/obter/" + id,
-        method: "GET"
-      })
+
+      PessoaServico.Obter(id)
         .then((resposta) => {
           this.loadingPessoa = false;
           resposta.data.dataNascimento = DateTime.formatar(
@@ -378,11 +378,7 @@ export default {
     },
     Novo() {
       this.loadingPessoa = true;
-      this.$http({
-        url: "pessoa/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+      PessoaServico.Novo(this.viewModel)
         .then((resposta) => {
           this.viewModel.id = resposta.data.id;
           if (!this.viewModel.nomeCompleto)
@@ -406,11 +402,8 @@ export default {
     },
     Editar() {
       this.loadingPessoa = true;
-      this.$http({
-        url: "pessoa/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+
+      PessoaServico.Editar(this.viewModel)
         .then(() => {
           this.loadingPessoa = false;
           this.$router.push("/pessoa");
@@ -450,10 +443,7 @@ export default {
       this.viewModel.tipoClienteId = this.$store.getters.emptyGuid;
     },
     ObterTiposClienteSelect() {
-      this.$http({
-        url: "/tipoCliente/obter-select",
-        method: "GET"
-      })
+      TipoClienteServico.ObterSelect()
         .then((response) => {
           this.tiposCliente = response.data;
         })

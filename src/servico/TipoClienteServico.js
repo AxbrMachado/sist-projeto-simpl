@@ -7,6 +7,13 @@ class TipoClienteServico {
     });
   }
 
+  ObterSelect() {
+    return Vue.prototype.$http({
+      url: "/tipocliente/obter-select",
+      method: "GET"
+    });
+  }
+
   ObterGrid(pagina, itensPorPagina, descricao) {
     return Vue.prototype.$http({
       url:

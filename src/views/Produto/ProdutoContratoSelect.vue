@@ -284,6 +284,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   name: "ProdutoContratoSelect",
@@ -508,10 +509,7 @@ export default {
       return value.numero + " - " + value.entidadeLicitacao;
     },
     ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
+      TipoUnidadeMedidaServico.ObterSelect()
         .then((response) => {
           this.tiposUnidadeMedidaOptions = response.data;
         })

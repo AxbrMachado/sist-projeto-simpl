@@ -120,6 +120,7 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
 import DateTime from "../../util/DateTime";
 
 export default {
@@ -177,16 +178,12 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url:
-          "/contratoproduto/obter-grid?pagina=" +
-          pagina +
-          "&numero=" +
-          this.filtro.numero +
-          "&produtoId=" +
-          this.produtoId,
-        method: "GET"
-      })
+
+      ContratoProdutoServico.ObterGrid(
+        pagina,
+        this.filtro.numero,
+        this.produtoId
+      )
         .then((response) => {
           this.loading = false;
           response.data.itens.forEach((item) => {

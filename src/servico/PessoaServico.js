@@ -50,6 +50,28 @@ class PessoaServico {
       method: "DELETE"
     });
   }
+
+  ObterGrid(
+    pagina,
+    itensPorPagina,
+    nome,
+    cidade,
+    tipoPessoa,
+    presenteEmPedido
+  ) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoa/obter-grid?pagina=" +
+        pagina +
+        "&ItensPorPagina=" +
+        itensPorPagina +
+        (nome ? "&Nome=" + nome : "") +
+        (cidade ? "&Cidade=" + cidade : "") +
+        (tipoPessoa ? "&TipoPessoa=" + tipoPessoa : "") +
+        (presenteEmPedido ? "&PresenteEmPedido=" + presenteEmPedido : ""),
+      method: "GET"
+    });
+  }
 }
 
 export default new PessoaServico();

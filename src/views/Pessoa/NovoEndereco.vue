@@ -233,6 +233,9 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
+import TipoEndereco from "../../servico/TipoEnderecoServico";
+import Endereco from "../../servico/EnderecoServico";
+import EnderecoServico from "../../servico/EnderecoServico";
 
 export default {
   components: { RotateSquare },
@@ -295,10 +298,8 @@ export default {
   methods: {
     ConsultarCep() {
       if (!this.viewModel.cep) return;
-      this.$http({
-        url: "endereco/obter-cep/" + this.viewModel.cep,
-        method: "GET"
-      })
+
+      EnderecoServico.ObterCep(this.viewModel.cep)
         .then((resposta) => {
           this.viewModel.bairro = resposta.data.bairro;
           this.viewModel.uf = resposta.data.uf;
@@ -310,10 +311,8 @@ export default {
     },
     ObeterTipoEndereco() {
       this.loading = false;
-      this.$http({
-        url: "tipoendereco/obter-select",
-        method: "GET"
-      })
+
+      TipoEndereco.ObterSelect()
         .then((resposta) => {
           this.loading = false;
           this.tipos = resposta.data;
@@ -337,10 +336,8 @@ export default {
     },
     Obter(id) {
       this.loading = false;
-      this.$http({
-        url: "endereco/obter/" + id,
-        method: "GET"
-      })
+
+      Endereco.Obter(id)
         .then((resposta) => {
           this.loading = false;
           resposta.data.validade = DateTime.formatar(resposta.data.validade);
@@ -355,18 +352,10 @@ export default {
           });
         });
     },
-    ObterGrid(val) {
+    ObterGrid(pagina) {
       this.loading = false;
-      this.$http({
-        url:
-          "endereco/obter-grid/" +
-          val +
-          "/" +
-          this.itensPorPagina +
-          "/" +
-          this.pessoaId,
-        method: "GET"
-      })
+
+      EnderecoServico.ObterGrid(pagina, this.itensPorPagina, this.pessoaId)
         .then((resposta) => {
           this.loading = false;
           this.itens = resposta.data.itens;
@@ -391,10 +380,7 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover) return;
 
-      this.$http({
-        url: "endereco/remover/" + this.itemRemover,
-        method: "DELETE"
-      })
+      EnderecoServico.Remover(this.itemRemover)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
@@ -418,11 +404,8 @@ export default {
     Novo() {
       this.loading = false;
       this.viewModel.pessoaId = this.pessoaId;
-      this.$http({
-        url: "endereco/novo",
-        data: this.viewModel,
-        method: "POST"
-      })
+
+      EnderecoServico.Novo(this.viewModel)
         .then((resposta) => {
           this.loading = false;
           this.Limpar();
@@ -446,11 +429,7 @@ export default {
       this.loading = false;
       this.viewModel.pessoaId = this.pessoaId;
 
-      this.$http({
-        url: "endereco/editar",
-        data: this.viewModel,
-        method: "PUT"
-      })
+      EnderecoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.Limpar();

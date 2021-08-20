@@ -184,6 +184,7 @@ import RotateSquare from "../../components/RotateSquare";
 import ProdutoFornecedorServico from "../../servico/ProdutoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import PessoaServico from "../../servico/PessoaServico";
 
 export default {
   components: { RotateSquare },
@@ -395,11 +396,7 @@ export default {
     ObterFornecedoresVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Fornecedor)
         .then((response) => {
           this.fornecedorOptions = response.data;
         })

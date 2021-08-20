@@ -7,6 +7,13 @@ class TipoEnderecoServico {
     });
   }
 
+  ObterSelect() {
+    return Vue.prototype.$http({
+      url: "/tipoendereco/obter-select",
+      method: "GET"
+    });
+  }
+
   ObterGrid(pagina, itensPorPagina, descricao) {
     return Vue.prototype.$http({
       url:
