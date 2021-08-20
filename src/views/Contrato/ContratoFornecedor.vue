@@ -246,6 +246,7 @@ import ContratoFornecedorServico from "../../servico/ContratoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import PessoaServico from "../../servico/PessoaServico";
 
 export default {
   components: { RotateSquare },
@@ -307,11 +308,7 @@ export default {
       this.ObterGrid(val);
     }
   },
-  created() {
-    //let contratoId = this.$route.params.id;
-    //if (contratoId) this.Obter(contratoId);
-    // this.ObterFornecedorFsSelect();
-  },
+  created() {},
   methods: {
     IsNovo() {
       return this.contratoId === this.$store.getters.emptyGuid;
@@ -488,11 +485,7 @@ export default {
     ObterFornecedoresVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url:
-          "/pessoa/obter-v-select/" + TipoPessoaEnum.Fornecedor + "/" + busca,
-        method: "GET"
-      })
+      PessoaServico.ObterClientesVSelect(busca, TipoPessoaEnum.Fornecedor)
         .then((response) => {
           this.fornecedorOptions = response.data;
         })
@@ -559,9 +552,10 @@ export default {
       return valor ? valor : 0;
     },
     FormataValorRestante(item) {
-      return (item.valorConsumido >= item.valorLimite
-        ? 0
-        : item.valorLimite - item.valorConsumido
+      return (
+        item.valorConsumido >= item.valorLimite
+          ? 0
+          : item.valorLimite - item.valorConsumido
       ).toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL"

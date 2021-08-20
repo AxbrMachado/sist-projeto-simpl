@@ -541,9 +541,10 @@ export default {
         });
     },
     FormataValorRestante(item) {
-      return (item.valorConsumido >= item.valorLimite
-        ? 0
-        : item.valorLimite - item.valorConsumido
+      return (
+        item.valorConsumido >= item.valorLimite
+          ? 0
+          : item.valorLimite - item.valorConsumido
       ).toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL"

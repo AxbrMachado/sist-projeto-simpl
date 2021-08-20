@@ -264,6 +264,7 @@ import RotateSquare from "../../components/RotateSquare";
 import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
 import TipoPessoaContratoEnum from "../../enums/TipoPessoaContratoEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
+import TipoUnidadeMedidaServico from "../../servico/TipoUnidadeMedidaServico";
 
 export default {
   name: "ContratoProdutoSelect",
@@ -485,10 +486,7 @@ export default {
       return valor ? valor : 0;
     },
     ObterTiposUnidadeMedidaSelect() {
-      this.$http({
-        url: "/tipoUnidadeMedida/obter-select",
-        method: "GET"
-      })
+      TipoUnidadeMedidaServico.ObterSelect()
         .then((response) => {
           this.tiposUnidadeMedidaOptions = response.data;
         })

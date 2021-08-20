@@ -2,7 +2,7 @@ import Vue from "vue";
 class ProdutoServico {
   ObterVSelect(busca) {
     return Vue.prototype.$http({
-      url: "obter-v-select/" + busca,
+      url: "produto/obter-v-select/" + busca,
       method: "GET"
     });
   }

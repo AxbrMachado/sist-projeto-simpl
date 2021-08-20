@@ -1,8 +1,8 @@
 import Vue from "vue";
 class ContratoServico {
-  ObterVSelect(busca) {
+  ObterVSelect(filtro) {
     return Vue.prototype.$http({
-      url: "obter-v-select/" + busca,
+      url: "contrato/obter-v-select/" + filtro,
       method: "GET"
     });
   }

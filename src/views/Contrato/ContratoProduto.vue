@@ -175,6 +175,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import ContratoProdutoServico from "../../servico/ContratoProdutoServico";
+import ProdutoServico from "../../servico/ProdutoServico";
 
 export default {
   components: { RotateSquare },
@@ -226,11 +227,7 @@ export default {
       this.ObterGrid(val);
     }
   },
-  created() {
-    //let contratoId = this.$route.params.id;
-    //if (contratoId) this.Obter(contratoId);
-    // this.ObterProdutosSelect();
-  },
+  created() {},
   methods: {
     IsNovo() {
       return this.contratoId === this.$store.getters.emptyGuid;
@@ -385,10 +382,7 @@ export default {
     ObterProdutosVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
-      this.$http({
-        url: "/produto/obter-v-select/" + busca,
-        method: "GET"
-      })
+      ProdutoServico.ObterVSelect(busca)
         .then((response) => {
           this.produtoOptions = response.data;
         })

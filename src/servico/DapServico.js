@@ -2,7 +2,7 @@ import Vue from "vue";
 class DapServico {
     ObterVSelect(busca) {
         return Vue.prototype.$http({
-            url: "obter-v-select/" + busca,
+            url: "dap/obter-v-select/" + busca,
             method: "GET"
         });
     }
