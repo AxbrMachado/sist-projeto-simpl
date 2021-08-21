@@ -30,7 +30,7 @@
                   <a
                     @click="AdicionarTodos()"
                     class="ml-auto btn btn-primary"
-                    href="/#/contrato/novo"
+                    href="javascript:"
                     title="Adicionar todos fornecedores ao contrato"
                   >
                     Adicionar Todos Fornecedores
@@ -235,21 +235,6 @@
             />
           </div>
         </div>
-        <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-6">
-          <div class="form-group">
-            <label for>* Quantidade Limite</label>
-            <vue-numeric
-              v-bind:precision="3"
-              v-bind:minus="false"
-              thousand-separator="."
-              decimal-separator=","
-              v-model="addTodosQuantidade"
-              class="form-control"
-              placeholder="Digite a quantidade limite"
-              required
-            />
-          </div>
-        </div> -->
       </div>
     </b-modal>
   </div>

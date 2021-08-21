@@ -27,6 +27,16 @@
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
                 <div class="row">
+                  <a
+                    @click="AdicionarTodos()"
+                    class="ml-auto btn btn-primary"
+                    href="javascript:"
+                    title="Adicionar todos fornecedores ao contrato"
+                  >
+                    Adicionar Todos Produtos
+                  </a>
+                </div>
+                <div class="row">
                   <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
                       <label>Produto</label>
@@ -206,6 +216,15 @@
         </div>
       </div>
     </b-modal>
+    <b-modal
+      v-model="modalAdicionarTodos"
+      title="Adicionar todos os produtos ao fornecedor"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="AdicionarTodosOk"
+      @hidden="AdicionarTodosCancel"
+    >
+    </b-modal>
   </div>
 </template>
 
@@ -225,6 +244,7 @@ export default {
   data() {
     return {
       modalEditarInfoProduto: false,
+      modalAdicionarTodos: false,
       valorProduto: 0,
       quantidadeProduto: 0,
       fornecedorProdutoId: this.$store.getters.emptyGuid,
@@ -347,10 +367,6 @@ export default {
         return;
       }
 
-      // if (!this.quantidadeProduto) {
-      //   this.quantidadeProduto = 0;
-      // }
-
       this.modalEditarInfoProduto = false;
 
       FornecedorProdutoServico.EditarFornecedorProduto(
@@ -396,6 +412,38 @@ export default {
     },
     FormataQuantidade(valor) {
       return valor ? valor : 0;
+    },
+    AdicionarTodos() {
+      this.modalAdicionarTodos = true;
+    },
+    AdicionarTodosCancel(evento) {
+      evento.preventDefault();
+    },
+
+    AdicionarTodosOk(evento) {
+      evento.preventDefault();
+
+      this.modalAdicionarTodos = false;
+
+      FornecedorProdutoServico.AdicionarTodosProdutos(this.fornecedorId)
+        .then((resposta) => {
+          this.loading = false;
+          this.Limpar();
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Produtos adicionados ao fornecedor com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };

@@ -112,6 +112,13 @@ class FornecedorProdutoServico {
     });
   }
 
+  AdicionarTodosProdutos(fornecedorId) {
+    return Vue.prototype.$http({
+      url: "/fornecedorProduto/adicionar-todos-produtos/" + fornecedorId,
+      method: "GET"
+    });
+  }
+
   Editar(viewModel) {
     return Vue.prototype.$http({
       url: "fornecedorProduto/editar",
