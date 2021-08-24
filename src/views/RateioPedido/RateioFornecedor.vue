@@ -124,7 +124,10 @@
                             <i class="fas fa-trash-alt"></i>
                           </b-button>
                           <b-button
-                            v-if="AtendeProduto(data.item)"
+                            v-if="
+                              AtendeProduto(data.item) &&
+                              FornecedorComTelefoneCadastrado(data.item)
+                            "
                             variant="success"
                             style="margin-right: 10px"
                             title="Enviar solicitação via whatsapp"
@@ -236,6 +239,7 @@ import PedidoFornecedorServico from "../../servico/PedidoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import Bus from "../../util/EventBus";
 import RateioServico from "../../servico/RateioServico";
+import ContatoServico from "../../servico/ContatoServico";
 
 // import PedidoFornecedorProduto from "./PedidoFornecedorProduto.vue";
 
@@ -478,10 +482,6 @@ export default {
           });
         });
     },
-
-    EnviarWhatsApp(item) {
-      console.log("enviar mensagem whats" + item.id);
-    },
     ConfirmarProdutosFornecedor(item) {
       console.log(
         "confirmar produtos fornecedor: " +
@@ -490,12 +490,17 @@ export default {
           item.pedidoId
       );
     },
-
     ImprimirInformacoesFornecedor(item) {
       console.log(
         "em breve impressao dos produtos atendidos pelo fornecedor no pedido: " +
           item.pedidoId
       );
+    },
+    FornecedorComTelefoneCadastrado(item) {
+      return item.telefone;
+    },
+    EnviarWhatsApp(item) {
+      ContatoServico.EnviarWhatsApp(item.telefone, "mensagem teste");
     }
   }
 };

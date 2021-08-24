@@ -50,9 +50,9 @@
                   <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                       <label for="">Telefone</label>
-                      <input
+                      <the-mask
+                        :mask="['+55 (##) ####-####', '+55 (##) #####-####']"
                         class="form-control"
-                        type="text"
                         v-model="viewModel.telefone"
                       />
                     </div>
@@ -248,6 +248,17 @@ export default {
     },
     ValidarForm(evt) {
       evt.preventDefault();
+
+      if (this.viewModel.telefone && this.viewModel.telefone.length < 10) {
+        this.loading = false;
+        this.$notify({
+          data: ["Telefone inválido."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
       else this.Novo();
     },
