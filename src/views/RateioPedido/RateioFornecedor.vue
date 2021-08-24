@@ -201,6 +201,53 @@
       </div>
     </form>
     <b-modal
+      v-model="modalEnviarWhatsApp"
+      title="Enviar mensagem para fornecedor"
+      class="modal-info"
+      ok-variant="info"
+      @ok="modalWhatsAppOk"
+      @hidden="modalWhatsAppCancel"
+    >
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-7">
+          <div class="form-group">
+            <label>Fornecedor</label>
+            <input
+              disabled
+              type="text"
+              v-model="fornecedorWhatsApp"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for="">Telefone</label>
+            <the-mask
+              disabled
+              :mask="['+55 (##) ####-####', '+55 (##) #####-####']"
+              class="form-control"
+              v-model="telefoneWhatsApp"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-12">
+          <div class="form-group">
+            <label for>Mensagem</label>
+            <b-form-textarea
+              id="textarea-auto-height"
+              v-model="mensagemWhatsApp"
+              rows="1"
+              max-rows="1 "
+              placeholder="Digite uma mensagem"
+            ></b-form-textarea>
+          </div>
+        </div>
+      </div>
+    </b-modal>
+    <b-modal
       v-model="modalRemover"
       title="Confirmar exclusão"
       class="modal-danger"
@@ -241,8 +288,6 @@ import Bus from "../../util/EventBus";
 import RateioServico from "../../servico/RateioServico";
 import ContatoServico from "../../servico/ContatoServico";
 
-// import PedidoFornecedorProduto from "./PedidoFornecedorProduto.vue";
-
 export default {
   name: "RateioFornecedor",
   emits: ["atualizarRateio"],
@@ -262,6 +307,10 @@ export default {
     return {
       modalRemover: false,
       modalRecusar: false,
+      modalEnviarWhatsApp: false,
+      telefoneWhatsApp: "",
+      mensagemWhatsApp: "",
+      fornecedorWhatsApp: "",
       itemEdicao: null,
       fornecedorId: "",
       fornecedorOptions: [],
@@ -499,8 +548,27 @@ export default {
     FornecedorComTelefoneCadastrado(item) {
       return item.telefone;
     },
+    modalWhatsAppCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+    },
+    modalWhatsAppOk(evento) {
+      evento.preventDefault();
+      this.modalEnviarWhatsApp = false;
+      if (!this.itemEdicao) return;
+
+      ContatoServico.EnviarWhatsApp(
+        this.telefoneWhatsApp,
+        this.mensagemWhatsApp
+      );
+    },
+
     EnviarWhatsApp(item) {
-      ContatoServico.EnviarWhatsApp(item.telefone, "mensagem teste");
+      this.modalEnviarWhatsApp = true;
+      this.itemEdicao = item;
+      this.telefoneWhatsApp = item.telefone;
+      this.fornecedorWhatsApp = item.pessoa;
+      this.mensagemWhatsApp = "";
     }
   }
 };
