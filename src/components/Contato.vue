@@ -257,6 +257,8 @@ export default {
           duration: 5000
         });
         return;
+      } else if (this.viewModel.telefone) {
+        this.viewModel.telefone = "+55" + this.viewModel.telefone;
       }
 
       if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();

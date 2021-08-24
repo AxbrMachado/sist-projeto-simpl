@@ -40,7 +40,10 @@ class ContatoServico {
   EnviarWhatsApp(telefone, mensagem) {
     window
       .open(
-        "https://api.whatsapp.com/send?phone=" + telefone + "&text=" + mensagem,
+        "https://api.whatsapp.com/send?phone=+55" +
+          telefone +
+          "&text=" +
+          mensagem,
         "_blank"
       )
       .focus();

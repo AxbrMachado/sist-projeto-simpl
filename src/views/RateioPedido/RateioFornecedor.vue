@@ -202,7 +202,7 @@
     </form>
     <b-modal
       v-model="modalEnviarWhatsApp"
-      title="Enviar mensagem para fornecedor"
+      title="Enviar mensagem de whatsapp para fornecedor"
       class="modal-info"
       ok-variant="info"
       @ok="modalWhatsAppOk"
@@ -287,6 +287,7 @@ import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import Bus from "../../util/EventBus";
 import RateioServico from "../../servico/RateioServico";
 import ContatoServico from "../../servico/ContatoServico";
+import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
 
 export default {
   name: "RateioFornecedor",
