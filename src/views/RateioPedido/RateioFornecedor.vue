@@ -268,15 +268,14 @@
       Ao recusar o atendimento dos produtos, o fornecedor não participa
       novamente do rateio do pedido. Confirma?
     </b-modal>
-    <!-- <div v-if="EditarFornecedorProduto()">
-      <PedidoFornecedorProduto
-        :fornecedorId="this.fornecedorId"
-        :pedidoId="this.pedidoId"
-        :descricaoFornecedor="this.descricaoFornecedor"
-        @atualizarFornecedor="atualizarFornecedor"
-      >
-      </PedidoFornecedorProduto>
-    </div> -->
+    <b-modal
+      v-model="modalImpressao"
+      title="Impressão"
+      class="modal-info"
+      ok-variant="info"
+    >
+      Rotina de impressão em desenvolvimento
+    </b-modal>
   </div>
 </template>
 
@@ -309,6 +308,7 @@ export default {
       modalRemover: false,
       modalRecusar: false,
       modalEnviarWhatsApp: false,
+      modalImpressao: false,
       telefoneWhatsApp: "",
       mensagemWhatsApp: "",
       fornecedorWhatsApp: "",
@@ -541,10 +541,7 @@ export default {
       );
     },
     ImprimirInformacoesFornecedor(item) {
-      console.log(
-        "em breve impressao dos produtos atendidos pelo fornecedor no pedido: " +
-          item.pedidoId
-      );
+      this.modalImpressao = true;
     },
     FornecedorComTelefoneCadastrado(item) {
       return item.telefone;
