@@ -289,8 +289,8 @@ export default {
         { key: "valorConsumido", label: "Valor Consumido", sortable: true },
         { key: "valorRestante", label: "Valor Disponível", sortable: true },
         // {
-        //   key: "quantidadeConsumida",
-        //   label: "Quantidade Consumida",
+        //   key: "quantidadeAtendida",
+        //   label: "Quantidade Atendida",
         //   sortable: true
         // },
         {

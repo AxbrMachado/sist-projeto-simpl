@@ -137,6 +137,7 @@
                           </b-button>
 
                           <b-button
+                            v-if="AtendeProduto(data.item)"
                             variant="dark"
                             title="Imprmir informações fornecedor pedido"
                             @click="ImprimirInformacoesFornecedor(data.item)"
@@ -259,7 +260,7 @@
     </b-modal>
     <b-modal
       v-model="modalRecusar"
-      title="Recusar atendimento"
+      title="Recusar produtos pedido para fornecedor"
       class="modal-danger"
       ok-variant="danger"
       @ok="ModalRecusarOk"
@@ -275,6 +276,17 @@
       ok-variant="info"
     >
       Rotina de impressão em desenvolvimento
+    </b-modal>
+    <b-modal
+      v-model="modalAtenderTodos"
+      title="Confirmar produtos pedido para fornecedor"
+      class="modal-success"
+      ok-variant="success"
+      @ok="ModalAtenderTodosOk"
+      @hidden="ModalAtenderTodosCancel"
+    >
+      Ao confirmar o atendimento dos produtos deste fornecedor os mesmos não
+      entram mais em possíveis rateios deste pedido. Confirma?
     </b-modal>
   </div>
 </template>
@@ -309,6 +321,7 @@ export default {
       modalRecusar: false,
       modalEnviarWhatsApp: false,
       modalImpressao: false,
+      modalAtenderTodos: false,
       telefoneWhatsApp: "",
       mensagemWhatsApp: "",
       fornecedorWhatsApp: "",
@@ -519,7 +532,7 @@ export default {
           this.$emit("atualizarRateio");
           Bus.$emit("alterado-produto-fornecedor");
           this.$notify({
-            data: ["Produto recusado pelo fornecedor com sucesso."],
+            data: ["Produtos recusados pelo fornecedor com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -531,14 +544,6 @@ export default {
             duration: 5000
           });
         });
-    },
-    ConfirmarProdutosFornecedor(item) {
-      console.log(
-        "confirmar produtos fornecedor: " +
-          item.fornecedorId +
-          "\npedido:" +
-          item.pedidoId
-      );
     },
     ImprimirInformacoesFornecedor(item) {
       this.modalImpressao = true;
@@ -560,13 +565,51 @@ export default {
         this.mensagemWhatsApp
       );
     },
-
     EnviarWhatsApp(item) {
       this.modalEnviarWhatsApp = true;
       this.itemEdicao = item;
       this.telefoneWhatsApp = item.telefone;
       this.fornecedorWhatsApp = item.pessoa;
       this.mensagemWhatsApp = "";
+    },
+    ConfirmarProdutosFornecedor(item) {
+      this.itemEdicao = item;
+      this.modalAtenderTodos = true;
+    },
+    ModalAtenderTodosCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+      this.modalAtenderTodos = false;
+    },
+    ModalAtenderTodosOk(evento) {
+      evento.preventDefault();
+      this.modalAtenderTodos = false;
+
+      evento.preventDefault();
+      this.modalRecusar = false;
+      if (!this.itemEdicao) return;
+
+      RateioServico.ConfirmarProdutoFornecedorRateio(
+        this.itemEdicao.pedidoId,
+        this.itemEdicao.fornecedorId
+      )
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          this.$emit("atualizarRateio");
+          Bus.$emit("alterado-produto-fornecedor");
+          this.$notify({
+            data: ["Produtos confirmados pelo fornecedor com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };

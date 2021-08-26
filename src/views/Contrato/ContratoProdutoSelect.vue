@@ -127,10 +127,10 @@
                           }}</span>
                         </div>
                       </template>
-                      <template v-slot:cell(quantidadeConsumida)="data">
+                      <template v-slot:cell(quantidadeAtendida)="data">
                         <div class="left">
                           <span>{{
-                            FormataQuantidade(data.item.quantidadeConsumida)
+                            FormataQuantidade(data.item.quantidadeAtendida)
                           }}</span>
                         </div>
                       </template>
@@ -305,7 +305,7 @@ export default {
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "quantidade", label: "Qtd. Contrato", sortable: true },
-        { key: "quantidadeConsumida", label: "Qtd. Consumida", sortable: true },
+        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
         {
           key: "quantidadeDisponivel",
           label: "Qtd. Disponível",
@@ -505,9 +505,9 @@ export default {
       return valor ? valor + "%" : "-";
     },
     FormataQuantidadePendente(item) {
-      return item.quantidadeConsumida >= item.quantidade
+      return item.quantidadeAtendida >= item.quantidade
         ? 0
-        : item.quantidade - item.quantidadeConsumida;
+        : item.quantidade - item.quantidadeAtendida;
     }
   }
 };
