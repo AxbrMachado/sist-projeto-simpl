@@ -155,6 +155,17 @@ class PedidoProdutoFornecedorServico {
       method: "GET"
     });
   }
+
+  LoadMensagemProdutosFornecedorPedido(fornecedorId, pedidoId) {
+    return Vue.prototype.$http({
+      url:
+        "/pedidoprodutofornecedor/load-mensagem-produtos-fornecedor-pedido/" +
+        fornecedorId +
+        "/" +
+        pedidoId,
+      method: "GET"
+    }).data;
+  }
 }
 
 export default new PedidoProdutoFornecedorServico();

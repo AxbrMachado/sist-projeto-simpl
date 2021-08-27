@@ -124,7 +124,10 @@
                             <i class="fas fa-trash-alt"></i>
                           </b-button>
                           <b-button
-                            v-if="AtendeProduto(data.item)"
+                            v-if="
+                              AtendeProduto(data.item) &&
+                              FornecedorComTelefoneCadastrado(data.item)
+                            "
                             variant="success"
                             style="margin-right: 10px"
                             title="Enviar solicitação via whatsapp"
@@ -134,6 +137,7 @@
                           </b-button>
 
                           <b-button
+                            v-if="AtendeProduto(data.item)"
                             variant="dark"
                             title="Imprmir informações fornecedor pedido"
                             @click="ImprimirInformacoesFornecedor(data.item)"
@@ -198,6 +202,53 @@
       </div>
     </form>
     <b-modal
+      v-model="modalEnviarWhatsApp"
+      title="Enviar mensagem de whatsapp para fornecedor"
+      class="modal-info"
+      ok-variant="info"
+      @ok="modalWhatsAppOk"
+      @hidden="modalWhatsAppCancel"
+    >
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-7">
+          <div class="form-group">
+            <label>Fornecedor</label>
+            <input
+              disabled
+              type="text"
+              v-model="fornecedorWhatsApp"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for="">Telefone</label>
+            <the-mask
+              disabled
+              :mask="['+55 (##) ####-####', '+55 (##) #####-####']"
+              class="form-control"
+              v-model="telefoneWhatsApp"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-12">
+          <div class="form-group">
+            <label for>Mensagem</label>
+            <b-form-textarea
+              id="textarea-auto-height"
+              v-model="mensagemWhatsApp"
+              rows="1"
+              max-rows="1 "
+              placeholder="Digite uma mensagem"
+            ></b-form-textarea>
+          </div>
+        </div>
+      </div>
+    </b-modal>
+    <b-modal
       v-model="modalRemover"
       title="Confirmar exclusão"
       class="modal-danger"
@@ -209,7 +260,7 @@
     </b-modal>
     <b-modal
       v-model="modalRecusar"
-      title="Recusar atendimento"
+      title="Recusar produtos pedido para fornecedor"
       class="modal-danger"
       ok-variant="danger"
       @ok="ModalRecusarOk"
@@ -218,15 +269,25 @@
       Ao recusar o atendimento dos produtos, o fornecedor não participa
       novamente do rateio do pedido. Confirma?
     </b-modal>
-    <!-- <div v-if="EditarFornecedorProduto()">
-      <PedidoFornecedorProduto
-        :fornecedorId="this.fornecedorId"
-        :pedidoId="this.pedidoId"
-        :descricaoFornecedor="this.descricaoFornecedor"
-        @atualizarFornecedor="atualizarFornecedor"
-      >
-      </PedidoFornecedorProduto>
-    </div> -->
+    <b-modal
+      v-model="modalImpressao"
+      title="Impressão"
+      class="modal-info"
+      ok-variant="info"
+    >
+      Rotina de impressão em desenvolvimento
+    </b-modal>
+    <b-modal
+      v-model="modalAtenderTodos"
+      title="Confirmar produtos pedido para fornecedor"
+      class="modal-success"
+      ok-variant="success"
+      @ok="ModalAtenderTodosOk"
+      @hidden="ModalAtenderTodosCancel"
+    >
+      Ao confirmar o atendimento dos produtos deste fornecedor os mesmos não
+      entram mais em possíveis rateios deste pedido. Confirma?
+    </b-modal>
   </div>
 </template>
 
@@ -236,8 +297,8 @@ import PedidoFornecedorServico from "../../servico/PedidoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import Bus from "../../util/EventBus";
 import RateioServico from "../../servico/RateioServico";
-
-// import PedidoFornecedorProduto from "./PedidoFornecedorProduto.vue";
+import ContatoServico from "../../servico/ContatoServico";
+import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
 
 export default {
   name: "RateioFornecedor",
@@ -258,6 +319,12 @@ export default {
     return {
       modalRemover: false,
       modalRecusar: false,
+      modalEnviarWhatsApp: false,
+      modalImpressao: false,
+      modalAtenderTodos: false,
+      telefoneWhatsApp: "",
+      mensagemWhatsApp: "",
+      fornecedorWhatsApp: "",
       itemEdicao: null,
       fornecedorId: "",
       fornecedorOptions: [],
@@ -465,7 +532,7 @@ export default {
           this.$emit("atualizarRateio");
           Bus.$emit("alterado-produto-fornecedor");
           this.$notify({
-            data: ["Produto recusado pelo fornecedor com sucesso."],
+            data: ["Produtos recusados pelo fornecedor com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -478,24 +545,71 @@ export default {
           });
         });
     },
+    ImprimirInformacoesFornecedor(item) {
+      this.modalImpressao = true;
+    },
+    FornecedorComTelefoneCadastrado(item) {
+      return item.telefone;
+    },
+    modalWhatsAppCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+    },
+    modalWhatsAppOk(evento) {
+      evento.preventDefault();
+      this.modalEnviarWhatsApp = false;
+      if (!this.itemEdicao) return;
 
+      ContatoServico.EnviarWhatsApp(
+        this.telefoneWhatsApp,
+        this.mensagemWhatsApp
+      );
+    },
     EnviarWhatsApp(item) {
-      console.log("enviar mensagem whats" + item.id);
+      this.modalEnviarWhatsApp = true;
+      this.itemEdicao = item;
+      this.telefoneWhatsApp = item.telefone;
+      this.fornecedorWhatsApp = item.pessoa;
+      this.mensagemWhatsApp = "";
     },
     ConfirmarProdutosFornecedor(item) {
-      console.log(
-        "confirmar produtos fornecedor: " +
-          item.fornecedorId +
-          "\npedido:" +
-          item.pedidoId
-      );
+      this.itemEdicao = item;
+      this.modalAtenderTodos = true;
     },
+    ModalAtenderTodosCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+      this.modalAtenderTodos = false;
+    },
+    ModalAtenderTodosOk(evento) {
+      evento.preventDefault();
+      this.modalAtenderTodos = false;
 
-    ImprimirInformacoesFornecedor(item) {
-      console.log(
-        "em breve impressao dos produtos atendidos pelo fornecedor no pedido: " +
-          item.pedidoId
-      );
+      evento.preventDefault();
+      this.modalRecusar = false;
+      if (!this.itemEdicao) return;
+
+      RateioServico.ConfirmarProdutoFornecedorRateio(
+        this.itemEdicao.pedidoId,
+        this.itemEdicao.fornecedorId
+      )
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          this.$emit("atualizarRateio");
+          Bus.$emit("alterado-produto-fornecedor");
+          this.$notify({
+            data: ["Produtos confirmados pelo fornecedor com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };

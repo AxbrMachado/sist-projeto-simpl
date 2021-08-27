@@ -14,6 +14,8 @@ import Highcharts from "highcharts";
 import VueCurrencyInput from "vue-currency-input";
 import VueNumeric from "vue-numeric";
 import VueMask from "v-mask";
+import VueTheMask from "vue-the-mask";
+Vue.use(VueTheMask);
 
 const pluginOptions = {
   globalOptions: { currency: "BRL" }

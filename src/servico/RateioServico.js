@@ -75,6 +75,13 @@ class RateioServico {
       method: "GET"
     });
   }
+
+  ConfirmarProdutoFornecedorRateio(pedidoId, fornecedorId) {
+    return Vue.prototype.$http({
+      url: "rateio/confirmarRateio/" + pedidoId + "/" + fornecedorId,
+      method: "GET"
+    });
+  }
 }
 
 export default new RateioServico();
