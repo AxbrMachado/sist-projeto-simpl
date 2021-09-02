@@ -11,7 +11,8 @@
         src="/img/5_quadrado.png"
         alt="Cooperar Logo"
       /> -->
-      <h2>Cooperar</h2>
+      <h2 class="c-sidebar-brand-full">{{ NomeEmpresa(true) }}</h2>
+      <h2 class="c-sidebar-brand-minimized">{{ NomeEmpresa(false) }}</h2>
     </b-link>
     <CRenderFunction flat :content-to-render="MontarMenu()" />
     <CSidebarMinimizer
@@ -23,7 +24,6 @@
 
 <script>
 import Nav from "./_nav";
-import TipoPerfilEnum from "../../enums/TipoPerfilEnum";
 
 export default {
   name: "TheSidebar",
@@ -45,6 +45,18 @@ export default {
     this.MontarMenu();
   },
   methods: {
+    NomeEmpresa(full) {
+      let nome = "";
+      if (
+        this.$store.getters.getAutenticacao &&
+        this.$store.getters.getAutenticacao.contaSelecionada &&
+        this.$store.getters.getAutenticacao.contaSelecionada.apelido
+      )
+        nome = this.$store.getters.getAutenticacao.contaSelecionada.apelido;
+      else nome = "";
+
+      return full ? nome : nome.charAt(0);
+    },
     MontarMenu() {
       let menu = [];
       menu.push({
@@ -93,10 +105,9 @@ export default {
         menu[0]._children.push(Nav.Pessoa);
 
       if (
-        (Nav.Fornecedor.permission &&
-          permissao.filter((x) => x.startsWith(Nav.Fornecedor.permission))
-            .length > 0) ||
-        1 == 1
+        Nav.Fornecedor.permission &&
+        permissao.filter((x) => x.startsWith(Nav.Fornecedor.permission))
+          .length > 0
       )
         menu[0]._children.push(Nav.Fornecedor);
 
