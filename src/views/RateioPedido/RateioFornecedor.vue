@@ -300,6 +300,7 @@
         :fornecedorId="this.fornecedorId"
         :pedidoId="this.pedidoId"
         :descricaoFornecedor="this.descricaoFornecedor"
+        :telefoneWhatsAppParam="this.telefoneWhatsApp"
         @atualizarFornecedor="atualizarFornecedor"
       >
       </RateioFornecedorProduto>
@@ -393,6 +394,11 @@ export default {
     }
   },
   created() {
+    Bus.$on("alterado-produto-fornecedor", () => {
+      this.ObterGrid(this.pagina);
+      this.$emit("atualizarRateio");
+    });
+
     Bus.$on("atualiza-fornecedores-rateio", () => {
       this.ObterGrid(this.pagina);
     });
@@ -443,7 +449,6 @@ export default {
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$emit("atualizarRateio");
-          Bus.$emit("alterado-produto-fornecedor");
           this.$notify({
             data: [
               "Produtos atendidos pelo fornecedor removidos do pedido com sucesso."
@@ -509,12 +514,7 @@ export default {
     EditarFornecedorProduto() {
       return this.editarProdutos;
     },
-    SwitchEditarProdutos(item) {
-      this.pedidoId = item.pedidoId;
-      this.fornecedorId = item.fornecedorId;
-      this.editarProdutos = !this.editarProdutos;
-      this.descricaoFornecedor = item.pessoa;
-    },
+
     switchAbertura() {
       this.abrir = !this.abrir;
 
@@ -528,7 +528,6 @@ export default {
     FormataQuantidade(valor) {
       return valor ? valor : 0;
     },
-
     AtendeProduto(item) {
       return item.valorPedido;
     },
@@ -547,12 +546,12 @@ export default {
 
       RateioServico.RecusarProdutoFornecedorRateio(
         this.itemEdicao.pedidoId,
-        this.itemEdicao.fornecedorId
+        this.itemEdicao.fornecedorId,
+        this.$store.getters.emptyGuid
       )
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$emit("atualizarRateio");
-          Bus.$emit("alterado-produto-fornecedor");
           this.$notify({
             data: ["Produtos recusados pelo fornecedor com sucesso."],
             type: "success",
@@ -613,12 +612,12 @@ export default {
 
       RateioServico.ConfirmarProdutoFornecedorRateio(
         this.itemEdicao.pedidoId,
-        this.itemEdicao.fornecedorId
+        this.itemEdicao.fornecedorId,
+        this.$store.getters.emptyGuid
       )
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$emit("atualizarRateio");
-          Bus.$emit("alterado-produto-fornecedor");
           this.$notify({
             data: ["Produtos confirmados pelo fornecedor com sucesso."],
             type: "success",
@@ -651,6 +650,7 @@ export default {
         this.fornecedorId = item.fornecedorId;
         this.editarProdutos = !this.editarProdutos;
         this.descricaoFornecedor = item.pessoa;
+        this.telefoneWhatsApp = item.telefone;
       }
     },
     switchAbertura() {

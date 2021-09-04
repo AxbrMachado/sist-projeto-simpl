@@ -235,9 +235,10 @@ export default {
     this.viewModel.id = this.$route.params.id;
     this.Obter(this.$route.params.id);
 
-    // Bus.$on("remocao-produto-pedido", () => {
-    //   this.AtualizarRateio();
-    // });
+    Bus.$on("alterado-produto-fornecedor", () => {
+      this.Obter(this.$route.params.id);
+      // this.AtualizarRateio();
+    });
   },
   methods: {
     ValidarForm(evt) {
@@ -308,7 +309,7 @@ export default {
           this.viewModel.id = resposta.data;
           this.Obter(resposta.data);
           Bus.$emit("atualiza-fornecedores-rateio");
-          this.$router.push("/rateio-pedido/editar/" + resposta.data);
+          AtualizarRateio();
           this.$notify({
             data: ["Rateio executado com sucesso."],
             type: "success",
@@ -316,15 +317,12 @@ export default {
           });
         })
         .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
+          // this.$notify({
+          //   data: erro.response.data.erros,
+          //   type: "warn",
+          //   duration: 5000
+          // });
         });
-    },
-    AtualizarRateio() {
-      this.Obter(this.viewModel.id);
     }
   }
 };

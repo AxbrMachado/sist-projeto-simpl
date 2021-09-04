@@ -13,7 +13,7 @@
             <header class="card-header" @click="abrir = !abrir">
               <div class="d-flex">
                 <strong class="align-self-center"
-                  >Produtos - {{ this.descricaoFornecedor }}</strong
+                  >Produto - {{ this.descricaoFornecedor }}</strong
                 >
                 <i
                   :class="
@@ -43,7 +43,7 @@
                   >
                     <label for>Presente no Rateio</label>
                     <b-form-checkbox
-                      v-model="filtro.produtosNoFornecedor"
+                      v-model="filtro.produtoNoRateio"
                       name="check-button"
                       switch
                     >
@@ -84,17 +84,40 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
-                          <!-- <b-button
-                            variant="info"
+                          <b-button
+                            v-if="AtendeProduto(data.item)"
+                            variant="primary"
                             style="margin-right: 10px"
-                            title="Editar Quantidade"
-                            @click="Edicao(data.item)"
+                            title="Confirmar produto"
+                            @click="ConfirmarProdutoFornecedor(data.item)"
                           >
-                            <i class="fa fa-edit"></i>
-                          </b-button> -->
+                            <i class="fas fa-thumbs-up"></i>
+                          </b-button>
+
+                          <b-button
+                            v-if="AtendeProduto(data.item)"
+                            variant="secondary"
+                            style="margin-right: 10px"
+                            title="Recusar produto"
+                            @click="RecusarProdutoFornecedor(data.item)"
+                          >
+                            <i class="fas fa-thumbs-down"></i>
+                          </b-button>
+                          <b-button
+                            v-if="
+                              AtendeProduto(data.item) &&
+                              FornecedorComTelefoneCadastrado(data.item)
+                            "
+                            variant="success"
+                            style="margin-right: 10px"
+                            title="Enviar solicitação via whatsapp"
+                            @click="EnviarWhatsApp(data.item)"
+                          >
+                            <i class="fab fa-whatsapp"></i>
+                          </b-button>
                           <b-button
                             variant="danger"
-                            title="Zerar Quantidade"
+                            title="Remover produto fornecedor"
                             @click="Remover(data.item)"
                           >
                             <i class="fas fa-trash-alt"></i>
@@ -146,7 +169,7 @@
       @ok="ModalRemocaoOk"
       @hidden="ModalRemocaoCancel"
     >
-      Confirma a remoção do produto desse cliente?
+      Confirma a remoção do rateio?
     </b-modal>
     <b-modal
       v-model="modalEdicao"
@@ -170,12 +193,91 @@
         />
       </div>
     </b-modal>
+    <b-modal
+      v-model="modalEnviarWhatsApp"
+      title="Enviar mensagem de whatsapp para fornecedor"
+      class="modal-info"
+      ok-variant="info"
+      @ok="modalWhatsAppOk"
+      @hidden="modalWhatsAppCancel"
+    >
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-7">
+          <div class="form-group">
+            <label>Fornecedor</label>
+            <input
+              disabled
+              type="text"
+              v-model="fornecedorWhatsApp"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for="">Telefone</label>
+            <the-mask
+              disabled
+              :mask="['+55 (##) ####-####', '+55 (##) #####-####']"
+              class="form-control"
+              v-model="telefoneWhatsApp"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-12">
+          <div class="form-group">
+            <label for>Mensagem</label>
+            <b-form-textarea
+              id="textarea-auto-height"
+              v-model="mensagemWhatsApp"
+              rows="1"
+              max-rows="1 "
+              placeholder="Digite uma mensagem"
+            ></b-form-textarea>
+          </div>
+        </div>
+      </div>
+    </b-modal>
+    <b-modal
+      v-model="modalRecusar"
+      title="Recusar produto no rateio"
+      class="modal-danger"
+      ok-variant="danger"
+      @ok="ModalRecusarOk"
+      @hidden="ModalRecusarCancel"
+    >
+      Ao recusar o atendimento deste produto, o fornecedor não participa
+      novamente do rateio do pedido para esse produto. Confirma?
+    </b-modal>
+    <b-modal
+      v-model="modalImpressao"
+      title="Impressão"
+      class="modal-info"
+      ok-variant="info"
+    >
+      Rotina de impressão em desenvolvimento
+    </b-modal>
+    <b-modal
+      v-model="modalAtenderProduto"
+      title="Confirma produto"
+      class="modal-success"
+      ok-variant="success"
+      @ok="ModalAtenderProdutoOk"
+      @hidden="ModalAtenderProdutoCancel"
+    >
+      Ao confirmar o atendimento deste produto, a quantidade confirmada, o mesmo
+      deixar de ter essa quantidade rateado no pedido. Confirma?
+    </b-modal>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
+import RateioServico from "../../servico/RateioServico";
 import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
+import ContatoServico from "../../servico/ContatoServico";
 import Bus from "../../util/EventBus";
 
 export default {
@@ -183,12 +285,14 @@ export default {
   emits: ["atualizarFornecedor"],
   components: {
     RotateSquare,
-    Bus
+    Bus,
+    ContatoServico
   },
   props: {
     fornecedorId: { type: String, default: "" },
     pedidoId: { type: String, default: "" },
-    descricaoFornecedor: { type: String, default: "" }
+    descricaoFornecedor: { type: String, default: "" },
+    telefoneWhatsAppParam: { type: String, default: "" }
   },
   data() {
     return {
@@ -196,6 +300,13 @@ export default {
       itemEdicao: null,
       itemEdicaoQuantidade: 0,
       modalRemover: false,
+      modalRecusar: false,
+      modalEnviarWhatsApp: false,
+      modalImpressao: false,
+      modalAtenderProduto: false,
+      telefoneWhatsApp: "",
+      mensagemWhatsApp: "",
+      fornecedorWhatsApp: "",
       produtoOptions: [],
       loading: false,
       abrir: true,
@@ -204,7 +315,7 @@ export default {
       itensPorPagina: 15,
       filtro: {
         produto: "",
-        produtosNoFornecedor: false
+        produtoNoRateio: true
       },
       itens: [],
       fields: [
@@ -241,20 +352,9 @@ export default {
     }
   },
   created() {
-    Bus.$on("alterado-produto-fornecedor", () => {
-      this.ObterGrid(this.pagina);
-    });
-    Bus.$on("alterado-fornecedor-produto", () => {
-      this.ObterGrid(this.pagina);
-    });
-
-    Bus.$on("remocao-produto-pedido", () => {
-      this.ObterGrid(this.pagina);
-    });
-
-    Bus.$on("alterado-produto-cliente", () => {
-      this.ObterGrid(this.pagina);
-    });
+    // Bus.$on("alterado-produto-fornecedor", () => {
+    //   this.ObterGrid(this.pagina);
+    // });
   },
   methods: {
     ObterGrid(val) {
@@ -268,7 +368,7 @@ export default {
         this.pedidoId,
         this.fornecedorId,
         this.filtro.produto,
-        this.filtro.produtosNoFornecedor
+        this.filtro.produtoNoRateio
       )
         .then((resposta) => {
           this.loading = false;
@@ -336,7 +436,7 @@ export default {
         .then(() => {
           this.ObterGrid(1);
           this.$emit("atualizarFornecedor");
-          Bus.$emit("remocao-produto-fornecedor");
+          Bus.$emit("alterado-produto-fornecedor");
           this.$notify({
             data: ["Produto removido com sucesso."],
             type: "success",
@@ -385,7 +485,7 @@ export default {
     },
     Limpar() {
       this.filtro.produto = "";
-      this.filtro.produtosNoFornecedor = false;
+      this.filtro.produtoNoRateio = true;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {
@@ -402,6 +502,120 @@ export default {
     },
     FormataQuantidade(valor) {
       return valor ? valor : 0;
+    },
+    AtendeProduto(item) {
+      return item.quantidadeAtendida;
+    },
+    RecusarProdutoFornecedor(item) {
+      this.modalRecusar = true;
+      this.itemEdicao = item;
+    },
+    ModalRecusarCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+    },
+    ModalRecusarOk(evento) {
+      evento.preventDefault();
+      this.modalRecusar = false;
+      if (!this.itemEdicao) return;
+
+      RateioServico.RecusarProdutoFornecedorRateio(
+        this.pedidoId,
+        this.itemEdicao.fornecedorId,
+        this.itemEdicao.id
+      )
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          Bus.$emit("alterado-produto-fornecedor");
+          this.$notify({
+            data: ["Produto recusado pelo fornecedor com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ConfirmarProdutoFornecedor(item) {
+      this.itemEdicao = item;
+      this.modalAtenderProduto = true;
+    },
+    ModalAtenderProdutoCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+      this.modalAtenderProduto = false;
+    },
+    ModalAtenderProdutoOk(evento) {
+      evento.preventDefault();
+      this.modalAtenderProduto = false;
+
+      evento.preventDefault();
+      this.modalRecusar = false;
+      if (!this.itemEdicao) return;
+
+      console.log(this.itemEdicao);
+
+      RateioServico.ConfirmarProdutoFornecedorRateio(
+        this.pedidoId,
+        this.itemEdicao.fornecedorId,
+        this.itemEdicao.id
+      )
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          Bus.$emit("alterado-produto-fornecedor");
+          this.$notify({
+            data: ["Produto confirmado pelo fornecedor com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ImprimirInformacoesFornecedor(item) {
+      this.modalImpressao = true;
+    },
+    ConfirmarProdutoFornecedor(item) {
+      this.itemEdicao = item;
+      this.modalAtenderProduto = true;
+    },
+    RecusarProdutoFornecedor(item) {
+      this.modalRecusar = true;
+      this.itemEdicao = item;
+    },
+    FornecedorComTelefoneCadastrado(item) {
+      return this.telefoneWhatsAppParam;
+    },
+    modalWhatsAppCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+    },
+    modalWhatsAppOk(evento) {
+      evento.preventDefault();
+      this.modalEnviarWhatsApp = false;
+      if (!this.itemEdicao) return;
+
+      ContatoServico.EnviarWhatsApp(
+        this.telefoneWhatsApp,
+        this.mensagemWhatsApp
+      );
+    },
+    EnviarWhatsApp(item) {
+      this.modalEnviarWhatsApp = true;
+      this.itemEdicao = item;
+      this.telefoneWhatsApp = this.telefoneWhatsAppParam;
+      this.fornecedorWhatsApp = item.pessoa;
+      this.mensagemWhatsApp = "";
     }
   }
 };
