@@ -184,6 +184,13 @@
                           }}</span>
                         </div>
                       </template>
+                      <template v-slot:cell(quantidadeConfirmada)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeConfirmada)
+                          }}</span>
+                        </div>
+                      </template>
                     </b-table>
                     <b-pagination
                       v-model="pagina"
@@ -343,10 +350,13 @@ export default {
       fields: [
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
-        { key: "valorLimite", label: "Limite Contrato", sortable: true },
-        { key: "valorConsumido", label: "Total Consumido", sortable: true },
-        { key: "valorDesignado", label: "Total Designado", sortable: true },
-        { key: "valorPedido", label: "Atendido Pedido", sortable: true },
+        // { key: "valorLimite", label: "Limite Contrato", sortable: true },
+        // { key: "valorConsumido", label: "Total Consumido", sortable: true },
+        // { key: "valorDesignado", label: "Designado", sortable: true },
+        // { key: "valorPedido", label: "Atendido", sortable: true },
+        { key: "quantidadeAtendida", label: "Atendido", sortable: true },
+        { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
+        { key: "quantidadeDesignada", label: "Designado", sortable: true },
         // {
         //   key: "fornecedorDesignado.label",
         //   label: "Fornecedor Designado",
