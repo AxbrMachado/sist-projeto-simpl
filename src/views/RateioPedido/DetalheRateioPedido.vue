@@ -236,8 +236,7 @@ export default {
     this.Obter(this.$route.params.id);
 
     Bus.$on("alterado-produto-fornecedor", () => {
-      this.Obter(this.$route.params.id);
-      // this.AtualizarRateio();
+      this.AtualizarRateio();
     });
   },
   methods: {

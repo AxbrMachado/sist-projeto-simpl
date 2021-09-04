@@ -352,9 +352,9 @@ export default {
     }
   },
   created() {
-    // Bus.$on("alterado-produto-fornecedor", () => {
-    //   this.ObterGrid(this.pagina);
-    // });
+    Bus.$on("atualizar-produto-fornecedor", () => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
     ObterGrid(val) {

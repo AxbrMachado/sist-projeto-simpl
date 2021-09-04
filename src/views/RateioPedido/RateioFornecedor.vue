@@ -409,6 +409,8 @@ export default {
         this.editarProdutos = false;
       }
 
+      Bus.$emit("atualizar-produto-fornecedor");
+
       this.loading = false;
       PedidoFornecedorServico.ObterGridTotal(
         pagina,
