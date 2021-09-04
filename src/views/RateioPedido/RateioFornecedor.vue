@@ -295,6 +295,15 @@
       Ao confirmar o atendimento dos produtos deste fornecedor os mesmos não
       entram mais em possíveis rateios deste pedido. Confirma?
     </b-modal>
+    <div v-if="EditarFornecedorProduto()">
+      <RateioFornecedorProduto
+        :fornecedorId="this.fornecedorId"
+        :pedidoId="this.pedidoId"
+        :descricaoFornecedor="this.descricaoFornecedor"
+        @atualizarFornecedor="atualizarFornecedor"
+      >
+      </RateioFornecedorProduto>
+    </div>
   </div>
 </template>
 
@@ -305,7 +314,7 @@ import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import Bus from "../../util/EventBus";
 import RateioServico from "../../servico/RateioServico";
 import ContatoServico from "../../servico/ContatoServico";
-import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
+import RateioFornecedorProduto from "./RateioFornecedorProduto";
 
 export default {
   name: "RateioFornecedor",
@@ -313,8 +322,8 @@ export default {
   components: {
     RotateSquare,
     Bus,
-    RateioServico
-    // PedidoFornecedorProduto
+    RateioServico,
+    RateioFornecedorProduto
   },
   props: {
     rateioId: {
@@ -335,6 +344,9 @@ export default {
       itemEdicao: null,
       fornecedorId: "",
       fornecedorOptions: [],
+      abrir: false,
+      editarProdutos: false,
+      descricaoFornecedor: "",
       loading: false,
       pagina: 1,
       total: 0,
@@ -620,6 +632,33 @@ export default {
             duration: 5000
           });
         });
+    },
+    EditarFornecedorProduto() {
+      return this.editarProdutos;
+    },
+    SwitchEditarProdutos(item) {
+      if (1 == 2 && this.pedidoId != item.pedidoId) {
+        this.pedidoId = item.pedidoId;
+        this.fornecedorId = item.fornecedorId;
+
+        if (this.editarProdutos) {
+          // PedidoFornecedorProduto.ObterFGrid(1);
+        }
+
+        this.editarProdutos = true;
+      } else {
+        this.pedidoId = item.pedidoId;
+        this.fornecedorId = item.fornecedorId;
+        this.editarProdutos = !this.editarProdutos;
+        this.descricaoFornecedor = item.pessoa;
+      }
+    },
+    switchAbertura() {
+      this.abrir = !this.abrir;
+
+      if (!this.abrir) {
+        this.editarProdutos = false;
+      }
     }
   }
 };
