@@ -89,7 +89,8 @@ class RateioServico {
   ConfirmarProdutoFornecedorRateio(
     pedidoId,
     fornecedorId,
-    pedidoProdutoFornecedorId
+    pedidoProdutoFornecedorId,
+    quantidadeConfirmada
   ) {
     return Vue.prototype.$http({
       url:
@@ -98,7 +99,9 @@ class RateioServico {
         "/" +
         fornecedorId +
         "/" +
-        pedidoProdutoFornecedorId,
+        pedidoProdutoFornecedorId +
+        "/" +
+        quantidadeConfirmada,
       method: "GET"
     });
   }

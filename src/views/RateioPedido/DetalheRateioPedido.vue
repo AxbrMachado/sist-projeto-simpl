@@ -316,11 +316,12 @@ export default {
           });
         })
         .catch((erro) => {
-          // this.$notify({
-          //   data: erro.response.data.erros,
-          //   type: "warn",
-          //   duration: 5000
-          // });
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
         });
     }
   }

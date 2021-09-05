@@ -615,7 +615,8 @@ export default {
       RateioServico.ConfirmarProdutoFornecedorRateio(
         this.itemEdicao.pedidoId,
         this.itemEdicao.fornecedorId,
-        this.$store.getters.emptyGuid
+        this.$store.getters.emptyGuid,
+        0
       )
         .then(() => {
           this.ObterGrid(this.pagina);

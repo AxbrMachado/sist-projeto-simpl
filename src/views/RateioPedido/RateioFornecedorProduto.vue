@@ -106,7 +106,7 @@
                           <b-button
                             v-if="
                               AtendeProduto(data.item) &&
-                              FornecedorComTelefoneCadastrado(data.item)
+                              FornecedorComTelefoneCadastrado()
                             "
                             variant="success"
                             style="margin-right: 10px"
@@ -172,28 +172,6 @@
       Confirma a remoção do rateio?
     </b-modal>
     <b-modal
-      v-model="modalEdicao"
-      title="Informar quantidade produto"
-      class="modal-danger"
-      ok-variant="info"
-      @ok="ModalEdicaoOk"
-      @hidden="ModalEdicaoCancel"
-    >
-      <div class="form-group">
-        <label for>* Quantidade</label>
-        <vue-numeric
-          v-bind:precision="3"
-          v-bind:minus="false"
-          thousand-separator="."
-          decimal-separator=","
-          v-model="itemEdicaoQuantidade"
-          class="form-control"
-          placeholder="Digite a quantidade"
-          required
-        />
-      </div>
-    </b-modal>
-    <b-modal
       v-model="modalEnviarWhatsApp"
       title="Enviar mensagem de whatsapp para fornecedor"
       class="modal-info"
@@ -249,7 +227,7 @@
       @hidden="ModalRecusarCancel"
     >
       Ao recusar o atendimento deste produto, o fornecedor não participa
-      novamente do rateio do pedido para esse produto. Confirma?
+      novamente do rateio para esse produto no pedido. Confirma?
     </b-modal>
     <b-modal
       v-model="modalImpressao"
@@ -267,8 +245,28 @@
       @ok="ModalAtenderProdutoOk"
       @hidden="ModalAtenderProdutoCancel"
     >
-      Ao confirmar o atendimento deste produto, a quantidade confirmada, o mesmo
-      deixar de ter essa quantidade rateado no pedido. Confirma?
+      A quantidade confirmada deste produto deixa de ser rateada entre os
+      fornecedores e fica limitada a este fornecedor. Confirma?
+
+      <br />
+      <br />
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for>* Quantidade Confirmada</label>
+            <vue-numeric
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="itemEdicaoQuantidadeConfirmada"
+              class="form-control"
+              placeholder="Quantidade confirmada"
+              required
+            />
+          </div>
+        </div>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -296,9 +294,8 @@ export default {
   },
   data() {
     return {
-      modalEdicao: false,
       itemEdicao: null,
-      itemEdicaoQuantidade: 0,
+      itemEdicaoQuantidadeConfirmada: 0,
       modalRemover: false,
       modalRecusar: false,
       modalEnviarWhatsApp: false,
@@ -321,15 +318,6 @@ export default {
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        // { key: "valorUnitario", label: "Valor  Un.", sortable: true },
-        // { key: "valorTotal", label: "Valor  Total", sortable: true },
-        // {
-        //   key: "quantidadeSolicitada",
-        //   label: "Qtd. Atendida",
-        //   sortable: true
-        // },
-        // { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
-        // { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         { key: "quantidadeAtendida", label: "Atendido", sortable: true },
         { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
@@ -359,7 +347,6 @@ export default {
   methods: {
     ObterGrid(val) {
       this.loading = false;
-      this.itemEdicaoQuantidade = 0;
       this.itemEdicao = null;
 
       PedidoProdutoFornecedorServico.ObterGridFornecedor(
@@ -385,41 +372,6 @@ export default {
           });
         });
     },
-    ModalEdicaoCancel(evento) {
-      evento.preventDefault();
-      this.itemEdicao = null;
-      this.itemEdicaoQuantidade = 0;
-    },
-
-    ModalEdicaoOk(evento) {
-      evento.preventDefault();
-      this.modalEdicao = false;
-
-      if (!this.itemEdicao || !this.itemEdicaoQuantidade) return;
-
-      //   PedidoProdutoFornecedorServico.EditarQuantidade(
-      //     this.itemEdicao.id,
-      //     this.itemEdicaoQuantidade
-      //   )
-      //     .then(() => {
-      //       this.ObterGrid(1);
-      //       this.$emit("atualizarFornecedor");
-      //       //   Bus.$emit("alterado-produto-cliente");
-      //       this.$notify({
-      //         data: ["Quantidade definida com sucesso."],
-      //         type: "success",
-      //         duration: 5000
-      //       });
-      //     })
-      //     .catch((erro) => {
-      //       this.$notify({
-      //         data: erro.response.data.erros,
-      //         type: "warn",
-      //         duration: 5000
-      //       });
-      //     });
-    },
-
     ModalRemocaoCancel(evento) {
       evento.preventDefault();
       this.itemEdicao = null;
@@ -454,34 +406,6 @@ export default {
     Remover(item) {
       this.modalRemover = true;
       this.itemEdicao = item;
-    },
-    Edicao(item) {
-      this.modalEdicao = true;
-      this.itemEdicao = item;
-      this.itemEdicaoQuantidade = item.quantidadeSolicitada;
-    },
-    Editar() {
-      this.loading = false;
-
-      //   PedidoProdutoFornecedorServico.Editar(this.itemEdicao)
-      //     .then(() => {
-      //       this.loading = false;
-      //       this.Limpar();
-      //       this.ObterGrid(1);
-      //       this.$notify({
-      //         data: ["Produto editado com sucesso."],
-      //         type: "success",
-      //         duration: 5000
-      //       });
-      //     })
-      //     .catch((erro) => {
-      //       this.loading = false;
-      //       this.$notify({
-      //         data: erro.response.data.erros,
-      //         type: "warn",
-      //         duration: 5000
-      //       });
-      //     });
     },
     Limpar() {
       this.filtro.produto = "";
@@ -552,18 +476,39 @@ export default {
     },
     ModalAtenderProdutoOk(evento) {
       evento.preventDefault();
-      this.modalAtenderProduto = false;
 
       evento.preventDefault();
-      this.modalRecusar = false;
       if (!this.itemEdicao) return;
 
-      console.log(this.itemEdicao);
+      if (!this.itemEdicaoQuantidadeConfirmada) {
+        this.loading = false;
+        this.$notify({
+          data: ["Quantidade confirmada deve ser informada."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
+      if (
+        this.itemEdicaoQuantidadeConfirmada > this.itemEdicao.quantidadeAtendida
+      ) {
+        this.loading = false;
+        this.$notify({
+          data: ["Quantidade confirmada maior que quantidade atendida."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
+      this.modalAtenderProduto = false;
 
       RateioServico.ConfirmarProdutoFornecedorRateio(
         this.pedidoId,
         this.itemEdicao.fornecedorId,
-        this.itemEdicao.id
+        this.itemEdicao.id,
+        this.itemEdicaoQuantidadeConfirmada
       )
         .then(() => {
           this.ObterGrid(this.pagina);
@@ -588,12 +533,15 @@ export default {
     ConfirmarProdutoFornecedor(item) {
       this.itemEdicao = item;
       this.modalAtenderProduto = true;
+      this.itemEdicaoQuantidadeConfirmada = item.quantidadeConfirmada
+        ? item.quantidadeConfirmada
+        : item.quantidadeAtendida;
     },
     RecusarProdutoFornecedor(item) {
       this.modalRecusar = true;
       this.itemEdicao = item;
     },
-    FornecedorComTelefoneCadastrado(item) {
+    FornecedorComTelefoneCadastrado() {
       return this.telefoneWhatsAppParam;
     },
     modalWhatsAppCancel(evento) {
