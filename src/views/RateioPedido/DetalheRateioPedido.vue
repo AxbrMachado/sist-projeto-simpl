@@ -306,9 +306,8 @@ export default {
       RateioServico.EfetuarRateio(this.viewModel.pedidoId)
         .then((resposta) => {
           this.viewModel.id = resposta.data;
-          this.Obter(resposta.data);
-          Bus.$emit("atualiza-fornecedores-rateio");
           AtualizarRateio();
+          Bus.$emit("atualiza-fornecedores-rateio");
           this.$notify({
             data: ["Rateio executado com sucesso."],
             type: "success",

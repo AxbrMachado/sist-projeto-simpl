@@ -535,6 +535,8 @@ export default {
       this.modalAtenderProduto = true;
       this.itemEdicaoQuantidadeConfirmada = item.quantidadeConfirmada
         ? item.quantidadeConfirmada
+        : item.quantidadeConfirmadaAnterior
+        ? item.quantidadeConfirmadaAnterior
         : item.quantidadeAtendida;
     },
     RecusarProdutoFornecedor(item) {
