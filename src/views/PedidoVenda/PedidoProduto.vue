@@ -88,7 +88,7 @@
                           <b-button
                             variant="primary"
                             style="margin-right: 10px"
-                            title="Editar Fornecedores do Produtos"
+                            title="Editar Fornecedores do Produto"
                             @click="SwitchEditarFornecedor(data.item)"
                           >
                             <i class="fas fa-binoculars"></i>

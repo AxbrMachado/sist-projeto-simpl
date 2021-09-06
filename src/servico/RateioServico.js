@@ -69,16 +69,39 @@ class RateioServico {
     });
   }
 
-  RecusarProdutoFornecedorRateio(pedidoId, fornecedorId) {
+  RecusarProdutoFornecedorRateio(
+    pedidoId,
+    fornecedorId,
+    pedidoProdutoFornecedorId
+  ) {
     return Vue.prototype.$http({
-      url: "rateio/recusarRateio/" + pedidoId + "/" + fornecedorId,
+      url:
+        "rateio/recusarRateio/" +
+        pedidoId +
+        "/" +
+        fornecedorId +
+        "/" +
+        pedidoProdutoFornecedorId,
       method: "GET"
     });
   }
 
-  ConfirmarProdutoFornecedorRateio(pedidoId, fornecedorId) {
+  ConfirmarProdutoFornecedorRateio(
+    pedidoId,
+    fornecedorId,
+    pedidoProdutoFornecedorId,
+    quantidadeConfirmada
+  ) {
     return Vue.prototype.$http({
-      url: "rateio/confirmarRateio/" + pedidoId + "/" + fornecedorId,
+      url:
+        "rateio/confirmarRateio/" +
+        pedidoId +
+        "/" +
+        fornecedorId +
+        "/" +
+        pedidoProdutoFornecedorId +
+        "/" +
+        quantidadeConfirmada,
       method: "GET"
     });
   }

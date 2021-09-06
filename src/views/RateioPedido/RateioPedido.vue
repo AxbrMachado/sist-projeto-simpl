@@ -243,6 +243,14 @@
             >
               Você confirma a execução do rateio para este pedido?
             </b-modal>
+            <b-modal
+              v-model="modalImpressao"
+              title="Impressão"
+              class="modal-info"
+              ok-variant="info"
+            >
+              Rotina de impressão em desenvolvimento
+            </b-modal>
           </div>
         </div>
       </div>
@@ -270,6 +278,7 @@ export default {
   },
   data() {
     return {
+      modalImpressao: false,
       modalRemover: false,
       itemRemover: null,
       modalRateio: false,
@@ -517,7 +526,7 @@ export default {
         });
     },
     ImprimirPedidoRateado(item) {
-      console.log("em breve impressao do pedido: " + item.pedidoId);
+      this.modalImpressao = true;
     }
   }
 };

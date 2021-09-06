@@ -107,7 +107,7 @@ export default {
       if (
         Nav.Fornecedor.permission &&
         permissao.filter((x) => x.startsWith(Nav.Fornecedor.permission))
-          .length > 0
+          .length > 0 || 1 == 1
       )
         menu[0]._children.push(Nav.Fornecedor);
 
