@@ -103,6 +103,15 @@
                     <i class="fa fa-edit"></i>
                   </b-button>
                   <ModalArquivoGrid :referenciaId="data.item.id" />
+                  <b-button
+                    variant="danger"
+                    style="margin-right: 10px"
+                    title="Remover"
+                    @click="Remover(data.item)"
+                    v-permission="'Fornecedor.Remover'"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </b-button>
                 </div>
               </template>
             </b-table>

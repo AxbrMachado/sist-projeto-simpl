@@ -67,6 +67,7 @@
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'GrupoUsuario.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

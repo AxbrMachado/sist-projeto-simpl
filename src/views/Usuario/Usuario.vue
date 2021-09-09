@@ -58,6 +58,7 @@
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'Usuario.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
@@ -96,7 +97,7 @@ import UsuarioServico from "../../servico/UsuarioServico";
 export default {
   name: "Usuario",
   components: {
-    RotateSquare,
+    RotateSquare
   },
   data() {
     return {

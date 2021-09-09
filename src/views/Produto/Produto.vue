@@ -112,6 +112,7 @@
                     style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'Produto.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

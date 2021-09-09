@@ -81,6 +81,7 @@
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'UnidadeMedida.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
