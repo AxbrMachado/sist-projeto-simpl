@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Usuários</strong>
               <a
+                v-permission="'Usuario.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/usuario/novo"
                 title="Adicionar novo usuário"
@@ -95,7 +96,7 @@ import UsuarioServico from "../../servico/UsuarioServico";
 export default {
   name: "Usuario",
   components: {
-    RotateSquare
+    RotateSquare,
   },
   data() {
     return {

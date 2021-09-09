@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Pedidos</strong>
               <a
+                v-permission="'PedidoVenda.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/pedido-venda/novo"
                 title="Adicionar novo pedido"

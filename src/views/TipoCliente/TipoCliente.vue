@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Tipo Cliente</strong>
               <a
+                v-permission="'TipoCliente.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/tipo-cliente/novo"
                 title="Adicionar novo tipo de cliente"

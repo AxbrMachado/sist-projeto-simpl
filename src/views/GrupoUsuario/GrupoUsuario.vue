@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Grupos</strong>
               <a
+                v-permission="'GrupoUsuario.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/grupo-usuario/novo"
                 title="Adicionar novo grupo"

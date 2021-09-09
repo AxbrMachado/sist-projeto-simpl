@@ -58,6 +58,17 @@ Vue.component("v-select", VSelect);
 Vue.use(HighchartsVue);
 Vue.use(Highcharts);
 
+Vue.directive('permission', {
+  inserted(el, binding, vnode) {
+    if (
+      store.getters.getAutenticacao.permissoes.filter(
+        (x) => x === binding.value
+      ).length <= 0) {
+      vnode.elm.parentElement.removeChild(vnode.elm)
+    }
+  }
+})
+
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {

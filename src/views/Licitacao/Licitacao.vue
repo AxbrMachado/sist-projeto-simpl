@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Licitação</strong>
               <a
+                v-permission="'Licitacao.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/licitacao/novo"
                 title="Adicionar nova licitação"

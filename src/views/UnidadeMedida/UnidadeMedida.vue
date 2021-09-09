@@ -9,6 +9,7 @@
                 >Conversão unidade medida</strong
               >
               <a
+                v-permission="'UnidadeMedida.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/unidade-medida/novo"
                 title="Adicionar nova conversão unidade medida"

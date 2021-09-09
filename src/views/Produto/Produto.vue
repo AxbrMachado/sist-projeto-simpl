@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Produto</strong>
               <a
+                v-permission="'Produto.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/produto/novo"
                 title="Adicionar nova produto"

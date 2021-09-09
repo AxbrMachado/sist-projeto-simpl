@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Tipo de produto</strong>
               <a
+                v-permission="'TipoProduto.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/tipo-produto/novo"
                 title="Adicionar novo tipo produto"

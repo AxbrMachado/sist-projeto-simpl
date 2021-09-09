@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Fornecedores</strong>
               <a
+                v-permission="'Fornececdor.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/fornecedor/novo"
                 title="Adicionar novo fornecedor"

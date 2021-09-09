@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Pessoas</strong>
               <a
+                v-permission="'Pessoa.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/pessoa/novo"
                 title="Adicionar nova pessoa"
