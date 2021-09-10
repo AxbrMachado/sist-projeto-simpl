@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Tipo de unidade medida</strong>
               <a
+                v-permission="'TipoUnidadeMedida.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/tipo-unidade-medida/novo"
                 title="Adicionar novo tipo unidade medida"
@@ -78,6 +79,7 @@
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'TipoUnidadeMedida.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

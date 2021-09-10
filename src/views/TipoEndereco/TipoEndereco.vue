@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Tipo de endereço</strong>
               <a
+                v-permission="'TipoEndereco.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/tipo-endereco/novo"
                 title="Adicionar novo tipo de endereço"
@@ -78,6 +79,7 @@
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'TipoEndereco.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

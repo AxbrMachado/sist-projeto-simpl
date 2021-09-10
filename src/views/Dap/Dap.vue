@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Dap's</strong>
               <a
+                v-permission="'Dap.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/dap/novo"
                 title="Adicionar nova dap"
@@ -152,6 +153,7 @@
                     style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'Dap.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

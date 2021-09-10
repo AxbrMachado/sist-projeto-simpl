@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Tipo Instituição</strong>
               <a
+                v-permission="'TipoInstituicao.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/tipo-instituicao/novo"
                 title="Adicionar novo tipo de instituição"
@@ -78,6 +79,7 @@
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'TipoInstituicao.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

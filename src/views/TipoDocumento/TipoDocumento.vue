@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Tipo de documento</strong>
               <a
+                v-permission="'TipoDocumento.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/tipo-documento/novo"
                 title="Adicionar novo tipo de documento"
@@ -78,6 +79,7 @@
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'TipoDocumento.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

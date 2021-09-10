@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Contrato</strong>
               <a
+                v-permission="'Contrato.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/contrato/novo"
                 title="Adicionar novo contrato"
@@ -136,6 +137,7 @@
                     style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'Contrato.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

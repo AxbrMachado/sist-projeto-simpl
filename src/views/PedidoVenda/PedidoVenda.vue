@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Pedidos</strong>
               <a
+                v-permission="'PedidoVenda.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/pedido-venda/novo"
                 title="Adicionar novo pedido"
@@ -193,6 +194,7 @@
                     style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'PedidoVenda.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
