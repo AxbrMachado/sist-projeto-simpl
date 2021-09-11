@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Usuários</strong>
               <a
+                v-permission="'Usuario.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/usuario/novo"
                 title="Adicionar novo usuário"
@@ -57,6 +58,7 @@
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'Usuario.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

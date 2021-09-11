@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Produto</strong>
               <a
+                v-permission="'Produto.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/produto/novo"
                 title="Adicionar nova produto"
@@ -111,6 +112,7 @@
                     style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'Produto.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

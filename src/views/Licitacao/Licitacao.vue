@@ -7,6 +7,7 @@
             <div class="d-flex">
               <strong class="align-self-center">Licitação</strong>
               <a
+                v-permission="'Licitacao.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/licitacao/novo"
                 title="Adicionar nova licitação"
@@ -137,6 +138,7 @@
                     style="margin-right: 10px"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'Licitacao.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>

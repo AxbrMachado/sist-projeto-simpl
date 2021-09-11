@@ -9,6 +9,7 @@
                 >Conversão unidade medida</strong
               >
               <a
+                v-permission="'UnidadeMedida.Adicionar'"
                 class="ml-auto btn btn-primary"
                 href="/#/unidade-medida/novo"
                 title="Adicionar nova conversão unidade medida"
@@ -80,6 +81,7 @@
                     variant="danger"
                     title="Remover"
                     @click="Remover(data.item)"
+                    v-permission="'UnidadeMedida.Remover'"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
