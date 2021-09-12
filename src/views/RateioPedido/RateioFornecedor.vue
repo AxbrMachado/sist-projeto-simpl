@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="switchAbertura()">
+            <header class="card-header" @click="switchAberturaProdutos()">
               <div class="d-flex">
                 <strong class="align-self-center">Fornecedore(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
@@ -95,6 +95,10 @@
                           </b-button> -->
 
                           <b-button
+                            v-if="
+                              AtendeProduto(data.item) ||
+                              isFornecedorAvulso(data.item)
+                            "
                             variant="info"
                             style="margin-right: 10px"
                             title="Visualizar produtos atendidos"
@@ -533,7 +537,7 @@ export default {
       return this.editarProdutos;
     },
 
-    switchAbertura() {
+    switchAberturaProdutos() {
       this.abrir = !this.abrir;
 
       if (!this.abrir) {
@@ -672,12 +676,15 @@ export default {
         this.telefoneWhatsApp = item.telefone;
       }
     },
-    switchAbertura() {
+    switchAberturaProdutos() {
       this.abrir = !this.abrir;
 
       if (!this.abrir) {
         this.editarProdutos = false;
       }
+    },
+    isFornecedorAvulso(item) {
+      return item.tipoFornecedor == TipoFornecedorEnum.Avulso;
     }
   }
 };
