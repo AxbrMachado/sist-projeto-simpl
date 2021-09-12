@@ -36,7 +36,8 @@ class PedidoProdutoFornecedorServico {
     pedidoId,
     fornecedorId,
     produto,
-    produtosNoFornecedor
+    produtosNoFornecedor,
+    rateioId
   ) {
     return Vue.prototype.$http({
       url:
@@ -51,7 +52,9 @@ class PedidoProdutoFornecedorServico {
         "&pedidoId=" +
         pedidoId +
         "&fornecedorId=" +
-        fornecedorId,
+        fornecedorId +
+        (rateioId ? "&rateioId=" + rateioId : ""),
+
       method: "GET"
     });
   }

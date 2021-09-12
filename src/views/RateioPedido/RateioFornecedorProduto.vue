@@ -85,6 +85,16 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
+                            v-if="!AtendeProduto(data.item)"
+                            variant="warning"
+                            style="margin-right: 10px"
+                            title="Atender Produto"
+                            @click="ConfirmarProdutoFornecedor(data.item)"
+                          >
+                            <i class="far fa-hand-point-up"></i>
+                          </b-button>
+
+                          <b-button
                             v-if="AtendeProduto(data.item)"
                             variant="primary"
                             style="margin-right: 10px"
@@ -116,6 +126,7 @@
                             <i class="fab fa-whatsapp"></i>
                           </b-button>
                           <b-button
+                            v-if="AtendeProduto(data.item)"
                             variant="danger"
                             title="Remover produto fornecedor"
                             @click="Remover(data.item)"
@@ -290,7 +301,8 @@ export default {
     fornecedorId: { type: String, default: "" },
     pedidoId: { type: String, default: "" },
     descricaoFornecedor: { type: String, default: "" },
-    telefoneWhatsAppParam: { type: String, default: "" }
+    telefoneWhatsAppParam: { type: String, default: "" },
+    rateioId: { type: String, default: "" }
   },
   data() {
     return {
@@ -355,7 +367,8 @@ export default {
         this.pedidoId,
         this.fornecedorId,
         this.filtro.produto,
-        this.filtro.produtoNoRateio
+        this.filtro.produtoNoRateio,
+        this.rateioId
       )
         .then((resposta) => {
           this.loading = false;

@@ -84,8 +84,17 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
-                          <b-button
+                          <!-- <b-button
                             v-if="AtendeProduto(data.item)"
+                            variant="info"
+                            style="margin-right: 10px"
+                            title="Visualizar produtos atendidos"
+                            @click="SwitchEditarProdutos(data.item)"
+                          >
+                            <i class="fas fa-cart-plus"></i>
+                          </b-button> -->
+
+                          <b-button
                             variant="info"
                             style="margin-right: 10px"
                             title="Visualizar produtos atendidos"
@@ -301,6 +310,7 @@
         :pedidoId="this.pedidoId"
         :descricaoFornecedor="this.descricaoFornecedor"
         :telefoneWhatsAppParam="this.telefoneWhatsApp"
+        :rateioId="this.rateioId"
         @atualizarFornecedor="atualizarFornecedor"
       >
       </RateioFornecedorProduto>

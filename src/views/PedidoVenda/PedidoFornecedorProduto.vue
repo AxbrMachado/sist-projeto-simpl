@@ -265,7 +265,8 @@ export default {
         this.pedidoId,
         this.fornecedorId,
         this.filtro.produto,
-        this.filtro.produtosNoFornecedor
+        this.filtro.produtosNoFornecedor,
+        null
       )
         .then((resposta) => {
           this.loading = false;
