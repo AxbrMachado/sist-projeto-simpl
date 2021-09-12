@@ -324,7 +324,7 @@ export default {
       itensPorPagina: 15,
       filtro: {
         produto: "",
-        produtoNoRateio: true
+        produtoNoRateio: false
       },
       itens: [],
       fields: [
@@ -422,7 +422,7 @@ export default {
     },
     Limpar() {
       this.filtro.produto = "";
-      this.filtro.produtoNoRateio = true;
+      this.filtro.produtoNoRateio = false;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {

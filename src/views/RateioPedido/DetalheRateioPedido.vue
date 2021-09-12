@@ -301,6 +301,7 @@ export default {
     },
     ModalRateioOk(evento) {
       evento.preventDefault();
+
       this.modalRateio = false;
 
       RateioServico.EfetuarRateio(this.viewModel.pedidoId)
@@ -308,6 +309,7 @@ export default {
           this.viewModel.id = resposta.data;
           AtualizarRateio();
           Bus.$emit("atualiza-fornecedores-rateio");
+          Bus.$emit("rateio-efetuado");
           this.$notify({
             data: ["Rateio executado com sucesso."],
             type: "success",
@@ -316,11 +318,11 @@ export default {
         })
         .catch((erro) => {
           this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
+          // this.$notify({
+          //   data: erro.response.data.erros,
+          //   type: "warn",
+          //   duration: 5000
+          // });
         });
     }
   }

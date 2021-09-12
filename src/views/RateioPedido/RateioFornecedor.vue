@@ -364,7 +364,7 @@ export default {
       itensPorPagina: 15,
       filtro: {
         nome: "",
-        fornecedorComProduto: true
+        fornecedorComProduto: false
       },
       itens: [],
       abrir: false,
@@ -404,6 +404,11 @@ export default {
     }
   },
   created() {
+    Bus.$on("rateio-efetuado", () => {
+      console.log("que merda ein");
+      this.ObterGrid(this.pagina);
+    });
+
     Bus.$on("alterado-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
       this.$emit("atualizarRateio");
@@ -431,6 +436,7 @@ export default {
         this.filtro.fornecedorComProduto
       )
         .then((resposta) => {
+          this.editarProdutos = false;
           this.loading = false;
           this.itens = resposta.data.itens;
           this.total = resposta.data.total;
@@ -505,7 +511,7 @@ export default {
     },
     Limpar() {
       this.filtro.nome = "";
-      this.filtro.fornecedorComProduto = true;
+      this.filtro.fornecedorComProduto = false;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {
