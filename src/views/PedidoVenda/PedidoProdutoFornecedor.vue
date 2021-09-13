@@ -450,7 +450,8 @@ export default {
         this.itemEdicao.id,
         this.itemEdicaoQuantidade,
         this.fornecedorDesignado?.id ?? null,
-        this.itemEdicaoQuantidadeDesignada
+        this.itemEdicaoQuantidadeDesignada,
+        null
       )
         .then(() => {
           this.ObterGrid(1);

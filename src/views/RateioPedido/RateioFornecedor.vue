@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
-            <header class="card-header" @click="switchAbertura()">
+            <header class="card-header" @click="switchAberturaProdutos()">
               <div class="d-flex">
                 <strong class="align-self-center">Fornecedore(s)</strong>
                 <small class="ml-2 mt-1">Clique para abrir/esconder</small>
@@ -84,8 +84,21 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
-                          <b-button
+                          <!-- <b-button
                             v-if="AtendeProduto(data.item)"
+                            variant="info"
+                            style="margin-right: 10px"
+                            title="Visualizar produtos atendidos"
+                            @click="SwitchEditarProdutos(data.item)"
+                          >
+                            <i class="fas fa-cart-plus"></i>
+                          </b-button> -->
+
+                          <b-button
+                            v-if="
+                              AtendeProduto(data.item) ||
+                              isFornecedorAvulso(data.item)
+                            "
                             variant="info"
                             style="margin-right: 10px"
                             title="Visualizar produtos atendidos"
@@ -301,6 +314,7 @@
         :pedidoId="this.pedidoId"
         :descricaoFornecedor="this.descricaoFornecedor"
         :telefoneWhatsAppParam="this.telefoneWhatsApp"
+        :rateioId="this.rateioId"
         @atualizarFornecedor="atualizarFornecedor"
       >
       </RateioFornecedorProduto>
@@ -354,7 +368,7 @@ export default {
       itensPorPagina: 15,
       filtro: {
         nome: "",
-        fornecedorComProduto: true
+        fornecedorComProduto: false
       },
       itens: [],
       abrir: false,
@@ -394,6 +408,11 @@ export default {
     }
   },
   created() {
+    Bus.$on("rateio-efetuado", () => {
+      console.log("que merda ein");
+      this.ObterGrid(this.pagina);
+    });
+
     Bus.$on("alterado-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
       this.$emit("atualizarRateio");
@@ -421,6 +440,7 @@ export default {
         this.filtro.fornecedorComProduto
       )
         .then((resposta) => {
+          this.editarProdutos = false;
           this.loading = false;
           this.itens = resposta.data.itens;
           this.total = resposta.data.total;
@@ -495,7 +515,7 @@ export default {
     },
     Limpar() {
       this.filtro.nome = "";
-      this.filtro.fornecedorComProduto = true;
+      this.filtro.fornecedorComProduto = false;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {
@@ -517,7 +537,7 @@ export default {
       return this.editarProdutos;
     },
 
-    switchAbertura() {
+    switchAberturaProdutos() {
       this.abrir = !this.abrir;
 
       if (!this.abrir) {
@@ -656,12 +676,15 @@ export default {
         this.telefoneWhatsApp = item.telefone;
       }
     },
-    switchAbertura() {
+    switchAberturaProdutos() {
       this.abrir = !this.abrir;
 
       if (!this.abrir) {
         this.editarProdutos = false;
       }
+    },
+    isFornecedorAvulso(item) {
+      return item.tipoFornecedor == TipoFornecedorEnum.Avulso;
     }
   }
 };

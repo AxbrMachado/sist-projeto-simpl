@@ -85,6 +85,16 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
+                            v-if="!AtendeProduto(data.item)"
+                            variant="warning"
+                            style="margin-right: 10px"
+                            title="Atender Produto"
+                            @click="AtenderProdutoAvulso(data.item)"
+                          >
+                            <i class="far fa-hand-point-up"></i>
+                          </b-button>
+
+                          <b-button
                             v-if="AtendeProduto(data.item)"
                             variant="primary"
                             style="margin-right: 10px"
@@ -116,6 +126,7 @@
                             <i class="fab fa-whatsapp"></i>
                           </b-button>
                           <b-button
+                            v-if="AtendeProduto(data.item)"
                             variant="danger"
                             title="Remover produto fornecedor"
                             @click="Remover(data.item)"
@@ -268,6 +279,98 @@
         </div>
       </div>
     </b-modal>
+
+    <b-modal
+      v-model="modalAtendimentoAvulso"
+      title="Atender produto via fornecedor avulso"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="modalAtendimentoAvulsoOk"
+      @hidden="modalAtendimentoAvulsoCancel"
+    >
+      A quantidade informada para fornecedor avulso é integralmente designada a
+      uma dap. A quantidade informada tambem entra como confirmada, fazendo
+      assim que a mesma nao entre mais no processo de rateio do pedido. Ficando
+      limitada a este fornecedor. Confirma?
+
+      <br />
+      <br />
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for>* Quantidade Pendente</label>
+            <vue-numeric
+              disabled
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="itemEdicaoQuantidadePendente"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
+          <div class="form-group">
+            <label for>* Quantidade Atendida</label>
+            <vue-numeric
+              v-bind:precision="3"
+              v-bind:minus="false"
+              thousand-separator="."
+              decimal-separator=","
+              v-model="itemEdicaoQuantidadeAvulsa"
+              class="form-control"
+              placeholder="Digite a quantidade"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
+          <div class="form-group">
+            <br />
+            <label for>Informações de Fornecedor Designado</label>
+            <br />
+            <br />
+            <div class="row">
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-8">
+                <div class="form-group">
+                  <label for>* Fornecedor</label>
+                  <v-select
+                    placeholder=""
+                    v-model="fornecedorDesignado"
+                    :options="fornecedoresDesignadosOptions"
+                    @search="ObterFornecedorDesignadoVSelect"
+                    required
+                  >
+                    <template slot="no-options">
+                      Nenhum resultado para a busca.
+                    </template>
+                  </v-select>
+                </div>
+              </div>
+              <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <div class="form-group">
+                  <label for>Quantidade</label>
+                  <vue-numeric
+                    v-bind:precision="3"
+                    v-bind:minus="false"
+                    thousand-separator="."
+                    decimal-separator=","
+                    v-model="itemEdicaoQuantidadeDesignada"
+                    class="form-control"
+                    placeholder=""
+                    required
+                  />
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -276,6 +379,7 @@ import RotateSquare from "../../components/RotateSquare";
 import RateioServico from "../../servico/RateioServico";
 import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
 import ContatoServico from "../../servico/ContatoServico";
+import FornecedorServico from "../../servico/FornecedorServico";
 import Bus from "../../util/EventBus";
 
 export default {
@@ -290,10 +394,16 @@ export default {
     fornecedorId: { type: String, default: "" },
     pedidoId: { type: String, default: "" },
     descricaoFornecedor: { type: String, default: "" },
-    telefoneWhatsAppParam: { type: String, default: "" }
+    telefoneWhatsAppParam: { type: String, default: "" },
+    rateioId: { type: String, default: "" }
   },
   data() {
     return {
+      modalAtendimentoAvulso: false,
+      itemEdicaoQuantidadeAvulsa: 0,
+      itemEdicaoQuantidadePendente: 0,
+      fornecedorDesignado: "",
+      fornecedoresDesignadosOptions: [],
       itemEdicao: null,
       itemEdicaoQuantidadeConfirmada: 0,
       modalRemover: false,
@@ -312,7 +422,7 @@ export default {
       itensPorPagina: 15,
       filtro: {
         produto: "",
-        produtoNoRateio: true
+        produtoNoRateio: false
       },
       itens: [],
       fields: [
@@ -355,7 +465,8 @@ export default {
         this.pedidoId,
         this.fornecedorId,
         this.filtro.produto,
-        this.filtro.produtoNoRateio
+        this.filtro.produtoNoRateio,
+        this.rateioId
       )
         .then((resposta) => {
           this.loading = false;
@@ -409,7 +520,7 @@ export default {
     },
     Limpar() {
       this.filtro.produto = "";
-      this.filtro.produtoNoRateio = true;
+      this.filtro.produtoNoRateio = false;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {
@@ -566,6 +677,102 @@ export default {
       this.telefoneWhatsApp = this.telefoneWhatsAppParam;
       this.fornecedorWhatsApp = item.pessoa;
       this.mensagemWhatsApp = "";
+    },
+    ObterFornecedorDesignadoVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      FornecedorServico.ObterVSelectFornecedorDesignado(
+        busca,
+        this.itemEdicao.fornecedorId
+      )
+
+        .then((response) => {
+          this.fornecedoresDesignadosOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    modalAtendimentoAvulsoCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+      this.itemEdicaoQuantidadeAvulsa = 0;
+      this.itemEdicaoQuantidadePendente = 0;
+      this.fornecedorDesignado = "";
+      this.fornecedoresDesignadosOptions = [];
+    },
+
+    modalAtendimentoAvulsoOk(evento) {
+      evento.preventDefault();
+
+      if (!this.itemEdicao) return;
+
+      if (!this.itemEdicaoQuantidadeAvulsa) {
+        this.loading = false;
+        this.$notify({
+          data: ["Quantidade atendida deve ser informada."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
+      if (this.itemEdicaoQuantidadeAvulsa > this.itemEdicaoQuantidadePendente) {
+        this.loading = false;
+        this.$notify({
+          data: ["Quantidade informada maior que a pendente."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
+      if (!this.fornecedorDesignado) {
+        this.loading = false;
+        this.$notify({
+          data: ["Fornecedor designado deve ser informado."],
+          type: "warn",
+          duration: 5000
+        });
+        return;
+      }
+
+      this.modalAtendimentoAvulso = false;
+      this.fornecedoresDesignadosOptions = [];
+
+      PedidoProdutoFornecedorServico.EditarFornecedorProduto(
+        this.itemEdicao.id,
+        this.itemEdicaoQuantidadeAvulsa,
+        this.fornecedorDesignado?.id ?? null,
+        this.itemEdicaoQuantidadeAvulsa,
+        this.rateioId
+      )
+        .then(() => {
+          this.ObterGrid(1);
+          this.$emit("atualizarFornecedor");
+          Bus.$emit("alterado-produto-fornecedor");
+          this.$notify({
+            data: ["Quantidade definida com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    AtenderProdutoAvulso(item) {
+      this.itemEdicao = item;
+      this.modalAtendimentoAvulso = true;
+      this.itemEdicaoQuantidadePendente = item.quantidadePendente;
     }
   }
 };
