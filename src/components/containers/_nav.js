@@ -14,16 +14,20 @@ const Menu = {
     _name: "CSidebarNavTitle",
     _children: ["Principal"]
   },
+  Venda: {
+    _name: "CSidebarNavTitle",
+    _children: ["Venda"]
+  },
   RateioPedido: {
     _name: "CSidebarNavItem",
-    name: "Rateio Pedido Venda",
+    name: "Rateio",
     to: "/rateio-pedido",
     icon: "cil-chart-pie",
     permission: "RateioPedido"
   },
   PedidoVenda: {
     _name: "CSidebarNavItem",
-    name: "Pedido Venda",
+    name: "Pedido",
     to: "/pedido-venda",
     icon: "cil-list",
     permission: "PedidoVenda"
