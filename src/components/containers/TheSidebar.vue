@@ -71,20 +71,6 @@ export default {
       menu[0]._children.push(Nav.Principal);
 
       if (
-        Nav.RateioPedido.permission &&
-        permissao.filter((x) => x.startsWith(Nav.RateioPedido.permission))
-          .length > 0
-      )
-        menu[0]._children.push(Nav.RateioPedido);
-
-      if (
-        Nav.PedidoVenda.permission &&
-        permissao.filter((x) => x.startsWith(Nav.PedidoVenda.permission))
-          .length > 0
-      )
-        menu[0]._children.push(Nav.PedidoVenda);
-
-      if (
         Nav.Licitacao.permission &&
         permissao.filter((x) => x.startsWith(Nav.Licitacao.permission)).length >
           0
@@ -122,6 +108,22 @@ export default {
         permissao.filter((x) => x.startsWith(Nav.Produto.permission)).length > 0
       )
         menu[0]._children.push(Nav.Produto);
+
+
+      menu[0]._children.push(Nav.Venda);
+      if (
+        Nav.RateioPedido.permission &&
+        permissao.filter((x) => x.startsWith(Nav.RateioPedido.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.RateioPedido);
+
+      if (
+        Nav.PedidoVenda.permission &&
+        permissao.filter((x) => x.startsWith(Nav.PedidoVenda.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.PedidoVenda);
 
       menu[0]._children.push(Nav.Configuracao);
 
