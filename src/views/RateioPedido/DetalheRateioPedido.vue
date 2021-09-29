@@ -216,10 +216,11 @@ export default {
         { value: StatusPedidoEnum.Cancelado, text: "Cancelado" }
       ],
       statusRateioOptions: [
-        { value: StatusRateioEnum.Pendente, text: "Pendente" },
-        { value: StatusRateioEnum.Incompleto, text: "Finalizado" },
-        { value: StatusRateioEnum.Completo, text: "Cancelado" },
-        { value: StatusRateioEnum.Cancelada, text: "Aberto" }
+        { value: StatusRateioEnum.Incompleto, text: "Incompleto" },
+        { value: StatusRateioEnum.Atendido, text: "Atendido" },
+        { value: StatusRateioEnum.Confirmado, text: "Confirmado" },
+        { value: StatusRateioEnum.Conferido, text: "Conferido" },
+        { value: StatusRateioEnum.Cancelado, text: "Cancelado" }
       ],
       tiposInstituicaoOptions: [],
       licitacaoOptions: [],

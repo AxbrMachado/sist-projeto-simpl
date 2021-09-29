@@ -1,8 +1,9 @@
 const StatusRateioEnum = {
-  Pendente: 1,
-  Completo: 2,
-  Incompleto: 3,
-  Cancelada: 4
+  Incompleto: 1,
+  Atendido: 2,
+  Confirmado: 3,
+  Conferido: 4,
+  Cancelado: 5
 };
 
 export default StatusRateioEnum;
