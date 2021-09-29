@@ -97,7 +97,8 @@
                           <b-button
                             v-if="
                               AtendeProduto(data.item) ||
-                              isFornecedorAvulso(data.item)
+                              (isFornecedorAvulso(data.item) &&
+                                isRateioPendente(data.item))
                             "
                             variant="info"
                             style="margin-right: 10px"
@@ -326,6 +327,7 @@
 import RotateSquare from "../../components/RotateSquare";
 import PedidoFornecedorServico from "../../servico/PedidoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
+import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import Bus from "../../util/EventBus";
 import RateioServico from "../../servico/RateioServico";
 import ContatoServico from "../../servico/ContatoServico";
@@ -685,6 +687,9 @@ export default {
     },
     isFornecedorAvulso(item) {
       return item.tipoFornecedor == TipoFornecedorEnum.Avulso;
+    },
+    isRateioPendente(item) {
+      return item.statusRateio == StatusRateioEnum.Incompleto;
     }
   }
 };
