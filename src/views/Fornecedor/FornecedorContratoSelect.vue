@@ -27,6 +27,16 @@
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
                 <div class="row">
+                  <a
+                    @click="AdicionarTodos()"
+                    class="ml-auto btn btn-primary"
+                    href="javascript:"
+                    title="Adicionar todos contratos ao fornecedor"
+                  >
+                    Adicionar Todos Contratos
+                  </a>
+                </div>
+                <div class="row">
                   <div class="col-lg-5 col-md-6 col-sm-12">
                     <div class="form-group">
                       <label>Descrição</label>
@@ -211,6 +221,28 @@
         </div> -->
       </div>
     </b-modal>
+    <b-modal
+      v-model="modalAdicionarTodos"
+      title="Adicionar todos os contratos ao fornecedor"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="AdicionarTodosOk"
+      @hidden="AdicionarTodosCancel"
+    >
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4">
+          <div class="form-group">
+            <label for>* Valor Limite</label>
+            <currency-input
+              v-model="addTodosValorLimite"
+              class="form-control"
+              placeholder="Digite o valor limite"
+              required
+            />
+          </div>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -230,6 +262,9 @@ export default {
   },
   data() {
     return {
+      modalAdicionarTodos: false,
+      addTodosQuantidade: 0,
+      addTodosValorLimite: 0,
       modalEditarInfoContrato: false,
       valor: 0,
       quantidade: 0,
@@ -413,13 +448,66 @@ export default {
       return value.numero + " - " + value.entidadeLicitacao;
     },
     FormataValorRestante(item) {
-      return (item.valorConsumido >= item.valorLimite
-        ? 0
-        : item.valorLimite - item.valorConsumido
+      return (
+        item.valorConsumido >= item.valorLimite
+          ? 0
+          : item.valorLimite - item.valorConsumido
       ).toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL"
       });
+    },
+    AdicionarTodos() {
+      this.modalAdicionarTodos = true;
+      this.addTodosQuantidade = 0;
+      this.addTodosValorLimite = 0;
+    },
+    AdicionarTodosCancel(evento) {
+      evento.preventDefault();
+    },
+
+    AdicionarTodosOk(evento) {
+      evento.preventDefault();
+
+      if (!this.addTodosValorLimite || this.addTodosValorLimite <= 0) {
+        this.$notify({
+          data: ["Informe um valor límite."],
+          type: "warn",
+          duration: 3000
+        });
+        return;
+      }
+
+      if (!this.addTodosQuantidade) {
+        this.addTodosQuantidade = 0;
+      }
+
+      this.modalAdicionarTodos = false;
+
+      ContratoFornecedorServico.AdicionarTodosContratos(
+        this.pessoaId,
+        this.addTodosValorLimite,
+        this.addTodosQuantidade
+      )
+        .then((resposta) => {
+          this.loading = false;
+          console.log("sucesso");
+          this.Limpar();
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Fornecedores cadastrados com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };
