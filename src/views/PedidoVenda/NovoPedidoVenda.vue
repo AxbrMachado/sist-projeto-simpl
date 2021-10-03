@@ -348,12 +348,13 @@ export default {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.descricao = "";
       this.viewModel.observacao = "";
-      this.viewModel.contratoId = this.$store.getters.emptyGuid;
       this.viewModel.numero = 0;
       this.viewModel.dataEntrega = "";
       this.viewModel.dataTermino = "";
       this.viewModel.valor = 0;
-
+      this.viewModel.contratoId = this.$store.getters.emptyGuid;
+      this.bloqueiaContrato = false;
+      
       this.ObterContratosSelect();
     },
     LoadContratoLicitacao(val) {
