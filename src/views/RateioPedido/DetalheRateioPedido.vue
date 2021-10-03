@@ -213,7 +213,12 @@ export default {
         { value: StatusPedidoEnum.EmRota, text: "Em Rota" },
         { value: StatusPedidoEnum.Entregue, text: "Entregue" },
         { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
-        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" }
+        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" },
+        { value: StatusPedidoEnum.AguardandoRateio, text: "Ag. Rateio" },
+        {
+          value: StatusPedidoEnum.AguardandoConferencia,
+          text: "Ag. Conferência"
+        }
       ],
       statusRateioOptions: [
         { value: StatusRateioEnum.Incompleto, text: "Incompleto" },

@@ -233,7 +233,12 @@ export default {
         { value: StatusPedidoEnum.EmRota, text: "Em Rota" },
         { value: StatusPedidoEnum.Entregue, text: "Entregue" },
         { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
-        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" }
+        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" },
+        { value: StatusPedidoEnum.AguardandoRateio, text: "Ag. Rateio" },
+        {
+          value: StatusPedidoEnum.AguardandoConferencia,
+          text: "Ag. Conferência"
+        }
       ],
 
       filtro: {
@@ -343,6 +348,11 @@ export default {
           return "Finalizado";
         case StatusPedidoEnum.Cancelado:
           return "Cancelado";
+        case StatusPedidoEnum.AguardandoRateio:
+          return "Ag. Rateio";
+        case StatusPedidoEnum.AguardandoConferencia:
+          return "Ag. Conferência";
+
         default:
           return "Inválido";
       }
