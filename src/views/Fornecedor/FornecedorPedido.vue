@@ -234,10 +234,10 @@ export default {
         { value: StatusPedidoEnum.Entregue, text: "Entregue" },
         { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
         { value: StatusPedidoEnum.Cancelado, text: "Cancelado" },
-        { value: StatusPedidoEnum.AguardandoRateio, text: "Ag. Rateio" },
+        { value: StatusPedidoEnum.AguardandoRateio, text: "Aguardando Rateio" },
         {
           value: StatusPedidoEnum.AguardandoConferencia,
-          text: "Ag. Conferência"
+          text: "Aguardando Conferência"
         }
       ],
 
@@ -349,9 +349,9 @@ export default {
         case StatusPedidoEnum.Cancelado:
           return "Cancelado";
         case StatusPedidoEnum.AguardandoRateio:
-          return "Ag. Rateio";
+          return "Aguardando Rateio";
         case StatusPedidoEnum.AguardandoConferencia:
-          return "Ag. Conferência";
+          return "Aguardando Conferência";
         default:
           return "Inválido";
       }

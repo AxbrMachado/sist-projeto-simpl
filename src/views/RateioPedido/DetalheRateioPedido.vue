@@ -214,10 +214,10 @@ export default {
         { value: StatusPedidoEnum.Entregue, text: "Entregue" },
         { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
         { value: StatusPedidoEnum.Cancelado, text: "Cancelado" },
-        { value: StatusPedidoEnum.AguardandoRateio, text: "Ag. Rateio" },
+        { value: StatusPedidoEnum.AguardandoRateio, text: "Aguardando Rateio" },
         {
           value: StatusPedidoEnum.AguardandoConferencia,
-          text: "Ag. Conferência"
+          text: "Aguardando Conferência"
         }
       ],
       statusRateioOptions: [

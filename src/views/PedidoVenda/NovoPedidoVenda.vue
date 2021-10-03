@@ -89,6 +89,16 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                   <div class="form-group">
+                    <label for>Status Pedido</label>
+                    <b-form-select
+                      disabled
+                      v-model="viewModel.status"
+                      :options="statusPedidoOptions"
+                    ></b-form-select>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                  <div class="form-group">
                     <label for>Valor</label>
                     <currency-input
                       disabled
@@ -158,6 +168,7 @@ import PedidoCliente from "./PedidoCliente";
 import PedidoFornecedor from "./PedidoFornecedor";
 import PedidoProduto from "./PedidoProduto";
 import Contato from "../../components/Contato";
+import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import Bus from "../../util/EventBus";
 
 export default {
@@ -178,6 +189,24 @@ export default {
       tiposInstituicaoOptions: [],
       licitacaoOptions: [],
       contratoOptions: [],
+      statusPedidoOptions: [
+        { value: StatusPedidoEnum.Pendente, text: "Pendente" },
+        { value: StatusPedidoEnum.Aberto, text: "Aberto" },
+        {
+          value: StatusPedidoEnum.AguardandoProdutos,
+          text: "Aguardando Produtos"
+        },
+        { value: StatusPedidoEnum.Incompleto, text: "Incompleto" },
+        { value: StatusPedidoEnum.EmRota, text: "Em Rota" },
+        { value: StatusPedidoEnum.Entregue, text: "Entregue" },
+        { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
+        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" },
+        { value: StatusPedidoEnum.AguardandoRateio, text: "Aguardando Rateio" },
+        {
+          value: StatusPedidoEnum.AguardandoConferencia,
+          text: "Aguardando Conferência"
+        }
+      ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
         descricao: "",
@@ -185,7 +214,8 @@ export default {
         contratoId: this.$store.getters.emptyGuid,
         numero: 0,
         dataEntrega: "",
-        dataTermino: ""
+        dataTermino: "",
+        status: 0
       }
     };
   },
