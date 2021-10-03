@@ -16,8 +16,8 @@
                 <a
                   @click="RecalcularRateioAutomatico()"
                   class="ml-auto btn btn-danger"
-                  href="#"
                   title="Recalcular rateio automático"
+                  href="#"
                 >
                   Recalcular Rateio Automático
                 </a>
@@ -307,14 +307,11 @@ export default {
     },
     ModalRateioOk(evento) {
       evento.preventDefault();
-
       this.modalRateio = false;
-
+      if (!this.viewModel.pedidoId) return;
       RateioServico.EfetuarRateio(this.viewModel.pedidoId)
-        .then((resposta) => {
-          this.viewModel.id = resposta.data;
-          AtualizarRateio();
-          Bus.$emit("atualiza-fornecedores-rateio");
+        .then(() => {
+          this.Obter(this.viewModel.id);
           Bus.$emit("rateio-efetuado");
           this.$notify({
             data: ["Rateio executado com sucesso."],
@@ -323,12 +320,11 @@ export default {
           });
         })
         .catch((erro) => {
-          this.loading = false;
-          // this.$notify({
-          //   data: erro.response.data.erros,
-          //   type: "warn",
-          //   duration: 5000
-          // });
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
         });
     }
   }

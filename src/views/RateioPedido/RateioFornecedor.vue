@@ -411,7 +411,6 @@ export default {
   },
   created() {
     Bus.$on("rateio-efetuado", () => {
-      console.log("que merda ein");
       this.ObterGrid(this.pagina);
     });
 

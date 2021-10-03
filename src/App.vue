@@ -20,13 +20,13 @@
               <div
                 v-for="item in props.item.data"
                 :key="item.id"
-                style="font-size: 22px;"
+                style="font-size: 22px"
               >
                 {{ item }}
               </div>
             </div>
             <div v-else class="notification-content">
-              <div style="font-size: 22px;">Mensagem não disponível.</div>
+              <div style="font-size: 22px">Mensagem não disponível.</div>
             </div>
           </div>
         </div>
