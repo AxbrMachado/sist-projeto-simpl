@@ -95,6 +95,7 @@
                             <!-- <i class="fas fa-cart-plus"></i> -->
                           </b-button>
                           <b-button
+                            :disabled="!IsPedidoPendente(data.item)"
                             variant="danger"
                             style="margin-right: 10px"
                             title="Remover"
@@ -321,6 +322,7 @@ import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServi
 import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
 import Bus from "../../util/EventBus";
 import ProdutoServico from "../../servico/ProdutoServico";
+import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 
 export default {
   name: "PedidoProduto",
@@ -768,6 +770,9 @@ export default {
             duration: 5000
           });
         });
+    },
+    IsPedidoPendente(item) {
+      return item.statusPedido == StatusPedidoEnum.Pendente;
     }
   }
 };
