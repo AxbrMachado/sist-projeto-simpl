@@ -231,7 +231,9 @@
               @ok="ModalOk"
               @hidden="ModalCancel"
             >
-              Você confirma a exclusão desse registro?
+              As informações de produtos atendidos/confirmados serão perdidas. 
+              <br>Você confirma a exclusão desse registro? <br>
+              
             </b-modal>
             <b-modal
               v-model="modalRateio"
