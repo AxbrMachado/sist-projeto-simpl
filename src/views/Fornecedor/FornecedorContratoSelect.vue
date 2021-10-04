@@ -491,7 +491,6 @@ export default {
       )
         .then((resposta) => {
           this.loading = false;
-          console.log("sucesso");
           this.Limpar();
           this.ObterGrid(1);
           this.$notify({

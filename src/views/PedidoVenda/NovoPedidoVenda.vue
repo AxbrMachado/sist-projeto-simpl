@@ -354,7 +354,7 @@ export default {
       this.viewModel.valor = 0;
       this.viewModel.contratoId = this.$store.getters.emptyGuid;
       this.bloqueiaContrato = false;
-      
+
       this.ObterContratosSelect();
     },
     LoadContratoLicitacao(val) {
