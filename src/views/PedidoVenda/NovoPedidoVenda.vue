@@ -24,6 +24,7 @@
                   class="ml-auto btn btn-primary"
                   href="/#/pedido-venda/novo"
                   title="Adicionar novo pedido"
+                  v-permission="'PedidoVenda.Adicionar'"
                 >
                   Adicionar
                 </a>
