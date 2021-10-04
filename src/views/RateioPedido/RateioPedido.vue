@@ -231,7 +231,8 @@
               @ok="ModalOk"
               @hidden="ModalCancel"
             >
-              Você confirma a exclusão desse registro?
+              As informações de produtos atendidos/confirmados serão perdidas.
+              <br />Você confirma a exclusão desse registro? <br />
             </b-modal>
             <b-modal
               v-model="modalRateio"
@@ -311,13 +312,19 @@ export default {
         { value: StatusPedidoEnum.EmRota, text: "Em Rota" },
         { value: StatusPedidoEnum.Entregue, text: "Entregue" },
         { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
-        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" }
+        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" },
+        { value: StatusPedidoEnum.AguardandoRateio, text: "Aguardando Rateio" },
+        {
+          value: StatusPedidoEnum.AguardandoConferencia,
+          text: "Aguardando Conferência"
+        }
       ],
       statusRateioOptions: [
-        { value: StatusRateioEnum.Pendente, text: "Pendente" },
-        { value: StatusRateioEnum.Incompleto, text: "Finalizado" },
-        { value: StatusRateioEnum.Completo, text: "Cancelado" },
-        { value: StatusRateioEnum.Cancelada, text: "Aberto" }
+        { value: StatusRateioEnum.Incompleto, text: "Incompleto" },
+        { value: StatusRateioEnum.Atendido, text: "Atendido" },
+        { value: StatusRateioEnum.Confirmado, text: "Confirmado" },
+        { value: StatusRateioEnum.Conferido, text: "Conferido" },
+        { value: StatusRateioEnum.Cancelado, text: "Cancelado" }
       ],
 
       fields: [
@@ -456,19 +463,25 @@ export default {
           return "Finalizado";
         case StatusPedidoEnum.Cancelado:
           return "Cancelado";
+        case StatusPedidoEnum.AguardandoRateio:
+          return "Aguardando Rateio";
+        case StatusPedidoEnum.AguardandoConferencia:
+          return "Aguardando Conferência";
         default:
           return "Inválido";
       }
     },
     ObterNomeStatusRateio(item) {
       switch (item) {
-        case StatusRateioEnum.Pendente:
-          return "Pendente";
-        case StatusRateioEnum.Completo:
-          return "Completo";
         case StatusRateioEnum.Incompleto:
           return "Incompleto";
-        case StatusRateioEnum.Cancelada:
+        case StatusRateioEnum.Atendido:
+          return "Atendido";
+        case StatusRateioEnum.Confirmado:
+          return "Confirmado";
+        case StatusRateioEnum.Conferido:
+          return "Conferido";
+        case StatusRateioEnum.Cancelado:
           return "Cancelado";
         default:
           return "-";

@@ -28,7 +28,7 @@
             <div :class="abrir ? 'collapse-show' : 'collapse'">
               <div class="card-body">
                 <div class="row">
-                  <div class="col-lg-5 col-md-6 col-sm-12">
+                  <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="form-group">
                       <label>Nome</label>
                       <input
@@ -38,6 +38,15 @@
                       />
                     </div>
                   </div>
+                  <!-- <div class="col-lg-2 col-md-6 col-sm-6">
+                    <div class="form-group">
+                      <label for>Tipo</label>
+                      <b-form-select
+                        v-model="filtro.TipoPessoa"
+                        :options="tipoOptions"
+                      ></b-form-select>
+                    </div>
+                  </div> -->
                   <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
                     title="Apenas clientes com produtos no pedido."
@@ -98,7 +107,10 @@
                       <template v-slot:cell(tipoPessoa)="data">
                         <div class="center">
                           <span>{{
-                            ObterTipoPessoa(data.item.tipoPessoa)
+                            ObterTipoPessoa(data.item) +
+                            (data.item.tipoCliente
+                              ? "/" + data.item.tipoCliente
+                              : "")
                           }}</span>
                         </div>
                       </template>
@@ -170,13 +182,20 @@ export default {
       itensPorPagina: 15,
       filtro: {
         nome: "",
-        clienteComProduto: false
+        clienteComProduto: false,
+        TipoPessoa: 0
       },
       itens: [],
       abrir: false,
       pedidoPessoaId: "",
       descricaoCliente: "",
       editarProduto: false,
+      tipoOptions: [
+        { value: TipoPessoaEnum.Funcionario, text: "Funcionário" },
+        { value: TipoPessoaEnum.Fornecedor, text: "Fornecedor" },
+        { value: TipoPessoaEnum.Cliente, text: "Cliente" },
+        { value: TipoPessoaEnum.Instituicao, text: "Instituicao" }
+      ],
       fields: [
         { key: "pessoa", label: "Cliente", sortable: true },
         { key: "tipoPessoa", label: "Tipo Pessoa", sortable: true },
@@ -250,7 +269,7 @@ export default {
       });
     },
     ObterTipoPessoa(item) {
-      switch (item) {
+      switch (item.tipoPessoa) {
         case TipoPessoaEnum.Funcionario:
           return "Funcionário";
         case TipoPessoaEnum.Fornecedor:

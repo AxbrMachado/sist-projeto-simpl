@@ -6,9 +6,9 @@ const StatusPedidoEnum = {
   EmRota: 5,
   Entregue: 6,
   Finalizado: 7,
-  Cancelado: 8
+  Cancelado: 8,
+  AguardandoRateio: 9,
+  AguardandoConferencia: 10
 };
 
 export default StatusPedidoEnum;
-
-
