@@ -2,12 +2,12 @@ import Vue from "vue";
 class PessoaServico {
   ObterVSelect(filtro, tipo) {
     return Vue.prototype.$http({
-      url: "/pessoa/obter-v-select/" + (tipo ? tipo + "/" : "") + "/" + filtro,
+      url: "/pessoa/obter-v-select/" + (tipo ? tipo + "/" : "") + filtro,
       method: "GET"
     });
   }
 
-  ObterVSelect(filtro) {
+  ObterVSelectSimples(filtro) {
     return Vue.prototype.$http({
       url: "pessoa/obter-v-select/" + filtro,
       method: "GET"

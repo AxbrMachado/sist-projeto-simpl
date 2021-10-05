@@ -31,6 +31,16 @@
             </header>
             <div class="card-body">
               <div class="row">
+                <a
+                  @click="ImportarConfiguracoes()"
+                  class="ml-auto btn btn-info"
+                  href="javascript:"
+                  title="Importar configurações de Contratos e Produtos"
+                >
+                  Importar Configurações
+                </a>
+              </div>
+              <div class="row">
                 <div class="col">
                   <div class="form-group">
                     <small>Campos com * são de preenchimento obrigatório</small>
@@ -154,6 +164,32 @@
       <NovoDocumento :referenciaId="viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="viewModel.id"> </Contato>
     </div>
+    <b-modal
+      v-model="modalImportarConfiguracoes"
+      title="Importar configurações de Contrato e Produtos"
+      class="modal-danger"
+      ok-variant="info"
+      @ok="ImportarConfiguracoesOK"
+      @hidden="ImportarConfiguracoesCancel"
+    >
+      <div class="row">
+        <div class="col-sm-12 col-md-5 col-lg-5 col-xl-12">
+          <div class="form-group">
+            <label for>* Fornecedor</label>
+            <v-select
+              placeholder="Digite um fornecedor"
+              v-model="fornecedorBase"
+              :options="fornecedoresBaseConfiguracaoOptions"
+              @search="ObterCooperadoBaseVSelect"
+            >
+              <template slot="no-options">
+                Nenhum resultado para a busca.
+              </template>
+            </v-select>
+          </div>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -179,6 +215,10 @@ export default {
   },
   data() {
     return {
+      modalImportarConfiguracoes: false,
+      addTodosValorLimite: 0,
+      fornecedoresBaseConfiguracaoOptions: [],
+      fornecedorBase: null,
       loading: false,
       pessoasOptions: [],
       responsaveisOptions: [],
@@ -324,6 +364,66 @@ export default {
       this.viewModel.fornecedorDesignado = false;
       this.viewModel.responsavel = null;
       this.viewModel.pessoas = [];
+    },
+    ImportarConfiguracoes() {
+      this.modalImportarConfiguracoes = true;
+      // this.addTodosValorLimite = 0;
+    },
+    ImportarConfiguracoesCancel(evento) {
+      evento.preventDefault();
+      this.fornecedoresBaseConfiguracaoOptions = [];
+      this.fornecedorBase = null;
+    },
+    ImportarConfiguracoesOK(evento) {
+      evento.preventDefault();
+
+      if (!this.fornecedorBase) {
+        this.$notify({
+          data: ["Informe um fornecedor."],
+          type: "warn",
+          duration: 3000
+        });
+        return;
+      }
+
+      this.modalImportarConfiguracoes = false;
+      DapServico.ImportarConfiguracoes(
+        this.viewModel.id,
+        this.fornecedorBase.id
+      )
+        .then((resposta) => {
+          this.loading = false;
+          this.$notify({
+            data: [
+              "Configurações de contrato e produtos importadas com sucesso."
+            ],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.loading = false;
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ObterCooperadoBaseVSelect(busca) {
+      if (!busca || busca.length <= 2) return;
+
+      PessoaServico.ObterVSelect(busca, TipoPessoaEnum.Fornecedor)
+        .then((response) => {
+          this.fornecedoresBaseConfiguracaoOptions = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     }
   }
 };
