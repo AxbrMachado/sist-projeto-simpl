@@ -16,8 +16,8 @@
                 <a
                   @click="RecalcularRateioAutomatico()"
                   class="ml-auto btn btn-danger"
-                  href="#"
                   title="Recalcular rateio automático"
+                  href="#"
                 >
                   Recalcular Rateio Automático
                 </a>
@@ -213,13 +213,19 @@ export default {
         { value: StatusPedidoEnum.EmRota, text: "Em Rota" },
         { value: StatusPedidoEnum.Entregue, text: "Entregue" },
         { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
-        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" }
+        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" },
+        { value: StatusPedidoEnum.AguardandoRateio, text: "Aguardando Rateio" },
+        {
+          value: StatusPedidoEnum.AguardandoConferencia,
+          text: "Aguardando Conferência"
+        }
       ],
       statusRateioOptions: [
-        { value: StatusRateioEnum.Pendente, text: "Pendente" },
-        { value: StatusRateioEnum.Incompleto, text: "Finalizado" },
-        { value: StatusRateioEnum.Completo, text: "Cancelado" },
-        { value: StatusRateioEnum.Cancelada, text: "Aberto" }
+        { value: StatusRateioEnum.Incompleto, text: "Incompleto" },
+        { value: StatusRateioEnum.Atendido, text: "Atendido" },
+        { value: StatusRateioEnum.Confirmado, text: "Confirmado" },
+        { value: StatusRateioEnum.Conferido, text: "Conferido" },
+        { value: StatusRateioEnum.Cancelado, text: "Cancelado" }
       ],
       tiposInstituicaoOptions: [],
       licitacaoOptions: [],
@@ -301,14 +307,11 @@ export default {
     },
     ModalRateioOk(evento) {
       evento.preventDefault();
-
       this.modalRateio = false;
-
+      if (!this.viewModel.pedidoId) return;
       RateioServico.EfetuarRateio(this.viewModel.pedidoId)
-        .then((resposta) => {
-          this.viewModel.id = resposta.data;
-          AtualizarRateio();
-          Bus.$emit("atualiza-fornecedores-rateio");
+        .then(() => {
+          this.Obter(this.viewModel.id);
           Bus.$emit("rateio-efetuado");
           this.$notify({
             data: ["Rateio executado com sucesso."],
@@ -317,12 +320,11 @@ export default {
           });
         })
         .catch((erro) => {
-          this.loading = false;
-          // this.$notify({
-          //   data: erro.response.data.erros,
-          //   type: "warn",
-          //   duration: 5000
-          // });
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
         });
     }
   }

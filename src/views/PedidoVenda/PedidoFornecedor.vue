@@ -93,6 +93,7 @@
                             <i class="fa fa-edit"></i>
                           </b-button>
                           <b-button
+                            :disabled="!IsPedidoPendente(data.item)"
                             variant="danger"
                             title="Remover produtos do fornecedor"
                             @click="Remover(data.item)"
@@ -182,8 +183,9 @@
 import RotateSquare from "../../components/RotateSquare";
 import PedidoFornecedorServico from "../../servico/PedidoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
-import Bus from "../../util/EventBus";
 import PedidoFornecedorProduto from "./PedidoFornecedorProduto.vue";
+import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
+import Bus from "../../util/EventBus";
 
 export default {
   name: "PedidoFornecedor",
@@ -400,6 +402,9 @@ export default {
     },
     FormataQuantidade(valor) {
       return valor ? valor : 0;
+    },
+    IsPedidoPendente(item) {
+      return item.statusPedido == StatusPedidoEnum.Pendente;
     }
   }
 };

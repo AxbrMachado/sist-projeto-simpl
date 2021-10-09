@@ -85,8 +85,23 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            v-if="!AtendeProduto(data.item)"
+                            v-if="
+                              !AtendeProduto(data.item) &&
+                              IsFornecedorAvulso(data.item)
+                            "
                             variant="warning"
+                            style="margin-right: 10px"
+                            title="Atender Produto"
+                            @click="AtenderProdutoAvulso(data.item)"
+                          >
+                            <i class="far fa-hand-point-up"></i>
+                          </b-button>
+                          <b-button
+                            v-if="
+                              AtendeProduto(data.item) &&
+                              IsFornecedorAvulso(data.item)
+                            "
+                            variant="primary"
                             style="margin-right: 10px"
                             title="Atender Produto"
                             @click="AtenderProdutoAvulso(data.item)"
@@ -95,7 +110,10 @@
                           </b-button>
 
                           <b-button
-                            v-if="AtendeProduto(data.item)"
+                            v-if="
+                              AtendeProduto(data.item) &&
+                              !IsFornecedorAvulso(data.item)
+                            "
                             variant="primary"
                             style="margin-right: 10px"
                             title="Confirmar produto"
@@ -105,7 +123,10 @@
                           </b-button>
 
                           <b-button
-                            v-if="AtendeProduto(data.item)"
+                            v-if="
+                              AtendeProduto(data.item) &&
+                              !IsFornecedorAvulso(data.item)
+                            "
                             variant="secondary"
                             style="margin-right: 10px"
                             title="Recusar produto"
@@ -433,6 +454,11 @@ export default {
         { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
         { key: "quantidadeDesignada", label: "Designado", sortable: true },
         {
+          key: "fornecedorDesignado.label",
+          label: "Fornecedor Designado",
+          sortable: true
+        },
+        {
           key: "acoes",
           label: "Ações",
           sortable: false,
@@ -457,7 +483,9 @@ export default {
   methods: {
     ObterGrid(val) {
       this.loading = false;
+      this.fornecedorDesignado = "";
       this.itemEdicao = null;
+      this.modalEdicao = false;
 
       PedidoProdutoFornecedorServico.ObterGridFornecedor(
         val,
@@ -772,7 +800,14 @@ export default {
     AtenderProdutoAvulso(item) {
       this.itemEdicao = item;
       this.modalAtendimentoAvulso = true;
-      this.itemEdicaoQuantidadePendente = item.quantidadePendente;
+      this.itemEdicaoQuantidadePendente =
+        item.quantidadePendente + item.quantidadeAtendida;
+      this.itemEdicaoQuantidadeAvulsa = item.quantidadeAtendida;
+      this.fornecedorDesignado = item.fornecedorDesignado;
+      this.fornecedoresDesignadosOptions = [];
+    },
+    IsFornecedorAvulso(item) {
+      return item.fornecedorAvulso;
     }
   }
 };

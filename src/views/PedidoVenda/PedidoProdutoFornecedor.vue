@@ -85,6 +85,7 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
+                            :disabled="!IsPedidoPendente(data.item)"
                             variant="info"
                             style="margin-right: 10px"
                             title="Editar Quantidade"
@@ -93,6 +94,7 @@
                             <i class="fa fa-edit"></i>
                           </b-button>
                           <b-button
+                            :disabled="!IsPedidoPendente(data.item)"
                             variant="danger"
                             title="Zerar Quantidade"
                             @click="Remover(data.item)"
@@ -269,6 +271,7 @@ import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
 import FornecedorServico from "../../servico/FornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
+import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import Bus from "../../util/EventBus";
 
 export default {
@@ -590,6 +593,9 @@ export default {
             duration: 5000
           });
         });
+    },
+    IsPedidoPendente(item) {
+      return item.statusPedido == StatusPedidoEnum.Pendente;
     }
   }
 };

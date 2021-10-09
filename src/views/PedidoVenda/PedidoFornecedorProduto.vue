@@ -93,6 +93,7 @@
                             <i class="fa fa-edit"></i>
                           </b-button> -->
                           <b-button
+                            :disabled="!IsPedidoPendente(data.item)"
                             variant="danger"
                             title="Zerar Quantidade"
                             @click="Remover(data.item)"
@@ -176,6 +177,7 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
+import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import Bus from "../../util/EventBus";
 
 export default {
@@ -400,6 +402,9 @@ export default {
     },
     FormataQuantidade(valor) {
       return valor ? valor : 0;
+    },
+    IsPedidoPendente(item) {
+      return item.statusPedido == StatusPedidoEnum.Pendente;
     }
   }
 };

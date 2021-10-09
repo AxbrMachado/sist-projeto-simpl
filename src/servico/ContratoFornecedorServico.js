@@ -40,19 +40,6 @@ class ContratoFornecedorServico {
     });
   }
 
-  AdicionarTodosFornecedores(ContratoId, ValorLimite, QuantidadeLimite) {
-    return Vue.prototype.$http({
-      url:
-        "/pessoacontrato/adicionar-todos-fornecedores?ContratoId=" +
-        ContratoId +
-        "&ValorLimite=" +
-        ValorLimite +
-        "&QuantidadeLimite=" +
-        QuantidadeLimite,
-      method: "GET"
-    });
-  }
-
   Remover(id) {
     return Vue.prototype.$http({
       url: "pessoacontrato/remover/" + id,
@@ -168,6 +155,32 @@ class ContratoFornecedorServico {
         tipoPessoaContrato +
         "&pessoaId=" +
         pessoaId,
+      method: "GET"
+    });
+  }
+
+  AdicionarTodosFornecedores(ContratoId, ValorLimite, QuantidadeLimite) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoacontrato/adicionar-todos-fornecedores?ContratoId=" +
+        ContratoId +
+        "&ValorLimite=" +
+        ValorLimite +
+        "&QuantidadeLimite=" +
+        QuantidadeLimite,
+      method: "GET"
+    });
+  }
+
+  AdicionarTodosContratos(pessoaId, ValorLimite, QuantidadeLimite) {
+    return Vue.prototype.$http({
+      url:
+        "/pessoacontrato/adicionar-todos-contratos?PessoaId=" +
+        pessoaId +
+        "&ValorLimite=" +
+        ValorLimite +
+        "&QuantidadeLimite=" +
+        QuantidadeLimite,
       method: "GET"
     });
   }

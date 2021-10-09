@@ -68,6 +68,13 @@ class DapServico {
       method: "GET"
     });
   }
+
+  ImportarConfiguracoes(dapId, pessoaId) {
+    return Vue.prototype.$http({
+      url: "dap/importar-configuracoes/" + dapId + "/" + pessoaId,
+      method: "GET"
+    });
+  }
 }
 
 export default new DapServico();
