@@ -103,6 +103,14 @@ const Menu = {
     permission: "TipoCliente"
   },
 
+  FuncaoFuncionario: {
+    _name: "CSidebarNavItem",
+    name: "Função Funcionário",
+    to: "/funcao-funcionario",
+    icon: "cil-description",
+    permission: "FuncaoFuncionario"
+  },
+
   TipoUnidadeMedida: {
     _name: "CSidebarNavItem",
     name: "Tipo Unidade Medida",
