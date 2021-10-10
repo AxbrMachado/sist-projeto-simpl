@@ -109,7 +109,6 @@ export default {
       )
         menu[0]._children.push(Nav.Produto);
 
-
       menu[0]._children.push(Nav.Venda);
       if (
         Nav.RateioPedido.permission &&
@@ -196,6 +195,13 @@ export default {
           .length > 0
       )
         menu[0]._children.push(Nav.UnidadeMedida);
+
+      if (
+        Nav.FuncaoFuncionario.permission &&
+        permissao.filter((x) => x.startsWith(Nav.FuncaoFuncionario.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.FuncaoFuncionario);
 
       return menu;
     }

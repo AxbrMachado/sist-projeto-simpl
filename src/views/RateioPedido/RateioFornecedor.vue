@@ -153,7 +153,7 @@
                           <b-button
                             v-if="AtendeProduto(data.item)"
                             variant="dark"
-                            title="Imprmir informações fornecedor pedido"
+                            title="Imprmir informações fornecedor no rateio"
                             @click="ImprimirInformacoesFornecedor(data.item)"
                           >
                             <i class="fas fa-print"></i>
@@ -420,6 +420,10 @@ export default {
     });
 
     Bus.$on("atualiza-fornecedores-rateio", () => {
+      this.ObterGrid(this.pagina);
+    });
+
+    Bus.$on("alterado-rateio-produtor", () => {
       this.ObterGrid(this.pagina);
     });
   },

@@ -31,6 +31,10 @@ const TipoProduto = () => import("@/views/TipoProduto/TipoProduto");
 const NovoTipoProduto = () => import("@/views/TipoProduto/NovoTipoProduto");
 const TipoCliente = () => import("@/views/TipoCliente/TipoCliente");
 const NovoTipoCliente = () => import("@/views/TipoCliente/NovoTipoCliente");
+const FuncaoFuncionario = () =>
+  import("@/views/FuncaoFuncionario/FuncaoFuncionario");
+const NovaFuncaoFuncionario = () =>
+  import("@/views/FuncaoFuncionario/NovaFuncaoFuncionario");
 const TipoUnidadeMedida = () =>
   import("@/views/TipoUnidadeMedida/TipoUnidadeMedida");
 const NovoTipoUnidadeMedida = () =>
@@ -667,6 +671,7 @@ export default new Router({
             }
           ]
         },
+
         //Cadastro de tipo cliente
         {
           path: "tipo-cliente",
@@ -844,6 +849,50 @@ export default new Router({
               meta: {
                 requiresAuth: true,
                 permission: "GrupoUsuario.Adicionar"
+              }
+            }
+          ]
+        },
+
+        //Cadastro de funcao funcionario
+        {
+          path: "funcao-funcionario",
+          name: "FuncaoFuncionario",
+          meta: {
+            requiresAuth: true,
+            permission: "FuncaoFuncionario.Visualizar"
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+
+          children: [
+            {
+              path: "",
+              component: FuncaoFuncionario,
+              meta: {
+                requiresAuth: true,
+                permission: "FuncaoFuncionario.Visualizar"
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "Editar",
+              component: NovaFuncaoFuncionario,
+              meta: {
+                requiresAuth: true,
+                permission: "FuncaoFuncionario.Adicionar"
+              }
+            },
+            {
+              path: "novo",
+              name: "Novo",
+              component: NovaFuncaoFuncionario,
+              meta: {
+                requiresAuth: true,
+                permission: "FuncaoFuncionario.Adicionar"
               }
             }
           ]
