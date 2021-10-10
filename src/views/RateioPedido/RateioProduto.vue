@@ -544,6 +544,7 @@ export default {
     },
     atualizarproduto() {
       this.ObterGrid(this.pagina);
+      this.$emit("atualizarRateio");
     },
     FormataQuantidade(valor) {
       return valor ? valor : 0;
