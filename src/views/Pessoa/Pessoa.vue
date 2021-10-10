@@ -116,7 +116,8 @@
                   <span>{{
                     ObterTipoPessoa(data.item.tipoPessoa) +
                     ObterNomeTipoFornecedor(data.item.tipoFornecedor) +
-                    (data.item.tipoCliente ? "/" + data.item.tipoCliente : "")
+                    (data.item.tipoCliente ? "/" + data.item.tipoCliente : "") +
+                    (data.item.funcaoFuncionario ? "/" + data.item.funcaoFuncionario : "")
                   }}</span>
                 </div>
               </template>
