@@ -85,7 +85,7 @@
                             variant="primary"
                             style="margin-right: 10px"
                             title="Confirmar produto no rateio"
-                            @click="ConfirmarProdutosFornecedor(data.item)"
+                            @click="ConfirmarAtendimentoProduto(data.item)"
                           >
                             <i class="fas fa-thumbs-up"></i>
                           </b-button>
@@ -335,11 +335,13 @@ import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
 import Bus from "../../util/EventBus";
 import ProdutoServico from "../../servico/ProdutoServico";
+import RateioServico from "../../servico/RateioServico";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 // import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
 
 export default {
   name: "RateioProduto",
+  emits: ["atualizarRateio"],
   components: {
     RotateSquare,
     Bus,
@@ -436,13 +438,13 @@ export default {
     }
   },
   created() {
-    Bus.$on("alterado-produto-cliente", () => {
+    Bus.$on("atualizar-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
     Bus.$on("alterado-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
-    Bus.$on("remocao-produto-fornecedor", () => {
+    Bus.$on("rateio-efetuado", () => {
       this.ObterGrid(this.pagina);
     });
   },
@@ -487,10 +489,12 @@ export default {
       this.modalRemover = false;
       if (!this.itemRemover.id) return;
 
-      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover.id)
+      RateioServico.RemoverAtendimentoProdutoRateio(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
-          Bus.$emit("remocao-produto-pedido");
+          console.log("emit porra.. 1");
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
           this.$notify({
             data: ["Produtos removido com sucesso."],
             type: "success",
@@ -635,6 +639,9 @@ export default {
       )
         .then(() => {
           this.ObterGrid(this.pagina);
+          console.log("emit porra.. 3");
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
           this.$notify({
             data: ["Produto designado definido com sucesso."],
             type: "success",
@@ -735,6 +742,9 @@ export default {
       PedidoProdutoServico.RemoverProdutoDesignado(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
+          console.log("emit porra.. 2");
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
           this.$notify({
             data: ["Produto designado removido com sucesso."],
             type: "success",
@@ -765,17 +775,14 @@ export default {
       this.modalRecusar = false;
       if (!this.itemEdicao) return;
 
-      RateioServico.RecusarProdutoFornecedorRateio(
-        this.itemEdicao.pedidoId,
-        this.itemEdicao.fornecedorId,
-        this.$store.getters.emptyGuid
-      )
+      RateioServico.RecusarAtendimentoProdutoRateio(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
-        //   this.$emit("atualizarRateio");
-          Bus.$emit("alterado-produto-fornecedor");
+          console.log("emit porra.. 4");
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
           this.$notify({
-            data: ["Atendimento do produto recusados com sucesso."],
+            data: ["Atendimento do produto recusado com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -788,7 +795,7 @@ export default {
           });
         });
     },
-    ConfirmarProdutosFornecedor(item) {
+    ConfirmarAtendimentoProduto(item) {
       this.itemEdicao = item;
       this.modalAtenderTodos = true;
     },
@@ -805,16 +812,12 @@ export default {
       this.modalRecusar = false;
       if (!this.itemEdicao) return;
 
-      RateioServico.ConfirmarProdutoFornecedorRateio(
-        this.itemEdicao.pedidoId,
-        this.itemEdicao.fornecedorId,
-        this.$store.getters.emptyGuid,
-        0
-      )
+      RateioServico.ConfirmarAtendimentoProdutoRateio(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
-          //this.$emit("atualizarRateio");
-          Bus.$emit("alterado-produto-fornecedor");
+          console.log("emit porra.. 5");
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
           this.$notify({
             data: ["Atendimento do produto confirmado com sucesso."],
             type: "success",

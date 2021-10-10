@@ -422,6 +422,11 @@ export default {
     Bus.$on("atualiza-fornecedores-rateio", () => {
       this.ObterGrid(this.pagina);
     });
+
+    Bus.$on("alterado-rateio-produtor", () => {
+      console.log("emit porra.. xxxxxxxxxxxxx");
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
     ObterGrid(pagina) {

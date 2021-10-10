@@ -168,6 +168,7 @@
       <RateioProduto
         :rateioId="this.viewModel.id"
         :pedidoId="this.viewModel.pedidoId"
+        @atualizarRateio="AtualizarRateio"
       >
       </RateioProduto>
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
@@ -247,6 +248,11 @@ export default {
     Bus.$on("alterado-produto-fornecedor", () => {
       this.AtualizarRateio();
     });
+
+    Bus.$on("alterado-rateio-produtor", () => {
+      console.log("emit porra.. xxxxxxxxxxxxx");
+      this.AtualizarRateio();
+    });
   },
   methods: {
     ValidarForm(evt) {
@@ -300,6 +306,7 @@ export default {
     },
     AtualizarRateio() {
       this.Obter(this.viewModel.id);
+      Bus.$emit("rateio-efetuado");
     },
     RecalcularRateioAutomatico() {
       this.modalRateio = true;
