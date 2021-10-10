@@ -84,7 +84,7 @@
                           <b-button
                             variant="primary"
                             style="margin-right: 10px"
-                            title="Confirmar todos os produtos atendidos"
+                            title="Confirmar produto no rateio"
                             @click="ConfirmarProdutosFornecedor(data.item)"
                           >
                             <i class="fas fa-thumbs-up"></i>
@@ -93,7 +93,7 @@
                           <b-button
                             variant="secondary"
                             style="margin-right: 10px"
-                            title="Recusar todos os produtos atendidos"
+                            title="Recusar produto no rateio"
                             @click="RecusarProdutosFornecedor(data.item)"
                           >
                             <i class="fas fa-thumbs-down"></i>
@@ -109,36 +109,17 @@
                           </b-button>
                           <b-button
                             variant="dark"
-                            title="Imprmir informações fornecedor pedido"
+                            title="Imprmir informações produto rateio"
                             @click="ImprimirInformacoesFornecedor(data.item)"
                           >
                             <i class="fas fa-print"></i>
                           </b-button>
                         </div>
                       </template>
-                      <template v-slot:cell(valorPedido)="data">
-                        <div class="left">
-                          <span>{{ FormataValor(data.item.valorPedido) }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(valorUnitario)="data">
-                        <div class="left">
-                          <span>{{
-                            FormataValor(data.item.valorUnitario)
-                          }}</span>
-                        </div>
-                      </template>
                       <template v-slot:cell(quantidadeSolicitada)="data">
                         <div class="left">
                           <span>{{
                             FormataQuantidade(data.item.quantidadeSolicitada)
-                          }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(quantidadePendente)="data">
-                        <div class="left">
-                          <span>{{
-                            FormataQuantidadePendente(data.item)
                           }}</span>
                         </div>
                       </template>
@@ -181,7 +162,7 @@
       @ok="ModalOk"
       @hidden="ModalCancel"
     >
-      Você confirma a exclusão desse produto do pedido?
+      Você confirma a exclusão do atendimento desse produto no rateio?
     </b-modal>
     <b-modal
       v-model="modalProdutoDesignado"
@@ -307,6 +288,36 @@
         </div>
       </div>
     </b-modal>
+    <b-modal
+      v-model="modalRecusar"
+      title="Recusar produtos pedido para fornecedor"
+      class="modal-danger"
+      ok-variant="danger"
+      @ok="ModalRecusarOk"
+      @hidden="ModalRecusarCancel"
+    >
+      Recusar atendimento do produto dos fornecedores designados para
+      atendimento. Ao recusar esses fornecedores não irão mais atender esse
+      produto nesse pedido. Confirma?
+    </b-modal>
+    <b-modal
+      v-model="modalAtenderTodos"
+      title="Confirmar produtos pedido para fornecedor"
+      class="modal-success"
+      ok-variant="success"
+      @ok="ModalAtenderTodosOk"
+      @hidden="ModalAtenderTodosCancel"
+    >
+      Confirmar atendimento de produtos via fornecedores rateados. Confirma?
+    </b-modal>
+    <b-modal
+      v-model="modalImpressao"
+      title="Impressão"
+      class="modal-info"
+      ok-variant="info"
+    >
+      Rotina de impressão em desenvolvimento
+    </b-modal>
     <!-- <div v-if="EditarFornecedorProduto()">
       <PedidoProdutoFornecedor
         :pedidoProdutoId="this.pedidoProdutoId"
@@ -348,6 +359,17 @@ export default {
   data() {
     return {
       modalProdutoDesignado: false,
+
+      modalRemover: false,
+      modalRecusar: false,
+      modalAtenderTodos: false,
+      modalImpressao: false,
+      //   fornecedorId: "",
+      //   fornecedorOptions: [],
+      //   abrir: false,
+      //   editarProdutos: false,
+      //   descricaoFornecedor: "",
+
       itemQuantidadeSolicitada: 0,
       itemQuantidadeSolicitadaEquivalente: 0,
       itemDescricaoProdutoOrigem: "",
@@ -729,6 +751,86 @@ export default {
     },
     IsPedidoPendente(item) {
       return item.statusPedido == StatusPedidoEnum.Pendente;
+    },
+    RecusarProdutosFornecedor(item) {
+      this.modalRecusar = true;
+      this.itemEdicao = item;
+    },
+    ModalRecusarCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+    },
+    ModalRecusarOk(evento) {
+      evento.preventDefault();
+      this.modalRecusar = false;
+      if (!this.itemEdicao) return;
+
+      RateioServico.RecusarProdutoFornecedorRateio(
+        this.itemEdicao.pedidoId,
+        this.itemEdicao.fornecedorId,
+        this.$store.getters.emptyGuid
+      )
+        .then(() => {
+          this.ObterGrid(this.pagina);
+        //   this.$emit("atualizarRateio");
+          Bus.$emit("alterado-produto-fornecedor");
+          this.$notify({
+            data: ["Atendimento do produto recusados com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ConfirmarProdutosFornecedor(item) {
+      this.itemEdicao = item;
+      this.modalAtenderTodos = true;
+    },
+    ModalAtenderTodosCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+      this.modalAtenderTodos = false;
+    },
+    ModalAtenderTodosOk(evento) {
+      evento.preventDefault();
+      this.modalAtenderTodos = false;
+
+      evento.preventDefault();
+      this.modalRecusar = false;
+      if (!this.itemEdicao) return;
+
+      RateioServico.ConfirmarProdutoFornecedorRateio(
+        this.itemEdicao.pedidoId,
+        this.itemEdicao.fornecedorId,
+        this.$store.getters.emptyGuid,
+        0
+      )
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          //this.$emit("atualizarRateio");
+          Bus.$emit("alterado-produto-fornecedor");
+          this.$notify({
+            data: ["Atendimento do produto confirmado com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ImprimirInformacoesFornecedor(item) {
+      this.modalImpressao = true;
     }
   }
 };
