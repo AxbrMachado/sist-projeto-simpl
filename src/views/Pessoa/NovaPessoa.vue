@@ -77,7 +77,21 @@
                   </div>
                 </div>
 
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div
+                  class="col-sm-12 col-md-3 col-lg-3 col-xl-3"
+                  v-if="isFuncionario()"
+                >
+                  <div class="form-group">
+                    <label for>* Função</label>
+                    <b-form-select
+                      v-model="viewModel.funcaoFuncionarioId"
+                      :options="funcoesFuncionario"
+                      required
+                    ></b-form-select>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
                   <div class="form-group">
                     <label for>{{
                       isPessoaJuridica() && !isCooperado()
@@ -108,7 +122,7 @@
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
                   <div class="form-group">
                     <label for>E-mail</label>
                     <input
@@ -266,6 +280,7 @@ import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import Contato from "../../components/Contato";
 import PessoaServico from "../../servico/PessoaServico";
 import TipoClienteServico from "../../servico/TipoClienteServico";
+import FuncaoFuncionarioServico from "../../servico/FuncaoFuncionarioServico";
 
 export default {
   name: "NovaPessoa",
@@ -280,6 +295,7 @@ export default {
     return {
       loadingPessoa: false,
       tiposCliente: [],
+      funcoesFuncionario: [],
       tiposEstadoCivil: [
         { value: TipoEstadoCivilEnum.Solteiro, text: "Solteiro" },
         { value: TipoEstadoCivilEnum.Casado, text: "Casado" },
@@ -316,7 +332,8 @@ export default {
         dataEntrada: null,
         nomeMae: "",
         nomePai: "",
-        tipoClienteId: this.$store.getters.emptyGuid
+        tipoClienteId: this.$store.getters.emptyGuid,
+        funcaoFuncionarioId: this.$store.getters.emptyGuid
       }
     };
   },
@@ -324,6 +341,7 @@ export default {
     let id = this.$route.params.id;
     if (id) this.Obter(id);
     this.ObterTiposClienteSelect();
+    this.ObterFuncoesFuncionariosSelect();
   },
   methods: {
     isPessoaJuridica() {
@@ -441,11 +459,25 @@ export default {
       this.viewModel.nomeMae = "";
       this.viewModel.nomePai = "";
       this.viewModel.tipoClienteId = this.$store.getters.emptyGuid;
+      this.viewModel.funcaoFuncionarioId = this.$store.getters.emptyGuid;
     },
     ObterTiposClienteSelect() {
       TipoClienteServico.ObterSelect()
         .then((response) => {
           this.tiposCliente = response.data;
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ObterFuncoesFuncionariosSelect() {
+      FuncaoFuncionarioServico.ObterSelect()
+        .then((response) => {
+          this.funcoesFuncionario = response.data;
         })
         .catch((erro) => {
           this.$notify({
