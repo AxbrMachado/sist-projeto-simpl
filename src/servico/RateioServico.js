@@ -127,6 +127,38 @@ class RateioServico {
     });
   }
 
+  ConfirmarAtendimentoProdutoFornecedorRateio(produtoPedidoId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "rateio/confirmarAtendimentoProdutoFornecedorRateio/" +
+        produtoPedidoId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
+
+  RecusarAtendimentoProdutoFornecedorRateio(produtoPedidoId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "rateio/recusarAtendimentoProdutoFornecedorRateio/" +
+        produtoPedidoId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
+
+  RemoverAtendimentoProdutoFornecedorRateio(produtoPedidoId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "rateio/removerAtendimentoProdutoFornecedorRateio/" +
+        produtoPedidoId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
 }
 
 export default new RateioServico();

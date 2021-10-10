@@ -76,7 +76,7 @@
                             variant="info"
                             style="margin-right: 10px"
                             title="Visualizar fornecedores do produto"
-                            @click="SwitchEditarFornecedor(data.item)"
+                            @click="SwitchVisualizarFornecedor(data.item)"
                           >
                             <i class="fas fa-cart-plus"></i>
                           </b-button>
@@ -103,7 +103,7 @@
                             variant="danger"
                             style="margin-right: 10px"
                             title="Remover produtos atendidos"
-                            @click="Remover(data.item)"
+                            @click="RemoverAtendimento(data.item)"
                           >
                             <i class="fas fa-trash-alt"></i>
                           </b-button>
@@ -155,12 +155,12 @@
       </div>
     </form>
     <b-modal
-      v-model="modalRemover"
+      v-model="modalRemoverAtendimento"
       title="Confirmar exclusão"
       class="modal-danger"
       ok-variant="danger"
-      @ok="ModalOk"
-      @hidden="ModalCancel"
+      @ok="ModalRemoverAtendimentoOk"
+      @hidden="ModalRemoverAtendimentoCancel"
     >
       Você confirma a exclusão do atendimento desse produto no rateio?
     </b-modal>
@@ -318,26 +318,25 @@
     >
       Rotina de impressão em desenvolvimento
     </b-modal>
-    <!-- <div v-if="EditarFornecedorProduto()">
-      <PedidoProdutoFornecedor
+    <div v-if="VisualizarFornecedorProduto()">
+      <RateioProdutoFornecedor
         :pedidoProdutoId="this.pedidoProdutoId"
         :descricaoProduto="this.descricaoProduto"
         @atualizarproduto="atualizarproduto"
       >
-      </PedidoProdutoFornecedor>
-    </div> -->
+      </RateioProdutoFornecedor>
+    </div>
   </div>
 </template>
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
-import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
 import Bus from "../../util/EventBus";
 import ProdutoServico from "../../servico/ProdutoServico";
 import RateioServico from "../../servico/RateioServico";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
-// import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
+import RateioProdutoFornecedor from "./RateioProdutoFornecedor.vue";
 
 export default {
   name: "RateioProduto",
@@ -345,7 +344,7 @@ export default {
   components: {
     RotateSquare,
     Bus,
-    // PedidoProdutoFornecedor,
+    RateioProdutoFornecedor,
     ProdutoServico
   },
   props: {
@@ -361,28 +360,19 @@ export default {
   data() {
     return {
       modalProdutoDesignado: false,
-
-      modalRemover: false,
+      modalRemoverAtendimento: false,
       modalRecusar: false,
       modalAtenderTodos: false,
       modalImpressao: false,
-      //   fornecedorId: "",
-      //   fornecedorOptions: [],
-      //   abrir: false,
-      //   editarProdutos: false,
-      //   descricaoFornecedor: "",
-
       itemQuantidadeSolicitada: 0,
       itemQuantidadeSolicitadaEquivalente: 0,
       itemDescricaoProdutoOrigem: "",
       itemQuantidadeProdutoDesignada: 0,
       itemValorQuantidadeDesignada: 0,
       itemEdicao: null,
-
       itemProdutoDesignado: "",
       produtosDesignadosOptions: [],
-
-      modalRemover: false,
+      modalRemoverAtendimento: false,
       itemRemover: null,
       produtoOptions: [],
       loading: false,
@@ -480,13 +470,17 @@ export default {
           });
         });
     },
-    ModalCancel(evento) {
+    RemoverAtendimento(item) {
+      this.modalRemoverAtendimento = true;
+      this.itemRemover = item;
+    },
+    ModalRemoverAtendimentoCancel(evento) {
       evento.preventDefault();
       this.itemRemover = null;
     },
-    ModalOk(evento) {
+    ModalRemoverAtendimentoOk(evento) {
       evento.preventDefault();
-      this.modalRemover = false;
+      this.modalRemoverAtendimento = false;
       if (!this.itemRemover.id) return;
 
       RateioServico.RemoverAtendimentoProdutoRateio(this.itemRemover.id)
@@ -508,10 +502,6 @@ export default {
           });
         });
     },
-    Remover(item) {
-      this.modalRemover = true;
-      this.itemRemover = item;
-    },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.produtoId = "";
@@ -527,10 +517,10 @@ export default {
         currency: "BRL"
       });
     },
-    EditarFornecedorProduto() {
+    VisualizarFornecedorProduto() {
       return this.editarFornecedor;
     },
-    SwitchEditarFornecedor(item) {
+    SwitchVisualizarFornecedor(item) {
       if (1 == 2 && this.pedidoProdutoId != item.id) {
         this.pedidoProdutoId = item.id;
 
