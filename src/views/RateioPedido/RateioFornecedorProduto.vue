@@ -479,6 +479,10 @@ export default {
     Bus.$on("atualizar-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
+
+    Bus.$on("alterado-rateio-produtor", () => {
+      this.ObterGrid(this.pagina);
+    });
   },
   methods: {
     ObterGrid(val) {

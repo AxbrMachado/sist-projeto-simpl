@@ -20,7 +20,14 @@ class PedidoProdutoServico {
     });
   }
 
-  ObterGridTotal(pagina, itensPorPagina, pedidoId, produto, produtosNoPedido) {
+  ObterGridTotal(
+    pagina,
+    itensPorPagina,
+    pedidoId,
+    rateioId,
+    produto,
+    produtosNoPedido
+  ) {
     return Vue.prototype.$http({
       url:
         "/pedidoproduto/obter-grid-produto-total?pagina=" +
@@ -32,7 +39,9 @@ class PedidoProdutoServico {
         "&produtosNoPedido=" +
         produtosNoPedido +
         "&pedidoId=" +
-        pedidoId,
+        pedidoId +
+        "&rateioId=" +
+        rateioId,
       method: "GET"
     });
   }

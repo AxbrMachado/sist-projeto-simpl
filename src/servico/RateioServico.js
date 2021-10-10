@@ -105,6 +105,60 @@ class RateioServico {
       method: "GET"
     });
   }
+
+  ConfirmarAtendimentoProdutoRateio(produtoPedidoId) {
+    return Vue.prototype.$http({
+      url: "rateio/confirmarAtendimentoProdutoRateio/" + produtoPedidoId,
+      method: "GET"
+    });
+  }
+
+  RecusarAtendimentoProdutoRateio(produtoPedidoId) {
+    return Vue.prototype.$http({
+      url: "rateio/recusarAtendimentoProdutoRateio/" + produtoPedidoId,
+      method: "GET"
+    });
+  }
+
+  RemoverAtendimentoProdutoRateio(produtoPedidoId) {
+    return Vue.prototype.$http({
+      url: "rateio/removerAtendimentoProdutoRateio/" + produtoPedidoId,
+      method: "GET"
+    });
+  }
+
+  ConfirmarAtendimentoProdutoFornecedorRateio(produtoPedidoId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "rateio/confirmarAtendimentoProdutoFornecedorRateio/" +
+        produtoPedidoId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
+
+  RecusarAtendimentoProdutoFornecedorRateio(produtoPedidoId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "rateio/recusarAtendimentoProdutoFornecedorRateio/" +
+        produtoPedidoId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
+
+  RemoverAtendimentoProdutoFornecedorRateio(produtoPedidoId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "rateio/removerAtendimentoProdutoFornecedorRateio/" +
+        produtoPedidoId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
 }
 
 export default new RateioServico();

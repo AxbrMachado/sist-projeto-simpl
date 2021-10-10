@@ -165,7 +165,12 @@
         @atualizarRateio="AtualizarRateio"
       >
       </RateioFornecedor>
-      <!-- <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto> -->
+      <RateioProduto
+        :rateioId="this.viewModel.id"
+        :pedidoId="this.viewModel.pedidoId"
+        @atualizarRateio="AtualizarRateio"
+      >
+      </RateioProduto>
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
@@ -179,9 +184,8 @@ import NovoDocumento from "../../components/NovoDocumento";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import RateioFornecedor from "./RateioFornecedor";
+import RateioProduto from "./RateioProduto";
 import RateioServico from "../../servico/RateioServico";
-
-// import PedidoProduto from "./PedidoProduto";
 import Contato from "../../components/Contato";
 import Bus from "../../util/EventBus";
 
@@ -195,8 +199,8 @@ export default {
     StatusRateioEnum,
     Contato,
     RateioFornecedor,
-    RateioServico
-    // PedidoProduto,
+    RateioServico,
+    RateioProduto
   },
   data() {
     return {
@@ -242,6 +246,10 @@ export default {
     this.Obter(this.$route.params.id);
 
     Bus.$on("alterado-produto-fornecedor", () => {
+      this.AtualizarRateio();
+    });
+
+    Bus.$on("alterado-rateio-produtor", () => {
       this.AtualizarRateio();
     });
   },
@@ -297,6 +305,7 @@ export default {
     },
     AtualizarRateio() {
       this.Obter(this.viewModel.id);
+      Bus.$emit("rateio-efetuado");
     },
     RecalcularRateioAutomatico() {
       this.modalRateio = true;
