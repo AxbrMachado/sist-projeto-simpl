@@ -6,7 +6,7 @@
         size="60px"
       ></RotateSquare>
     </div>
-    <form v-else @submit="ValidarForm">
+    <form>
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
@@ -37,18 +37,6 @@
                         class="form-control"
                       />
                     </div>
-                  </div>
-                  <div
-                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas produtos presentes no pedido."
-                  >
-                    <label for>Produto Solicitado</label>
-                    <b-form-checkbox
-                      v-model="filtro.produtosNoPedido"
-                      name="check-button"
-                      switch
-                    >
-                    </b-form-checkbox>
                   </div>
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
@@ -82,34 +70,49 @@
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
                       </template>
-
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            variant="primary"
+                            variant="info"
                             style="margin-right: 10px"
-                            title="Editar Fornecedores do Produto"
+                            title="Visualizar fornecedores do produto"
                             @click="SwitchEditarFornecedor(data.item)"
                           >
-                            <i class="fas fa-binoculars"></i>
-                            <!-- <i class="fas fa-cart-plus"></i> -->
+                            <i class="fas fa-cart-plus"></i>
                           </b-button>
+
                           <b-button
-                            :disabled="!IsPedidoPendente(data.item)"
+                            variant="primary"
+                            style="margin-right: 10px"
+                            title="Confirmar todos os produtos atendidos"
+                            @click="ConfirmarProdutosFornecedor(data.item)"
+                          >
+                            <i class="fas fa-thumbs-up"></i>
+                          </b-button>
+
+                          <b-button
+                            variant="secondary"
+                            style="margin-right: 10px"
+                            title="Recusar todos os produtos atendidos"
+                            @click="RecusarProdutosFornecedor(data.item)"
+                          >
+                            <i class="fas fa-thumbs-down"></i>
+                          </b-button>
+
+                          <b-button
                             variant="danger"
                             style="margin-right: 10px"
-                            title="Remover"
+                            title="Remover produtos atendidos"
                             @click="Remover(data.item)"
                           >
                             <i class="fas fa-trash-alt"></i>
                           </b-button>
                           <b-button
-                            v-if="produtoSolicitado(data.item)"
-                            variant="warning"
-                            title="Produto Designado"
-                            @click="edicaoProdutoDesignado(data.item)"
+                            variant="dark"
+                            title="Imprmir informações fornecedor pedido"
+                            @click="ImprimirInformacoesFornecedor(data.item)"
                           >
-                            <i class="fas fa-apple-alt"></i>
+                            <i class="fas fa-print"></i>
                           </b-button>
                         </div>
                       </template>
@@ -304,14 +307,14 @@
         </div>
       </div>
     </b-modal>
-    <div v-if="EditarFornecedorProduto()">
+    <!-- <div v-if="EditarFornecedorProduto()">
       <PedidoProdutoFornecedor
         :pedidoProdutoId="this.pedidoProdutoId"
         :descricaoProduto="this.descricaoProduto"
         @atualizarproduto="atualizarproduto"
       >
       </PedidoProdutoFornecedor>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -319,21 +322,25 @@
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
 import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
-import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
 import Bus from "../../util/EventBus";
 import ProdutoServico from "../../servico/ProdutoServico";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
+// import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
 
 export default {
-  name: "PedidoProduto",
+  name: "RateioProduto",
   components: {
     RotateSquare,
     Bus,
-    PedidoProdutoFornecedor,
+    // PedidoProdutoFornecedor,
     ProdutoServico
   },
   props: {
     pedidoId: {
+      type: String,
+      default: ""
+    },
+    rateioId: {
       type: String,
       default: ""
     }
@@ -359,8 +366,7 @@ export default {
       total: 0,
       itensPorPagina: 15,
       filtro: {
-        produto: "",
-        produtosNoPedido: false
+        produto: ""
       },
       itens: [],
       abrir: false,
@@ -369,22 +375,11 @@ export default {
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        { key: "valorUnitario", label: "Valor Un.", sortable: true },
-        { key: "valorPedido", label: "Valor Total", sortable: true },
-        {
-          key: "quantidadeSolicitada",
-          label: "Qtd. Solicitada",
-          sortable: true
-        },
-        {
-          key: "quantidadeAtendida",
-          label: "Qtd. Atendida",
-          sortable: true
-        },
-        { key: "margemRateio", label: "% Rateio", sortable: true },
-        { key: "quantidadePendente", label: "Qtd. Pendente", sortable: true },
-        // { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
+        { key: "quantidadeSolicitada", label: "Solicitado", sortable: true },
+        { key: "margemRateio", label: "% Rateio", sortable: true },
+        { key: "quantidadeAtendida", label: "Atendido", sortable: true },
+        { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -430,45 +425,6 @@ export default {
     });
   },
   methods: {
-    IsNovo() {
-      return this.pedidoId === this.$store.getters.emptyGuid;
-    },
-    ValidarForm(evt) {
-      evt.preventDefault();
-
-      if (!this.viewModel.produto || this.viewModel.produto.id == undefined) {
-        this.loading = false;
-        this.$notify({
-          data: ["Informe um produto."],
-          type: "warn",
-          duration: 5000
-        });
-        return;
-      }
-
-      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.Novo();
-    },
-    Obter(id) {
-      this.loading = false;
-      this.itemEdicao = null;
-      this.itemProdutoDesignado = "";
-
-      PedidoProdutoServico.Obter(id)
-        .then((resposta) => {
-          this.loading = false;
-          //resposta.data.validade = DateTime.formatar(resposta.data.validade);
-          this.viewModel = resposta.data;
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
     ObterGrid(val) {
       this.loading = false;
       this.modalProdutoDesignado = false;
@@ -480,10 +436,10 @@ export default {
       PedidoProdutoServico.ObterGridTotal(
         val,
         this.itensPorPagina,
-        this.pedidoId,
         this.$store.getters.emptyGuid,
+        this.rateioId,
         this.filtro.produto,
-        this.filtro.produtosNoPedido
+        true
       )
         .then((resposta) => {
           this.loading = false;
@@ -539,7 +495,6 @@ export default {
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
       this.filtro.produto = "";
-      this.filtro.produtosNoPedido = false;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {

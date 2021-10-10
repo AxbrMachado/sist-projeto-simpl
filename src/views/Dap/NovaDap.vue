@@ -166,7 +166,7 @@
     </div>
     <b-modal
       v-model="modalImportarConfiguracoes"
-      title="Importar configurações de Contrato e Produtos"
+      title="Importar configurações de Contratos e Produtos"
       class="modal-danger"
       ok-variant="info"
       @ok="ImportarConfiguracoesOK"

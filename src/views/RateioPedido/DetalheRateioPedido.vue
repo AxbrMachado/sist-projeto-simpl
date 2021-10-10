@@ -165,7 +165,11 @@
         @atualizarRateio="AtualizarRateio"
       >
       </RateioFornecedor>
-      <!-- <PedidoProduto :pedidoId="viewModel.id"> </PedidoProduto> -->
+      <RateioProduto
+        :rateioId="this.viewModel.id"
+        :pedidoId="this.viewModel.pedidoId"
+      >
+      </RateioProduto>
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
@@ -179,9 +183,8 @@ import NovoDocumento from "../../components/NovoDocumento";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import RateioFornecedor from "./RateioFornecedor";
+import RateioProduto from "./RateioProduto";
 import RateioServico from "../../servico/RateioServico";
-
-// import PedidoProduto from "./PedidoProduto";
 import Contato from "../../components/Contato";
 import Bus from "../../util/EventBus";
 
@@ -195,8 +198,8 @@ export default {
     StatusRateioEnum,
     Contato,
     RateioFornecedor,
-    RateioServico
-    // PedidoProduto,
+    RateioServico,
+    RateioProduto
   },
   data() {
     return {
