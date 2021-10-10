@@ -492,7 +492,6 @@ export default {
       RateioServico.RemoverAtendimentoProdutoRateio(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
-          console.log("emit porra.. 1");
           Bus.$emit("alterado-rateio-produto");
           this.$emit("atualizarRateio");
           this.$notify({
@@ -639,7 +638,6 @@ export default {
       )
         .then(() => {
           this.ObterGrid(this.pagina);
-          console.log("emit porra.. 3");
           Bus.$emit("alterado-rateio-produto");
           this.$emit("atualizarRateio");
           this.$notify({
@@ -742,7 +740,6 @@ export default {
       PedidoProdutoServico.RemoverProdutoDesignado(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
-          console.log("emit porra.. 2");
           Bus.$emit("alterado-rateio-produto");
           this.$emit("atualizarRateio");
           this.$notify({
@@ -778,7 +775,6 @@ export default {
       RateioServico.RecusarAtendimentoProdutoRateio(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
-          console.log("emit porra.. 4");
           Bus.$emit("alterado-rateio-produto");
           this.$emit("atualizarRateio");
           this.$notify({
@@ -815,7 +811,6 @@ export default {
       RateioServico.ConfirmarAtendimentoProdutoRateio(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
-          console.log("emit porra.. 5");
           Bus.$emit("alterado-rateio-produto");
           this.$emit("atualizarRateio");
           this.$notify({

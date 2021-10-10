@@ -250,7 +250,6 @@ export default {
     });
 
     Bus.$on("alterado-rateio-produtor", () => {
-      console.log("emit porra.. xxxxxxxxxxxxx");
       this.AtualizarRateio();
     });
   },
