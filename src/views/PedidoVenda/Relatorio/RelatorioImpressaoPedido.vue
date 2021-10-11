@@ -1,67 +1,80 @@
 <template>
-  <div class="animated fadeIn">
-    <div v-for="(item, index) in relatorio.clientes" :key="index">
-      <div class="row">
-        <div class="col"></div>
-        <div class="col">
-          <div class="row center">
-            <h5>{{ relatorio.cabecalho.fantasia }}</h5>
+  <div>
+    <div v-for="(item, index) in relatorio.clientes" :key="index" style="height: 148mm; width: 210mm">
+        <div class="row logo">
+          <div class="col center">
+            <img
+              :src="
+                $store.getters.baseURL +
+                'arquivo/obter/' +
+                relatorio.cabecalho.logo
+              "
+              height="130px"
+              alt="Logo"
+            />
           </div>
-          <div class="row center">
-            <span>{{ relatorio.cabecalho.razaoSocial }}</span>
-          </div>
-          <div class="row center">
-            <span>{{ relatorio.cabecalho.endereco }}</span>
-          </div>
-          <div class="row center">
-            <span>{{ relatorio.cabecalho.telefone }}</span>
-          </div>
-          <div class="row center">
-            <span>{{ relatorio.cabecalho.email }}</span>
-          </div>
-          <div class="row center">
-            <div class="col center">
-              <span>CNPJ: {{ relatorio.cabecalho.cnpj }}</span>
+          <div class="col">
+            <div class="row center">
+              <h5>{{ relatorio.cabecalho.fantasia }}</h5>
             </div>
-            <div class="col center">
-              <span>Incrição Estatual: {{ relatorio.cabecalho.ie }}</span>
+            <div class="row center">
+              <span>{{ relatorio.cabecalho.razaoSocial }}</span>
+            </div>
+            <div class="row center">
+              <span>{{ relatorio.cabecalho.endereco }}</span>
+            </div>
+            <div class="row center">
+              <span>{{ relatorio.cabecalho.telefone }}</span>
+            </div>
+            <div class="row center">
+              <span>{{ relatorio.cabecalho.email }}</span>
+            </div>
+            <div class="row center">
+              <div class="col center">
+                <span>CNPJ: {{ relatorio.cabecalho.cnpj }}</span>
+              </div>
+              <div class="col center">
+                <span>Incrição Estatual: {{ relatorio.cabecalho.ie }}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <span>Data: ____/____/______ </span>
-      </div>
-      <div class="row">
-        <span>Unidade Escolar: {{ item.nome }}</span>
-      </div>
-      <div class="row">
-        <b-table
-          striped
-          hover
-          :items="item.produtos"
-          :fields="fields"
-        ></b-table>
-      </div>
+        <div class="row">
+          <span>Data: ____/____/______ </span>
+        </div>
+        <div class="row">
+          <span>Unidade Escolar: {{ item.nome }}</span>
+        </div>
+        <div class="row">
+          <b-table
+            striped
+            hover
+            :items="item.produtos"
+            :fields="fields"
+          ></b-table>
+        </div>
 
-      <div class="row">
-        <p>Obs: {{ item.observacao }}</p>
-      </div>
-      <div class="row" style="margin: 10px; padding-top: 30px">
-        <table class="table">
-          <tr>
-            <td align="center" valign="center" style="border-top: solid 1px">
-              Resp. Entrega
-            </td>
+        <div class="row">
+          <p>Obs: {{ item.observacao }}</p>
+        </div>
+        <div
+          class="row"
+          style="margin: 10px;"
+        >
+          <table class="table">
+            <tr>
+              <td align="center" valign="center" style="border-top: solid 1px">
+                Resp. Entrega
+              </td>
 
-            <td align="center" valign="center" style="border: none"></td>
-            <td align="center" valign="center" style="border-top: solid 1px">
-              Resp. Recebimento
-            </td>
-          </tr>
-        </table>
-      </div>
+              <td align="center" valign="center" style="border: none"></td>
+              <td align="center" valign="center" style="border-top: solid 1px">
+                Resp. Recebimento
+              </td>
+            </tr>
+          </table>
+        </div>
     </div>
   </div>
 </template>
@@ -112,9 +125,8 @@ export default {
 };
 </script>
 <style lang="scss">
-
 .center {
- display: flex;
- justify-content: space-around; 
+  display: flex;
+  justify-content: space-around;
 }
 </style>
