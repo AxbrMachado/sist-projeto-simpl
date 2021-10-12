@@ -67,6 +67,13 @@ class ConferenciaRateioServico {
       method: "GET"
     });
   }
+
+  CancelarConferencia(conferenciaId) {
+    return Vue.prototype.$http({
+      url: "conferencia/cancelarConferencia/" + conferenciaId,
+      method: "GET"
+    });
+  }
 }
 
 export default new ConferenciaRateioServico();

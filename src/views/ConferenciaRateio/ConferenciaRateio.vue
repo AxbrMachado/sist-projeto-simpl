@@ -128,7 +128,7 @@
                     variant="danger"
                     style="margin-right: 10px"
                     title="Excluir Rateio"
-                    @click="Remover(data.item)"
+                    @click="CancelarConferencia(data.item)"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
@@ -203,12 +203,12 @@
               class="mt-2"
             ></b-pagination>
             <b-modal
-              v-model="modalRemover"
+              v-model="modalCancelarConferencia"
               title="Confirmar exclusão"
               class="modal-danger"
               ok-variant="danger"
-              @ok="ModalOk"
-              @hidden="ModalCancel"
+              @ok="ModalCancelarConferenciaOk"
+              @hidden="ModalCancelelarConferenciaCancel"
             >
               As informações de produtos conferidos serão perdidas.
               <br />Você confirma a exclusão do processo de conferência? <br />
@@ -260,10 +260,10 @@ export default {
   data() {
     return {
       modalImpressao: false,
-      modalRemover: false,
+      modalCancelarConferencia: false,
       modalIniciarConferencia: false,
       rateioId: null,
-      itemRemover: null,
+      itemConferencia: null,
       loading: false,
       itens: [],
       pagina: 1,
@@ -337,18 +337,22 @@ export default {
     Editar(item) {
       this.$router.push("/conferencia-rateio/editar/" + item.id);
     },
-    ModalCancel(evento) {
-      evento.preventDefault();
-      this.itemRemover = null;
+    CancelarConferencia(item) {
+      this.modalCancelarConferencia = true;
+      this.itemConferencia = item;
     },
-    ModalOk(evento) {
+    ModalCancelelarConferenciaCancel(evento) {
       evento.preventDefault();
-      this.modalRemover = false;
-      if (!this.itemRemover) return;
+      this.itemConferencia = null;
+    },
+    ModalCancelarConferenciaOk(evento) {
+      evento.preventDefault();
+      this.modalCancelarConferencia = false;
+      if (!this.itemConferencia) return;
 
-      ConferenciaRateioServico.Remover(this.itemRemover.id)
+      ConferenciaRateioServico.CancelarConferencia(this.itemConferencia.id)
         .then(() => {
-          this.ObterGrid(1);
+          this.ObterGrid(this.pagina);
           this.$notify({
             data: ["Conferência removida com sucesso."],
             type: "success",
@@ -362,10 +366,6 @@ export default {
             duration: 5000
           });
         });
-    },
-    Remover(item) {
-      this.modalRemover = true;
-      this.itemRemover = item;
     },
     ObterGrid(pagina) {
       this.loading = false;
