@@ -25,6 +25,15 @@ const Menu = {
     icon: "cil-chart-pie",
     permission: "RateioPedido"
   },
+
+  ConferenciaRateio: {
+    _name: "CSidebarNavItem",
+    name: "Conferência Rateio",
+    to: "/conferencia-rateio",
+    icon: "cil-check",
+    permission: "ConferenciaRateio"
+  },
+
   PedidoVenda: {
     _name: "CSidebarNavItem",
     name: "Pedido",
