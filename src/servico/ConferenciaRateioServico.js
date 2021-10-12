@@ -60,6 +60,13 @@ class ConferenciaRateioServico {
       method: "PUT"
     });
   }
+
+  IniciarConferencia(rateioId) {
+    return Vue.prototype.$http({
+      url: "conferencia/iniciarConferencia/" + rateioId,
+      method: "GET"
+    });
+  }
 }
 
 export default new ConferenciaRateioServico();

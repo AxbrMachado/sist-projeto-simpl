@@ -106,6 +106,15 @@
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
                   <b-button
+                    v-if="!isConferenciaExistente(data.item)"
+                    variant="info"
+                    style="margin-right: 10px"
+                    title="Iniciar Conferência"
+                    @click="IniciarConferencia(data.item)"
+                  >
+                    <i class="fa fa-tasks"></i>
+                  </b-button>
+                  <b-button
                     v-if="isConferenciaExistente(data.item)"
                     variant="warning"
                     style="margin-right: 10px"
@@ -212,6 +221,17 @@
             >
               Rotina de impressão em desenvolvimento
             </b-modal>
+            <b-modal
+              v-model="modalIniciarConferencia"
+              title="Iniciar conferência do rateio"
+              class="modal-danger"
+              ok-variant="info"
+              @ok="ModalIniciarConferenciaOk"
+              @hidden="ModalIniciarConferenciaCancel"
+            >
+              Ao iniciar a confenrência do rateio o mesmo não poderá ser
+              alterado. Confirma?
+            </b-modal>
           </div>
         </div>
       </div>
@@ -241,6 +261,8 @@ export default {
     return {
       modalImpressao: false,
       modalRemover: false,
+      modalIniciarConferencia: false,
+      rateioId: null,
       itemRemover: null,
       loading: false,
       itens: [],
@@ -439,6 +461,36 @@ export default {
     },
     isConferenciaExistente(item) {
       return !(item.id === this.$store.getters.emptyGuid);
+    },
+    IniciarConferencia(item) {
+      this.modalIniciarConferencia = true;
+      this.rateioId = item.rateioId;
+    },
+    ModalIniciarConferenciaCancel(evento) {
+      evento.preventDefault();
+      this.rateioId = null;
+    },
+    ModalIniciarConferenciaOk(evento) {
+      evento.preventDefault();
+      this.modalIniciarConferencia = false;
+      if (!this.rateioId) return;
+
+      ConferenciaRateioServico.IniciarConferencia(this.rateioId)
+        .then(() => {
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Conferência aberta com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
     },
     ImprimirConferenciaPedido(item) {
       this.modalImpressao = true;
