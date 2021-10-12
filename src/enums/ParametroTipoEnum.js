@@ -5,7 +5,8 @@ const ParametroTipoEnum = {
   Decimal: 4,
   Long: 5,
   Boolean: 6,
-  Date: 7
+  Date: 7,
+  Guid: 8
 };
 
 export default ParametroTipoEnum;

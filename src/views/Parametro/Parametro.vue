@@ -231,8 +231,8 @@ export default {
       this.conteudoParametro = this.FormatarConteudo(item);
       this.observacaoParametro = item.observacao;
     },
-    ObterGrid(pagina) {
-      this.loading = false;
+    ObterGrid() {
+      this.loading = true;
       ParametroServico.ObterGrid(
         this.pagina,
         this.itensPorPagina,
@@ -275,6 +275,7 @@ export default {
     FormatarConteudo(value) {
       switch (value.tipoParametro) {
         case ParametroTipoEnum.String:
+        case ParametroTipoEnum.Guid:
           return value.conteudo;
         case ParametroTipoEnum.Inteiro:
           return parseInt(value.conteudo);
@@ -363,7 +364,10 @@ export default {
       return this.itemEdicao.tipoParametro;
     },
     isString() {
-      return this.itemEdicao.tipoParametro == ParametroTipoEnum.String;
+      return (
+        this.itemEdicao.tipoParametro == ParametroTipoEnum.String ||
+        this.itemEdicao.tipoParametro == ParametroTipoEnum.Guid
+      );
     },
     isNumber() {
       return (
