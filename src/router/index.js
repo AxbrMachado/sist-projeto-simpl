@@ -54,6 +54,8 @@ const NovoGrupoUsuario = () => import("@/views/GrupoUsuario/NovoGrupoUsuario");
 const GrupoUsuario = () => import("@/views/GrupoUsuario/GrupoUsuario");
 const Permissao = () => import("@/views/GrupoUsuario/Permissao");
 const SemPermissao = () => import("@/views/GrupoUsuario/SemPermissao");
+const RelatorioImpressaoPedido = () => import("@/views/PedidoVenda/Relatorio/RelatorioImpressaoPedido");
+
 
 Vue.use(Router);
 
@@ -347,6 +349,14 @@ export default new Router({
               meta: {
                 requiresAuth: true,
                 permission: "PedidoVenda.Adicionar"
+              }
+            },
+            {
+              path: "relatorio-impressao/:id",
+              name: "RelatorioImpressao",
+              component: RelatorioImpressaoPedido,
+              meta: {
+                requiresAuth: true,
               }
             },
             {

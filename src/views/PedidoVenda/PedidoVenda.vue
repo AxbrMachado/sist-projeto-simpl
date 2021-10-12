@@ -199,6 +199,14 @@
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
                   <ModalArquivoGrid :referenciaId="data.item.id" />
+                  <a
+                    target="blank"
+                    class="btn btn-dark mr-1"
+                    :href="'/#/pedido-venda/relatorio-impressao/' + data.item.id"
+                    title="Imprmir informações pedido"
+                  >
+                    <i class="fas fa-print"></i>
+                  </a>
                 </div>
               </template>
               <template v-slot:cell(dataEntrega)="data">

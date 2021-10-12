@@ -77,6 +77,13 @@ class PedidoServico {
       method: "GET"
     });
   }
+
+  RelatorioImpressao(pedidoId) {
+    return Vue.prototype.$http({
+      url: "pedido/relatorio/" + pedidoId,
+      method: "GET"
+    });
+  }
 }
 
 export default new PedidoServico();
