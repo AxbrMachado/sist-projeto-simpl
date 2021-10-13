@@ -115,10 +115,10 @@
                     <i class="fa fa-tasks"></i>
                   </b-button>
                   <b-button
-                    v-if="isConferenciaExistente(data.item)"
+                    v-if="isConferenciaExistente(null)"
                     variant="warning"
                     style="margin-right: 10px"
-                    title="Visualizar Rateio"
+                    title="Visualizar Conferência"
                     @click="Editar(data.item)"
                   >
                     <i class="fa fa-edit"></i>
@@ -127,7 +127,7 @@
                     v-if="isConferenciaExistente(data.item)"
                     variant="danger"
                     style="margin-right: 10px"
-                    title="Excluir Rateio"
+                    title="Cancelar Conferência"
                     @click="CancelarConferencia(data.item)"
                   >
                     <i class="fas fa-trash-alt"></i>
