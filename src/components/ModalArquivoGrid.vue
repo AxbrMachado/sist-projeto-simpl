@@ -36,7 +36,9 @@
           <div class="btn-group-sm">
             <a
               class="btn btn-secondary"
-              :href="$store.getters.baseURL + 'arquivo/obter/' + data.item.arquivoId"
+              :href="
+                $store.getters.baseURL + 'arquivo/obter/' + data.item.arquivoId
+              "
               target="_blank"
               title="Download arquivo"
               ><i class="fas fa-download"></i
@@ -100,6 +102,11 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
+
+      if (!this.referenciaId || this.referenciaId == this.$store.getters.emptyGuid) {
+        return;
+      }
+
       DocumentoAnexoService.ObterGrid(
         pagina,
         this.itensPorPagina,

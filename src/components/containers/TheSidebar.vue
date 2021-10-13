@@ -110,6 +110,14 @@ export default {
         menu[0]._children.push(Nav.Produto);
 
       menu[0]._children.push(Nav.Venda);
+
+      if (
+        Nav.PedidoVenda.permission &&
+        permissao.filter((x) => x.startsWith(Nav.PedidoVenda.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.PedidoVenda);
+
       if (
         Nav.RateioPedido.permission &&
         permissao.filter((x) => x.startsWith(Nav.RateioPedido.permission))
@@ -118,11 +126,11 @@ export default {
         menu[0]._children.push(Nav.RateioPedido);
 
       if (
-        Nav.PedidoVenda.permission &&
-        permissao.filter((x) => x.startsWith(Nav.PedidoVenda.permission))
+        Nav.ConferenciaRateio.permission &&
+        permissao.filter((x) => x.startsWith(Nav.ConferenciaRateio.permission))
           .length > 0
       )
-        menu[0]._children.push(Nav.PedidoVenda);
+        menu[0]._children.push(Nav.ConferenciaRateio);
 
       menu[0]._children.push(Nav.Configuracao);
 

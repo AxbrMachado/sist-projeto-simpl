@@ -13,9 +13,16 @@ const Contrato = () => import("@/views/Contrato/Contrato");
 const NovoContrato = () => import("@/views/Contrato/NovoContrato");
 const Dap = () => import("@/views/Dap/Dap");
 const NovaDap = () => import("@/views/Dap/NovaDap");
+
 const RateioPedido = () => import("@/views/RateioPedido/RateioPedido");
 const DetalheRateioPedido = () =>
   import("@/views/RateioPedido/DetalheRateioPedido");
+
+const ConferenciaRateio = () =>
+  import("@/views/ConferenciaRateio/ConferenciaRateio");
+const DetalheConferenciaRateio = () =>
+  import("@/views/ConferenciaRateio/DetalheConferenciaRateio");
+
 const PedidoVenda = () => import("@/views/PedidoVenda/PedidoVenda");
 const NovoPedidoVenda = () => import("@/views/PedidoVenda/NovoPedidoVenda");
 const Pessoa = () => import("@/views/Pessoa/Pessoa");
@@ -49,7 +56,6 @@ const Licitacao = () => import("@/views/Licitacao/Licitacao");
 const NovaLicitacao = () => import("@/views/Licitacao/NovaLicitacao");
 const Fornecedor = () => import("@/views/Fornecedor/Fornecedor");
 const NovoFornecedor = () => import("@/views/Fornecedor/NovoFornecedor");
-
 const NovoGrupoUsuario = () => import("@/views/GrupoUsuario/NovoGrupoUsuario");
 const GrupoUsuario = () => import("@/views/GrupoUsuario/GrupoUsuario");
 const Permissao = () => import("@/views/GrupoUsuario/Permissao");
@@ -313,6 +319,37 @@ export default new Router({
               path: "editar/:id",
               name: "editar",
               component: DetalheRateioPedido,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
+        //conferencia rateio pedido venda
+        {
+          path: "conferencia-rateio",
+          name: "ConferenciaRateio",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: ConferenciaRateio,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "editar",
+              component: DetalheConferenciaRateio,
               meta: {
                 requiresAuth: true
               }
