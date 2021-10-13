@@ -115,7 +115,7 @@
                     <i class="fa fa-tasks"></i>
                   </b-button>
                   <b-button
-                    v-if="isConferenciaExistente(null)"
+                    v-if="isConferenciaExistente(data.item)"
                     variant="warning"
                     style="margin-right: 10px"
                     title="Visualizar Conferência"
@@ -460,7 +460,9 @@ export default {
       }
     },
     isConferenciaExistente(item) {
-      return !(item.id === this.$store.getters.emptyGuid);
+      console.log(item);
+
+      return !item ? false : !(item.id === this.$store.getters.emptyGuid);
     },
     IniciarConferencia(item) {
       this.modalIniciarConferencia = true;
