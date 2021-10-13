@@ -460,8 +460,6 @@ export default {
       }
     },
     isConferenciaExistente(item) {
-      console.log(item);
-
       return !item ? false : !(item.id === this.$store.getters.emptyGuid);
     },
     IniciarConferencia(item) {
