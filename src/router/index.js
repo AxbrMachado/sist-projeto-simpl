@@ -457,7 +457,7 @@ export default new Router({
           name: "Fornecedor",
           meta: {
             requiresAuth: true,
-            permission: "Fornececdor.Visualizar"
+            permission: "Fornecedor.Visualizar"
           },
           component: {
             render(c) {
@@ -470,7 +470,7 @@ export default new Router({
               component: Fornecedor,
               meta: {
                 requiresAuth: true,
-                permission: "Fornececdor.Visualizar"
+                permission: "Fornecedor.Visualizar"
               }
             },
             {
@@ -479,7 +479,7 @@ export default new Router({
               component: NovoFornecedor,
               meta: {
                 requiresAuth: true,
-                permission: "Fornececdor.Adicionar"
+                permission: "Fornecedor.Adicionar"
               }
             },
             {
@@ -488,7 +488,7 @@ export default new Router({
               component: NovoFornecedor,
               meta: {
                 requiresAuth: true,
-                permission: "Fornececdor.Adicionar"
+                permission: "Fornecedor.Adicionar"
               }
             }
           ]
