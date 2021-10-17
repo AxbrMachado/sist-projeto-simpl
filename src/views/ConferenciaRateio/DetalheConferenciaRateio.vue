@@ -190,7 +190,6 @@ import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import StatusConferenciaEnum from "../../enums/StatusConferenciaEnum";
 // import RateioFornecedor from "./RateioFornecedor";
 // import RateioProduto from "./RateioProduto";
-//import RateioServico from "../../servico/RateioServico";
 import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
 import Contato from "../../components/Contato";
 import Bus from "../../util/EventBus";
@@ -206,7 +205,6 @@ export default {
     Contato,
     // RateioFornecedor,
     // RateioProduto,
-    //RateioServico,
     ConferenciaRateioServico
   },
   data() {
