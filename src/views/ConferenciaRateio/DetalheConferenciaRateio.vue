@@ -162,11 +162,13 @@
     <div>
       <!-- <RateioFornecedor
         :rateioId="this.viewModel.id"
+        :conferenciaId="this.viewModel.conferenciaId"
         @atualizarRateio="AtualizarRateio"
       >
       </RateioFornecedor>
       <RateioProduto
         :rateioId="this.viewModel.id"
+        :conferenciaId="this.viewModel.conferenciaId"
         :pedidoId="this.viewModel.pedidoId"
         @atualizarRateio="AtualizarRateio"
       >
@@ -180,19 +182,18 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import DateTime from "../../util/DateTime";
-
-// import RateioFornecedor from "./RateioFornecedor";
-// import RateioProduto from "./RateioProduto";
-
 import NovoDocumento from "../../components/NovoDocumento";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
+// import RateioFornecedor from "./RateioFornecedor";
+// import RateioProduto from "./RateioProduto";
 import RateioServico from "../../servico/RateioServico";
+import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
 import Contato from "../../components/Contato";
 import Bus from "../../util/EventBus";
 
 export default {
-  name: "DetalheRateioPedido",
+  name: "DetalheConferenciaRateio",
   components: {
     Bus,
     RotateSquare,
@@ -200,9 +201,10 @@ export default {
     StatusPedidoEnum,
     StatusRateioEnum,
     Contato,
-    RateioFornecedor,
+    // RateioFornecedor,
+    // RateioProduto,
     RateioServico,
-    RateioProduto
+    ConferenciaRateioServico
   },
   data() {
     return {
@@ -238,6 +240,7 @@ export default {
       contratoOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
+        conferenciaId: this.$store.getters.emptyGuid,
         descricao: ""
       }
     };
@@ -260,10 +263,10 @@ export default {
       evt.preventDefault();
       this.Editar();
     },
-    Obter(rateioId) {
+    Obter(conferenciaId) {
       this.loading = false;
 
-      RateioServico.Obter(rateioId)
+      ConferenciaRateioServico.Obter(conferenciaId)
         .then((resposta) => {
           this.loading = false;
           resposta.data.previsaEntrega = DateTime.formatar(
