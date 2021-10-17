@@ -72,6 +72,7 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
+                            :disabled="isRateioConferindo()"
                             variant="primary"
                             style="margin-right: 10px"
                             title="Confirmar atendimento do produto para este fornecedor?"
@@ -83,6 +84,7 @@
                           </b-button>
 
                           <b-button
+                            :disabled="isRateioConferindo()"
                             variant="secondary"
                             style="margin-right: 10px"
                             title="Recusar atendimento do produto neste rateio para este fornecedor"
@@ -94,6 +96,7 @@
                           </b-button>
 
                           <b-button
+                            :disabled="isRateioConferindo()"
                             variant="danger"
                             style="margin-right: 10px"
                             title="Remover produto atendidos"
@@ -224,7 +227,9 @@ export default {
   },
   props: {
     pedidoProdutoId: { type: String, default: "" },
-    descricaoProduto: { type: String, default: "" }
+    descricaoProduto: { type: String, default: "" },
+    rateioId: { type: String, default: "" },
+    conferenciaId: { type: String, default: "" }
   },
   data() {
     return {
@@ -443,6 +448,12 @@ export default {
             duration: 5000
           });
         });
+    },
+    isRateioConferindo() {
+      return (
+        !(this.conferenciaId == null || this.conferenciaId == undefined) &&
+        this.conferenciaId.toString().length == 36
+      );
     }
   }
 };

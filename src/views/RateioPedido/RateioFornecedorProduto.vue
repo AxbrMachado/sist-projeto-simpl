@@ -89,6 +89,7 @@
                               !AtendeProduto(data.item) &&
                               IsFornecedorAvulso(data.item)
                             "
+                            :disabled="isRateioConferindo()"
                             variant="warning"
                             style="margin-right: 10px"
                             title="Atender Produto"
@@ -101,6 +102,7 @@
                               AtendeProduto(data.item) &&
                               IsFornecedorAvulso(data.item)
                             "
+                            :disabled="isRateioConferindo()"
                             variant="primary"
                             style="margin-right: 10px"
                             title="Atender Produto"
@@ -114,6 +116,7 @@
                               AtendeProduto(data.item) &&
                               !IsFornecedorAvulso(data.item)
                             "
+                            :disabled="isRateioConferindo()"
                             variant="primary"
                             style="margin-right: 10px"
                             title="Confirmar produto"
@@ -127,6 +130,7 @@
                               AtendeProduto(data.item) &&
                               !IsFornecedorAvulso(data.item)
                             "
+                            :disabled="isRateioConferindo()"
                             variant="secondary"
                             style="margin-right: 10px"
                             title="Recusar produto"
@@ -139,6 +143,7 @@
                               AtendeProduto(data.item) &&
                               FornecedorComTelefoneCadastrado()
                             "
+                            :disabled="isRateioConferindo()"
                             variant="success"
                             style="margin-right: 10px"
                             title="Enviar solicitação via whatsapp"
@@ -148,6 +153,7 @@
                           </b-button>
                           <b-button
                             v-if="AtendeProduto(data.item)"
+                            :disabled="isRateioConferindo()"
                             variant="danger"
                             title="Remover produto fornecedor"
                             @click="Remover(data.item)"
@@ -416,7 +422,8 @@ export default {
     pedidoId: { type: String, default: "" },
     descricaoFornecedor: { type: String, default: "" },
     telefoneWhatsAppParam: { type: String, default: "" },
-    rateioId: { type: String, default: "" }
+    rateioId: { type: String, default: "" },
+    conferenciaId: { type: String, default: "" }
   },
   data() {
     return {
@@ -812,6 +819,12 @@ export default {
     },
     IsFornecedorAvulso(item) {
       return item.fornecedorAvulso;
+    },
+    isRateioConferindo() {
+      return (
+        !(this.conferenciaId == null || this.conferenciaId == undefined) &&
+        this.conferenciaId.toString().length == 36
+      );
     }
   }
 };

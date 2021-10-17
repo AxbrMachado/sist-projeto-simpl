@@ -110,6 +110,7 @@
 
                           <b-button
                             v-if="AtendeProduto(data.item)"
+                            :disabled="isRateioConferindo()"
                             variant="primary"
                             style="margin-right: 10px"
                             title="Confirmar todos os produtos atendidos"
@@ -120,6 +121,7 @@
 
                           <b-button
                             v-if="AtendeProduto(data.item)"
+                            :disabled="isRateioConferindo()"
                             variant="secondary"
                             style="margin-right: 10px"
                             title="Recusar todos os produtos atendidos"
@@ -130,6 +132,7 @@
 
                           <b-button
                             v-if="AtendeProduto(data.item)"
+                            :disabled="isRateioConferindo()"
                             variant="danger"
                             style="margin-right: 10px"
                             title="Remover produtos atendidos"
@@ -142,6 +145,7 @@
                               AtendeProduto(data.item) &&
                               FornecedorComTelefoneCadastrado(data.item)
                             "
+                            :disabled="isRateioConferindo()"
                             variant="success"
                             style="margin-right: 10px"
                             title="Enviar solicitação via whatsapp"
@@ -152,6 +156,7 @@
 
                           <b-button
                             v-if="AtendeProduto(data.item)"
+                            :disabled="isRateioConferindo()"
                             variant="dark"
                             title="Imprmir informações fornecedor no rateio"
                             @click="ImprimirInformacoesFornecedor(data.item)"
@@ -316,6 +321,7 @@
         :descricaoFornecedor="this.descricaoFornecedor"
         :telefoneWhatsAppParam="this.telefoneWhatsApp"
         :rateioId="this.rateioId"
+        :conferenciaId="this.conferenciaId"
         @atualizarFornecedor="atualizarFornecedor"
       >
       </RateioFornecedorProduto>
@@ -343,10 +349,8 @@ export default {
     RateioFornecedorProduto
   },
   props: {
-    rateioId: {
-      type: String,
-      default: ""
-    }
+    rateioId: { type: String, default: "" },
+    conferenciaId: { type: String, default: "" }
   },
   data() {
     return {
@@ -693,6 +697,12 @@ export default {
     },
     isRateioPendente(item) {
       return item.statusRateio == StatusRateioEnum.Incompleto;
+    },
+    isRateioConferindo() {
+      return (
+        !(this.conferenciaId == null || this.conferenciaId == undefined) &&
+        this.conferenciaId.toString().length == 36
+      );
     }
   }
 };
