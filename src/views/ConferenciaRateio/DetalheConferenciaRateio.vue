@@ -12,14 +12,16 @@
           <div class="card">
             <header class="card-header">
               <div class="d-flex">
-                <strong class="align-self-center">Rateio</strong>
+                <strong class="align-self-center"
+                  >Conferência Rateio Pedido</strong
+                >
                 <a
-                  @click="RecalcularRateioAutomatico()"
+                  @click="ReiniciarConferencia()"
                   class="ml-auto btn btn-danger"
-                  title="Recalcular rateio automático"
+                  title="Reiniciar conferência?"
                   href="#"
                 >
-                  Recalcular Rateio Automático
+                  Reiniciar Conferência
                 </a>
               </div>
             </header>
@@ -42,7 +44,7 @@
                     <label for>Previsão Entrega</label>
                     <input
                       disabled
-                      v-model="viewModel.previsaEntrega"
+                      v-model="viewModel.previsaoEntrega"
                       class="form-control"
                       type="date"
                       required
@@ -75,11 +77,11 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>Status Rateio</label>
+                    <label for>Status Conferência</label>
                     <b-form-select
                       disabled
-                      v-model="viewModel.status"
-                      :options="statusRateioOptions"
+                      v-model="viewModel.statusConferencia"
+                      :options="statusConferenciaOptions"
                     ></b-form-select>
                   </div>
                 </div>
@@ -95,15 +97,15 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>Valor Rateado</label>
+                    <label for>Valor Conferido</label>
                     <currency-input
                       disabled
-                      v-model="viewModel.valorRateado"
+                      v-model="viewModel.valorConferido"
                       class="form-control"
                     />
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>Rateio Automático</label>
                     <input
@@ -113,7 +115,7 @@
                       type="text"
                     />
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -150,27 +152,27 @@
       </div>
     </form>
     <b-modal
-      v-model="modalRateio"
-      title="Confirmar execução rateio"
+      v-model="modalReiniciarConferencia"
+      title="Reiniciar Conferência"
       class="modal-danger"
       ok-variant="info"
-      @ok="ModalRateioOk"
-      @hidden="ModalRateioCancel"
+      @ok="modalReiniciarConferenciaOk"
+      @hidden="modalReiniciarConferenciaCancel"
     >
-      Você confirma a execução do rateio para este pedido?
+      Você confirma o reinício da conferência do pedido?
     </b-modal>
     <div>
       <!-- <RateioFornecedor
-        :rateioId="this.viewModel.id"
-        :conferenciaId="this.viewModel.conferenciaId"
-        @atualizarRateio="AtualizarRateio"
+        :rateioId="this.viewModel.rateioId"
+        :conferenciaId="this.viewModel.id"
+        @atualizarRateio="LoadConferencia"
       >
       </RateioFornecedor>
       <RateioProduto
-        :rateioId="this.viewModel.id"
-        :conferenciaId="this.viewModel.conferenciaId"
+        :rateioId="this.viewModel.rateioId"
+        :conferenciaId="this.viewModel.id"
         :pedidoId="this.viewModel.pedidoId"
-        @atualizarRateio="AtualizarRateio"
+        @atualizarRateio="LoadConferencia"
       >
       </RateioProduto> -->
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
@@ -185,9 +187,10 @@ import DateTime from "../../util/DateTime";
 import NovoDocumento from "../../components/NovoDocumento";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
+import StatusConferenciaEnum from "../../enums/StatusConferenciaEnum";
 // import RateioFornecedor from "./RateioFornecedor";
 // import RateioProduto from "./RateioProduto";
-import RateioServico from "../../servico/RateioServico";
+//import RateioServico from "../../servico/RateioServico";
 import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
 import Contato from "../../components/Contato";
 import Bus from "../../util/EventBus";
@@ -203,13 +206,13 @@ export default {
     Contato,
     // RateioFornecedor,
     // RateioProduto,
-    RateioServico,
+    //RateioServico,
     ConferenciaRateioServico
   },
   data() {
     return {
       loading: false,
-      modalRateio: false,
+      modalReiniciarConferencia: false,
       statusPedidoOptions: [
         { value: StatusPedidoEnum.Pendente, text: "Pendente" },
         { value: StatusPedidoEnum.Aberto, text: "Aberto" },
@@ -235,12 +238,16 @@ export default {
         { value: StatusRateioEnum.Conferido, text: "Conferido" },
         { value: StatusRateioEnum.Cancelado, text: "Cancelado" }
       ],
-      tiposInstituicaoOptions: [],
-      licitacaoOptions: [],
-      contratoOptions: [],
+      statusConferenciaOptions: [
+        { value: StatusConferenciaEnum.Pendente, text: "Pendente" },
+        { value: StatusConferenciaEnum.Iniciada, text: "Iniciada" },
+        { value: StatusConferenciaEnum.Completa, text: "Completa" },
+        { value: StatusConferenciaEnum.Finalizada, text: "Finalizada" },
+        { value: StatusConferenciaEnum.Cancelada, text: "Cancelado" }
+      ],
       viewModel: {
         id: this.$store.getters.emptyGuid,
-        conferenciaId: this.$store.getters.emptyGuid,
+        rateioId: this.$store.getters.emptyGuid,
         descricao: ""
       }
     };
@@ -251,11 +258,11 @@ export default {
     this.Obter(this.$route.params.id);
 
     Bus.$on("alterado-produto-fornecedor", () => {
-      this.AtualizarRateio();
+      this.LoadConferencia();
     });
 
     Bus.$on("alterado-rateio-produtor", () => {
-      this.AtualizarRateio();
+      this.LoadConferencia();
     });
   },
   methods: {
@@ -269,8 +276,8 @@ export default {
       ConferenciaRateioServico.Obter(conferenciaId)
         .then((resposta) => {
           this.loading = false;
-          resposta.data.previsaEntrega = DateTime.formatar(
-            resposta.data.previsaEntrega
+          resposta.data.previsaoEntrega = DateTime.formatar(
+            resposta.data.previsaoEntrega
           );
           resposta.data.dataRateio = DateTime.formatar(
             resposta.data.dataRateio
@@ -289,12 +296,12 @@ export default {
     Editar() {
       this.loading = false;
 
-      RateioServico.Editar(this.viewModel)
+      ConferenciaRateioServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/rateio-pedido");
+          this.$router.push("/conferencia-rateio");
           this.$notify({
-            data: ["Rateio editado com sucesso."],
+            data: ["Conferência salva com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -308,27 +315,27 @@ export default {
           });
         });
     },
-    AtualizarRateio() {
+    LoadConferencia() {
       this.Obter(this.viewModel.id);
       Bus.$emit("rateio-efetuado");
     },
-    RecalcularRateioAutomatico() {
-      this.modalRateio = true;
+    ReiniciarConferencia() {
+      this.modalReiniciarConferencia = true;
     },
-    ModalRateioCancel(evento) {
+    modalReiniciarConferenciaCancel(evento) {
       evento.preventDefault();
-      this.modalRateio = false;
+      this.modalReiniciarConferencia = false;
     },
-    ModalRateioOk(evento) {
+    modalReiniciarConferenciaOk(evento) {
       evento.preventDefault();
-      this.modalRateio = false;
-      if (!this.viewModel.pedidoId) return;
-      RateioServico.EfetuarRateio(this.viewModel.pedidoId)
+      this.modalReiniciarConferencia = false;
+      if (!this.viewModel.id) return;
+      ConferenciaRateioServico.ReiniciarConferencia(this.viewModel.id)
         .then(() => {
           this.Obter(this.viewModel.id);
           Bus.$emit("rateio-efetuado");
           this.$notify({
-            data: ["Rateio executado com sucesso."],
+            data: ["Conferência reiniciada com sucesso."],
             type: "success",
             duration: 5000
           });

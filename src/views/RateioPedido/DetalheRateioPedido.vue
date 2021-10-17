@@ -233,9 +233,6 @@ export default {
         { value: StatusRateioEnum.Conferido, text: "Conferido" },
         { value: StatusRateioEnum.Cancelado, text: "Cancelado" }
       ],
-      tiposInstituicaoOptions: [],
-      licitacaoOptions: [],
-      contratoOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
         conferenciaId: this.$store.getters.emptyGuid,
