@@ -37,7 +37,7 @@
                       />
                     </div>
                   </div>
-                  <div
+                  <!-- <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
                     title="Apenas clientes presentes no pedido."
                   >
@@ -48,7 +48,7 @@
                       switch
                     >
                     </b-form-checkbox>
-                  </div>
+                  </div> -->
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
                       class="btn btn-primary mr-2"
@@ -135,10 +135,10 @@
                           }}</span>
                         </div>
                       </template>
-                      <template v-slot:cell(quantidadaAtendida)="data">
+                      <template v-slot:cell(quantidadeAtendida)="data">
                         <div class="left">
                           <span>{{
-                            FormataQuantidade(data.item.quantidadaAtendida)
+                            FormataQuantidade(data.item.quantidadeAtendida)
                           }}</span>
                         </div>
                       </template>
@@ -302,7 +302,7 @@ export default {
       itensPorPagina: 15,
       filtro: {
         fornecedor: "",
-        fornecedorComProduto: false
+        fornecedorComProduto: true
       },
       itens: [],
       fields: [
@@ -312,7 +312,7 @@ export default {
         // { key: "valorConsumido", label: "Valor Consumido", sortable: true },
         { key: "valorPedido", label: "Valor Pedido", sortable: true },
         { key: "quantidadePedido", label: "Qtd. Total Pedido", sortable: true },
-        { key: "quantidadaAtendida", label: "Qtd. Atendida", sortable: true },
+        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
         {
           key: "quantidadeConfirmada",
           label: "Qtd. Confirmada",
@@ -514,14 +514,14 @@ export default {
       this.modalEdicao = true;
       this.itemEdicao = item;
       this.itemEdicaoQuantidade = item.quantidadeSolicitada;
-      this.itemEdicaoQuantidade = item.quantidadaAtendida;
+      this.itemEdicaoQuantidade = item.quantidadeAtendida;
       this.itemEdicaoQuantidadeDesignada = item.quantidadeDesignada ?? 0;
       this.fornecedorDesignado = item.fornecedorDesignado;
       this.fornecedoresDesignadosOptions = [];
     },
     Limpar() {
       this.filtro.fornecedor = "";
-      this.filtro.fornecedorComProduto = false;
+      this.filtro.fornecedorComProduto = true;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {

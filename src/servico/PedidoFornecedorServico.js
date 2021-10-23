@@ -29,6 +29,7 @@ class PedidoFornecedorServico {
     itensPorPagina,
     pedidoId,
     rateioId,
+    conferenciaId,
     nome,
     fornecedorComProduto
   ) {
@@ -46,6 +47,8 @@ class PedidoFornecedorServico {
         pedidoId +
         "&rateioId=" +
         rateioId +
+        "&conferenciaId=" +
+        conferenciaId +
         "&tipoPessoaContrato=" +
         TipoPessoaContratoEnum.Fornecedor,
       method: "GET"

@@ -25,6 +25,7 @@ class PedidoProdutoServico {
     itensPorPagina,
     pedidoId,
     rateioId,
+    conferenciaId,
     produto,
     produtosNoPedido
   ) {
@@ -36,12 +37,13 @@ class PedidoProdutoServico {
         itensPorPagina +
         "&produto=" +
         produto +
-        "&produtosNoPedido=" +
-        produtosNoPedido +
+        (produtosNoPedido ? "&produtosNoPedido=" + produtosNoPedido : "") +
         "&pedidoId=" +
         pedidoId +
         "&rateioId=" +
-        rateioId,
+        rateioId +
+        "&conferenciaId=" +
+        conferenciaId,
       method: "GET"
     });
   }

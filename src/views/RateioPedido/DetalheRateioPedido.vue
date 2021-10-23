@@ -162,11 +162,13 @@
     <div>
       <RateioFornecedor
         :rateioId="this.viewModel.id"
+        :conferenciaId="this.viewModel.conferenciaId"
         @atualizarRateio="AtualizarRateio"
       >
       </RateioFornecedor>
       <RateioProduto
         :rateioId="this.viewModel.id"
+        :conferenciaId="this.viewModel.conferenciaId"
         :pedidoId="this.viewModel.pedidoId"
         @atualizarRateio="AtualizarRateio"
       >
@@ -231,11 +233,9 @@ export default {
         { value: StatusRateioEnum.Conferido, text: "Conferido" },
         { value: StatusRateioEnum.Cancelado, text: "Cancelado" }
       ],
-      tiposInstituicaoOptions: [],
-      licitacaoOptions: [],
-      contratoOptions: [],
       viewModel: {
         id: this.$store.getters.emptyGuid,
+        conferenciaId: this.$store.getters.emptyGuid,
         descricao: ""
       }
     };

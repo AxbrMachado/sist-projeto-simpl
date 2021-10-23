@@ -82,6 +82,7 @@
                           </b-button>
 
                           <b-button
+                            :disabled="isRateioConferindo()"
                             variant="primary"
                             style="margin-right: 10px"
                             title="Confirmar produto no rateio"
@@ -91,6 +92,7 @@
                           </b-button>
 
                           <b-button
+                            :disabled="isRateioConferindo()"
                             variant="secondary"
                             style="margin-right: 10px"
                             title="Recusar produto no rateio"
@@ -100,6 +102,7 @@
                           </b-button>
 
                           <b-button
+                            :disabled="isRateioConferindo()"
                             variant="danger"
                             style="margin-right: 10px"
                             title="Remover produtos atendidos"
@@ -108,6 +111,7 @@
                             <i class="fas fa-trash-alt"></i>
                           </b-button>
                           <b-button
+                            :disabled="isRateioConferindo()"
                             variant="dark"
                             title="Imprmir informações produto rateio"
                             @click="ImprimirInformacoesFornecedor(data.item)"
@@ -322,6 +326,7 @@
       <RateioProdutoFornecedor
         :pedidoProdutoId="this.pedidoProdutoId"
         :descricaoProduto="this.descricaoProduto"
+        :conferenciaId="this.conferenciaId"
         @atualizarproduto="atualizarproduto"
       >
       </RateioProdutoFornecedor>
@@ -348,14 +353,9 @@ export default {
     ProdutoServico
   },
   props: {
-    pedidoId: {
-      type: String,
-      default: ""
-    },
-    rateioId: {
-      type: String,
-      default: ""
-    }
+    pedidoId: { type: String, default: "" },
+    rateioId: { type: String, default: "" },
+    conferenciaId: { type: String, default: "" }
   },
   data() {
     return {
@@ -452,6 +452,7 @@ export default {
         this.itensPorPagina,
         this.$store.getters.emptyGuid,
         this.rateioId,
+        this.$store.getters.emptyGuid,
         this.filtro.produto,
         true
       )
@@ -820,6 +821,12 @@ export default {
     },
     ImprimirInformacoesFornecedor(item) {
       this.modalImpressao = true;
+    },
+    isRateioConferindo() {
+      return (
+        !(this.conferenciaId == null || this.conferenciaId == undefined) &&
+        this.conferenciaId.toString().length == 36
+      );
     }
   }
 };

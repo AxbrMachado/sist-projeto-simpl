@@ -6,7 +6,7 @@
         size="60px"
       ></RotateSquare>
     </div>
-    <form v-else @submit="ValidarForm">
+    <form>
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card">
@@ -38,18 +38,6 @@
                       />
                     </div>
                   </div>
-                  <!-- <div
-                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas produtos presentes no pedido."
-                  >
-                    <label for>Produto Solicitado</label>
-                    <b-form-checkbox
-                      v-model="filtro.produtosNoPedido"
-                      name="check-button"
-                      switch
-                    >
-                    </b-form-checkbox>
-                  </div> -->
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
                       class="btn btn-primary mr-2"
@@ -82,60 +70,60 @@
                       <template v-slot:empty="scope">
                         <h4>{{ scope.emptyText }}</h4>
                       </template>
-
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
+                            variant="info"
+                            style="margin-right: 10px"
+                            title="Visualizar fornecedores do produto"
+                            @click="SwitchVisualizarFornecedor(data.item)"
+                          >
+                            <i class="fas fa-cart-plus"></i>
+                          </b-button>
+
+                          <b-button
+                            :disabled="isRateioConferindo()"
                             variant="primary"
                             style="margin-right: 10px"
-                            title="Editar Fornecedores do Produto"
-                            @click="SwitchEditarFornecedor(data.item)"
+                            title="Confirmar produto no rateio"
+                            @click="ConfirmarAtendimentoProduto(data.item)"
                           >
-                            <i class="fas fa-binoculars"></i>
-                            <!-- <i class="fas fa-cart-plus"></i> -->
+                            <i class="fas fa-thumbs-up"></i>
                           </b-button>
+
                           <b-button
-                            :disabled="!IsPedidoPendente(data.item)"
+                            :disabled="isRateioConferindo()"
+                            variant="secondary"
+                            style="margin-right: 10px"
+                            title="Recusar produto no rateio"
+                            @click="RecusarProdutosFornecedor(data.item)"
+                          >
+                            <i class="fas fa-thumbs-down"></i>
+                          </b-button>
+
+                          <b-button
+                            :disabled="isRateioConferindo()"
                             variant="danger"
                             style="margin-right: 10px"
-                            title="Remover"
-                            @click="Remover(data.item)"
+                            title="Remover produtos atendidos"
+                            @click="RemoverAtendimento(data.item)"
                           >
                             <i class="fas fa-trash-alt"></i>
                           </b-button>
                           <b-button
-                            v-if="produtoSolicitado(data.item)"
-                            variant="warning"
-                            title="Produto Designado"
-                            @click="edicaoProdutoDesignado(data.item)"
+                            :disabled="isRateioConferindo()"
+                            variant="dark"
+                            title="Imprmir informações produto rateio"
+                            @click="ImprimirInformacoesFornecedor(data.item)"
                           >
-                            <i class="fas fa-apple-alt"></i>
+                            <i class="fas fa-print"></i>
                           </b-button>
-                        </div>
-                      </template>
-                      <template v-slot:cell(valorPedido)="data">
-                        <div class="left">
-                          <span>{{ FormataValor(data.item.valorPedido) }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(valorUnitario)="data">
-                        <div class="left">
-                          <span>{{
-                            FormataValor(data.item.valorUnitario)
-                          }}</span>
                         </div>
                       </template>
                       <template v-slot:cell(quantidadeSolicitada)="data">
                         <div class="left">
                           <span>{{
                             FormataQuantidade(data.item.quantidadeSolicitada)
-                          }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(quantidadePendente)="data">
-                        <div class="left">
-                          <span>{{
-                            FormataQuantidadePendente(data.item)
                           }}</span>
                         </div>
                       </template>
@@ -171,14 +159,14 @@
       </div>
     </form>
     <b-modal
-      v-model="modalRemover"
+      v-model="modalRemoverAtendimento"
       title="Confirmar exclusão"
       class="modal-danger"
       ok-variant="danger"
-      @ok="ModalOk"
-      @hidden="ModalCancel"
+      @ok="ModalRemoverAtendimentoOk"
+      @hidden="ModalRemoverAtendimentoCancel"
     >
-      Você confirma a exclusão desse produto do pedido?
+      Você confirma a exclusão do atendimento desse produto no rateio?
     </b-modal>
     <b-modal
       v-model="modalProdutoDesignado"
@@ -304,13 +292,44 @@
         </div>
       </div>
     </b-modal>
-    <div v-if="EditarFornecedorProduto()">
-      <PedidoProdutoFornecedor
+    <b-modal
+      v-model="modalRecusar"
+      title="Recusar produtos pedido para fornecedor"
+      class="modal-danger"
+      ok-variant="danger"
+      @ok="ModalRecusarOk"
+      @hidden="ModalRecusarCancel"
+    >
+      Recusar atendimento do produto dos fornecedores designados para
+      atendimento. Ao recusar esses fornecedores não irão mais atender esse
+      produto nesse pedido. Confirma?
+    </b-modal>
+    <b-modal
+      v-model="modalAtenderTodos"
+      title="Confirmar produtos pedido para fornecedor"
+      class="modal-success"
+      ok-variant="success"
+      @ok="ModalAtenderTodosOk"
+      @hidden="ModalAtenderTodosCancel"
+    >
+      Confirmar atendimento de produtos via fornecedores rateados. Confirma?
+    </b-modal>
+    <b-modal
+      v-model="modalImpressao"
+      title="Impressão"
+      class="modal-info"
+      ok-variant="info"
+    >
+      Rotina de impressão em desenvolvimento
+    </b-modal>
+    <div v-if="VisualizarFornecedorProduto()">
+      <ConferenciaProdutoFornecedor
         :pedidoProdutoId="this.pedidoProdutoId"
         :descricaoProduto="this.descricaoProduto"
+        :conferenciaId="this.conferenciaId"
         @atualizarproduto="atualizarproduto"
       >
-      </PedidoProdutoFornecedor>
+      </ConferenciaProdutoFornecedor>
     </div>
   </div>
 </template>
@@ -318,40 +337,42 @@
 <script>
 import RotateSquare from "../../components/RotateSquare";
 import PedidoProdutoServico from "../../servico/PedidoProdutoServico";
-import PedidoProdutoClienteServico from "../../servico/PedidoProdutoClienteServico";
-import PedidoProdutoFornecedor from "./PedidoProdutoFornecedor.vue";
 import Bus from "../../util/EventBus";
 import ProdutoServico from "../../servico/ProdutoServico";
+import RateioServico from "../../servico/RateioServico";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
+import ConferenciaProdutoFornecedor from "./ConferenciaProdutoFornecedor.vue";
 
 export default {
-  name: "PedidoProduto",
+  name: "ConferenciaProduto",
+  emits: ["atualizarRateio"],
   components: {
     RotateSquare,
     Bus,
-    PedidoProdutoFornecedor,
+    ConferenciaProdutoFornecedor,
     ProdutoServico
   },
   props: {
-    pedidoId: {
-      type: String,
-      default: ""
-    }
+    pedidoId: { type: String, default: "" },
+    rateioId: { type: String, default: "" },
+    conferenciaId: { type: String, default: "" }
   },
   data() {
     return {
       modalProdutoDesignado: false,
+      modalRemoverAtendimento: false,
+      modalRecusar: false,
+      modalAtenderTodos: false,
+      modalImpressao: false,
       itemQuantidadeSolicitada: 0,
       itemQuantidadeSolicitadaEquivalente: 0,
       itemDescricaoProdutoOrigem: "",
       itemQuantidadeProdutoDesignada: 0,
       itemValorQuantidadeDesignada: 0,
       itemEdicao: null,
-
       itemProdutoDesignado: "",
       produtosDesignadosOptions: [],
-
-      modalRemover: false,
+      modalRemoverAtendimento: false,
       itemRemover: null,
       produtoOptions: [],
       loading: false,
@@ -359,8 +380,7 @@ export default {
       total: 0,
       itensPorPagina: 15,
       filtro: {
-        produto: "",
-        produtosNoPedido: true
+        produto: ""
       },
       itens: [],
       abrir: false,
@@ -369,22 +389,12 @@ export default {
       fields: [
         { key: "produto", label: "Produto", sortable: true },
         { key: "tipoProduto", label: "Tipo Produto", sortable: true },
-        { key: "valorUnitario", label: "Valor Un.", sortable: true },
-        { key: "valorPedido", label: "Valor Total", sortable: true },
-        {
-          key: "quantidadeSolicitada",
-          label: "Qtd. Solicitada",
-          sortable: true
-        },
-        {
-          key: "quantidadeAtendida",
-          label: "Qtd. Atendida",
-          sortable: true
-        },
-        { key: "margemRateio", label: "% Rateio", sortable: true },
-        { key: "quantidadePendente", label: "Qtd. Pendente", sortable: true },
-        // { key: "disponivel", label: "Disponivel", sortable: true },
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
+        { key: "quantidadeSolicitada", label: "Solicitado", sortable: true },
+        { key: "margemRateio", label: "% Rateio", sortable: true },
+        { key: "quantidadeAtendida", label: "Atendido", sortable: true },
+        { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
+        { key: "quantidadeConferida", label: "Conferido", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -419,56 +429,17 @@ export default {
     }
   },
   created() {
-    Bus.$on("alterado-produto-cliente", () => {
+    Bus.$on("atualizar-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
     Bus.$on("alterado-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
-    Bus.$on("remocao-produto-fornecedor", () => {
+    Bus.$on("rateio-efetuado", () => {
       this.ObterGrid(this.pagina);
     });
   },
   methods: {
-    IsNovo() {
-      return this.pedidoId === this.$store.getters.emptyGuid;
-    },
-    ValidarForm(evt) {
-      evt.preventDefault();
-
-      if (!this.viewModel.produto || this.viewModel.produto.id == undefined) {
-        this.loading = false;
-        this.$notify({
-          data: ["Informe um produto."],
-          type: "warn",
-          duration: 5000
-        });
-        return;
-      }
-
-      if (this.viewModel.id !== this.$store.getters.emptyGuid) this.Editar();
-      else this.Novo();
-    },
-    Obter(id) {
-      this.loading = false;
-      this.itemEdicao = null;
-      this.itemProdutoDesignado = "";
-
-      PedidoProdutoServico.Obter(id)
-        .then((resposta) => {
-          this.loading = false;
-          //resposta.data.validade = DateTime.formatar(resposta.data.validade);
-          this.viewModel = resposta.data;
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
     ObterGrid(val) {
       this.loading = false;
       this.modalProdutoDesignado = false;
@@ -480,11 +451,11 @@ export default {
       PedidoProdutoServico.ObterGridTotal(
         val,
         this.itensPorPagina,
-        this.pedidoId,
         this.$store.getters.emptyGuid,
-        this.$store.getters.emptyGuid,
+        this.rateioId,
+        this.conferenciaId,
         this.filtro.produto,
-        this.filtro.produtosNoPedido
+        true
       )
         .then((resposta) => {
           this.loading = false;
@@ -501,19 +472,24 @@ export default {
           });
         });
     },
-    ModalCancel(evento) {
+    RemoverAtendimento(item) {
+      this.modalRemoverAtendimento = true;
+      this.itemRemover = item;
+    },
+    ModalRemoverAtendimentoCancel(evento) {
       evento.preventDefault();
       this.itemRemover = null;
     },
-    ModalOk(evento) {
+    ModalRemoverAtendimentoOk(evento) {
       evento.preventDefault();
-      this.modalRemover = false;
+      this.modalRemoverAtendimento = false;
       if (!this.itemRemover.id) return;
 
-      PedidoProdutoClienteServico.RemoverProdutoPedido(this.itemRemover.id)
+      RateioServico.RemoverAtendimentoProdutoRateio(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
-          Bus.$emit("remocao-produto-pedido");
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
           this.$notify({
             data: ["Produtos removido com sucesso."],
             type: "success",
@@ -528,10 +504,6 @@ export default {
           });
         });
     },
-    Remover(item) {
-      this.modalRemover = true;
-      this.itemRemover = item;
-    },
     Limpar() {
       this.viewModel.id = this.$store.getters.emptyGuid;
       this.viewModel.produtoId = "";
@@ -540,7 +512,6 @@ export default {
       this.viewModel.quantidade = 0;
       this.viewModel.produto = {};
       this.filtro.produto = "";
-      this.filtro.produtosNoPedido = true;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {
@@ -548,10 +519,10 @@ export default {
         currency: "BRL"
       });
     },
-    EditarFornecedorProduto() {
+    VisualizarFornecedorProduto() {
       return this.editarFornecedor;
     },
-    SwitchEditarFornecedor(item) {
+    SwitchVisualizarFornecedor(item) {
       if (1 == 2 && this.pedidoProdutoId != item.id) {
         this.pedidoProdutoId = item.id;
 
@@ -575,6 +546,7 @@ export default {
     },
     atualizarproduto() {
       this.ObterGrid(this.pagina);
+      this.$emit("atualizarRateio");
     },
     FormataQuantidade(valor) {
       return valor ? valor : 0;
@@ -659,6 +631,8 @@ export default {
       )
         .then(() => {
           this.ObterGrid(this.pagina);
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
           this.$notify({
             data: ["Produto designado definido com sucesso."],
             type: "success",
@@ -759,6 +733,8 @@ export default {
       PedidoProdutoServico.RemoverProdutoDesignado(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
           this.$notify({
             data: ["Produto designado removido com sucesso."],
             type: "success",
@@ -775,6 +751,83 @@ export default {
     },
     IsPedidoPendente(item) {
       return item.statusPedido == StatusPedidoEnum.Pendente;
+    },
+    RecusarProdutosFornecedor(item) {
+      this.modalRecusar = true;
+      this.itemEdicao = item;
+    },
+    ModalRecusarCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+    },
+    ModalRecusarOk(evento) {
+      evento.preventDefault();
+      this.modalRecusar = false;
+      if (!this.itemEdicao) return;
+
+      RateioServico.RecusarAtendimentoProdutoRateio(this.itemEdicao.id)
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
+          this.$notify({
+            data: ["Atendimento do produto recusado com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ConfirmarAtendimentoProduto(item) {
+      this.itemEdicao = item;
+      this.modalAtenderTodos = true;
+    },
+    ModalAtenderTodosCancel(evento) {
+      evento.preventDefault();
+      this.itemEdicao = null;
+      this.modalAtenderTodos = false;
+    },
+    ModalAtenderTodosOk(evento) {
+      evento.preventDefault();
+      this.modalAtenderTodos = false;
+
+      evento.preventDefault();
+      this.modalRecusar = false;
+      if (!this.itemEdicao) return;
+
+      RateioServico.ConfirmarAtendimentoProdutoRateio(this.itemEdicao.id)
+        .then(() => {
+          this.ObterGrid(this.pagina);
+          Bus.$emit("alterado-rateio-produto");
+          this.$emit("atualizarRateio");
+          this.$notify({
+            data: ["Atendimento do produto confirmado com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    ImprimirInformacoesFornecedor(item) {
+      this.modalImpressao = true;
+    },
+    isRateioConferindo() {
+      return (
+        !(this.conferenciaId == null || this.conferenciaId == undefined) &&
+        this.conferenciaId.toString().length == 36
+      );
     }
   }
 };

@@ -219,7 +219,7 @@ import RateioServico from "../../servico/RateioServico";
 import Bus from "../../util/EventBus";
 
 export default {
-  name: "RateioProdutoFornecedor",
+  name: "ConferenciaProdutoFornecedor",
   emits: ["atualizarproduto"],
   components: {
     RotateSquare,
@@ -250,12 +250,15 @@ export default {
       fields: [
         { key: "fornecedor", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
-        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
-        {
-          key: "quantidadeConfirmada",
-          label: "Qtd. Confirmada",
-          sortable: true
-        },
+        // { key: "quantidadeAtendida", label: "Atendida", sortable: true },
+        // {
+        //   key: "quantidadeConfirmada",
+        //   label: "Confirmada",
+        //   sortable: true
+        // },
+        { key: "quantidadeAtendida", label: "Atendido", sortable: true },
+        { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
+        { key: "quantidadeConferida", label: "Conferido", sortable: true },
         { key: "quantidadeDesignada", label: "Designado", sortable: true },
         {
           key: "fornecedorDesignado.label",

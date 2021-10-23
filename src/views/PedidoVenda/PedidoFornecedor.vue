@@ -276,6 +276,7 @@ export default {
         this.itensPorPagina,
         this.pedidoId,
         this.$store.getters.emptyGuid,
+        this.$store.getters.emptyGuid,
         this.filtro.nome,
         this.filtro.fornecedorComProduto
       )

@@ -37,7 +37,7 @@
                       />
                     </div>
                   </div>
-                  <div
+                  <!-- <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
                     title="Apenas fornecedores que fornecem produtos no pedido."
                   >
@@ -48,7 +48,7 @@
                       switch
                     >
                     </b-form-checkbox>
-                  </div>
+                  </div> -->
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
                       class="btn btn-primary mr-2"
@@ -315,7 +315,7 @@
       entram mais em possíveis rateios deste pedido. Confirma?
     </b-modal>
     <div v-if="EditarFornecedorProduto()">
-      <RateioFornecedorProduto
+      <ConferenciaFornecedorProduto
         :fornecedorId="this.fornecedorId"
         :pedidoId="this.pedidoId"
         :descricaoFornecedor="this.descricaoFornecedor"
@@ -324,7 +324,7 @@
         :conferenciaId="this.conferenciaId"
         @atualizarFornecedor="atualizarFornecedor"
       >
-      </RateioFornecedorProduto>
+      </ConferenciaFornecedorProduto>
     </div>
   </div>
 </template>
@@ -337,16 +337,16 @@ import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import Bus from "../../util/EventBus";
 import RateioServico from "../../servico/RateioServico";
 import ContatoServico from "../../servico/ContatoServico";
-import RateioFornecedorProduto from "./RateioFornecedorProduto";
+import ConferenciaFornecedorProduto from "./ConferenciaFornecedorProduto";
 
 export default {
-  name: "RateioFornecedor",
-  emits: ["atualizarRateio"],
+  name: "ConferenciaFornecedor",
+  emits: ["atualizarConferencia"],
   components: {
     RotateSquare,
     Bus,
     RateioServico,
-    RateioFornecedorProduto
+    ConferenciaFornecedorProduto
   },
   props: {
     rateioId: { type: String, default: "" },
@@ -374,7 +374,7 @@ export default {
       itensPorPagina: 15,
       filtro: {
         nome: "",
-        fornecedorComProduto: false
+        fornecedorComProduto: true
       },
       itens: [],
       abrir: false,
@@ -389,12 +389,13 @@ export default {
         // { key: "valorPedido", label: "Atendido", sortable: true },
         { key: "quantidadeAtendida", label: "Atendido", sortable: true },
         { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
+        { key: "quantidadeConferida", label: "Conferido", sortable: true },
         { key: "quantidadeDesignada", label: "Designado", sortable: true },
-        // {
-        //   key: "fornecedorDesignado.label",
-        //   label: "Fornecedor Designado",
-        //   sortable: true
-        // },
+        {
+          key: "fornecedorDesignado.label",
+          label: "Fornecedor Designado",
+          sortable: true
+        },
         // { key: "quantidadeDesignada", label: "Qtd. Designada", sortable: true },
         {
           key: "acoes",
@@ -420,7 +421,7 @@ export default {
 
     Bus.$on("alterado-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
-      this.$emit("atualizarRateio");
+      this.$emit("atualizarConferencia");
     });
 
     Bus.$on("atualiza-fornecedores-rateio", () => {
@@ -440,12 +441,13 @@ export default {
       Bus.$emit("atualizar-produto-fornecedor");
 
       this.loading = false;
+
       PedidoFornecedorServico.ObterGridTotal(
         pagina,
         this.itensPorPagina,
         this.$store.getters.emptyGuid,
         this.rateioId,
-        this.$store.getters.emptyGuid,
+        this.conferenciaId,
         this.filtro.nome,
         this.filtro.fornecedorComProduto
       )
@@ -480,7 +482,7 @@ export default {
       )
         .then(() => {
           this.ObterGrid(this.pagina);
-          this.$emit("atualizarRateio");
+          this.$emit("atualizarConferencia");
           this.$notify({
             data: [
               "Produtos atendidos pelo fornecedor removidos do pedido com sucesso."
@@ -525,7 +527,7 @@ export default {
     },
     Limpar() {
       this.filtro.nome = "";
-      this.filtro.fornecedorComProduto = false;
+      this.filtro.fornecedorComProduto = true;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {
@@ -583,7 +585,7 @@ export default {
       )
         .then(() => {
           this.ObterGrid(this.pagina);
-          this.$emit("atualizarRateio");
+          this.$emit("atualizarConferencia");
           this.$notify({
             data: ["Produtos recusados pelo fornecedor com sucesso."],
             type: "success",
@@ -650,7 +652,7 @@ export default {
       )
         .then(() => {
           this.ObterGrid(this.pagina);
-          this.$emit("atualizarRateio");
+          this.$emit("atualizarConferencia");
           this.$notify({
             data: ["Produtos confirmados pelo fornecedor com sucesso."],
             type: "success",

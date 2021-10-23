@@ -37,7 +37,7 @@
                       />
                     </div>
                   </div>
-                  <div
+                  <!-- <div
                     class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
                     title="Apenas clientes presentes no pedido."
                   >
@@ -48,7 +48,7 @@
                       switch
                     >
                     </b-form-checkbox>
-                  </div>
+                  </div> -->
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
                       class="btn btn-primary mr-2"
@@ -410,7 +410,7 @@ import FornecedorServico from "../../servico/FornecedorServico";
 import Bus from "../../util/EventBus";
 
 export default {
-  name: "RateioFornecedorProduto",
+  name: "ConferenciaFornecedorProduto",
   emits: ["atualizarFornecedor"],
   components: {
     RotateSquare,
@@ -450,7 +450,7 @@ export default {
       itensPorPagina: 15,
       filtro: {
         produto: "",
-        produtoNoRateio: false
+        produtoNoRateio: true
       },
       itens: [],
       fields: [
@@ -459,6 +459,7 @@ export default {
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         { key: "quantidadeAtendida", label: "Atendido", sortable: true },
         { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
+        { key: "quantidadeConferida", label: "Conferido", sortable: true },
         { key: "quantidadeDesignada", label: "Designado", sortable: true },
         {
           key: "fornecedorDesignado.label",
@@ -559,7 +560,7 @@ export default {
     },
     Limpar() {
       this.filtro.produto = "";
-      this.filtro.produtoNoRateio = false;
+      this.filtro.produtoNoRateio = true;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {
