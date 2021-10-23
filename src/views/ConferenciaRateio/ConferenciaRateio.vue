@@ -115,7 +115,10 @@
                     <i class="fa fa-tasks"></i>
                   </b-button>
                   <b-button
-                    v-if="isConferenciaExistente(data.item)"
+                    v-if="
+                      isConferenciaExistente(data.item) &&
+                      isUsuarioConferente(data.item)
+                    "
                     variant="warning"
                     style="margin-right: 10px"
                     title="Visualizar Conferência"
@@ -143,6 +146,17 @@
                     @click="ImprimirConferenciaPedido(data.item)"
                   >
                     <i class="fas fa-print"></i>
+                  </b-button>
+
+                  <b-button
+                    v-if="isConferenciaExistente(data.item) && !isUsuarioConferente(data.item)"
+                    variant="info"
+                    style="margin-right: 10px"
+                    title="Assumir conferência"
+                    @click="AssumirConferencia(data.item)"
+                  >
+                    <i class="fas fa-user-tag"></i>
+                    <!-- <i class="fas fa-print"></i> -->
                   </b-button>
                 </div>
               </template>
@@ -232,6 +246,17 @@
               Ao iniciar a confenrência do rateio o mesmo não poderá ser
               alterado. Confirma?
             </b-modal>
+            <b-modal
+              v-model="modalAssumirConferencia"
+              title="Assumir Conferência"
+              class="modal-danger"
+              ok-variant="info"
+              @ok="ModalAssumirConferenciaOk"
+              @hidden="ModalAssumirConferenciaCancel"
+            >
+              <br />Confirma que você irá efetuar a conferência do rateio do
+              pedido? <br />
+            </b-modal>
           </div>
         </div>
       </div>
@@ -262,7 +287,9 @@ export default {
       modalImpressao: false,
       modalCancelarConferencia: false,
       modalIniciarConferencia: false,
+      modalAssumirConferencia: false,
       rateioId: null,
+      conferenciaId: null,
       itemConferencia: null,
       loading: false,
       itens: [],
@@ -308,7 +335,7 @@ export default {
           label: "Status Rateio",
           sortable: true
         },
-        { key: "usuarioAlteracao", label: "Usuário", sortable: true },
+        { key: "usuarioConferente", label: "Conferente", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -494,6 +521,40 @@ export default {
     },
     ImprimirConferenciaPedido(item) {
       this.modalImpressao = true;
+    },
+    AssumirConferencia(item) {
+      this.conferenciaId = item.id;
+      this.modalAssumirConferencia = true;
+    },
+    ModalAssumirConferenciaCancel(evento) {
+      evento.preventDefault();
+      this.conferenciaId = null;
+    },
+    ModalAssumirConferenciaOk(evento) {
+      evento.preventDefault();
+      this.modalAssumirConferencia = false;
+
+      if (!this.conferenciaId) return;
+
+      ConferenciaRateioServico.AssumirConferencia(this.conferenciaId)
+        .then(() => {
+          this.ObterGrid(1);
+          this.$notify({
+            data: ["Conferência assumida com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    isUsuarioConferente(item) {
+      return item.ehConferente;
     }
   }
 };
