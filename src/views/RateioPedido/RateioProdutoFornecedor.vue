@@ -137,10 +137,10 @@
                           }}</span>
                         </div>
                       </template>
-                      <template v-slot:cell(quantidadaAtendida)="data">
+                      <template v-slot:cell(quantidadeAtendida)="data">
                         <div class="left">
                           <span>{{
-                            FormataQuantidade(data.item.quantidadaAtendida)
+                            FormataQuantidade(data.item.quantidadeAtendida)
                           }}</span>
                         </div>
                       </template>
@@ -250,7 +250,7 @@ export default {
       fields: [
         { key: "fornecedor", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
-        { key: "quantidadaAtendida", label: "Qtd. Atendida", sortable: true },
+        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
         {
           key: "quantidadeConfirmada",
           label: "Qtd. Confirmada",

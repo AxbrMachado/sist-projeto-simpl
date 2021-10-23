@@ -394,6 +394,7 @@ export default {
         { key: "margemRateio", label: "% Rateio", sortable: true },
         { key: "quantidadeAtendida", label: "Atendido", sortable: true },
         { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
+        { key: "quantidadeConferida", label: "Conferido", sortable: true },
         {
           key: "acoes",
           label: "Ações",

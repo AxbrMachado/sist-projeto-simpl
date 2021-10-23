@@ -459,6 +459,7 @@ export default {
         { key: "tipoUnidadeMedida", label: "Unidade Medida", sortable: true },
         { key: "quantidadeAtendida", label: "Atendido", sortable: true },
         { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
+        { key: "quantidadeConferida", label: "Conferido", sortable: true },
         { key: "quantidadeDesignada", label: "Designado", sortable: true },
         {
           key: "fornecedorDesignado.label",

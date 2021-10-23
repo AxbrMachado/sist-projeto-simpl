@@ -135,10 +135,10 @@
                           }}</span>
                         </div>
                       </template>
-                      <template v-slot:cell(quantidadaAtendida)="data">
+                      <template v-slot:cell(quantidadeAtendida)="data">
                         <div class="left">
                           <span>{{
-                            FormataQuantidade(data.item.quantidadaAtendida)
+                            FormataQuantidade(data.item.quantidadeAtendida)
                           }}</span>
                         </div>
                       </template>
@@ -312,7 +312,7 @@ export default {
         // { key: "valorConsumido", label: "Valor Consumido", sortable: true },
         { key: "valorPedido", label: "Valor Pedido", sortable: true },
         { key: "quantidadePedido", label: "Qtd. Total Pedido", sortable: true },
-        { key: "quantidadaAtendida", label: "Qtd. Atendida", sortable: true },
+        { key: "quantidadeAtendida", label: "Qtd. Atendida", sortable: true },
         {
           key: "quantidadeConfirmada",
           label: "Qtd. Confirmada",
@@ -514,7 +514,7 @@ export default {
       this.modalEdicao = true;
       this.itemEdicao = item;
       this.itemEdicaoQuantidade = item.quantidadeSolicitada;
-      this.itemEdicaoQuantidade = item.quantidadaAtendida;
+      this.itemEdicaoQuantidade = item.quantidadeAtendida;
       this.itemEdicaoQuantidadeDesignada = item.quantidadeDesignada ?? 0;
       this.fornecedorDesignado = item.fornecedorDesignado;
       this.fornecedoresDesignadosOptions = [];

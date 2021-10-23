@@ -389,12 +389,13 @@ export default {
         // { key: "valorPedido", label: "Atendido", sortable: true },
         { key: "quantidadeAtendida", label: "Atendido", sortable: true },
         { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
+        { key: "quantidadeConferida", label: "Conferido", sortable: true },
         { key: "quantidadeDesignada", label: "Designado", sortable: true },
-        // {
-        //   key: "fornecedorDesignado.label",
-        //   label: "Fornecedor Designado",
-        //   sortable: true
-        // },
+        {
+          key: "fornecedorDesignado.label",
+          label: "Fornecedor Designado",
+          sortable: true
+        },
         // { key: "quantidadeDesignada", label: "Qtd. Designada", sortable: true },
         {
           key: "acoes",
