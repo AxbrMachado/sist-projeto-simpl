@@ -105,17 +105,6 @@
                     />
                   </div>
                 </div>
-                <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
-                  <div class="form-group">
-                    <label for>Rateio Automático</label>
-                    <input
-                      disabled
-                      v-model="viewModel.automatico"
-                      class="form-control"
-                      type="text"
-                    />
-                  </div>
-                </div> -->
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -162,19 +151,19 @@
       Você confirma o reinício da conferência do pedido?
     </b-modal>
     <div>
-      <!-- <RateioFornecedor
+      <ConferenciaFornecedor
         :rateioId="this.viewModel.rateioId"
         :conferenciaId="this.viewModel.id"
-        @atualizarRateio="LoadConferencia"
+        @atualizarConferencia="LoadConferencia"
       >
-      </RateioFornecedor>
-      <RateioProduto
+      </ConferenciaFornecedor>
+      <ConferenciaProduto
         :rateioId="this.viewModel.rateioId"
         :conferenciaId="this.viewModel.id"
         :pedidoId="this.viewModel.pedidoId"
-        @atualizarRateio="LoadConferencia"
+        @atualizarConferencia="LoadConferencia"
       >
-      </RateioProduto> -->
+      </ConferenciaProduto>
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
@@ -188,8 +177,8 @@ import NovoDocumento from "../../components/NovoDocumento";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import StatusConferenciaEnum from "../../enums/StatusConferenciaEnum";
-// import RateioFornecedor from "./RateioFornecedor";
-// import RateioProduto from "./RateioProduto";
+import ConferenciaFornecedor from "./ConferenciaFornecedor";
+import ConferenciaProduto from "./ConferenciaProduto";
 import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
 import Contato from "../../components/Contato";
 import Bus from "../../util/EventBus";
@@ -203,8 +192,8 @@ export default {
     StatusPedidoEnum,
     StatusRateioEnum,
     Contato,
-    // RateioFornecedor,
-    // RateioProduto,
+    ConferenciaFornecedor,
+    ConferenciaProduto,
     ConferenciaRateioServico
   },
   data() {

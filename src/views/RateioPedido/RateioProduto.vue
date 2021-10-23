@@ -452,6 +452,7 @@ export default {
         this.itensPorPagina,
         this.$store.getters.emptyGuid,
         this.rateioId,
+        this.$store.getters.emptyGuid,
         this.filtro.produto,
         true
       )
