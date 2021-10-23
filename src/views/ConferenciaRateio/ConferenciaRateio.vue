@@ -127,7 +127,10 @@
                     <i class="fa fa-edit"></i>
                   </b-button>
                   <b-button
-                    v-if="isConferenciaExistente(data.item) && isUsuarioConferente(data.item)"
+                    v-if="
+                      isConferenciaExistente(data.item) &&
+                      isUsuarioConferente(data.item)
+                    "
                     variant="danger"
                     style="margin-right: 10px"
                     title="Cancelar Conferência"
