@@ -113,7 +113,7 @@
                           <b-button
                             :disabled="isRateioConferindo()"
                             variant="dark"
-                            title="Imprmir informações produto rateio"
+                            title="Imprimir informações produto rateio"
                             @click="ImprimirInformacoesFornecedor(data.item)"
                           >
                             <i class="fas fa-print"></i>

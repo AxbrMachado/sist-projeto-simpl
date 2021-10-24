@@ -145,7 +145,7 @@
                     v-if="isConferenciaExistente(data.item)"
                     variant="dark"
                     style="margin-right: 10px"
-                    title="Imprmir informações conferência"
+                    title="Imprimir informações conferência"
                     @click="ImprimirConferenciaPedido(data.item)"
                   >
                     <i class="fas fa-print"></i>

@@ -89,6 +89,38 @@ class ConferenciaRateioServico {
     });
   }
 
+  RecusarConferenciaProdutoFornecedor(conferenciaId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/recusarConferenciaProdutoFornecedor/" +
+        conferenciaId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
+
+  ConfirmarConferenciaProdutoFornecedor(conferenciaId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/confirmarConferenciaProdutoFornecedor/" +
+        conferenciaId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
+
+  RemoverConferenciaProdutosFornecedor(conferenciaId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/removerConferenciaProdutosFornecedor/" +
+        conferenciaId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
 }
 
 export default new ConferenciaRateioServico();

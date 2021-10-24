@@ -37,18 +37,6 @@
                       />
                     </div>
                   </div>
-                  <!-- <div
-                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas clientes presentes no pedido."
-                  >
-                    <label for>Presente no Rateio</label>
-                    <b-form-checkbox
-                      v-model="filtro.produtoNoRateio"
-                      name="check-button"
-                      switch
-                    >
-                    </b-form-checkbox>
-                  </div> -->
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
                       class="btn btn-primary mr-2"
@@ -139,19 +127,6 @@
                             <i class="fas fa-thumbs-down"></i>
                           </b-button>
                           <b-button
-                            v-if="
-                              AtendeProduto(data.item) &&
-                              FornecedorComTelefoneCadastrado()
-                            "
-                            :disabled="isRateioConferindo()"
-                            variant="success"
-                            style="margin-right: 10px"
-                            title="Enviar solicitação via whatsapp"
-                            @click="EnviarWhatsApp(data.item)"
-                          >
-                            <i class="fab fa-whatsapp"></i>
-                          </b-button>
-                          <b-button
                             v-if="AtendeProduto(data.item)"
                             :disabled="isRateioConferindo()"
                             variant="danger"
@@ -208,53 +183,6 @@
       @hidden="ModalRemocaoCancel"
     >
       Confirma a remoção do rateio?
-    </b-modal>
-    <b-modal
-      v-model="modalEnviarWhatsApp"
-      title="Enviar mensagem de whatsapp para fornecedor"
-      class="modal-info"
-      ok-variant="info"
-      @ok="modalWhatsAppOk"
-      @hidden="modalWhatsAppCancel"
-    >
-      <div class="row">
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-7">
-          <div class="form-group">
-            <label>Fornecedor</label>
-            <input
-              disabled
-              type="text"
-              v-model="fornecedorWhatsApp"
-              class="form-control"
-            />
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
-          <div class="form-group">
-            <label for="">Telefone</label>
-            <the-mask
-              disabled
-              :mask="['+55 (##) ####-####', '+55 (##) #####-####']"
-              class="form-control"
-              v-model="telefoneWhatsApp"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-12">
-          <div class="form-group">
-            <label for>Mensagem</label>
-            <b-form-textarea
-              id="textarea-auto-height"
-              v-model="mensagemWhatsApp"
-              rows="1"
-              max-rows="1 "
-              placeholder="Digite uma mensagem"
-            ></b-form-textarea>
-          </div>
-        </div>
-      </div>
     </b-modal>
     <b-modal
       v-model="modalRecusar"
@@ -378,21 +306,6 @@
                   </v-select>
                 </div>
               </div>
-              <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <div class="form-group">
-                  <label for>Quantidade</label>
-                  <vue-numeric
-                    v-bind:precision="3"
-                    v-bind:minus="false"
-                    thousand-separator="."
-                    decimal-separator=","
-                    v-model="itemEdicaoQuantidadeDesignada"
-                    class="form-control"
-                    placeholder=""
-                    required
-                  />
-                </div>
-              </div> -->
             </div>
           </div>
         </div>
@@ -421,7 +334,6 @@ export default {
     fornecedorId: { type: String, default: "" },
     pedidoId: { type: String, default: "" },
     descricaoFornecedor: { type: String, default: "" },
-    telefoneWhatsAppParam: { type: String, default: "" },
     rateioId: { type: String, default: "" },
     conferenciaId: { type: String, default: "" }
   },
@@ -436,12 +348,8 @@ export default {
       itemEdicaoQuantidadeConfirmada: 0,
       modalRemover: false,
       modalRecusar: false,
-      modalEnviarWhatsApp: false,
       modalImpressao: false,
       modalAtenderProduto: false,
-      telefoneWhatsApp: "",
-      mensagemWhatsApp: "",
-      fornecedorWhatsApp: "",
       produtoOptions: [],
       loading: false,
       abrir: true,
@@ -694,30 +602,6 @@ export default {
       this.modalRecusar = true;
       this.itemEdicao = item;
     },
-    FornecedorComTelefoneCadastrado() {
-      return this.telefoneWhatsAppParam;
-    },
-    modalWhatsAppCancel(evento) {
-      evento.preventDefault();
-      this.itemEdicao = null;
-    },
-    modalWhatsAppOk(evento) {
-      evento.preventDefault();
-      this.modalEnviarWhatsApp = false;
-      if (!this.itemEdicao) return;
-
-      ContatoServico.EnviarWhatsApp(
-        this.telefoneWhatsApp,
-        this.mensagemWhatsApp
-      );
-    },
-    EnviarWhatsApp(item) {
-      this.modalEnviarWhatsApp = true;
-      this.itemEdicao = item;
-      this.telefoneWhatsApp = this.telefoneWhatsAppParam;
-      this.fornecedorWhatsApp = item.pessoa;
-      this.mensagemWhatsApp = "";
-    },
     ObterFornecedorDesignadoVSelect(busca) {
       if (!busca || busca.length <= 2) return;
 
@@ -827,6 +711,6 @@ export default {
         this.conferenciaId.toString().length == 36
       );
     }
-  }
+  },
 };
 </script>

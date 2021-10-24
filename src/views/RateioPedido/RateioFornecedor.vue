@@ -158,7 +158,7 @@
                             v-if="AtendeProduto(data.item)"
                             :disabled="isRateioConferindo()"
                             variant="dark"
-                            title="Imprmir informações fornecedor no rateio"
+                            title="Imprimir informações fornecedor no rateio"
                             @click="ImprimirInformacoesFornecedor(data.item)"
                           >
                             <i class="fas fa-print"></i>
