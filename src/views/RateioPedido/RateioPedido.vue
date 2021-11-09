@@ -162,7 +162,7 @@
                     v-if="isRateioRemovivel(data.item)"
                     variant="dark"
                     style="margin-right: 10px"
-                    title="Imprmir informações pedido"
+                    title="Imprimir informações pedido"
                     @click="ImprimirPedidoRateado(data.item)"
                   >
                     <i class="fas fa-print"></i>

@@ -37,18 +37,6 @@
                       />
                     </div>
                   </div>
-                  <!-- <div
-                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas fornecedores que fornecem produtos no pedido."
-                  >
-                    <label for>Fornecedor com Produto</label>
-                    <b-form-checkbox
-                      v-model="filtro.fornecedorComProduto"
-                      name="check-button"
-                      switch
-                    >
-                    </b-form-checkbox>
-                  </div> -->
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
                       class="btn btn-primary mr-2"
@@ -84,97 +72,56 @@
 
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
-                          <!-- <b-button
-                            v-if="AtendeProduto(data.item)"
-                            variant="info"
-                            style="margin-right: 10px"
-                            title="Visualizar produtos atendidos"
-                            @click="SwitchEditarProdutos(data.item)"
-                          >
-                            <i class="fas fa-cart-plus"></i>
-                          </b-button> -->
-
                           <b-button
-                            v-if="
-                              AtendeProduto(data.item) ||
-                              (isFornecedorAvulso(data.item) &&
-                                isRateioPendente(data.item))
-                            "
                             variant="info"
                             style="margin-right: 10px"
-                            title="Visualizar produtos atendidos"
+                            title="Visualizar produtos"
                             @click="SwitchEditarProdutos(data.item)"
                           >
                             <i class="fas fa-cart-plus"></i>
                           </b-button>
 
                           <b-button
-                            v-if="AtendeProduto(data.item)"
-                            :disabled="isRateioConferindo()"
+                            :disabled="isPedidoEmRotaDeEntrega()"
                             variant="primary"
                             style="margin-right: 10px"
-                            title="Confirmar todos os produtos atendidos"
-                            @click="ConfirmarProdutosFornecedor(data.item)"
+                            title="Confirmar conferência de todos os produtos deste fornecedor"
+                            @click="
+                              ConfirmarConferenciaProdutosFornecedor(data.item)
+                            "
                           >
                             <i class="fas fa-thumbs-up"></i>
                           </b-button>
 
                           <b-button
-                            v-if="AtendeProduto(data.item)"
-                            :disabled="isRateioConferindo()"
+                            :disabled="isPedidoEmRotaDeEntrega()"
                             variant="secondary"
                             style="margin-right: 10px"
-                            title="Recusar todos os produtos atendidos"
-                            @click="RecusarProdutosFornecedor(data.item)"
+                            title="Recusar conferência de todos os produtos do fornecedor"
+                            @click="
+                              RecusarConferenciaProdutosFornecedor(data.item)
+                            "
                           >
                             <i class="fas fa-thumbs-down"></i>
                           </b-button>
 
                           <b-button
-                            v-if="AtendeProduto(data.item)"
-                            :disabled="isRateioConferindo()"
+                            :disabled="isPedidoEmRotaDeEntrega()"
                             variant="danger"
                             style="margin-right: 10px"
-                            title="Remover produtos atendidos"
+                            title="Excluír conferência dos produtos do fornecedor"
                             @click="Remover(data.item)"
                           >
                             <i class="fas fa-trash-alt"></i>
                           </b-button>
                           <b-button
-                            v-if="
-                              AtendeProduto(data.item) &&
-                              FornecedorComTelefoneCadastrado(data.item)
-                            "
-                            :disabled="isRateioConferindo()"
-                            variant="success"
-                            style="margin-right: 10px"
-                            title="Enviar solicitação via whatsapp"
-                            @click="EnviarWhatsApp(data.item)"
-                          >
-                            <i class="fab fa-whatsapp"></i>
-                          </b-button>
-
-                          <b-button
-                            v-if="AtendeProduto(data.item)"
-                            :disabled="isRateioConferindo()"
+                            :disabled="isPedidoEmRotaDeEntrega()"
                             variant="dark"
-                            title="Imprmir informações fornecedor no rateio"
+                            title="Imprimir informações de conferência do fornecedor"
                             @click="ImprimirInformacoesFornecedor(data.item)"
                           >
                             <i class="fas fa-print"></i>
                           </b-button>
-                        </div>
-                      </template>
-                      <template v-slot:cell(valorConsumido)="data">
-                        <div class="left">
-                          <span>{{
-                            FormataValor(data.item.valorConsumido)
-                          }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(valorPedido)="data">
-                        <div class="left">
-                          <span>{{ FormataValor(data.item.valorPedido) }}</span>
                         </div>
                       </template>
                       <template v-slot:cell(tipoFornecedor)="data">
@@ -184,29 +131,17 @@
                           }}</span>
                         </div>
                       </template>
-                      <template v-slot:cell(valorLimite)="data">
-                        <div class="left">
-                          <span>{{ FormataValor(data.item.valorLimite) }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(valorDesignado)="data">
-                        <div class="left">
-                          <span>{{
-                            FormataValor(data.item.valorDesignado)
-                          }}</span>
-                        </div>
-                      </template>
-                      <template v-slot:cell(quantidadeDesignada)="data">
-                        <div class="left">
-                          <span>{{
-                            FormataQuantidade(data.item.quantidadeDesignada)
-                          }}</span>
-                        </div>
-                      </template>
                       <template v-slot:cell(quantidadeConfirmada)="data">
                         <div class="left">
                           <span>{{
                             FormataQuantidade(data.item.quantidadeConfirmada)
+                          }}</span>
+                        </div>
+                      </template>
+                      <template v-slot:cell(quantidadeConferida)="data">
+                        <div class="left">
+                          <span>{{
+                            FormataQuantidade(data.item.quantidadeConferida)
                           }}</span>
                         </div>
                       </template>
@@ -228,72 +163,25 @@
       </div>
     </form>
     <b-modal
-      v-model="modalEnviarWhatsApp"
-      title="Enviar mensagem de whatsapp para fornecedor"
-      class="modal-info"
-      ok-variant="info"
-      @ok="modalWhatsAppOk"
-      @hidden="modalWhatsAppCancel"
-    >
-      <div class="row">
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-7">
-          <div class="form-group">
-            <label>Fornecedor</label>
-            <input
-              disabled
-              type="text"
-              v-model="fornecedorWhatsApp"
-              class="form-control"
-            />
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
-          <div class="form-group">
-            <label for="">Telefone</label>
-            <the-mask
-              disabled
-              :mask="['+55 (##) ####-####', '+55 (##) #####-####']"
-              class="form-control"
-              v-model="telefoneWhatsApp"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-12">
-          <div class="form-group">
-            <label for>Mensagem</label>
-            <b-form-textarea
-              id="textarea-auto-height"
-              v-model="mensagemWhatsApp"
-              rows="1"
-              max-rows="1 "
-              placeholder="Digite uma mensagem"
-            ></b-form-textarea>
-          </div>
-        </div>
-      </div>
-    </b-modal>
-    <b-modal
-      v-model="modalRemover"
-      title="Confirmar exclusão"
+      v-model="modalRemoverConferencia"
+      title="Confirmar exclusão conferência"
       class="modal-danger"
       ok-variant="danger"
-      @ok="ModalOk"
-      @hidden="ModalCancel"
+      @ok="ModalRemoverConferenciaOk"
+      @hidden="ModalRemoverConferenciaCancel"
     >
-      Você confirma a exclusão dos produtos desse fornecedor no pedido?
+      Você confirma a exclusão da conferência dos produtos desse fornecedor?
     </b-modal>
     <b-modal
-      v-model="modalRecusar"
-      title="Recusar produtos pedido para fornecedor"
+      v-model="modalRecusarConferencia"
+      title="Recusar conferência dos produtos deste fornecedor"
       class="modal-danger"
       ok-variant="danger"
       @ok="ModalRecusarOk"
       @hidden="ModalRecusarCancel"
     >
-      Ao recusar o atendimento dos produtos, o fornecedor não participa
-      novamente do rateio do pedido. Confirma?
+      Ao recusar a conferência dos produtos, o pedido pode prosseguir sem os
+      produtos do fornecedor. Confirma?
     </b-modal>
     <b-modal
       v-model="modalImpressao"
@@ -304,22 +192,21 @@
       Rotina de impressão em desenvolvimento
     </b-modal>
     <b-modal
-      v-model="modalAtenderTodos"
-      title="Confirmar produtos pedido para fornecedor"
+      v-model="modalConferirTodos"
+      title="Confirmar conferência dos produtos deste fornecedor"
       class="modal-success"
       ok-variant="success"
-      @ok="ModalAtenderTodosOk"
-      @hidden="ModalAtenderTodosCancel"
+      @ok="ModalConferirTodosOk"
+      @hidden="ModalConferirTodosCancel"
     >
-      Ao confirmar o atendimento dos produtos deste fornecedor os mesmos não
-      entram mais em possíveis rateios deste pedido. Confirma?
+      Todos os produtos deste fornecedor entregues conforme quantidade
+      confirmada? Confirma?
     </b-modal>
     <div v-if="EditarFornecedorProduto()">
       <ConferenciaFornecedorProduto
         :fornecedorId="this.fornecedorId"
         :pedidoId="this.pedidoId"
         :descricaoFornecedor="this.descricaoFornecedor"
-        :telefoneWhatsAppParam="this.telefoneWhatsApp"
         :rateioId="this.rateioId"
         :conferenciaId="this.conferenciaId"
         @atualizarFornecedor="atualizarFornecedor"
@@ -335,8 +222,7 @@ import PedidoFornecedorServico from "../../servico/PedidoFornecedorServico";
 import TipoFornecedorEnum from "../../enums/TipoFornecedorEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import Bus from "../../util/EventBus";
-import RateioServico from "../../servico/RateioServico";
-import ContatoServico from "../../servico/ContatoServico";
+import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
 import ConferenciaFornecedorProduto from "./ConferenciaFornecedorProduto";
 
 export default {
@@ -345,7 +231,7 @@ export default {
   components: {
     RotateSquare,
     Bus,
-    RateioServico,
+    ConferenciaRateioServico,
     ConferenciaFornecedorProduto
   },
   props: {
@@ -354,14 +240,10 @@ export default {
   },
   data() {
     return {
-      modalRemover: false,
-      modalRecusar: false,
-      modalEnviarWhatsApp: false,
+      modalRemoverConferencia: false,
+      modalRecusarConferencia: false,
       modalImpressao: false,
-      modalAtenderTodos: false,
-      telefoneWhatsApp: "",
-      mensagemWhatsApp: "",
-      fornecedorWhatsApp: "",
+      modalConferirTodos: false,
       itemEdicao: null,
       fornecedorId: "",
       fornecedorOptions: [],
@@ -373,8 +255,7 @@ export default {
       total: 0,
       itensPorPagina: 15,
       filtro: {
-        nome: "",
-        fornecedorComProduto: true
+        nome: ""
       },
       itens: [],
       abrir: false,
@@ -383,20 +264,8 @@ export default {
       fields: [
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
-        // { key: "valorLimite", label: "Limite Contrato", sortable: true },
-        // { key: "valorConsumido", label: "Total Consumido", sortable: true },
-        // { key: "valorDesignado", label: "Designado", sortable: true },
-        // { key: "valorPedido", label: "Atendido", sortable: true },
-        { key: "quantidadeAtendida", label: "Atendido", sortable: true },
         { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
         { key: "quantidadeConferida", label: "Conferido", sortable: true },
-        { key: "quantidadeDesignada", label: "Designado", sortable: true },
-        {
-          key: "fornecedorDesignado.label",
-          label: "Fornecedor Designado",
-          sortable: true
-        },
-        // { key: "quantidadeDesignada", label: "Qtd. Designada", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -449,7 +318,7 @@ export default {
         this.rateioId,
         this.conferenciaId,
         this.filtro.nome,
-        this.filtro.fornecedorComProduto
+        true
       )
         .then((resposta) => {
           this.editarProdutos = false;
@@ -467,25 +336,25 @@ export default {
           });
         });
     },
-    ModalCancel(evento) {
+    ModalRemoverConferenciaCancel(evento) {
       evento.preventDefault();
       this.itemEdicao = null;
     },
-    ModalOk(evento) {
+    ModalRemoverConferenciaOk(evento) {
       evento.preventDefault();
-      this.modalRemover = false;
+      this.modalRemoverConferencia = false;
       if (!this.itemEdicao) return;
 
-      PedidoFornecedorServico.RemoverFornecedorPedido(
-        this.itemEdicao.fornecedorId,
-        this.itemEdicao.pedidoId
+      ConferenciaRateioServico.RemoverConferenciaFornecedor(
+        this.conferenciaId,
+        this.itemEdicao.fornecedorId
       )
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$emit("atualizarConferencia");
           this.$notify({
             data: [
-              "Produtos atendidos pelo fornecedor removidos do pedido com sucesso."
+              "Conferência para produtos do fornecedor excluídas com sucesso."
             ],
             type: "success",
             duration: 5000
@@ -500,34 +369,11 @@ export default {
         });
     },
     Remover(item) {
-      this.modalRemover = true;
+      this.modalRemoverConferencia = true;
       this.itemEdicao = item;
-    },
-    Editar() {
-      this.loading = false;
-      PedidoFornecedorServico.Editar(this.viewModel)
-        .then(() => {
-          this.loading = false;
-          this.Limpar();
-          this.ObterGrid(1);
-          this.$notify({
-            data: ["Fornecedor editado com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
     },
     Limpar() {
       this.filtro.nome = "";
-      this.filtro.fornecedorComProduto = true;
     },
     FormataValor(value) {
       return (value ? value : 0.0).toLocaleString("pt-br", {
@@ -562,11 +408,8 @@ export default {
     FormataQuantidade(valor) {
       return valor ? valor : 0;
     },
-    AtendeProduto(item) {
-      return item.valorPedido;
-    },
-    RecusarProdutosFornecedor(item) {
-      this.modalRecusar = true;
+    RecusarConferenciaProdutosFornecedor(item) {
+      this.modalRecusarConferencia = true;
       this.itemEdicao = item;
     },
     ModalRecusarCancel(evento) {
@@ -575,13 +418,12 @@ export default {
     },
     ModalRecusarOk(evento) {
       evento.preventDefault();
-      this.modalRecusar = false;
+      this.modalRecusarConferencia = false;
       if (!this.itemEdicao) return;
 
-      RateioServico.RecusarProdutoFornecedorRateio(
-        this.itemEdicao.pedidoId,
-        this.itemEdicao.fornecedorId,
-        this.$store.getters.emptyGuid
+      ConferenciaRateioServico.RecusarConferenciaFornecedor(
+        this.conferenciaId,
+        this.itemEdicao.fornecedorId
       )
         .then(() => {
           this.ObterGrid(this.pagina);
@@ -606,49 +448,26 @@ export default {
     FornecedorComTelefoneCadastrado(item) {
       return item.telefone;
     },
-    modalWhatsAppCancel(evento) {
+    ConfirmarConferenciaProdutosFornecedor(item) {
+      this.itemEdicao = item;
+      this.modalConferirTodos = true;
+    },
+    ModalConferirTodosCancel(evento) {
       evento.preventDefault();
       this.itemEdicao = null;
+      this.modalConferirTodos = false;
     },
-    modalWhatsAppOk(evento) {
+    ModalConferirTodosOk(evento) {
       evento.preventDefault();
-      this.modalEnviarWhatsApp = false;
+      this.modalConferirTodos = false;
+
+      evento.preventDefault();
+      this.modalRecusarConferencia = false;
       if (!this.itemEdicao) return;
 
-      ContatoServico.EnviarWhatsApp(
-        this.telefoneWhatsApp,
-        this.mensagemWhatsApp
-      );
-    },
-    EnviarWhatsApp(item) {
-      this.modalEnviarWhatsApp = true;
-      this.itemEdicao = item;
-      this.telefoneWhatsApp = item.telefone;
-      this.fornecedorWhatsApp = item.pessoa;
-      this.mensagemWhatsApp = "";
-    },
-    ConfirmarProdutosFornecedor(item) {
-      this.itemEdicao = item;
-      this.modalAtenderTodos = true;
-    },
-    ModalAtenderTodosCancel(evento) {
-      evento.preventDefault();
-      this.itemEdicao = null;
-      this.modalAtenderTodos = false;
-    },
-    ModalAtenderTodosOk(evento) {
-      evento.preventDefault();
-      this.modalAtenderTodos = false;
-
-      evento.preventDefault();
-      this.modalRecusar = false;
-      if (!this.itemEdicao) return;
-
-      RateioServico.ConfirmarProdutoFornecedorRateio(
-        this.itemEdicao.pedidoId,
-        this.itemEdicao.fornecedorId,
-        this.$store.getters.emptyGuid,
-        0
+      ConferenciaRateioServico.ConfirmarConferenciaFornecedor(
+        this.conferenciaId,
+        this.itemEdicao.fornecedorId
       )
         .then(() => {
           this.ObterGrid(this.pagina);
@@ -685,7 +504,6 @@ export default {
         this.fornecedorId = item.fornecedorId;
         this.editarProdutos = !this.editarProdutos;
         this.descricaoFornecedor = item.pessoa;
-        this.telefoneWhatsApp = item.telefone;
       }
     },
     switchAberturaProdutos() {
@@ -701,11 +519,8 @@ export default {
     isRateioPendente(item) {
       return item.statusRateio == StatusRateioEnum.Incompleto;
     },
-    isRateioConferindo() {
-      return (
-        !(this.conferenciaId == null || this.conferenciaId == undefined) &&
-        this.conferenciaId.toString().length == 36
-      );
+    isPedidoEmRotaDeEntrega() {
+      return false;
     }
   }
 };

@@ -89,6 +89,74 @@ class ConferenciaRateioServico {
     });
   }
 
+  RecusarConferenciaFornecedor(conferenciaId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/recusarConferenciaFornecedor/" +
+        conferenciaId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
+
+  ConfirmarConferenciaFornecedor(conferenciaId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/confirmarConferenciaFornecedor/" +
+        conferenciaId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
+
+  RemoverConferenciaFornecedor(conferenciaId, fornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/removerConferenciaFornecedor/" +
+        conferenciaId +
+        "/" +
+        fornecedorId,
+      method: "GET"
+    });
+  }
+
+  FinalizarConferencia(conferenciaId) {
+    return Vue.prototype.$http({
+      url: "conferencia/finalizarConferencia/" + conferenciaId,
+      method: "GET"
+    });
+  }
+
+  RecusarConferenciaProdutoFornecedor(pedidoProdutoFornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/recusarConferenciaProdutoFornecedor/" +
+        pedidoProdutoFornecedorId,
+      method: "GET"
+    });
+  }
+
+  ConfirmarConferenciaProdutoFornecedor(pedidoProdutoFornecedorId, quantidade) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/confirmarConferenciaProdutoFornecedor/" +
+        pedidoProdutoFornecedorId +
+        "/" +
+        quantidade,
+      method: "GET"
+    });
+  }
+
+  RemoverConferenciaProdutoFornecedor(pedidoProdutoFornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/removerConferenciaProdutoFornecedor/" +
+        pedidoProdutoFornecedorId,
+      method: "GET"
+    });
+  }
 }
 
 export default new ConferenciaRateioServico();
