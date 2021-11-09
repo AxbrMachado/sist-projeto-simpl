@@ -128,12 +128,26 @@
               </div>
               <div class="btn-group" role="group">
                 <button
-                  class="btn btn-secondary"
+                  class="btn btn-secondary mr-2"
                   type="reset"
                   @click="$router.go(-1)"
                 >
                   Voltar
                 </button>
+              </div>
+              <div
+                v-if="isConferenciaCompleta()"
+                class="btn-group"
+                role="group"
+              >
+                <a
+                  @click="FinalizarConferencia()"
+                  class="ml-auto btn btn-info"
+                  title="Finalizar conferência?"
+                  href="#"
+                >
+                  Finalizar Conferência
+                </a>
               </div>
             </div>
           </div>
@@ -149,6 +163,16 @@
       @hidden="modalReiniciarConferenciaCancel"
     >
       Você confirma o reinício da conferência do pedido?
+    </b-modal>
+    <b-modal
+      v-model="modalFinalizarConferencia"
+      title="Finalizar Conferência"
+      class="modal-info"
+      ok-variant="info"
+      @ok="modalFinalizarConferenciaOk"
+      @hidden="modalFinalizarConferenciaCancel"
+    >
+      Você confirma a finalização da conferência do pedido?
     </b-modal>
     <div>
       <ConferenciaFornecedor
@@ -200,6 +224,7 @@ export default {
     return {
       loading: false,
       modalReiniciarConferencia: false,
+      modalFinalizarConferencia: false,
       statusPedidoOptions: [
         { value: StatusPedidoEnum.Pendente, text: "Pendente" },
         { value: StatusPedidoEnum.Aberto, text: "Aberto" },
@@ -323,6 +348,35 @@ export default {
           Bus.$emit("rateio-efetuado");
           this.$notify({
             data: ["Conferência reiniciada com sucesso."],
+            type: "success",
+            duration: 5000
+          });
+        })
+        .catch((erro) => {
+          this.$notify({
+            data: erro.response.data.erros,
+            type: "warn",
+            duration: 5000
+          });
+        });
+    },
+    isConferenciaCompleta() {
+      return this.viewModel.statusConferencia == StatusConferenciaEnum.Completa;
+    },
+    FinalizarConferencia() {
+      this.modalFinalizarConferencia = true;
+    },
+    modalFinalizarConferenciaCancel(evento) {
+      evento.preventDefault();
+      this.modalFinalizarConferencia = false;
+    },
+    modalFinalizarConferenciaOk(evento) {
+      ConferenciaRateioServico.FinalizarConferencia(this.viewModel.id)
+        .then(() => {
+          this.Obter(this.viewModel.id);
+          Bus.$emit("rateio-efetuado");
+          this.$notify({
+            data: ["Conferência finalizada com sucesso."],
             type: "success",
             duration: 5000
           });
