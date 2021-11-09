@@ -345,7 +345,7 @@ export default {
       this.modalRemoverConferencia = false;
       if (!this.itemEdicao) return;
 
-      ConferenciaRateioServico.RemoverConferenciaProdutosFornecedor(
+      ConferenciaRateioServico.RemoverConferenciaFornecedor(
         this.conferenciaId,
         this.itemEdicao.fornecedorId
       )
@@ -421,7 +421,7 @@ export default {
       this.modalRecusarConferencia = false;
       if (!this.itemEdicao) return;
 
-      ConferenciaRateioServico.RecusarConferenciaProdutoFornecedor(
+      ConferenciaRateioServico.RecusarConferenciaFornecedor(
         this.conferenciaId,
         this.itemEdicao.fornecedorId
       )
@@ -465,7 +465,7 @@ export default {
       this.modalRecusarConferencia = false;
       if (!this.itemEdicao) return;
 
-      ConferenciaRateioServico.ConfirmarConferenciaProdutoFornecedor(
+      ConferenciaRateioServico.ConfirmarConferenciaFornecedor(
         this.conferenciaId,
         this.itemEdicao.fornecedorId
       )

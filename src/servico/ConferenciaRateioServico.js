@@ -89,10 +89,10 @@ class ConferenciaRateioServico {
     });
   }
 
-  RecusarConferenciaProdutoFornecedor(conferenciaId, fornecedorId) {
+  RecusarConferenciaFornecedor(conferenciaId, fornecedorId) {
     return Vue.prototype.$http({
       url:
-        "conferencia/recusarConferenciaProdutoFornecedor/" +
+        "conferencia/recusarConferenciaFornecedor/" +
         conferenciaId +
         "/" +
         fornecedorId,
@@ -100,10 +100,10 @@ class ConferenciaRateioServico {
     });
   }
 
-  ConfirmarConferenciaProdutoFornecedor(conferenciaId, fornecedorId) {
+  ConfirmarConferenciaFornecedor(conferenciaId, fornecedorId) {
     return Vue.prototype.$http({
       url:
-        "conferencia/confirmarConferenciaProdutoFornecedor/" +
+        "conferencia/confirmarConferenciaFornecedor/" +
         conferenciaId +
         "/" +
         fornecedorId,
@@ -111,10 +111,10 @@ class ConferenciaRateioServico {
     });
   }
 
-  RemoverConferenciaProdutosFornecedor(conferenciaId, fornecedorId) {
+  RemoverConferenciaFornecedor(conferenciaId, fornecedorId) {
     return Vue.prototype.$http({
       url:
-        "conferencia/removerConferenciaProdutosFornecedor/" +
+        "conferencia/removerConferenciaFornecedor/" +
         conferenciaId +
         "/" +
         fornecedorId,
@@ -125,6 +125,35 @@ class ConferenciaRateioServico {
   FinalizarConferencia(conferenciaId) {
     return Vue.prototype.$http({
       url: "conferencia/finalizarConferencia/" + conferenciaId,
+      method: "GET"
+    });
+  }
+
+  RecusarConferenciaProdutoFornecedor(pedidoProdutoFornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/recusarConferenciaProdutoFornecedor/" +
+        pedidoProdutoFornecedorId,
+      method: "GET"
+    });
+  }
+
+  ConfirmarConferenciaProdutoFornecedor(pedidoProdutoFornecedorId, quantidade) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/confirmarConferenciaProdutoFornecedor/" +
+        pedidoProdutoFornecedorId +
+        "/" +
+        quantidade,
+      method: "GET"
+    });
+  }
+
+  RemoverConferenciaProdutoFornecedor(pedidoProdutoFornecedorId) {
+    return Vue.prototype.$http({
+      url:
+        "conferencia/removerConferenciaProdutoFornecedor/" +
+        pedidoProdutoFornecedorId,
       method: "GET"
     });
   }
