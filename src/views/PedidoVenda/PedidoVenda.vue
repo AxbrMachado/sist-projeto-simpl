@@ -203,7 +203,7 @@
                     target="blank"
                     class="btn btn-dark mr-1"
                     :href="'/#/pedido-venda/relatorio-impressao/' + data.item.id"
-                    title="Imprmir informações pedido"
+                    title="Imprimir informações pedido"
                   >
                     <i class="fas fa-print"></i>
                   </a>

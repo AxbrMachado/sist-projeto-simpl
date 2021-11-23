@@ -37,18 +37,6 @@
                       />
                     </div>
                   </div>
-                  <!-- <div
-                    class="col-sm-6 col-md-2 col-lg-2 col-xl-2"
-                    title="Apenas clientes presentes no pedido."
-                  >
-                    <label for>Presente no Rateio</label>
-                    <b-form-checkbox
-                      v-model="filtro.produtoNoRateio"
-                      name="check-button"
-                      switch
-                    >
-                    </b-form-checkbox>
-                  </div> -->
                   <div class="col-lg-4 col-md-5 col-sm-12 mt-4">
                     <button
                       class="btn btn-primary mr-2"
@@ -85,77 +73,31 @@
                       <template v-slot:cell(acoes)="data">
                         <div class="btn-group-sm">
                           <b-button
-                            v-if="
-                              !AtendeProduto(data.item) &&
-                              IsFornecedorAvulso(data.item)
-                            "
-                            :disabled="isRateioConferindo()"
-                            variant="warning"
-                            style="margin-right: 10px"
-                            title="Atender Produto"
-                            @click="AtenderProdutoAvulso(data.item)"
-                          >
-                            <i class="far fa-hand-point-up"></i>
-                          </b-button>
-                          <b-button
-                            v-if="
-                              AtendeProduto(data.item) &&
-                              IsFornecedorAvulso(data.item)
-                            "
-                            :disabled="isRateioConferindo()"
+                            v-if="1 == 1"
+                            :disabled="isConferenciaFinalizada()"
                             variant="primary"
                             style="margin-right: 10px"
-                            title="Atender Produto"
-                            @click="AtenderProdutoAvulso(data.item)"
-                          >
-                            <i class="far fa-hand-point-up"></i>
-                          </b-button>
-
-                          <b-button
-                            v-if="
-                              AtendeProduto(data.item) &&
-                              !IsFornecedorAvulso(data.item)
-                            "
-                            :disabled="isRateioConferindo()"
-                            variant="primary"
-                            style="margin-right: 10px"
-                            title="Confirmar produto"
+                            title="Confirmar conferência"
                             @click="ConfirmarProdutoFornecedor(data.item)"
                           >
                             <i class="fas fa-thumbs-up"></i>
                           </b-button>
 
                           <b-button
-                            v-if="
-                              AtendeProduto(data.item) &&
-                              !IsFornecedorAvulso(data.item)
-                            "
-                            :disabled="isRateioConferindo()"
+                            v-if="1 == 1"
+                            :disabled="isConferenciaFinalizada()"
                             variant="secondary"
                             style="margin-right: 10px"
-                            title="Recusar produto"
+                            title="Recusar conferência"
                             @click="RecusarProdutoFornecedor(data.item)"
                           >
                             <i class="fas fa-thumbs-down"></i>
                           </b-button>
                           <b-button
-                            v-if="
-                              AtendeProduto(data.item) &&
-                              FornecedorComTelefoneCadastrado()
-                            "
-                            :disabled="isRateioConferindo()"
-                            variant="success"
-                            style="margin-right: 10px"
-                            title="Enviar solicitação via whatsapp"
-                            @click="EnviarWhatsApp(data.item)"
-                          >
-                            <i class="fab fa-whatsapp"></i>
-                          </b-button>
-                          <b-button
-                            v-if="AtendeProduto(data.item)"
-                            :disabled="isRateioConferindo()"
+                            v-if="1 == 1"
+                            :disabled="isConferenciaFinalizada()"
                             variant="danger"
-                            title="Remover produto fornecedor"
+                            title="Remover conferência"
                             @click="Remover(data.item)"
                           >
                             <i class="fas fa-trash-alt"></i>
@@ -200,72 +142,26 @@
       </div>
     </form>
     <b-modal
-      v-model="modalRemover"
+      v-model="modalExcluirConferencia"
       title="Confirmar exclusão"
       class="modal-danger"
       ok-variant="danger"
-      @ok="ModalRemocaoOk"
-      @hidden="ModalRemocaoCancel"
+      @ok="ModalExcluirConferenciaOk"
+      @hidden="ModalExcluirConferenciaCancel"
     >
-      Confirma a remoção do rateio?
+      Ao excluir a conferência deste produto, a quantidade conferida é zerada.
+      Confirma?
     </b-modal>
     <b-modal
-      v-model="modalEnviarWhatsApp"
-      title="Enviar mensagem de whatsapp para fornecedor"
-      class="modal-info"
-      ok-variant="info"
-      @ok="modalWhatsAppOk"
-      @hidden="modalWhatsAppCancel"
-    >
-      <div class="row">
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-7">
-          <div class="form-group">
-            <label>Fornecedor</label>
-            <input
-              disabled
-              type="text"
-              v-model="fornecedorWhatsApp"
-              class="form-control"
-            />
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
-          <div class="form-group">
-            <label for="">Telefone</label>
-            <the-mask
-              disabled
-              :mask="['+55 (##) ####-####', '+55 (##) #####-####']"
-              class="form-control"
-              v-model="telefoneWhatsApp"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-12">
-          <div class="form-group">
-            <label for>Mensagem</label>
-            <b-form-textarea
-              id="textarea-auto-height"
-              v-model="mensagemWhatsApp"
-              rows="1"
-              max-rows="1 "
-              placeholder="Digite uma mensagem"
-            ></b-form-textarea>
-          </div>
-        </div>
-      </div>
-    </b-modal>
-    <b-modal
-      v-model="modalRecusar"
-      title="Recusar produto no rateio"
+      v-model="modalRecusarConferencia"
+      title="Recusar conferência do produto"
       class="modal-danger"
       ok-variant="danger"
-      @ok="ModalRecusarOk"
-      @hidden="ModalRecusarCancel"
+      @ok="ModalRecusarConferenciaOk"
+      @hidden="ModalRecusarConferenciaCancel"
     >
-      Ao recusar o atendimento deste produto, o fornecedor não participa
-      novamente do rateio para esse produto no pedido. Confirma?
+      Recusar conferência. A entrega passa a não contar com a quantidade deste
+      produto. Confirma?
     </b-modal>
     <b-modal
       v-model="modalImpressao"
@@ -276,124 +172,32 @@
       Rotina de impressão em desenvolvimento
     </b-modal>
     <b-modal
-      v-model="modalAtenderProduto"
+      v-model="modalConfirmarConferencia"
       title="Confirma produto"
       class="modal-success"
       ok-variant="success"
-      @ok="ModalAtenderProdutoOk"
-      @hidden="ModalAtenderProdutoCancel"
+      @ok="ModalConfirmarConferenciaOk"
+      @hidden="ModalConfirmarConferenciaCancel"
     >
-      A quantidade confirmada deste produto deixa de ser rateada entre os
-      fornecedores e fica limitada a este fornecedor. Confirma?
+      A quantidade conferida deste produto é a quantidade que efetivamente fará
+      parte da entrega do pedido. Confirma?
 
       <br />
       <br />
       <div class="row">
         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
           <div class="form-group">
-            <label for>* Quantidade Confirmada</label>
+            <label for>* Quantidade Conferida</label>
             <vue-numeric
               v-bind:precision="3"
               v-bind:minus="false"
               thousand-separator="."
               decimal-separator=","
-              v-model="itemEdicaoQuantidadeConfirmada"
+              v-model="itemEdicaoQuantidadeConferida"
               class="form-control"
-              placeholder="Quantidade confirmada"
+              placeholder="Quantidade conferida"
               required
             />
-          </div>
-        </div>
-      </div>
-    </b-modal>
-
-    <b-modal
-      v-model="modalAtendimentoAvulso"
-      title="Atender produto via fornecedor avulso"
-      class="modal-danger"
-      ok-variant="info"
-      @ok="modalAtendimentoAvulsoOk"
-      @hidden="modalAtendimentoAvulsoCancel"
-    >
-      A quantidade informada para fornecedor avulso é integralmente designada a
-      uma dap. A quantidade informada tambem entra como confirmada, fazendo
-      assim que a mesma nao entre mais no processo de rateio do pedido. Ficando
-      limitada a este fornecedor. Confirma?
-
-      <br />
-      <br />
-      <div class="row">
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
-          <div class="form-group">
-            <label for>* Quantidade Pendente</label>
-            <vue-numeric
-              disabled
-              v-bind:precision="3"
-              v-bind:minus="false"
-              thousand-separator="."
-              decimal-separator=","
-              v-model="itemEdicaoQuantidadePendente"
-              class="form-control"
-              required
-            />
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-5">
-          <div class="form-group">
-            <label for>* Quantidade Atendida</label>
-            <vue-numeric
-              v-bind:precision="3"
-              v-bind:minus="false"
-              thousand-separator="."
-              decimal-separator=","
-              v-model="itemEdicaoQuantidadeAvulsa"
-              class="form-control"
-              placeholder="Digite a quantidade"
-              required
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
-          <div class="form-group">
-            <br />
-            <label for>Informações de Fornecedor Designado</label>
-            <br />
-            <br />
-            <div class="row">
-              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-8">
-                <div class="form-group">
-                  <label for>* Fornecedor</label>
-                  <v-select
-                    placeholder=""
-                    v-model="fornecedorDesignado"
-                    :options="fornecedoresDesignadosOptions"
-                    @search="ObterFornecedorDesignadoVSelect"
-                    required
-                  >
-                    <template slot="no-options">
-                      Nenhum resultado para a busca.
-                    </template>
-                  </v-select>
-                </div>
-              </div>
-              <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <div class="form-group">
-                  <label for>Quantidade</label>
-                  <vue-numeric
-                    v-bind:precision="3"
-                    v-bind:minus="false"
-                    thousand-separator="."
-                    decimal-separator=","
-                    v-model="itemEdicaoQuantidadeDesignada"
-                    class="form-control"
-                    placeholder=""
-                    required
-                  />
-                </div>
-              </div> -->
-            </div>
           </div>
         </div>
       </div>
@@ -403,10 +207,9 @@
 
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import RateioServico from "../../servico/RateioServico";
+import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
 import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
 import ContatoServico from "../../servico/ContatoServico";
-import FornecedorServico from "../../servico/FornecedorServico";
 import Bus from "../../util/EventBus";
 
 export default {
@@ -421,28 +224,17 @@ export default {
     fornecedorId: { type: String, default: "" },
     pedidoId: { type: String, default: "" },
     descricaoFornecedor: { type: String, default: "" },
-    telefoneWhatsAppParam: { type: String, default: "" },
     rateioId: { type: String, default: "" },
     conferenciaId: { type: String, default: "" }
   },
   data() {
     return {
-      modalAtendimentoAvulso: false,
-      itemEdicaoQuantidadeAvulsa: 0,
-      itemEdicaoQuantidadePendente: 0,
-      fornecedorDesignado: "",
-      fornecedoresDesignadosOptions: [],
+      modalExcluirConferencia: false,
+      modalRecusarConferencia: false,
+      modalConfirmarConferencia: false,
       itemEdicao: null,
-      itemEdicaoQuantidadeConfirmada: 0,
-      modalRemover: false,
-      modalRecusar: false,
-      modalEnviarWhatsApp: false,
+      itemEdicaoQuantidadeConferida: 0,
       modalImpressao: false,
-      modalAtenderProduto: false,
-      telefoneWhatsApp: "",
-      mensagemWhatsApp: "",
-      fornecedorWhatsApp: "",
-      produtoOptions: [],
       loading: false,
       abrir: true,
       pagina: 1,
@@ -495,7 +287,6 @@ export default {
   methods: {
     ObterGrid(val) {
       this.loading = false;
-      this.fornecedorDesignado = "";
       this.itemEdicao = null;
       this.modalEdicao = false;
 
@@ -523,17 +314,17 @@ export default {
           });
         });
     },
-    ModalRemocaoCancel(evento) {
+    ModalExcluirConferenciaCancel(evento) {
       evento.preventDefault();
       this.itemEdicao = null;
     },
-    ModalRemocaoOk(evento) {
+    ModalExcluirConferenciaOk(evento) {
       evento.preventDefault();
-      this.modalRemover = false;
+      this.modalExcluirConferencia = false;
 
       if (!this.itemEdicao) return;
 
-      PedidoProdutoFornecedorServico.RemoverProdutoFornecedorPedido(
+      ConferenciaRateioServico.RemoverConferenciaProdutoFornecedor(
         this.itemEdicao.id
       )
         .then(() => {
@@ -555,7 +346,7 @@ export default {
         });
     },
     Remover(item) {
-      this.modalRemover = true;
+      this.modalExcluirConferencia = true;
       this.itemEdicao = item;
     },
     Limpar() {
@@ -568,13 +359,6 @@ export default {
         currency: "BRL"
       });
     },
-    RemoverCifrao(valor) {
-      if (valor) {
-        return valor; //valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-      } else {
-        return valor;
-      }
-    },
     FormataQuantidade(valor) {
       return valor ? valor : 0;
     },
@@ -582,21 +366,19 @@ export default {
       return item.quantidadeAtendida;
     },
     RecusarProdutoFornecedor(item) {
-      this.modalRecusar = true;
+      this.modalRecusarConferencia = true;
       this.itemEdicao = item;
     },
-    ModalRecusarCancel(evento) {
+    ModalRecusarConferenciaCancel(evento) {
       evento.preventDefault();
       this.itemEdicao = null;
     },
-    ModalRecusarOk(evento) {
+    ModalRecusarConferenciaOk(evento) {
       evento.preventDefault();
-      this.modalRecusar = false;
+      this.modalRecusarConferencia = false;
       if (!this.itemEdicao) return;
 
-      RateioServico.RecusarProdutoFornecedorRateio(
-        this.pedidoId,
-        this.itemEdicao.fornecedorId,
+      ConferenciaRateioServico.RecusarConferenciaProdutoFornecedor(
         this.itemEdicao.id
       )
         .then(() => {
@@ -618,23 +400,23 @@ export default {
     },
     ConfirmarProdutoFornecedor(item) {
       this.itemEdicao = item;
-      this.modalAtenderProduto = true;
+      this.modalConfirmarConferencia = true;
     },
-    ModalAtenderProdutoCancel(evento) {
+    ModalConfirmarConferenciaCancel(evento) {
       evento.preventDefault();
       this.itemEdicao = null;
-      this.modalAtenderProduto = false;
+      this.modalConfirmarConferencia = false;
     },
-    ModalAtenderProdutoOk(evento) {
+    ModalConfirmarConferenciaOk(evento) {
       evento.preventDefault();
 
       evento.preventDefault();
       if (!this.itemEdicao) return;
 
-      if (!this.itemEdicaoQuantidadeConfirmada) {
+      if (!this.itemEdicaoQuantidadeConferida) {
         this.loading = false;
         this.$notify({
-          data: ["Quantidade confirmada deve ser informada."],
+          data: ["Quantidade conferida deve ser informada."],
           type: "warn",
           duration: 5000
         });
@@ -642,24 +424,22 @@ export default {
       }
 
       if (
-        this.itemEdicaoQuantidadeConfirmada > this.itemEdicao.quantidadeAtendida
+        this.itemEdicaoQuantidadeConferida > this.itemEdicao.quantidadeAtendida
       ) {
         this.loading = false;
         this.$notify({
-          data: ["Quantidade confirmada maior que quantidade atendida."],
+          data: ["Quantidade conferida maior que quantidade atendida."],
           type: "warn",
           duration: 5000
         });
         return;
       }
 
-      this.modalAtenderProduto = false;
+      this.modalConfirmarConferencia = false;
 
-      RateioServico.ConfirmarProdutoFornecedorRateio(
-        this.pedidoId,
-        this.itemEdicao.fornecedorId,
+      ConferenciaRateioServico.ConfirmarConferenciaProdutoFornecedor(
         this.itemEdicao.id,
-        this.itemEdicaoQuantidadeConfirmada
+        this.itemEdicaoQuantidadeConferida
       )
         .then(() => {
           this.ObterGrid(this.pagina);
@@ -683,145 +463,22 @@ export default {
     },
     ConfirmarProdutoFornecedor(item) {
       this.itemEdicao = item;
-      this.modalAtenderProduto = true;
-      this.itemEdicaoQuantidadeConfirmada = item.quantidadeConfirmada
+      this.modalConfirmarConferencia = true;
+      this.itemEdicaoQuantidadeConferida = item.quantidadeConfirmada
         ? item.quantidadeConfirmada
         : item.quantidadeConfirmadaAnterior
         ? item.quantidadeConfirmadaAnterior
         : item.quantidadeAtendida;
     },
     RecusarProdutoFornecedor(item) {
-      this.modalRecusar = true;
+      this.modalRecusarConferencia = true;
       this.itemEdicao = item;
-    },
-    FornecedorComTelefoneCadastrado() {
-      return this.telefoneWhatsAppParam;
-    },
-    modalWhatsAppCancel(evento) {
-      evento.preventDefault();
-      this.itemEdicao = null;
-    },
-    modalWhatsAppOk(evento) {
-      evento.preventDefault();
-      this.modalEnviarWhatsApp = false;
-      if (!this.itemEdicao) return;
-
-      ContatoServico.EnviarWhatsApp(
-        this.telefoneWhatsApp,
-        this.mensagemWhatsApp
-      );
-    },
-    EnviarWhatsApp(item) {
-      this.modalEnviarWhatsApp = true;
-      this.itemEdicao = item;
-      this.telefoneWhatsApp = this.telefoneWhatsAppParam;
-      this.fornecedorWhatsApp = item.pessoa;
-      this.mensagemWhatsApp = "";
-    },
-    ObterFornecedorDesignadoVSelect(busca) {
-      if (!busca || busca.length <= 2) return;
-
-      FornecedorServico.ObterVSelectFornecedorDesignado(
-        busca,
-        this.itemEdicao.fornecedorId
-      )
-
-        .then((response) => {
-          this.fornecedoresDesignadosOptions = response.data;
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    modalAtendimentoAvulsoCancel(evento) {
-      evento.preventDefault();
-      this.itemEdicao = null;
-      this.itemEdicaoQuantidadeAvulsa = 0;
-      this.itemEdicaoQuantidadePendente = 0;
-      this.fornecedorDesignado = "";
-      this.fornecedoresDesignadosOptions = [];
-    },
-
-    modalAtendimentoAvulsoOk(evento) {
-      evento.preventDefault();
-
-      if (!this.itemEdicao) return;
-
-      if (!this.itemEdicaoQuantidadeAvulsa) {
-        this.loading = false;
-        this.$notify({
-          data: ["Quantidade atendida deve ser informada."],
-          type: "warn",
-          duration: 5000
-        });
-        return;
-      }
-
-      if (this.itemEdicaoQuantidadeAvulsa > this.itemEdicaoQuantidadePendente) {
-        this.loading = false;
-        this.$notify({
-          data: ["Quantidade informada maior que a pendente."],
-          type: "warn",
-          duration: 5000
-        });
-        return;
-      }
-
-      if (!this.fornecedorDesignado) {
-        this.loading = false;
-        this.$notify({
-          data: ["Fornecedor designado deve ser informado."],
-          type: "warn",
-          duration: 5000
-        });
-        return;
-      }
-
-      this.modalAtendimentoAvulso = false;
-      this.fornecedoresDesignadosOptions = [];
-
-      PedidoProdutoFornecedorServico.EditarFornecedorProduto(
-        this.itemEdicao.id,
-        this.itemEdicaoQuantidadeAvulsa,
-        this.fornecedorDesignado?.id ?? null,
-        this.itemEdicaoQuantidadeAvulsa,
-        this.rateioId
-      )
-        .then(() => {
-          this.ObterGrid(1);
-          this.$emit("atualizarFornecedor");
-          Bus.$emit("alterado-produto-fornecedor");
-          this.$notify({
-            data: ["Quantidade definida com sucesso."],
-            type: "success",
-            duration: 5000
-          });
-        })
-        .catch((erro) => {
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
-        });
-    },
-    AtenderProdutoAvulso(item) {
-      this.itemEdicao = item;
-      this.modalAtendimentoAvulso = true;
-      this.itemEdicaoQuantidadePendente =
-        item.quantidadePendente + item.quantidadeAtendida;
-      this.itemEdicaoQuantidadeAvulsa = item.quantidadeAtendida;
-      this.fornecedorDesignado = item.fornecedorDesignado;
-      this.fornecedoresDesignadosOptions = [];
     },
     IsFornecedorAvulso(item) {
       return item.fornecedorAvulso;
     },
-    isRateioConferindo() {
+    isConferenciaFinalizada() {
+      return false;
       return (
         !(this.conferenciaId == null || this.conferenciaId == undefined) &&
         this.conferenciaId.toString().length == 36
