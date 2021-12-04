@@ -1,6 +1,10 @@
 <template>
-  <div style="width: 130mm; heigth: 210mm">
-    <div v-for="(item, index) in relatorio.clientes" :key="index">
+  <div>
+    <div
+      v-for="(item, index) in relatorio.clientes"
+      :key="index"
+      style="width: 130mm"
+    >
       <table>
         <tr>
           <td colspan="7">
@@ -83,6 +87,7 @@
           </tr>
         </table>
       </div>
+      <div class="pagebreak"></div>
     </div>
   </div>
 </template>
@@ -142,6 +147,9 @@ export default {
   @page {
     size: 97mm 210mm;
     size: portrait;
+  }
+  .pagebreak {
+    page-break-after: always;
   }
 }
 </style>
