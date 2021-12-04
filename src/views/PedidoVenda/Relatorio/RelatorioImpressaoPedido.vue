@@ -1,47 +1,55 @@
 <template>
-  <div>
-    <div
-      v-for="(item, index) in relatorio.clientes"
-      :key="index"
-    >
-      <div class="row logo">
-        <div class="col center">
-          <img
-            :src="
-              $store.getters.baseURL +
-              'arquivo/obter/' +
-              relatorio.cabecalho.logo
-            "
-            height="130px"
-            alt="Logo"
-          />
-        </div>
-        <div class="col">
-          <div class="row center">
-            <h5>{{ relatorio.cabecalho.fantasia }}</h5>
-          </div>
-          <div class="row center">
-            <span>{{ relatorio.cabecalho.razaoSocial }}</span>
-          </div>
-          <div class="row center">
-            <span>{{ relatorio.cabecalho.endereco }}</span>
-          </div>
-          <div class="row center">
-            <span>{{ relatorio.cabecalho.telefone }}</span>
-          </div>
-          <div class="row center">
-            <span>{{ relatorio.cabecalho.email }}</span>
-          </div>
-          <div class="row center">
-            <div class="col center">
-              <span>CNPJ: {{ relatorio.cabecalho.cnpj }}</span>
-            </div>
-            <div class="col center">
-              <span>Incrição Estatual: {{ relatorio.cabecalho.ie }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div style="width: 130mm; heigth: 210mm">
+    <div v-for="(item, index) in relatorio.clientes" :key="index">
+      <table>
+        <tr>
+          <td colspan="7">
+            <img
+              :src="
+                $store.getters.baseURL +
+                'arquivo/obter/' +
+                relatorio.cabecalho.logo
+              "
+              height="90px"
+              alt="Logo"
+            />
+          </td>
+          <td>
+            <tr class="center">
+              <h5>{{ relatorio.cabecalho.fantasia }}</h5>
+            </tr>
+
+            <tr class="center">
+              <td>
+                <span>{{ relatorio.cabecalho.razaoSocial }}</span>
+              </td>
+            </tr>
+            <tr class="center">
+              <td>
+                <span>{{ relatorio.cabecalho.endereco }}</span>
+              </td>
+            </tr>
+            <tr class="center">
+              <td>
+                <span>{{ relatorio.cabecalho.telefone }}</span>
+              </td>
+            </tr>
+            <tr class="center">
+              <td>
+                <span>{{ relatorio.cabecalho.email }}</span>
+              </td>
+            </tr>
+            <tr class="center">
+              <td>
+                <span>CNPJ: {{ relatorio.cabecalho.cnpj }}</span>
+              </td>
+              <td>
+                <span>Incrição Estatual: {{ relatorio.cabecalho.ie }}</span>
+              </td>
+            </tr>
+          </td>
+        </tr>
+      </table>
 
       <div class="row">
         <span>Data: {{ relatorio.dataEntrega }}</span>
@@ -128,5 +136,12 @@ export default {
 .center {
   display: flex;
   justify-content: space-around;
+}
+
+@media print {
+  @page {
+    size: 97mm 210mm;
+    size: portrait;
+  }
 }
 </style>
