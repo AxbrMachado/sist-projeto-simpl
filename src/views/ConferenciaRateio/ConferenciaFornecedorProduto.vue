@@ -173,7 +173,7 @@
     </b-modal>
     <b-modal
       v-model="modalConfirmarConferencia"
-      title="Confirma produto"
+      title="Confirmar conferência produto"
       class="modal-success"
       ok-variant="success"
       @ok="ModalConfirmarConferenciaOk"

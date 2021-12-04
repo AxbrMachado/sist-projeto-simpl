@@ -264,6 +264,11 @@ export default {
       fields: [
         { key: "pessoa", label: "Fornecedor", sortable: true },
         { key: "tipoFornecedor", label: "Tipo Fornecedor", sortable: true },
+
+        // { key: "quantidadeSolicitada", label: "Solicitado", sortable: true },
+        // { key: "margemRateio", label: "% Rateio", sortable: true },
+        // { key: "quantidadeAtendida", label: "Atendido", sortable: true },
+
         { key: "quantidadeConfirmada", label: "Confirmado", sortable: true },
         { key: "quantidadeConferida", label: "Conferido", sortable: true },
         {

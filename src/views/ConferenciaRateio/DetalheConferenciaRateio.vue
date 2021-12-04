@@ -181,13 +181,13 @@
         @atualizarConferencia="LoadConferencia"
       >
       </ConferenciaFornecedor>
-      <ConferenciaProduto
+      <!-- <ConferenciaProduto
         :rateioId="this.viewModel.rateioId"
         :conferenciaId="this.viewModel.id"
         :pedidoId="this.viewModel.pedidoId"
         @atualizarConferencia="LoadConferencia"
       >
-      </ConferenciaProduto>
+      </ConferenciaProduto> -->
       <NovoDocumento :referenciaId="this.viewModel.id"> </NovoDocumento>
       <Contato :referenciaId="this.viewModel.id"> </Contato>
     </div>
