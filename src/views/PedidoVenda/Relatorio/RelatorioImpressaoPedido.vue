@@ -55,11 +55,15 @@
         </tr>
       </table>
 
-      <div class="row">
+      <div class="d-flex">
         <span>Data: {{ relatorio.dataEntrega }}</span>
       </div>
-      <div class="row">
+      <div class="d-flex">
+        <span>Instituição: {{ item.contrato }}</span>
+      </div>
+      <div class="d-flex justify-content-between">
         <span>Destino: {{ item.nome }}</span>
+        <span>Rota: {{ item.rota }}</span>
       </div>
       <div class="row">
         <b-table
