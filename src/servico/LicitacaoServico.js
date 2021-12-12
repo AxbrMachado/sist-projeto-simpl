@@ -1,15 +1,16 @@
 import Vue from "vue";
 class LicitacaoServico {
   ObterInstituicoesSelect() {
-    return Vue.prototype.$http({
-      url: "/licitacao/obter-select",
-      method: "GET"
-    });
+    return this.ObterSelect(false);
   }
 
   ObterSelect() {
+    return this.ObterSelect(false);
+  }
+
+  ObterSelect(vigente) {
     return Vue.prototype.$http({
-      url: "/licitacao/obter-select",
+      url: "/licitacao/obter-select/" + vigente,
       method: "GET"
     });
   }

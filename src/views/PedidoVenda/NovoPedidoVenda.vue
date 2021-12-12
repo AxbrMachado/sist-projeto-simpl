@@ -330,7 +330,7 @@ export default {
         });
     },
     ObterContratosSelect() {
-      ContratoServico.ObterSelect()
+      ContratoServico.ObterSelect(!this.IsEdicao())
         .then((response) => {
           this.contratoOptions = response.data;
         })

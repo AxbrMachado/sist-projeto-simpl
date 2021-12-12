@@ -157,7 +157,7 @@
               </template>
               <template v-slot:cell(status)="data">
                 <div class="center">
-                  <span>{{ ObterNomeStatus(data.item.status) }}</span>
+                  <span>{{ ObterNomeStatus(data.item.status) + (data.item.vencida ? "/Vencida" : "") }}</span>
                 </div>
               </template>
             </b-table>
