@@ -505,9 +505,9 @@ export default {
       return valor ? valor + "%" : "-";
     },
     FormataQuantidadePendente(item) {
-      return item.quantidadeAtendida >= item.quantidade
+      return item.quantidadeConsumida >= item.quantidade
         ? 0
-        : item.quantidade - item.quantidadeAtendida;
+        : item.quantidade - item.quantidadeConsumida;
     }
   }
 };
