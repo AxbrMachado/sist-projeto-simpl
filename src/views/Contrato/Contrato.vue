@@ -159,6 +159,12 @@
                   <span>{{ FormataValor(data.item.valor) }}</span>
                 </div>
               </template>
+              <template v-slot:cell(vencido)="data">
+                <div class="left">
+                  <span>{{ CalculaStatus(data.item.vencido) }}</span>
+                </div>
+              </template>
+
             </b-table>
             <b-pagination
               v-model="pagina"
@@ -224,6 +230,7 @@ export default {
         { key: "dataTermino", label: "Data Término", sortable: true },
         { key: "valor", label: "Valor", sortable: true },
         { key: "valorEntregue", label: "Valor Entregue", sortable: true },
+        { key: "vencido", label: "Status", sortable: true },
         {
           key: "acoes",
           label: "Ações",
@@ -334,6 +341,9 @@ export default {
             duration: 5000
           });
         });
+    },
+    CalculaStatus(vencido){
+      return vencido ? "Vencido": "Vigente";
     }
   }
 };

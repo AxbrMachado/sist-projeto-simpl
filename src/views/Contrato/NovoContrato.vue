@@ -290,7 +290,7 @@ export default {
     },
 
     ObterInstituicoesSelect() {
-      LicitacaoServico.ObterSelect()
+      LicitacaoServico.ObterSelect(!this.IsEdicao())
         .then((response) => {
           this.licitacaoOptions = response.data;
         })

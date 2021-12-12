@@ -8,8 +8,12 @@ class ContratoServico {
   }
 
   ObterSelect() {
+    ObterSelect(false);
+  }
+
+  ObterSelect(vigente) {
     return Vue.prototype.$http({
-      url: "/contrato/obter-select",
+      url: "/contrato/obter-select/" + vigente,
       method: "GET"
     });
   }
