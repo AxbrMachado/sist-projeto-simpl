@@ -106,7 +106,7 @@
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
                   <b-button
-                    v-if="!isConferenciaExistente(data.item)"
+                    v-if="!isConferenciaExistente(data.item) && isRateioConfirmado(data.item)"
                     variant="info"
                     style="margin-right: 10px"
                     title="Iniciar Conferência"
@@ -494,6 +494,9 @@ export default {
     },
     isConferenciaExistente(item) {
       return !item ? false : !(item.id === this.$store.getters.emptyGuid);
+    },
+    isRateioConfirmado(item) {
+      return !item ? false : item.statusRateio == StatusRateioEnum.Confirmado;
     },
     IniciarConferencia(item) {
       this.modalIniciarConferencia = true;
