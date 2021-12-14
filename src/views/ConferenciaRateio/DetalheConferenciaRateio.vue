@@ -361,9 +361,6 @@ export default {
           });
         });
     },
-    isConferenciaCompleta() {
-      return this.viewModel.statusConferencia == StatusConferenciaEnum.Completa;
-    },
     FinalizarConferencia() {
       this.modalFinalizarConferencia = true;
     },
@@ -389,6 +386,9 @@ export default {
             duration: 5000
           });
         });
+    },
+    isConferenciaCompleta() {
+      return this.viewModel.statusConferencia == StatusConferenciaEnum.Completa;
     }
   }
 };

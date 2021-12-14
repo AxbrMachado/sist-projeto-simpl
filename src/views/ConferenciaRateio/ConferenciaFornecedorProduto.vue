@@ -326,6 +326,7 @@ export default {
       if (!this.itemEdicao) return;
 
       ConferenciaRateioServico.RemoverConferenciaProdutoFornecedor(
+        this.itemEdicao.conferenciaId,
         this.itemEdicao.id
       )
         .then(() => {
@@ -380,6 +381,7 @@ export default {
       if (!this.itemEdicao) return;
 
       ConferenciaRateioServico.RecusarConferenciaProdutoFornecedor(
+        this.itemEdicao.conferenciaId,
         this.itemEdicao.id
       )
         .then(() => {
@@ -439,6 +441,7 @@ export default {
       this.modalConfirmarConferencia = false;
 
       ConferenciaRateioServico.ConfirmarConferenciaProdutoFornecedor(
+        this.itemEdicao.conferenciaId,
         this.itemEdicao.id,
         this.itemEdicaoQuantidadeConferida
       )
