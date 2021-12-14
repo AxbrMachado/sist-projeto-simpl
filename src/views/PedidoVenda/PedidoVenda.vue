@@ -202,7 +202,9 @@
                   <a
                     target="blank"
                     class="btn btn-dark mr-1"
-                    :href="'/#/pedido-venda/relatorio-impressao/' + data.item.id"
+                    :href="
+                      '/#/pedido-venda/relatorio-impressao/' + data.item.id
+                    "
                     title="Imprimir informações pedido"
                   >
                     <i class="fas fa-print"></i>
@@ -294,7 +296,8 @@ export default {
         {
           value: StatusPedidoEnum.AguardandoConferencia,
           text: "Aguardando Conferência"
-        }
+        },
+        { value: StatusPedidoEnum.Conferido, text: "Conferido" }
       ],
 
       filtro: {
@@ -442,6 +445,8 @@ export default {
           return "Aguardando Rateio";
         case StatusPedidoEnum.AguardandoConferencia:
           return "Aguardando Conferência";
+        case StatusPedidoEnum.Conferido:
+          return "Conferido";
         default:
           return "Inválido";
       }

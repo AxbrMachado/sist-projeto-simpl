@@ -238,7 +238,8 @@ export default {
         {
           value: StatusPedidoEnum.AguardandoConferencia,
           text: "Aguardando Conferência"
-        }
+        },
+        { value: StatusPedidoEnum.Conferido, text: "Conferido" }
       ],
 
       filtro: {
@@ -352,6 +353,8 @@ export default {
           return "Aguardando Rateio";
         case StatusPedidoEnum.AguardandoConferencia:
           return "Aguardando Conferência";
+        case StatusPedidoEnum.Conferido:
+          return "Conferido";
 
         default:
           return "Inválido";

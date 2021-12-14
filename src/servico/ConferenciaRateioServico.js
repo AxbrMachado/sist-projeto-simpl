@@ -129,19 +129,30 @@ class ConferenciaRateioServico {
     });
   }
 
-  RecusarConferenciaProdutoFornecedor(pedidoProdutoFornecedorId) {
+  RecusarConferenciaProdutoFornecedor(
+    conferenciaId,
+    pedidoProdutoFornecedorId
+  ) {
     return Vue.prototype.$http({
       url:
         "conferencia/recusarConferenciaProdutoFornecedor/" +
+        conferenciaId +
+        "/" +
         pedidoProdutoFornecedorId,
       method: "GET"
     });
   }
 
-  ConfirmarConferenciaProdutoFornecedor(pedidoProdutoFornecedorId, quantidade) {
+  ConfirmarConferenciaProdutoFornecedor(
+    conferenciaId,
+    pedidoProdutoFornecedorId,
+    quantidade
+  ) {
     return Vue.prototype.$http({
       url:
         "conferencia/confirmarConferenciaProdutoFornecedor/" +
+        conferenciaId +
+        "/" +
         pedidoProdutoFornecedorId +
         "/" +
         quantidade,
@@ -149,10 +160,15 @@ class ConferenciaRateioServico {
     });
   }
 
-  RemoverConferenciaProdutoFornecedor(pedidoProdutoFornecedorId) {
+  RemoverConferenciaProdutoFornecedor(
+    conferenciaId,
+    pedidoProdutoFornecedorId
+  ) {
     return Vue.prototype.$http({
       url:
         "conferencia/removerConferenciaProdutoFornecedor/" +
+        conferenciaId +
+        "/" +
         pedidoProdutoFornecedorId,
       method: "GET"
     });

@@ -13,7 +13,7 @@
             <header class="card-header">
               <div class="d-flex">
                 <strong class="align-self-center"
-                  >Conferência Rateio Pedido</strong
+                  >Conferência Pedido</strong
                 >
                 <a
                   @click="ReiniciarConferencia()"
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>Previsão Entrega</label>
+                    <label for>Entrega Pedido</label>
                     <input
                       disabled
                       v-model="viewModel.previsaoEntrega"
@@ -87,6 +87,22 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
+                    <label for>Total Pedido</label>
+                    <vue-numeric
+                      disabled
+                      v-bind:precision="3"
+                      v-bind:minus="false"
+                      thousand-separator="."
+                      decimal-separator=","
+                      v-model="viewModel.quantidadePedido"
+                      class="form-control"
+                      placeholder="Digite a quantidade"
+                      requerid
+                    />
+                  </div>
+                </div>
+                <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
                     <label for>Valor Pedido</label>
                     <currency-input
                       disabled
@@ -94,8 +110,24 @@
                       class="form-control"
                     />
                   </div>
-                </div>
+                </div> -->
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
+                    <label for>Conferido</label>
+                    <vue-numeric
+                      disabled
+                      v-bind:precision="3"
+                      v-bind:minus="false"
+                      thousand-separator="."
+                      decimal-separator=","
+                      v-model="viewModel.quantidadeConferido"
+                      class="form-control"
+                      placeholder="Digite a quantidade"
+                      requerid
+                    />
+                  </div>
+                </div>
+                <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>Valor Conferido</label>
                     <currency-input
@@ -104,7 +136,7 @@
                       class="form-control"
                     />
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -241,7 +273,8 @@ export default {
         {
           value: StatusPedidoEnum.AguardandoConferencia,
           text: "Aguardando Conferência"
-        }
+        },
+        { value: StatusPedidoEnum.Conferido, text: "Conferido" }
       ],
       statusRateioOptions: [
         { value: StatusRateioEnum.Incompleto, text: "Incompleto" },
@@ -360,9 +393,6 @@ export default {
           });
         });
     },
-    isConferenciaCompleta() {
-      return this.viewModel.statusConferencia == StatusConferenciaEnum.Completa;
-    },
     FinalizarConferencia() {
       this.modalFinalizarConferencia = true;
     },
@@ -388,6 +418,9 @@ export default {
             duration: 5000
           });
         });
+    },
+    isConferenciaCompleta() {
+      return this.viewModel.statusConferencia == StatusConferenciaEnum.Completa;
     }
   }
 };
