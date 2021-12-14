@@ -74,7 +74,7 @@
                         <div class="btn-group-sm">
                           <b-button
                             v-if="1 == 1"
-                            :disabled="isConferenciaFinalizada()"
+                            :disabled="isConferenciaFinalizada(data.item)"
                             variant="primary"
                             style="margin-right: 10px"
                             title="Confirmar conferência"
@@ -85,7 +85,7 @@
 
                           <b-button
                             v-if="1 == 1"
-                            :disabled="isConferenciaFinalizada()"
+                            :disabled="isConferenciaFinalizada(data.item)"
                             variant="secondary"
                             style="margin-right: 10px"
                             title="Recusar conferência"
@@ -95,7 +95,7 @@
                           </b-button>
                           <b-button
                             v-if="1 == 1"
-                            :disabled="isConferenciaFinalizada()"
+                            :disabled="isConferenciaFinalizada(data.item)"
                             variant="danger"
                             title="Remover conferência"
                             @click="Remover(data.item)"
@@ -210,6 +210,7 @@ import RotateSquare from "../../components/RotateSquare";
 import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
 import PedidoProdutoFornecedorServico from "../../servico/PedidoProdutoFornecedorServico";
 import ContatoServico from "../../servico/ContatoServico";
+import StatusConferenciaEnum from "../../enums/StatusConferenciaEnum";
 import Bus from "../../util/EventBus";
 
 export default {
@@ -307,11 +308,11 @@ export default {
         })
         .catch((erro) => {
           this.loading = false;
-          this.$notify({
-            data: erro.response.data.erros,
-            type: "warn",
-            duration: 5000
-          });
+          // this.$notify({
+          //   data: erro.response.data.erros,
+          //   type: "warn",
+          //   duration: 5000
+          // });
         });
     },
     ModalExcluirConferenciaCancel(evento) {
@@ -477,12 +478,8 @@ export default {
     IsFornecedorAvulso(item) {
       return item.fornecedorAvulso;
     },
-    isConferenciaFinalizada() {
-      return false;
-      return (
-        !(this.conferenciaId == null || this.conferenciaId == undefined) &&
-        this.conferenciaId.toString().length == 36
-      );
+    isConferenciaFinalizada(item) {
+      return item.statusConferencia == StatusConferenciaEnum.Finalizada;
     }
   }
 };

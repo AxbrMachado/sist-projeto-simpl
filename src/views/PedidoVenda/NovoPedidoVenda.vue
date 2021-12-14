@@ -206,7 +206,8 @@ export default {
         {
           value: StatusPedidoEnum.AguardandoConferencia,
           text: "Aguardando Conferência"
-        }
+        },
+        { value: StatusPedidoEnum.Conferido, text: "Conferido" }
       ],
       viewModel: {
         id: this.$store.getters.emptyGuid,

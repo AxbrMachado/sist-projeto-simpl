@@ -82,7 +82,7 @@
                           </b-button>
 
                           <b-button
-                            :disabled="isPedidoEmRotaDeEntrega()"
+                            :disabled="isConferenciaFinalizada(data.item)"
                             variant="primary"
                             style="margin-right: 10px"
                             title="Confirmar conferência de todos os produtos deste fornecedor"
@@ -94,7 +94,7 @@
                           </b-button>
 
                           <b-button
-                            :disabled="isPedidoEmRotaDeEntrega()"
+                            :disabled="isConferenciaFinalizada(data.item)"
                             variant="secondary"
                             style="margin-right: 10px"
                             title="Recusar conferência de todos os produtos do fornecedor"
@@ -106,7 +106,7 @@
                           </b-button>
 
                           <b-button
-                            :disabled="isPedidoEmRotaDeEntrega()"
+                            :disabled="isConferenciaFinalizada(data.item)"
                             variant="danger"
                             style="margin-right: 10px"
                             title="Excluír conferência dos produtos do fornecedor"
@@ -115,7 +115,6 @@
                             <i class="fas fa-trash-alt"></i>
                           </b-button>
                           <b-button
-                            :disabled="isPedidoEmRotaDeEntrega()"
                             variant="dark"
                             title="Imprimir informações de conferência do fornecedor"
                             @click="ImprimirInformacoesFornecedor(data.item)"
@@ -224,6 +223,7 @@ import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import Bus from "../../util/EventBus";
 import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
 import ConferenciaFornecedorProduto from "./ConferenciaFornecedorProduto";
+import StatusConferenciaEnum from "../../enums/StatusConferenciaEnum";
 
 export default {
   name: "ConferenciaFornecedor",
@@ -524,8 +524,8 @@ export default {
     isRateioPendente(item) {
       return item.statusRateio == StatusRateioEnum.Incompleto;
     },
-    isPedidoEmRotaDeEntrega() {
-      return false;
+    isConferenciaFinalizada(item) {
+      return item.statusConferencia == StatusConferenciaEnum.Finalizada;
     }
   }
 };

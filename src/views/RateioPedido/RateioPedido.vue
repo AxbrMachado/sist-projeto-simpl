@@ -317,7 +317,8 @@ export default {
         {
           value: StatusPedidoEnum.AguardandoConferencia,
           text: "Aguardando Conferência"
-        }
+        },
+        { value: StatusPedidoEnum.Conferido, text: "Conferido" }
       ],
       statusRateioOptions: [
         { value: StatusRateioEnum.Incompleto, text: "Incompleto" },
@@ -467,6 +468,8 @@ export default {
           return "Aguardando Rateio";
         case StatusPedidoEnum.AguardandoConferencia:
           return "Aguardando Conferência";
+        case StatusPedidoEnum.Conferido:
+          return "Conferido";
         default:
           return "Inválido";
       }
