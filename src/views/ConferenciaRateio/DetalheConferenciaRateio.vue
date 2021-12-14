@@ -13,7 +13,7 @@
             <header class="card-header">
               <div class="d-flex">
                 <strong class="align-self-center"
-                  >Conferência Rateio Pedido</strong
+                  >Conferência Pedido</strong
                 >
                 <a
                   @click="ReiniciarConferencia()"
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
-                    <label for>Previsão Entrega</label>
+                    <label for>Entrega Pedido</label>
                     <input
                       disabled
                       v-model="viewModel.previsaoEntrega"
