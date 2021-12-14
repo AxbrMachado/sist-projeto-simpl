@@ -87,6 +87,22 @@
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
+                    <label for>Total Pedido</label>
+                    <vue-numeric
+                      disabled
+                      v-bind:precision="3"
+                      v-bind:minus="false"
+                      thousand-separator="."
+                      decimal-separator=","
+                      v-model="viewModel.quantidadePedido"
+                      class="form-control"
+                      placeholder="Digite a quantidade"
+                      requerid
+                    />
+                  </div>
+                </div>
+                <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
                     <label for>Valor Pedido</label>
                     <currency-input
                       disabled
@@ -94,8 +110,24 @@
                       class="form-control"
                     />
                   </div>
-                </div>
+                </div> -->
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
+                  <div class="form-group">
+                    <label for>Conferido</label>
+                    <vue-numeric
+                      disabled
+                      v-bind:precision="3"
+                      v-bind:minus="false"
+                      thousand-separator="."
+                      decimal-separator=","
+                      v-model="viewModel.quantidadeConferido"
+                      class="form-control"
+                      placeholder="Digite a quantidade"
+                      requerid
+                    />
+                  </div>
+                </div>
+                <!-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                   <div class="form-group">
                     <label for>Valor Conferido</label>
                     <currency-input
@@ -104,7 +136,7 @@
                       class="form-control"
                     />
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
