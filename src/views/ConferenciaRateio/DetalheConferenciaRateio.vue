@@ -344,7 +344,7 @@ export default {
       ConferenciaRateioServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/conferencia-conferencia");
+          this.$router.push("/conferencia-rateio");
           this.$notify({
             data: ["Conferência salva com sucesso."],
             type: "success",

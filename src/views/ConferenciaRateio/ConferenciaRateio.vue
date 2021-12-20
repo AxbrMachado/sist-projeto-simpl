@@ -368,7 +368,7 @@ export default {
       this.filtro.dataEntrega = "";
     },
     Editar(item) {
-      this.$router.push("/conferencia-conferencia/editar/" + item.id);
+      this.$router.push("/conferencia-rateio/editar/" + item.id);
     },
     CancelarConferencia(item) {
       this.modalCancelarConferencia = true;
