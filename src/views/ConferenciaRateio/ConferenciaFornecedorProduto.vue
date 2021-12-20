@@ -278,11 +278,11 @@ export default {
   },
   created() {
     Bus.$on("atualizar-produto-fornecedor", () => {
-      this.ObterGrid(this.pagina);
+      //this.ObterGrid(this.pagina);
     });
 
-    Bus.$on("alterado-rateio-produtor", () => {
-      this.ObterGrid(this.pagina);
+    Bus.$on("alterado-conferencia-produtor", () => {
+      //this.ObterGrid(this.pagina);
     });
   },
   methods: {

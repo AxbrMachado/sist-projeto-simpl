@@ -306,7 +306,7 @@ export default {
       this.LoadConferencia();
     });
 
-    Bus.$on("alterado-rateio-produtor", () => {
+    Bus.$on("alterado-conferencia-produtor", () => {
       this.LoadConferencia();
     });
   },
@@ -344,7 +344,7 @@ export default {
       ConferenciaRateioServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
-          this.$router.push("/conferencia-rateio");
+          this.$router.push("/conferencia-conferencia");
           this.$notify({
             data: ["Conferência salva com sucesso."],
             type: "success",
@@ -362,7 +362,7 @@ export default {
     },
     LoadConferencia() {
       this.Obter(this.viewModel.id);
-      Bus.$emit("rateio-efetuado");
+      Bus.$emit("conferencia-efetuada");
     },
     ReiniciarConferencia() {
       this.modalReiniciarConferencia = true;
@@ -378,7 +378,7 @@ export default {
       ConferenciaRateioServico.ReiniciarConferencia(this.viewModel.id)
         .then(() => {
           this.Obter(this.viewModel.id);
-          Bus.$emit("rateio-efetuado");
+          Bus.$emit("conferencia-efetuada");
           this.$notify({
             data: ["Conferência reiniciada com sucesso."],
             type: "success",
@@ -404,7 +404,7 @@ export default {
       ConferenciaRateioServico.FinalizarConferencia(this.viewModel.id)
         .then(() => {
           this.Obter(this.viewModel.id);
-          Bus.$emit("rateio-efetuado");
+          Bus.$emit("conferencia-efetuada");
           this.$notify({
             data: ["Conferência finalizada com sucesso."],
             type: "success",
