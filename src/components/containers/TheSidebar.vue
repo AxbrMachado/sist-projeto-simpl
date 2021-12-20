@@ -132,6 +132,13 @@ export default {
       )
         menu[0]._children.push(Nav.ConferenciaRateio);
 
+      if (
+        Nav.EntregaPedido.permission &&
+        permissao.filter((x) => x.startsWith(Nav.EntregaPedido.permission))
+          .length > 0
+      )
+        menu[0]._children.push(Nav.EntregaPedido);
+
       menu[0]._children.push(Nav.Configuracao);
 
       if (
