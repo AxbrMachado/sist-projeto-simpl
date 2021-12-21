@@ -23,6 +23,11 @@ const ConferenciaRateio = () =>
 const DetalheConferenciaRateio = () =>
   import("@/views/ConferenciaRateio/DetalheConferenciaRateio");
 
+const EntregaPedido = () =>
+  import("@/views/EntregaPedido/EntregaPedido");
+const DetalheEntregaPedido = () =>
+  import("@/views/EntregaPedido/DetalheEntregaPedido");
+
 const PedidoVenda = () => import("@/views/PedidoVenda/PedidoVenda");
 const NovoPedidoVenda = () => import("@/views/PedidoVenda/NovoPedidoVenda");
 const Pessoa = () => import("@/views/Pessoa/Pessoa");
@@ -60,8 +65,8 @@ const NovoGrupoUsuario = () => import("@/views/GrupoUsuario/NovoGrupoUsuario");
 const GrupoUsuario = () => import("@/views/GrupoUsuario/GrupoUsuario");
 const Permissao = () => import("@/views/GrupoUsuario/Permissao");
 const SemPermissao = () => import("@/views/GrupoUsuario/SemPermissao");
-const RelatorioImpressaoPedido = () => import("@/views/PedidoVenda/Relatorio/RelatorioImpressaoPedido");
-
+const RelatorioImpressaoPedido = () =>
+  import("@/views/PedidoVenda/Relatorio/RelatorioImpressaoPedido");
 
 Vue.use(Router);
 
@@ -357,6 +362,37 @@ export default new Router({
           ]
         },
 
+        //entrega pedido
+        {
+          path: "entrega-pedido",
+          name: "EntregaPedido",
+          meta: {
+            requiresAuth: true
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            }
+          },
+          children: [
+            {
+              path: "",
+              component: EntregaPedido,
+              meta: {
+                requiresAuth: true
+              }
+            },
+            {
+              path: "editar/:id",
+              name: "editar",
+              component: DetalheEntregaPedido,
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+
         //Cadastro de pedido venda
         {
           path: "pedido-venda",
@@ -393,7 +429,7 @@ export default new Router({
               name: "RelatorioImpressao",
               component: RelatorioImpressaoPedido,
               meta: {
-                requiresAuth: true,
+                requiresAuth: true
               }
             },
             {

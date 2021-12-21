@@ -435,7 +435,7 @@ export default {
     Bus.$on("alterado-produto-fornecedor", () => {
       this.ObterGrid(this.pagina);
     });
-    Bus.$on("rateio-efetuado", () => {
+    Bus.$on("conferencia-efetuada", () => {
       this.ObterGrid(this.pagina);
     });
   },
@@ -488,7 +488,7 @@ export default {
       RateioServico.RemoverAtendimentoProdutoRateio(this.itemRemover.id)
         .then(() => {
           this.ObterGrid(1);
-          Bus.$emit("alterado-rateio-produto");
+          Bus.$emit("alterado-conferencia-produto");
           this.$emit("atualizarRateio");
           this.$notify({
             data: ["Produtos removido com sucesso."],
@@ -631,7 +631,7 @@ export default {
       )
         .then(() => {
           this.ObterGrid(this.pagina);
-          Bus.$emit("alterado-rateio-produto");
+          Bus.$emit("alterado-conferencia-produto");
           this.$emit("atualizarRateio");
           this.$notify({
             data: ["Produto designado definido com sucesso."],
@@ -733,7 +733,7 @@ export default {
       PedidoProdutoServico.RemoverProdutoDesignado(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
-          Bus.$emit("alterado-rateio-produto");
+          Bus.$emit("alterado-conferencia-produto");
           this.$emit("atualizarRateio");
           this.$notify({
             data: ["Produto designado removido com sucesso."],
@@ -768,7 +768,7 @@ export default {
       RateioServico.RecusarAtendimentoProdutoRateio(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
-          Bus.$emit("alterado-rateio-produto");
+          Bus.$emit("alterado-conferencia-produto");
           this.$emit("atualizarRateio");
           this.$notify({
             data: ["Atendimento do produto recusado com sucesso."],
@@ -804,7 +804,7 @@ export default {
       RateioServico.ConfirmarAtendimentoProdutoRateio(this.itemEdicao.id)
         .then(() => {
           this.ObterGrid(this.pagina);
-          Bus.$emit("alterado-rateio-produto");
+          Bus.$emit("alterado-conferencia-produto");
           this.$emit("atualizarRateio");
           this.$notify({
             data: ["Atendimento do produto confirmado com sucesso."],

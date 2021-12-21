@@ -207,12 +207,12 @@
       Você confirma a finalização da conferência do pedido?
     </b-modal>
     <div>
-      <ConferenciaFornecedor
+      <!-- <ConferenciaFornecedor
         :rateioId="this.viewModel.rateioId"
         :conferenciaId="this.viewModel.id"
         @atualizarConferencia="LoadConferencia"
       >
-      </ConferenciaFornecedor>
+      </ConferenciaFornecedor> -->
       <!-- <ConferenciaProduto
         :rateioId="this.viewModel.rateioId"
         :conferenciaId="this.viewModel.id"
@@ -233,9 +233,9 @@ import NovoDocumento from "../../components/NovoDocumento";
 import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import StatusConferenciaEnum from "../../enums/StatusConferenciaEnum";
-import ConferenciaFornecedor from "./ConferenciaFornecedor";
-import ConferenciaProduto from "./ConferenciaProduto";
-import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
+// import ConferenciaFornecedor from "./ConferenciaFornecedor";
+// import ConferenciaProduto from "./ConferenciaProduto";
+import EntregaPedidoServico from "../../servico/EntregaPedidoServico";
 import Contato from "../../components/Contato";
 import Bus from "../../util/EventBus";
 
@@ -250,7 +250,7 @@ export default {
     Contato,
     ConferenciaFornecedor,
     ConferenciaProduto,
-    ConferenciaRateioServico
+    EntregaPedidoServico
   },
   data() {
     return {
@@ -318,7 +318,7 @@ export default {
     Obter(conferenciaId) {
       this.loading = false;
 
-      ConferenciaRateioServico.Obter(conferenciaId)
+      EntregaPedidoServico.Obter(conferenciaId)
         .then((resposta) => {
           this.loading = false;
           resposta.data.previsaoEntrega = DateTime.formatar(
@@ -341,7 +341,7 @@ export default {
     Editar() {
       this.loading = false;
 
-      ConferenciaRateioServico.Editar(this.viewModel)
+      EntregaPedidoServico.Editar(this.viewModel)
         .then(() => {
           this.loading = false;
           this.$router.push("/conferencia-rateio");
@@ -375,7 +375,7 @@ export default {
       evento.preventDefault();
       this.modalReiniciarConferencia = false;
       if (!this.viewModel.id) return;
-      ConferenciaRateioServico.ReiniciarConferencia(this.viewModel.id)
+      EntregaPedidoServico.ReiniciarConferencia(this.viewModel.id)
         .then(() => {
           this.Obter(this.viewModel.id);
           Bus.$emit("conferencia-efetuada");
@@ -401,7 +401,7 @@ export default {
       this.modalFinalizarConferencia = false;
     },
     modalFinalizarConferenciaOk(evento) {
-      ConferenciaRateioServico.FinalizarConferencia(this.viewModel.id)
+      EntregaPedidoServico.FinalizarConferencia(this.viewModel.id)
         .then(() => {
           this.Obter(this.viewModel.id);
           Bus.$emit("conferencia-efetuada");

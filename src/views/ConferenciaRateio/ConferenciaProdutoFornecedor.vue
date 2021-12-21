@@ -283,7 +283,7 @@ export default {
     }
   },
   created() {
-    Bus.$on("rateio-efetuado", () => {
+    Bus.$on("conferencia-efetuada", () => {
       this.ObterGrid(this.pagina);
     });
   },
@@ -329,7 +329,7 @@ export default {
       )
         .then(() => {
           this.ObterGrid(1);
-          Bus.$emit("alterado-rateio-produto");
+          Bus.$emit("alterado-conferencia-produto");
           this.$emit("atualizarRateio");
           this.$emit("atualizarproduto");
           this.$notify({
@@ -399,7 +399,7 @@ export default {
       )
         .then(() => {
           this.ObterGrid(this.pagina);
-          Bus.$emit("alterado-rateio-produto");
+          Bus.$emit("alterado-conferencia-produto");
           this.$emit("atualizarRateio");
           this.$emit("atualizarproduto");
           this.$notify({
@@ -435,7 +435,7 @@ export default {
       )
         .then(() => {
           this.ObterGrid(this.pagina);
-          Bus.$emit("alterado-rateio-produto");
+          Bus.$emit("alterado-conferencia-produto");
           this.$emit("atualizarRateio");
           this.$emit("atualizarproduto");
           this.$notify({

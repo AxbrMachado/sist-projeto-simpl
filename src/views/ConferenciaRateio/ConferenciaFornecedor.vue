@@ -289,7 +289,7 @@ export default {
     }
   },
   created() {
-    Bus.$on("rateio-efetuado", () => {
+    Bus.$on("conferencia-efetuada", () => {
       this.ObterGrid(this.pagina);
     });
 
@@ -298,11 +298,11 @@ export default {
       this.$emit("atualizarConferencia");
     });
 
-    Bus.$on("atualiza-fornecedores-rateio", () => {
+    Bus.$on("atualiza-fornecedores-conferencia", () => {
       this.ObterGrid(this.pagina);
     });
 
-    Bus.$on("alterado-rateio-produtor", () => {
+    Bus.$on("alterado-conferencia-produtor", () => {
       this.ObterGrid(this.pagina);
     });
   },

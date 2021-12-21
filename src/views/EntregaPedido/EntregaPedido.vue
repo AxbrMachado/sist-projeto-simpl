@@ -5,7 +5,7 @@
         <div class="card">
           <header class="card-header">
             <div class="d-flex">
-              <strong class="align-self-center">Conferência Rateio</strong>
+              <strong class="align-self-center">Entrega Pedido</strong>
             </div>
           </header>
           <div v-if="loading" class="loading-container">
@@ -16,7 +16,7 @@
           </div>
           <div v-else class="card-body">
             <div class="row">
-              <div class="col-lg-2 col-md-6 col-sm-12">
+              <div class="col-lg-1 col-md-6 col-sm-12">
                 <div class="form-group">
                   <label>Pedido</label>
                   <input
@@ -43,24 +43,14 @@
               </div>
               <div class="col-lg-2 col-md-6 col-sm-12">
                 <div class="form-group">
-                  <label for>Status Conferencia</label>
+                  <label for>Status Pedido</label>
                   <b-form-select
-                    v-model="filtro.statusConferencia"
-                    :options="statusConferenciaOptions"
+                    v-model="filtro.statusPedido"
+                    :options="statusPedidoOptions"
                   ></b-form-select>
                 </div>
               </div>
-              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
-                <div class="form-group">
-                  <label for>Status Rateio</label>
-                  <b-form-select
-                    v-model="filtro.statusRateio"
-                    :options="statusRateioOptions"
-                  ></b-form-select>
-                </div>
-              </div>
-            </div>
-            <div class="row">
+
               <div class="col-sm-12 col-md-3 col-lg-3 col-xl-2">
                 <div class="form-group">
                   <label for>Previsão Entrega</label>
@@ -98,7 +88,7 @@
               striped
               :per-page="itensPorPagina"
               show-empty
-              empty-text="Nenhuma conferência encontrada."
+              empty-text="Nenhuma Entrega encontrada."
             >
               <template v-slot:empty="scope">
                 <h4>{{ scope.emptyText }}</h4>
@@ -106,38 +96,26 @@
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
                   <b-button
-                    v-if="
-                      !isConferenciaExistente(data.item) &&
-                      isRateioConfirmado(data.item)
-                    "
                     variant="info"
                     style="margin-right: 10px"
-                    title="Iniciar Conferência"
-                    @click="IniciarConferencia(data.item)"
+                    title="Iniciar Entrega"
+                    @click="Teste(data.item)"
                   >
                     <i class="fa fa-tasks"></i>
                   </b-button>
                   <b-button
-                    v-if="
-                      isConferenciaExistente(data.item) &&
-                      isUsuarioConferente(data.item)
-                    "
                     variant="warning"
                     style="margin-right: 10px"
-                    title="Visualizar Conferência"
-                    @click="Editar(data.item)"
+                    title="Visualizar Entrega"
+                    @click="Teste(data.item)"
                   >
                     <i class="fa fa-edit"></i>
                   </b-button>
                   <b-button
-                    v-if="
-                      isConferenciaExistente(data.item) &&
-                      isUsuarioConferente(data.item)
-                    "
                     variant="danger"
                     style="margin-right: 10px"
-                    title="Cancelar Conferência"
-                    @click="CancelarConferencia(data.item)"
+                    title="Cancelar Entrega"
+                    @click="Teste(data.item)"
                   >
                     <i class="fas fa-trash-alt"></i>
                   </b-button>
@@ -145,27 +123,12 @@
                   <ModalArquivoGrid :referenciaId="data.item.id" />
 
                   <b-button
-                    v-if="isConferenciaExistente(data.item)"
                     variant="dark"
                     style="margin-right: 10px"
-                    title="Imprimir informações conferência"
-                    @click="ImprimirConferenciaPedido(data.item)"
+                    title="Imprimir informações Entrega"
+                    @click="Teste(data.item)"
                   >
                     <i class="fas fa-print"></i>
-                  </b-button>
-
-                  <b-button
-                    v-if="
-                      isConferenciaExistente(data.item) &&
-                      !isUsuarioConferente(data.item)
-                    "
-                    variant="info"
-                    style="margin-right: 10px"
-                    title="Assumir conferência"
-                    @click="AssumirConferencia(data.item)"
-                  >
-                    <i class="fas fa-user-tag"></i>
-                    <!-- <i class="fas fa-print"></i> -->
                   </b-button>
                 </div>
               </template>
@@ -189,17 +152,10 @@
                   <span>{{ FormataValor(data.item.valorRateado) }}</span>
                 </div>
               </template>
-              <template v-slot:cell(statusConferencia)="data">
+              <template v-slot:cell(statusPedido)="data">
                 <div class="left">
                   <span>{{
-                    ObterNomeStatusConferencia(data.item.statusConferencia)
-                  }}</span>
-                </div>
-              </template>
-              <template v-slot:cell(statusRateio)="data">
-                <div class="left">
-                  <span>{{
-                    ObterNomeStatusRateio(data.item.statusRateio)
+                    ObterNomestatusPedido(data.item.statusPedido)
                   }}</span>
                 </div>
               </template>
@@ -234,7 +190,7 @@
               @hidden="ModalCancelelarConferenciaCancel"
             >
               As informações de produtos conferidos serão perdidas.
-              <br />Você confirma a exclusão do processo de conferência? <br />
+              <br />Você confirma a exclusão do processo de Entrega? <br />
             </b-modal>
             <b-modal
               v-model="modalImpressao"
@@ -246,7 +202,7 @@
             </b-modal>
             <b-modal
               v-model="modalIniciarConferencia"
-              title="Iniciar conferência do rateio"
+              title="Iniciar Entrega do rateio"
               class="modal-danger"
               ok-variant="info"
               @ok="ModalIniciarConferenciaOk"
@@ -257,14 +213,14 @@
             </b-modal>
             <b-modal
               v-model="modalAssumirConferencia"
-              title="Assumir Conferência"
+              title="Assumir Entrega"
               class="modal-danger"
               ok-variant="info"
               @ok="ModalAssumirConferenciaOk"
               @hidden="ModalAssumirConferenciaCancel"
             >
-              <br />Confirma que você irá efetuar a conferência do rateio do
-              pedido? <br />
+              <br />Confirma que você irá efetuar a Entrega do rateio do pedido?
+              <br />
             </b-modal>
           </div>
         </div>
@@ -274,9 +230,9 @@
 </template>
 <script>
 import RotateSquare from "../../components/RotateSquare";
-import ConferenciaRateioServico from "../../servico/ConferenciaRateioServico";
+import EntregaPedidoServico from "../../servico/EntregaPedidoServico";
 import PessoaServico from "../../servico/PessoaServico";
-import StatusConferenciaEnum from "../../enums/StatusConferenciaEnum";
+import StatusPedidoEnum from "../../enums/StatusPedidoEnum";
 import StatusRateioEnum from "../../enums/StatusRateioEnum";
 import TipoPessoaEnum from "../../enums/TipoPessoaEnum";
 import ModalArquivoGrid from "../../components/ModalArquivoGrid";
@@ -287,7 +243,7 @@ export default {
   name: "ConferenciaRateio",
   components: {
     RotateSquare,
-    ConferenciaRateioServico,
+    EntregaPedidoServico,
     Bus,
     ModalArquivoGrid
   },
@@ -309,45 +265,39 @@ export default {
       filtro: {
         pedido: "",
         instituicao: "",
-        statusConferencia: null,
+        statusPedido: null,
         statusRateio: null,
         dataEntrega: ""
       },
-      statusConferenciaOptions: [
-        { value: StatusConferenciaEnum.Pendente, text: "Pendente" },
-        { value: StatusConferenciaEnum.Iniciada, text: "Iniciada" },
-        { value: StatusConferenciaEnum.Completa, text: "Completa" },
-        { value: StatusConferenciaEnum.Finalizada, text: "Finalizada" },
-        { value: StatusConferenciaEnum.Cancelada, text: "Cancelada" }
-      ],
-      statusRateioOptions: [
-        { value: StatusRateioEnum.Incompleto, text: "Incompleto" },
-        { value: StatusRateioEnum.Atendido, text: "Atendido" },
-        { value: StatusRateioEnum.Confirmado, text: "Confirmado" },
-        { value: StatusRateioEnum.Conferido, text: "Conferido" },
-        { value: StatusRateioEnum.Cancelado, text: "Cancelado" }
+      statusPedidoOptions: [
+        { value: StatusPedidoEnum.Pendente, text: "Pendente" },
+        { value: StatusPedidoEnum.Aberto, text: "Aberto" },
+        {
+          value: StatusPedidoEnum.AguardandoProdutos,
+          text: "Aguardando Produtos"
+        },
+        { value: StatusPedidoEnum.Incompleto, text: "Incompleto" },
+        { value: StatusPedidoEnum.EmRota, text: "Em Rota" },
+        { value: StatusPedidoEnum.Entregue, text: "Entregue" },
+        { value: StatusPedidoEnum.Finalizado, text: "Finalizado" },
+        { value: StatusPedidoEnum.Cancelado, text: "Cancelado" },
+        { value: StatusPedidoEnum.AguardandoRateio, text: "Aguardando Rateio" },
+        {
+          value: StatusPedidoEnum.AguardandoConferencia,
+          text: "Aguardando Conferência"
+        },
+        { value: StatusPedidoEnum.Conferido, text: "Conferido" }
       ],
       fields: [
         { key: "pedido", label: "Pedido", sortable: true },
         // { key: "instituicao", label: "Instituição", sortable: true },
-        { key: "dataEntrega", label: "Previsão Entrega", sortable: true },
+        { key: "dataEntrega", label: "Entrega", sortable: true },
         {
-          key: "statusConferencia",
-          label: "Status Conferência",
+          key: "statusPedido",
+          label: "Status",
           sortable: true
         },
-        {
-          key: "quantidadeRateada",
-          label: "Quantidade Rateada",
-          sortable: true
-        },
-        { key: "manual", label: "Rateio Automático", sortable: true },
-        { key: "dataRateio", label: "Data Rateio", sortable: true },
-        {
-          key: "statusRateio",
-          label: "Status Rateio",
-          sortable: true
-        },
+        { key: "valorRateado", label: "Valor", sortable: true },
         { key: "usuarioConferente", label: "Conferente", sortable: true },
         {
           key: "acoes",
@@ -370,7 +320,7 @@ export default {
     Limpar() {
       this.filtro.pedido = "";
       this.filtro.instituicao = "";
-      this.filtro.statusConferencia = null;
+      this.filtro.statusPedido = null;
       this.filtro.statusRateio = null;
       this.filtro.dataEntrega = "";
     },
@@ -390,11 +340,11 @@ export default {
       this.modalCancelarConferencia = false;
       if (!this.itemConferencia) return;
 
-      ConferenciaRateioServico.CancelarConferencia(this.itemConferencia.id)
+      EntregaPedidoServico.CancelarConferencia(this.itemConferencia.id)
         .then(() => {
           this.ObterGrid(this.pagina);
           this.$notify({
-            data: ["Conferência removida com sucesso."],
+            data: ["Entrega removida com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -409,12 +359,12 @@ export default {
     },
     ObterGrid(pagina) {
       this.loading = false;
-      ConferenciaRateioServico.ObterGrid(
+      EntregaPedidoServico.ObterGrid(
         pagina,
         this.itensPorPagina,
         this.pedido,
         this.filtro.instituicao.id,
-        this.filtro.statusConferencia,
+        this.filtro.statusPedido,
         this.filtro.statusRateio,
         this.filtro.dataEntrega
       )
@@ -449,36 +399,34 @@ export default {
           });
         });
     },
-    ObterNomeStatusConferencia(item) {
+    ObterNomestatusPedido(item) {
       switch (item) {
-        case StatusConferenciaEnum.Pendente:
+         case StatusPedidoEnum.Pendente:
           return "Pendente";
-        case StatusConferenciaEnum.Iniciada:
-          return "Iniciada";
-        case StatusConferenciaEnum.Completa:
-          return "Completa";
-        case StatusConferenciaEnum.Finalizada:
-          return "Finalizada";
-        case StatusConferenciaEnum.Cancelada:
-          return "Cancelada";
-        default:
-          return "-";
-      }
-    },
-    ObterNomeStatusRateio(item) {
-      switch (item) {
-        case StatusRateioEnum.Incompleto:
+        case StatusPedidoEnum.Pendente:
+          return "Pendente";
+        case StatusPedidoEnum.Aberto:
+          return "Aberto";
+        case StatusPedidoEnum.AguardandoProdutos:
+          return "Aguardando Produtos";
+        case StatusPedidoEnum.Incompleto:
           return "Incompleto";
-        case StatusRateioEnum.Atendido:
-          return "Atendido";
-        case StatusRateioEnum.Confirmado:
-          return "Confirmado";
-        case StatusRateioEnum.Conferido:
-          return "Conferido";
-        case StatusRateioEnum.Cancelado:
+        case StatusPedidoEnum.EmRota:
+          return "Em Rota";
+        case StatusPedidoEnum.Entregue:
+          return "Entregue";
+        case StatusPedidoEnum.Finalizado:
+          return "Finalizado";
+        case StatusPedidoEnum.Cancelado:
           return "Cancelado";
+        case StatusPedidoEnum.AguardandoRateio:
+          return "Aguardando Rateio";
+        case StatusPedidoEnum.AguardandoConferencia:
+          return "Aguardando Conferência";
+        case StatusPedidoEnum.Conferido:
+          return "Conferido";
         default:
-          return "-";
+          return "Inválido";
       }
     },
     FormatarData(value) {
@@ -518,11 +466,11 @@ export default {
       this.modalIniciarConferencia = false;
       if (!this.rateioId) return;
 
-      ConferenciaRateioServico.IniciarConferencia(this.rateioId)
+      EntregaPedidoServico.IniciarConferencia(this.rateioId)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Conferência aberta com sucesso."],
+            data: ["Entrega aberta com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -552,11 +500,11 @@ export default {
 
       if (!this.conferenciaId) return;
 
-      ConferenciaRateioServico.AssumirConferencia(this.conferenciaId)
+      EntregaPedidoServico.AssumirConferencia(this.conferenciaId)
         .then(() => {
           this.ObterGrid(1);
           this.$notify({
-            data: ["Conferência assumida com sucesso."],
+            data: ["Entrega assumida com sucesso."],
             type: "success",
             duration: 5000
           });
@@ -571,6 +519,9 @@ export default {
     },
     isUsuarioConferente(item) {
       return item.ehConferente;
+    },
+    Teste(item) {
+      console.log("teste");
     }
   }
 };

@@ -437,8 +437,6 @@ export default {
         this.editarProdutos = false;
       }
 
-      Bus.$emit("atualizar-produto-fornecedor");
-
       this.loading = false;
       PedidoFornecedorServico.ObterGridTotal(
         pagina,
@@ -455,6 +453,7 @@ export default {
           this.itens = resposta.data.itens;
           this.total = resposta.data.total;
           this.itensPorPagina = resposta.data.itensPorPagina;
+          Bus.$emit("atualizar-produto-fornecedor");
         })
         .catch((erro) => {
           this.loading = false;

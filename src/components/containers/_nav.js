@@ -34,6 +34,14 @@ const Menu = {
     permission: "ConferenciaRateio"
   },
 
+  EntregaPedido: {
+    _name: "CSidebarNavItem",
+    name: "Entrega Pedido",
+    to: "/entrega-pedido",
+    icon: "cil-truck",
+    permission: "EntregaPedido"
+  },
+
   PedidoVenda: {
     _name: "CSidebarNavItem",
     name: "Pedido",
