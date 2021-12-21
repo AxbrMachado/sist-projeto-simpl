@@ -106,7 +106,10 @@
               <template v-slot:cell(acoes)="data">
                 <div class="btn-group-sm">
                   <b-button
-                    v-if="!isConferenciaExistente(data.item) && isRateioConfirmado(data.item)"
+                    v-if="
+                      !isConferenciaExistente(data.item) &&
+                      isRateioConfirmado(data.item)
+                    "
                     variant="info"
                     style="margin-right: 10px"
                     title="Iniciar Conferência"
@@ -333,7 +336,11 @@ export default {
           label: "Status Conferência",
           sortable: true
         },
-        { key: "valorRateado", label: "Valor Rateado", sortable: true },
+        {
+          key: "quantidadeRateada",
+          label: "Quantidade Rateada",
+          sortable: true
+        },
         { key: "manual", label: "Rateio Automático", sortable: true },
         { key: "dataRateio", label: "Data Rateio", sortable: true },
         {
